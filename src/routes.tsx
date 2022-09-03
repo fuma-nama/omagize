@@ -26,6 +26,14 @@ const routes: RoutesType[] = [
 		secondary: true
 	},
 	{
+		name: 'NFT Marketplace',
+		layout: '/admin',
+		path: '/:group',
+		icon: <Icon as={MdOutlineShoppingCart} width='20px' height='20px' color='inherit' />,
+		component: <NFTMarketplace />,
+		secondary: true
+	},
+	{
 		name: 'Profile',
 		layout: '/admin',
 		path: '/profile',

@@ -6,9 +6,10 @@ import Navbar from 'components/navbar/NavbarAdmin';
 import Sidebar from 'components/sidebar/Sidebar';
 import { SidebarContext } from 'contexts/SidebarContext';
 import { useState } from 'react';
-import {Outlet} from 'react-router-dom';
+import {Outlet, useLocation} from 'react-router-dom';
 import routes from 'routes';
 import {PageContextProvider} from "contexts/PageContext";
+import {getActiveRoute} from "../../utils/RouteUtil";
 
 // Custom Chakra theme
 export default function Dashboard(props: { [x: string]: any }) {
@@ -16,16 +17,8 @@ export default function Dashboard(props: { [x: string]: any }) {
 	// states and functions
 	const [ fixed ] = useState(false);
 	const [ toggleSidebar, setToggleSidebar ] = useState(false);
+	const location = useLocation()
 
-	const getActiveRoute = (routes: RoutesType[]): string => {
-		let activeRoute = 'Default Brand Text';
-		for (let i = 0; i < routes.length; i++) {
-			if (window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1) {
-				return routes[i].name;
-			}
-		}
-		return activeRoute;
-	};
 	const getActiveNavbar = (routes: RoutesType[]): boolean => {
 		let activeNavbar = false;
 		for (let i = 0; i < routes.length; i++) {
@@ -73,7 +66,7 @@ export default function Dashboard(props: { [x: string]: any }) {
 								<Navbar
 									onOpen={onOpen}
 									logoText={'Horizon UI Dashboard PRO'}
-									brandText={getActiveRoute(routes)}
+									brandText={getActiveRoute(location, routes).name}
 									secondary={getActiveNavbar(routes)}
 									message={getActiveNavbarText(routes)}
 									fixed={fixed}

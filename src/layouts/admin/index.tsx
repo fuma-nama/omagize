@@ -12,7 +12,6 @@ import {PageContextProvider} from "contexts/PageContext";
 
 // Custom Chakra theme
 export default function Dashboard(props: { [x: string]: any }) {
-	console.log(window.location.pathname)
 	const { ...rest } = props;
 	// states and functions
 	const [ fixed ] = useState(false);

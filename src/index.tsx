@@ -13,7 +13,7 @@ const client = new QueryClient()
 function getRoutes(layout: string): any {
 	return routes.map((route: RoutesType, key: any) => {
 		if (route.layout === layout) {
-			return <Route path={route.path} element={route.component} key={key} />;
+			return <Route path={route.layout + route.path} element={route.component} key={key} />;
 		} else {
 			return null;
 		}
@@ -24,8 +24,8 @@ function Pages() {
 
 	return <Routes>
 		{
-			layouts.map(layout =>
-				<Route path={layout.path} element={layout.component}>
+			layouts.map((layout, i) =>
+				<Route key={i} path={layout.path} element={layout.component}>
 					{getRoutes(layout.path)}
 					{layout.index && <Route index element={<Navigate to={layout.index}/>}/>}
 					{layout.default && <Route path="*" element={<Navigate to={layout.default}/>}/>}

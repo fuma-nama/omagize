@@ -9,35 +9,35 @@ import Profile from 'views/admin/profile';
 // Auth Imports
 import SignInCentered from 'views/auth/signIn';
 
-const routes = [
+const routes: RoutesType[] = [
 	{
 		name: 'Main Dashboard',
 		layout: '/admin',
-		path: '/default',
+		path: 'default',
 		icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-		component: MainDashboard
+		component: <MainDashboard />
 	},
 	{
 		name: 'NFT Marketplace',
 		layout: '/admin',
-		path: '/nft-marketplace',
+		path: 'nft-marketplace',
 		icon: <Icon as={MdOutlineShoppingCart} width='20px' height='20px' color='inherit' />,
-		component: NFTMarketplace,
+		component: <NFTMarketplace />,
 		secondary: true
 	},
 	{
 		name: 'Profile',
 		layout: '/admin',
-		path: '/profile',
+		path: 'profile',
 		icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
-		component: Profile
+		component: <Profile />
 	},
 	{
 		name: 'Sign In',
 		layout: '/auth',
-		path: '/sign-in',
+		path: 'sign-in',
 		icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
-		component: SignInCentered
+		component: <SignInCentered />
 	}
 ];
 

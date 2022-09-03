@@ -27,6 +27,6 @@ export const renderView = ( ) => {
 		marginBottom: -22
 	}as const;
 	return (
-		<Box height="100%" me={{ base: '0px !important', lg: '-16px !important' }} style={ viewStyle }   />
+		<Box w='100%' height="100%" me={{ base: '0px !important', lg: '-16px !important' }} style={ viewStyle }   />
 	);
 };

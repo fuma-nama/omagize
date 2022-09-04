@@ -59,7 +59,6 @@ function Content({...rest}) {
 					<Navbar
 						onOpen={onOpen}
 						brandText={activeRoute?.name || info?.title}
-						secondary={activeRoute?.secondary}
 						fixed={fixed}
 						{...rest}
 					/>

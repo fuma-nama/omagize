@@ -19,17 +19,13 @@ export function SidebarLinks(props: {
 	) => {
 		const active = getActiveRoute(location, routes)
 
-		return routes.map(
+		return routes.filter(route =>
+			layouts.some(layout => layout.path === route.layout) && !route.hidden
+		).map(
 			(
 				route: RoutesType,
 				index: number
-			) => {
-				const exists = layouts.some(layout => layout.path === route.layout)
-
-				if (exists) {
-					return <Link key={index} route={route} active={active === route} />
-				}
-			}
+			) => <Link key={index} route={route} active={active === route} />
 		);
 	};
 	//  BRAND

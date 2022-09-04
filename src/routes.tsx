@@ -24,14 +24,6 @@ const routes: RoutesType[] = [
 		path: '/nft-marketplace',
 		icon: <Icon as={MdOutlineShoppingCart} width='20px' height='20px' color='inherit' />,
 		component: <NFTMarketplace />,
-		secondary: true
-	},
-	{
-		name: 'Profile',
-		layout: '/user',
-		path: '/profile',
-		icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
-		component: <Profile />
 	},
 	{
 		name: 'Sign In',
@@ -39,7 +31,15 @@ const routes: RoutesType[] = [
 		path: '/sign-in',
 		icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
 		component: <SignInCentered />
-	}
+	},
+	{
+		name: 'Profile',
+		layout: '/user',
+		path: '/profile',
+		icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
+		component: <Profile />,
+		hidden: true
+	},
 ];
 
 export const dynamicRoutes: DynamicRoute[] = [

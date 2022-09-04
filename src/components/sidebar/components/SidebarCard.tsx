@@ -3,13 +3,13 @@ import {
 	Box,
 	Button,
 	Flex,
-	Link,
 	SkeletonCircle, SkeletonText,
 	Text,
 	useColorModeValue
 } from '@chakra-ui/react';
 import {useUserQuery} from "../../../api/UserAPI";
 import {FiSettings} from "react-icons/fi";
+import {Link} from "react-router-dom";
 
 export default function SidebarProfile() {
 	const bgColor = 'linear-gradient(135deg, #868CFF 0%, #4318FF 100%)';
@@ -87,7 +87,7 @@ function SidebarProfileSkeleton() {
 }
 
 function SettingsButton() {
-	return <Link href='https://horizon-ui.com/pro'>
+	return <Link to='/user/profile'>
 		<Button
 			bg='whiteAlpha.300'
 			_hover={{ bg: 'whiteAlpha.200' }}

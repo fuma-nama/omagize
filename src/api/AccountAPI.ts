@@ -1,7 +1,21 @@
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 
 export function loggedIn() {
-    return true
+    return false
+}
+
+export function logout() {
+}
+
+export function useLogoutMutation() {
+    const client = useQueryClient()
+
+    // @ts-ignore
+    return useMutation(() => logout(), {
+        onSuccess() {
+            client.setQueryData(["logged_in"], () => false)
+        }
+    })
 }
 
 export function useLoggedInQuery() {

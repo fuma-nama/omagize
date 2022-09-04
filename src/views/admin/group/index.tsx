@@ -16,9 +16,8 @@ export default function GroupChat() {
 function Content(props: {group: Group}) {
     const {group} = props
     const {setInfo} = useContext(PageContext)
-    console.log(group.name)
 
-    useEffect(() => setInfo({title: group.name}), [])
+    useEffect(() => setInfo({title: group.name}), [group])
 
     return <></>
 }

@@ -1,6 +1,16 @@
 /* eslint-disable */
 // Chakra Imports
-import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Link, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+	Box,
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	Flex,
+	Link, Skeleton,
+	SkeletonText,
+	Text,
+	useColorModeValue
+} from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
 
@@ -102,7 +112,7 @@ export default function AdminNavbar(props: {
 
 						<BreadcrumbItem color={secondaryText} fontSize='sm'>
 							<BreadcrumbLink href='#' color={secondaryText}>
-								{brandText}
+								{brandText || <Skeleton w='200px' height='20px' rounded='lg' />}
 							</BreadcrumbLink>
 						</BreadcrumbItem>
 					</Breadcrumb>
@@ -123,7 +133,7 @@ export default function AdminNavbar(props: {
 						_focus={{
 							boxShadow: 'none'
 						}}>
-						{brandText}
+						{brandText || <SkeletonText w='full' noOfLines={2} />}
 					</Link>
 				</Box>
 				<Box ms='auto' w={{ sm: '100%', md: 'unset' }}>

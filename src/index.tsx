@@ -9,7 +9,6 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import routes, {dynamicRoutes} from "./routes";
 import {layouts} from "./layouts";
 import {useLoggedInQuery} from "./api/AccountAPI";
-import Auth from "./layouts/auth";
 
 const client = new QueryClient()
 function getRoutes(layout: string): any {
@@ -36,7 +35,7 @@ function Pages() {
 	return <Routes>
 		{
 			layouts
-				.filter(layout => layout.loggedIn == loggedIn)
+				.filter(layout => layout.requireLogin == loggedIn)
 				.map((layout, i) =>
 					<Route key={i} path={layout.path} element={layout.component}>
 						{getRoutes(layout.path)}

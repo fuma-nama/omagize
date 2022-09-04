@@ -1,11 +1,9 @@
 import {
 	Avatar,
 	Box,
-	Button, Circle,
+	Button,
 	Flex,
-	Image,
 	Link,
-	Skeleton,
 	SkeletonCircle, SkeletonText,
 	Text,
 	useColorModeValue

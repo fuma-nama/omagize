@@ -1,4 +1,5 @@
 import {createContext, ReactNode, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 
 type PageContextType = {
     selectedGroup?: string
@@ -8,11 +9,14 @@ type PageContextType = {
 export const PageContext = createContext<PageContextType>({})
 
 export function PageContextProvider(props: {children: ReactNode}) {
-    const [selectedGroup, setSelectedGroup] = useState<string>(null)
+    const {group} = useParams()
+    const navigate = useNavigate()
 
     return <PageContext.Provider value={{
-        selectedGroup,
-        setSelectedGroup
+        selectedGroup: group,
+        setSelectedGroup(group) {
+            navigate(`/admin/${group}`)
+        }
     }}>
         {props.children}
     </PageContext.Provider>

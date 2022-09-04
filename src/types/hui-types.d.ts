@@ -9,10 +9,18 @@ declare global {
    */
 	interface RoutesType {
 		name: string;
+		icon: JSX.Element | string;
 		layout: string;
 		component: ReactNode;
-		icon: JSX.Element | string;
 		path: string;
 		secondary?: boolean;
+	}
+
+	interface DynamicRoute extends IRoute {}
+
+	interface IRoute {
+		layout: string;
+		path: string;
+		component: ReactNode;
 	}
 }

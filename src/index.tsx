@@ -6,18 +6,23 @@ import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 import {ChakraProvider} from '@chakra-ui/react';
 import theme from './theme/theme';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import routes from "./routes";
+import routes, {dynamicRoutes} from "./routes";
 import {layouts} from "./layouts";
 
 const client = new QueryClient()
 function getRoutes(layout: string): any {
-	return routes.map((route: RoutesType, key: any) => {
+	const mapper = (route: IRoute, key: any) => {
 		if (route.layout === layout) {
 			return <Route path={route.layout + route.path} element={route.component} key={key} />;
 		} else {
 			return null;
 		}
-	});
+	}
+
+	return [
+		...routes.map(mapper),
+		...dynamicRoutes.map(mapper)
+	]
 }
 
 function Pages() {

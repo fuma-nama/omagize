@@ -66,7 +66,7 @@ export default function Dashboard(props: { [x: string]: any }) {
 								<Navbar
 									onOpen={onOpen}
 									logoText={'Horizon UI Dashboard PRO'}
-									brandText={getActiveRoute(location, routes).name}
+									brandText={getActiveRoute(location, routes)?.name}
 									secondary={getActiveNavbar(routes)}
 									message={getActiveNavbarText(routes)}
 									fixed={fixed}

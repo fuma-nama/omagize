@@ -1,4 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
+import {groups} from "./model";
 
 export type Group = {
     id: string
@@ -7,22 +8,18 @@ export type Group = {
     banner?: string
 }
 
+export function fetchGroup(id: string): Group {
+    return groups.find(g => g.id === id)
+}
+
 export function fetchGroups(): Group[] {
-    return [
-        {
-            id: "54352234532456325433",
-            name: "Study Group",
-            icon: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
-            banner: "https://img.moelong.com/images/LycorisRecoiltwnews/LycorisRecoiltwnews09.webp"
-        },
-        {
-            id: "5435234532456335333",
-            name: "My Funny Chat Group",
-            icon: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
-        },
-    ]
+    return groups
 }
 
 export function useGroupsQuery() {
     return useQuery(["groups"], () => fetchGroups())
+}
+
+export function useGroupQuery(id: string) {
+    return useQuery(["group", id], () => fetchGroup(id))
 }

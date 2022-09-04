@@ -8,6 +8,7 @@ import Profile from 'views/admin/profile';
 
 // Auth Imports
 import SignInCentered from 'views/auth/signIn';
+import GroupChat from "./views/admin/group";
 
 const routes: RoutesType[] = [
 	{
@@ -45,7 +46,7 @@ export const dynamicRoutes: DynamicRoute[] = [
 	{
 		layout: '/user',
 		path: '/:group',
-		component: <NFTMarketplace />,
+		component: <GroupChat />,
 	},
 ]
 

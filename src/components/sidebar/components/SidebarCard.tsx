@@ -1,10 +1,26 @@
-import { Button, Flex, Image, Link, Text, useColorModeValue } from '@chakra-ui/react';
-import logoWhite from 'assets/img/layout/logoWhite.png';
+import {
+	Avatar,
+	Box,
+	Button, Circle,
+	Flex,
+	Image,
+	Link,
+	Skeleton,
+	SkeletonCircle, SkeletonText,
+	Text,
+	useColorModeValue
+} from '@chakra-ui/react';
+import {useUserQuery} from "../../../api/UserAPI";
+import {FiSettings} from "react-icons/fi";
 
-export default function SidebarDocs() {
+export default function SidebarProfile() {
 	const bgColor = 'linear-gradient(135deg, #868CFF 0%, #4318FF 100%)';
 	const borderColor = useColorModeValue('white', 'navy.800');
+	const query = useUserQuery()
 
+	if (query.isLoading) return <SidebarProfileSkeleton />
+
+	const user = query.data
 	return (
 		<Flex
 			justify='center'
@@ -12,25 +28,19 @@ export default function SidebarDocs() {
 			align='center'
 			bg={bgColor}
 			borderRadius='30px'
-			me={{ base: '20px' }}
+			me='20px'
 			position='relative'>
-			<Flex
+			<Box
 				border='5px solid'
 				borderColor={borderColor}
-				bg='linear-gradient(135deg, #868CFF 0%, #4318FF 100%)'
 				borderRadius='50%'
 				w='94px'
 				h='94px'
-				align='center'
-				justify='center'
 				mx='auto'
-				position='absolute'
-				left='50%'
-				top='-47px'
-				transform='translate(-50%, 0%)'>
-				<Image src={logoWhite} w='40px' h='40px' />
-			</Flex>
-			<Flex direction='column' mb='12px' align='center' justify='center' px='15px' pt='55px'>
+				mt='-47px'>
+				<Avatar name={user.username} src={user.avatarUrl} w='full' h='full' bg='linear-gradient(135deg, #868CFF 0%, #4318FF 100%)' />
+			</Box>
+			<Flex direction='column' mb='5px' align='center' justify='center' px='15px' pt='3px'>
 				<Text
 					fontSize={{ base: 'lg', xl: '18px' }}
 					color='white'
@@ -39,26 +49,59 @@ export default function SidebarDocs() {
 					textAlign='center'
 					px='10px'
 					mb='14px'>
-					Upgrade to PRO
-				</Text>
-				<Text fontSize='14px' color={'white'} px='10px' mb='14px' textAlign='center'>
-					Improve your development process and start doing more with Horizon UI PRO!
+					{user.username}
 				</Text>
 			</Flex>
-			<Link href='https://horizon-ui.com/pro'>
-				<Button
-					bg='whiteAlpha.300'
-					_hover={{ bg: 'whiteAlpha.200' }}
-					_active={{ bg: 'whiteAlpha.100' }}
-					mb={{ sm: '16px', xl: '24px' }}
-					color={'white'}
-					fontWeight='regular'
-					fontSize='sm'
-					minW='185px'
-					mx='auto'>
-					Upgrade to PRO
-				</Button>
-			</Link>
+			<SettingsButton />
 		</Flex>
 	);
+}
+
+function SidebarProfileSkeleton() {
+	const bgColor = 'linear-gradient(135deg, #868CFF 0%, #4318FF 100%)';
+
+	return (
+		<Flex
+			justify='center'
+			direction='column'
+			align='center'
+			bg={bgColor}
+			borderRadius='30px'
+			me='20px'
+			position='relative'>
+			<Box
+				rounded='full'
+				w='94px'
+				h='94px'
+				mx='auto'
+				mt='-47px'
+				bg='linear-gradient(135deg, #868CFF 0%, #4318FF 100%)'
+			>
+				<SkeletonCircle w='full' h='full' />
+			</Box>
+			<Flex direction='column' mb='20px' w='full' align='center' justify='center' px='15px' pt='3px'>
+				<SkeletonText w='80%' noOfLines={2} />
+			</Flex>
+
+			<SettingsButton />
+		</Flex>
+	);
+}
+
+function SettingsButton() {
+	return <Link href='https://horizon-ui.com/pro'>
+		<Button
+			bg='whiteAlpha.300'
+			_hover={{ bg: 'whiteAlpha.200' }}
+			_active={{ bg: 'whiteAlpha.100' }}
+			mb={{ sm: '16px', xl: '24px' }}
+			color={'white'}
+			fontWeight='regular'
+			fontSize='sm'
+			leftIcon={<FiSettings />}
+			minW='185px'
+			mx='auto'>
+			Settings
+		</Button>
+	</Link>
 }

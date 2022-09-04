@@ -15,7 +15,7 @@ export function PageContextProvider(props: {children: ReactNode}) {
     return <PageContext.Provider value={{
         selectedGroup: group,
         setSelectedGroup(group) {
-            navigate(`/admin/${group}`)
+            navigate(`/user/${group}`)
         }
     }}>
         {props.children}

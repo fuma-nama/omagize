@@ -12,14 +12,14 @@ import SignInCentered from 'views/auth/signIn';
 const routes: RoutesType[] = [
 	{
 		name: 'Main Dashboard',
-		layout: '/admin',
+		layout: '/user',
 		path: '/default',
 		icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
 		component: <MainDashboard />
 	},
 	{
 		name: 'NFT Marketplace',
-		layout: '/admin',
+		layout: '/user',
 		path: '/nft-marketplace',
 		icon: <Icon as={MdOutlineShoppingCart} width='20px' height='20px' color='inherit' />,
 		component: <NFTMarketplace />,
@@ -27,7 +27,7 @@ const routes: RoutesType[] = [
 	},
 	{
 		name: 'Profile',
-		layout: '/admin',
+		layout: '/user',
 		path: '/profile',
 		icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
 		component: <Profile />
@@ -43,7 +43,7 @@ const routes: RoutesType[] = [
 
 export const dynamicRoutes: DynamicRoute[] = [
 	{
-		layout: '/admin',
+		layout: '/user',
 		path: '/:group',
 		component: <NFTMarketplace />,
 	},

@@ -37,7 +37,7 @@ function Pages() {
 				</Route>
 			)
 		}
-		<Route path='*' element={<Navigate to="/admin" />} />
+		<Route path='*' element={<Navigate to="/user" />} />
 	</Routes>
 }
 

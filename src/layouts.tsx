@@ -9,9 +9,9 @@ export const layouts: LayoutType[] = [
         index: "/auth/sign-in/default"
     },
     {
-        path: "/admin",
+        path: "/user",
         component: <AdminLayout />,
-        index: "/admin/default"
+        index: "/user/default"
     }
 ]
 

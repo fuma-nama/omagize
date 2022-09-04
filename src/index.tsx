@@ -8,6 +8,8 @@ import theme from './theme/theme';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import routes, {dynamicRoutes} from "./routes";
 import {layouts} from "./layouts";
+import {useLoggedInQuery} from "./api/AccountAPI";
+import Auth from "./layouts/auth";
 
 const client = new QueryClient()
 function getRoutes(layout: string): any {
@@ -26,18 +28,25 @@ function getRoutes(layout: string): any {
 }
 
 function Pages() {
+	const query = useLoggedInQuery();
+
+	if (query.isLoading) return <></>
+	const loggedIn = query.data
 
 	return <Routes>
 		{
-			layouts.map((layout, i) =>
-				<Route key={i} path={layout.path} element={layout.component}>
-					{getRoutes(layout.path)}
-					{layout.index && <Route index element={<Navigate to={layout.index}/>}/>}
-					{layout.default && <Route path="*" element={<Navigate to={layout.default}/>}/>}
-				</Route>
-			)
+			layouts
+				.filter(layout => layout.loggedIn == loggedIn)
+				.map((layout, i) =>
+					<Route key={i} path={layout.path} element={layout.component}>
+						{getRoutes(layout.path)}
+						{layout.index && <Route index element={<Navigate to={layout.index}/>}/>}
+						{layout.default && <Route path="*" element={<Navigate to={layout.default}/>}/>}
+					</Route>
+				)
 		}
-		<Route path='*' element={<Navigate to="/user" />} />
+
+		<Route path='*' element={loggedIn? <Navigate to="/user" /> : <Navigate to="/auth" />} />
 	</Routes>
 }
 

@@ -11,7 +11,8 @@ export const layouts: LayoutType[] = [
     {
         path: "/user",
         component: <AdminLayout />,
-        index: "/user/default"
+        index: "/user/default",
+        loggedIn: true
     }
 ]
 
@@ -20,4 +21,5 @@ type LayoutType = {
     component: ReactNode
     index?: string
     default?: string
+    loggedIn?: boolean
 }

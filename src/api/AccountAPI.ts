@@ -1,7 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 
 export function loggedIn() {
-    return false
+    return true
 }
 
 export function logout() {

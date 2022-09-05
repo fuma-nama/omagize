@@ -1,10 +1,9 @@
 // chakra imports
-import {Box, Flex, Skeleton, Stack, Text, VStack} from '@chakra-ui/react';
+import {Box, Flex, Stack} from '@chakra-ui/react';
 //   Custom components
 import Brand from 'components/sidebar/components/Brand';
 import Links from 'components/sidebar/components/Links';
 import SidebarCard from 'components/sidebar/components/SidebarCard';
-import Card from "../../card/Card";
 import {useGroupsQuery} from "../../../api/GroupAPI";
 import {ChatGroup, ChatGroupSkeleton} from "../../card/ChatGroup";
 import {useContext} from "react";
@@ -19,7 +18,7 @@ function SidebarContent(props: { routes: RoutesType[] }) {
 
 	// SIDEBAR
 	return (
-		<Flex direction='column' height='100%' pt='25px' borderRadius='30px'>
+		<Flex direction='column' height='100%' pt='25px' borderRadius='30px' overflow='auto'>
 			<Brand />
 			<Stack direction='column' mt='18px' mb='auto'>
 				<Box ps='10px'>

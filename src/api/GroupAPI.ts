@@ -1,6 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
 import {groups} from "./model";
-import {useParams} from "react-router-dom";
 
 export type Group = {
     id: string
@@ -19,6 +18,15 @@ export type Member = {
     username: string
     avatar?: string
 }
+
+export type MentionNotification = {
+    type: "mention"
+    author: Member
+    url?: string
+    date: Date
+}
+
+export type GroupNotification = MentionNotification
 
 export function fetchGroup(id: string): Group {
     return groups.find(g => g.id === id)
@@ -42,6 +50,19 @@ export function fetchGroupDetail(id: string): GroupDetail {
     }
 }
 
+export function fetchGroupNotifications(id: string): GroupNotification[] {
+    return [
+        {
+            type: "mention",
+            author: {
+                id: "4324232344324543",
+                username: "MONEY",
+            },
+            date: new Date(Date.now())
+        }
+    ]
+}
+
 export function fetchGroups(): Group[] {
     return groups
 }
@@ -52,6 +73,10 @@ export function useGroupsQuery() {
 
 export function useGroupQuery(id: string) {
     return useQuery(["group", id], () => fetchGroup(id))
+}
+
+export function useGroupNotificationsQuery(id: string) {
+    return useQuery(["group_notifications", id], () => fetchGroupNotifications(id))
 }
 
 export function useGroupDetailQuery(id: string) {

@@ -65,7 +65,7 @@ function Content({...rest}) {
 				</Box>
 			</Portal>
 
-			<Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt='50px'>
+			<Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt={{ base: '180px', md: '130px' }}>
 				<Outlet />
 			</Box>
 			<Box>

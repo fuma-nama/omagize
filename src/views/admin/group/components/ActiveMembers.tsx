@@ -8,7 +8,6 @@ import {
 import React from "react";
 import {GroupDetail, Member} from "api/GroupAPI";
 import Card from "components/card/Card";
-import {useItemHoverBg} from "variables/colors";
 
 export default function ActiveMembers(props: { group: GroupDetail}) {
   const { group } = props;
@@ -48,20 +47,21 @@ function MemberCard(props: {member: Member}) {
   return <Card
       _hover={{opacity: 0.5, cursor: 'pointer'}}
       transition='0.2s linear'
+      overflow='hidden'
       pos='relative'>
     <Box
         pos='absolute'
         top={0} left={0}
         w='full' h='full'
-        overflow='hidden'
+        bgGradient={member.avatar? null : `linear-gradient(to right, transparent 30%, ${brand})`}
         css={{maskImage: "linear-gradient(to right, transparent 30%, black)"}}>
-      <Image
+      {member.avatar && <Image
           w='full' h='full'
           src={member.avatar}
           objectFit="cover"
           filter='auto'
-          brightness={0.5}
-      />
+          brightness={0.5}/>
+      }
     </Box>
 
     <HStack gap='10px' pos='relative'>

@@ -36,7 +36,6 @@ export function fetchGroupDetail(id: string): GroupDetail {
             {
                 id: "4324232344324443",
                 username: "Kane",
-                avatar: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg"
             }
         ],
         ...groups.find(g => g.id === id)

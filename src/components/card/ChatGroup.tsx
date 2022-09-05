@@ -3,6 +3,7 @@ import {Group} from "../../api/GroupAPI";
 import {Avatar, Box, Image, SkeletonCircle, SkeletonText, Text} from "@chakra-ui/react";
 import {PageContext} from "../../contexts/PageContext";
 import {useContext} from "react";
+import {AvatarBg} from "../../variables/colors";
 
 export function ChatGroup(props: {group: Group, active: boolean}) {
     const {group, active} = props
@@ -10,6 +11,7 @@ export function ChatGroup(props: {group: Group, active: boolean}) {
     const {setSelectedGroup} = useContext(PageContext)
 
     return <Box
+        transition='0.2s linear'
         mr={active? '5px' : '10px'}
         filter='auto' brightness={active? 1 : 0.7}
         onClick={() => setSelectedGroup(group.id)}
@@ -26,7 +28,7 @@ export function ChatGroup(props: {group: Group, active: boolean}) {
             </Box>
 
             <Box pos='relative' maxW='70%' color='white'>
-                <Avatar name={group.name} src={group.icon} />
+                <Avatar name={group.name} src={group.icon} bg={AvatarBg} />
                 <Text mt={3} fontSize='lg' fontWeight='bold' lineHeight={1}>{group.name}</Text>
             </Box>
         </Card>

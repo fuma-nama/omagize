@@ -1,6 +1,7 @@
-import {Flex, Text, useColorModeValue} from "@chakra-ui/react";
+import {Avatar, Flex, HStack, Text, useColorModeValue, VStack} from "@chakra-ui/react";
 import Card from "../card/Card";
 import {fetchMessages, Message} from "../../api/MessageAPI";
+import {AvatarBg} from "../../variables/colors";
 
 export default function ChatView() {
     const textColor = useColorModeValue('secondaryGray.900', 'white');
@@ -13,7 +14,18 @@ export default function ChatView() {
 }
 
 function MessageItem(props: Message) {
-    return <Card>
-        <Text>{props.content}</Text>
+    const {author} = props
+    const secondaryText = useColorModeValue('gray.400', 'white');
+
+    return <Card flexDirection="row">
+        <Avatar name={author.username} src={author.avatar} bg={AvatarBg} />
+        <Flex direction='column' align='start' ml={2}>
+            <HStack>
+                <Text fontWeight='bold' fontSize='lg'>{author.username}</Text>
+                <Text textColor={secondaryText}>- {props.timestamp.toLocaleTimeString()}</Text>
+            </HStack>
+
+            <Text>{props.content}</Text>
+        </Flex>
     </Card>
 }

@@ -7,7 +7,7 @@ export default function ChatView() {
     const textColorBrand = useColorModeValue('brand.500', 'white');
     const messages = fetchMessages(0)
 
-    return <Card h='full'>
+    return <Card h='full' minH='400px'>
         {messages.map(message => <MessageItem key={message.id} {...message} />)}
     </Card>
 }

@@ -28,6 +28,7 @@ function Content(props: {group: GroupDetail}) {
 
     return (
         <Grid
+            h='full'
             mb='20px'
             gridTemplateColumns={{ xl: 'repeat(3, 1fr)', '2xl': '1fr 0.46fr' }}
             gap={{ base: '20px', xl: '20px' }}
@@ -35,7 +36,6 @@ function Content(props: {group: GroupDetail}) {
             <Flex flexDirection='column' gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}>
                 <Banner />
                 <Box
-                    h='75vh'
                     flexGrow={1}
                     mt='45px'
                     mb='20px'

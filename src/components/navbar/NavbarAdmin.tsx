@@ -1,4 +1,3 @@
-/* eslint-disable */
 // Chakra Imports
 import {
 	Box,
@@ -8,17 +7,15 @@ import {
 	Flex,
 	Link, Skeleton,
 	SkeletonText,
-	Text,
 	useColorModeValue
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
+import {ChakraProps} from "@chakra-ui/system/src/system.types";
 
 export default function AdminNavbar(props: {
 	brandText: string;
-	fixed: boolean;
-	onOpen: (...args: any[]) => any;
-}) {
+} & ChakraProps) {
 	const [ scrolled, setScrolled ] = useState(false);
 
 	useEffect(() => {
@@ -34,7 +31,6 @@ export default function AdminNavbar(props: {
 	// Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
 	let mainText = useColorModeValue('navy.700', 'white');
 	let secondaryText = useColorModeValue('gray.700', 'white');
-	let navbarPosition = 'fixed' as const;
 	let navbarFilter = 'none';
 	let navbarBackdrop = 'blur(20px)';
 	let navbarShadow = 'none';
@@ -53,7 +49,8 @@ export default function AdminNavbar(props: {
 
 	return (
 		<Box
-			position={navbarPosition}
+			zIndex='sticky'
+			pos="sticky"
 			boxShadow={navbarShadow}
 			bg={navbarBg}
 			borderColor={navbarBorder}
@@ -76,7 +73,6 @@ export default function AdminNavbar(props: {
 			mx='auto'
 			mt={secondaryMargin}
 			pb='8px'
-			right={{ base: '12px', md: '30px', lg: '30px', xl: '30px' }}
 			px={{
 				sm: paddingX,
 				md: '10px'
@@ -85,14 +81,9 @@ export default function AdminNavbar(props: {
 				xl: '12px'
 			}}
 			pt='8px'
-			top={{ base: '12px', md: '16px', xl: '18px' }}
-			w={{
-				base: 'calc(100vw - 6%)',
-				md: 'calc(100vw - 8%)',
-				lg: 'calc(100vw - 6%)',
-				xl: 'calc(100vw - 350px)',
-				'2xl': 'calc(100vw - 365px)'
-			}}>
+			top={0}
+			w='full'
+		>
 			<Flex
 				w='100%'
 				flexDirection={{

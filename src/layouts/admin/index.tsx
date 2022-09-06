@@ -1,5 +1,5 @@
 // Chakra imports
-import { Portal, Box, useDisclosure } from '@chakra-ui/react';
+import {Portal, Box, useDisclosure, Flex} from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin';
@@ -33,11 +33,9 @@ export default function Dashboard(props: { [x: string]: any }) {
 }
 
 function Content({...rest}) {
-	const [ fixed ] = useState(false);
 	const location = useLocation()
 	const {info} = useContext(PageContext)
 	const activeRoute = getActiveRoute(location, routes)
-	const { onOpen } = useDisclosure();
 
 	return <>
 		<Sidebar routes={routes} display='none' {...rest} />
@@ -48,24 +46,18 @@ function Content({...rest}) {
 			overflow='auto'
 			position='relative'
 			maxHeight='100%'
+			p={{ base: '20px', md: '30px' }}
 			w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
 			maxWidth={{ base: '100%', xl: 'calc( 100% - 290px )' }}
 			transition='all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)'
 			transitionDuration='.2s, .2s, .35s'
 			transitionProperty='top, bottom, width'
 			transitionTimingFunction='linear, linear, ease'>
-			<Portal>
-				<Box>
-					<Navbar
-						onOpen={onOpen}
-						brandText={activeRoute?.name || info?.title}
-						fixed={fixed}
-						{...rest}
-					/>
-				</Box>
-			</Portal>
-
-			<Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt={{ base: '180px', md: '130px' }}>
+			<Navbar
+				brandText={activeRoute?.name || info?.title}
+				{...rest}
+			/>
+			<Box mx='auto' pe='20px' minH='full' mt='50px'>
 				<Outlet />
 			</Box>
 			<Box>

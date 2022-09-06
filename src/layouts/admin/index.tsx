@@ -18,7 +18,7 @@ export default function Dashboard(props: { [x: string]: any }) {
 	document.documentElement.dir = 'ltr';
 
 	return (
-		<Box>
+		<Box h='full'>
 			<PageContextProvider>
 				<SidebarContext.Provider
 					value={{

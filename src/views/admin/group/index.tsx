@@ -35,6 +35,8 @@ function Content(props: {group: GroupDetail}) {
             <Flex flexDirection='column' gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}>
                 <Banner />
                 <Box
+                    h='75vh'
+                    flexGrow={1}
                     mt='45px'
                     mb='20px'
                 >

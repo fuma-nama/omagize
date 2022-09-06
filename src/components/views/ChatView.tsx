@@ -1,7 +1,19 @@
-import {useColorModeValue} from "@chakra-ui/react";
+import {Text, useColorModeValue} from "@chakra-ui/react";
+import Card from "../card/Card";
+import {fetchMessages, Message} from "../../api/MessageAPI";
 
 export default function ChatView() {
     const textColor = useColorModeValue('secondaryGray.900', 'white');
     const textColorBrand = useColorModeValue('brand.500', 'white');
-    return <></>
+    const messages = fetchMessages(0)
+
+    return <Card h='full'>
+        {messages.map(message => <MessageItem key={message.id} {...message} />)}
+    </Card>
+}
+
+function MessageItem(props: Message) {
+    return <Card>
+        <Text>{props.content}</Text>
+    </Card>
 }

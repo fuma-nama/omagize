@@ -21,14 +21,14 @@ import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import PropTypes from 'prop-types';
 import React from 'react';
 // Assets
-import navImage from 'assets/img/layout/Navbar.png';
-import { MdNotificationsNone, MdInfoOutline } from 'react-icons/md';
-import { IoMdMoon, IoMdSunny } from 'react-icons/io';
-import { FaEthereum } from 'react-icons/fa';
+
+import { MdNotificationsNone} from 'react-icons/md';
+
 import routes from 'routes';
 import {UserMenu} from "./profile/UserMenu";
+import ThemeSwitch from "./components/ThemeSwitch";
+
 export default function HeaderLinks() {
-	const { colorMode, toggleColorMode } = useColorMode();
 	// Chakra Color Mode
 	const navbarIcon = useColorModeValue('gray.400', 'white');
 	let menuBg = useColorModeValue('white', 'navy.800');
@@ -88,23 +88,7 @@ export default function HeaderLinks() {
 				</MenuList>
 			</Menu>
 
-			<Button
-				variant='no-hover'
-				bg='transparent'
-				p='0px'
-				minW='unset'
-				minH='unset'
-				h='18px'
-				w='max-content'
-				onClick={toggleColorMode}>
-				<Icon
-					me='10px'
-					h='18px'
-					w='18px'
-					color={navbarIcon}
-					as={colorMode === 'light' ? IoMdMoon : IoMdSunny}
-				/>
-			</Button>
+			<ThemeSwitch color={navbarIcon} />
 			<UserMenu color={textColor} shadow={shadow} bg={menuBg} />
 		</Flex>
 	);

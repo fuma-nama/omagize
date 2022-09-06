@@ -2,15 +2,12 @@
 import {
 	Avatar,
 	AvatarGroup,
-	Button,
 	Flex,
 	Heading,
 	HStack,
 	Image,
-	Link,
 	Text,
 	useColorModeValue,
-	VStack
 } from '@chakra-ui/react';
 
 // Assets
@@ -53,10 +50,9 @@ function Content(props: {group: GroupDetail}) {
 					display={{base: "none", md: "block"}}
 					w={{base: "100px", "2xl": "200px"}} h={{base: "100px", "2xl": "200px"}}
 			/>
-			<Flex direction='column' pos='relative' align='start' gap='20px'>
+			<Flex color='white' direction='column' pos='relative' align='start' gap='20px'>
 				<Heading
 					mt='40px'
-					color='white'
 					mb='20px'>
 					{group.name}
 				</Heading>

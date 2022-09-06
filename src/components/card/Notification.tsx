@@ -24,7 +24,7 @@ function MentionNotificationItem(props: MentionNotification) {
         <Card _hover={bgItem} bg='transparent' boxShadow='unset' px='24px' py='21px' transition='0.2s linear'>
             <Flex direction='row' align='center' justify='center' gap='12px'>
                 <Flex bg='brand.400' p='10px' rounded='xl'>
-                    <Icon as={GoMention} color={textColor} width='30px' height='30px' />
+                    <Icon as={GoMention} color='white' width='30px' height='30px' />
                 </Flex>
                 <Flex
                     direction='column'

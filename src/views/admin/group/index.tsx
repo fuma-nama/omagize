@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useMemo} from "react";
 // Chakra imports
-import {Box, Button, Flex, Grid, Heading, HStack, IconButton, useDisclosure} from '@chakra-ui/react';
+import {Box, Button, Flex, Grid, Heading, HStack, useDisclosure} from '@chakra-ui/react';
 
 // Custom components
 import Banner from './components/Banner';
@@ -11,6 +11,7 @@ import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
 import { Notifications } from "./components/Notifications";
 import ChatView from "components/views/ChatView";
 import {BiArrowBack} from "react-icons/bi";
+import {useNavigate} from "react-router-dom";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -26,17 +27,8 @@ export default function GroupOverview() {
 
 function Content(props: {group: GroupDetail}) {
     const {group} = props
-    const {onOpen, onClose, isOpen} = useDisclosure()
-    const view = useMemo(() => <ChatView />, [])
+    const navigate = useNavigate()
 
-    if (isOpen) return <>
-        <HStack pos='sticky' top={0} left={0}>
-            <Button leftIcon={<BiArrowBack />} onClick={onClose} variant="link">
-                Back
-            </Button>
-        </HStack>
-        {view}
-    </>
     return (
         <Grid
             h='full'
@@ -53,9 +45,9 @@ function Content(props: {group: GroupDetail}) {
                 >
                     <Card flexDirection='row' mb='20px' alignItems='center'>
                         <Heading fontSize='24px'>Messages</Heading>
-                        <Button ml='auto' variant="brand" onClick={onOpen}>Open</Button>
+                        <Button ml='auto' variant="brand" onClick={() => navigate(`/user/chat/${group.id}`)}>Open</Button>
                     </Card>
-                    {view}
+                    <ChatView />
                 </Box>
             </Flex>
             <Flex direction='column' gap="20px" gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}>

@@ -7,14 +7,14 @@ import {ChakraProvider} from '@chakra-ui/react';
 import theme from './theme/theme';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import routes, {dynamicRoutes} from "./routes";
-import {layouts} from "./layouts";
+import {layouts, LayoutType} from "./layouts";
 import {useLoggedInQuery} from "./api/AccountAPI";
 
 const client = new QueryClient()
-function getRoutes(layout: string): any {
-	const mapper = (route: IRoute, key: any) => {
-		if (route.layout === layout) {
-			return <Route path={route.layout + route.path} element={route.component} key={key} />;
+function getRoutes(layout: LayoutType): any {
+	const mapper = (route: IRoute, key: number) => {
+		if (route.layout === layout.path) {
+			return <Route path={route.layout + route.path} element={route.component} key={key} />
 		} else {
 			return null;
 		}
@@ -38,7 +38,7 @@ function Pages() {
 				.filter(layout => layout.requireLogin == loggedIn)
 				.map((layout, i) =>
 					<Route key={i} path={layout.path} element={layout.component}>
-						{getRoutes(layout.path)}
+						{getRoutes(layout)}
 						{layout.index && <Route index element={<Navigate to={layout.index}/>}/>}
 						{layout.default && <Route path="*" element={<Navigate to={layout.default}/>}/>}
 					</Route>

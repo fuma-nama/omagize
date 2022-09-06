@@ -9,52 +9,29 @@ import {
 	SkeletonText,
 	useColorModeValue
 } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
 import {ChakraProps} from "@chakra-ui/system/src/system.types";
+import {getActiveRoute} from "../../utils/RouteUtil";
+import {useLocation} from "react-router-dom";
+import routes from "routes";
 
 export default function AdminNavbar(props: {
 	brandText: string;
 } & ChakraProps) {
-	const [ scrolled, setScrolled ] = useState(false);
-
-	useEffect(() => {
-		window.addEventListener('scroll', changeNavbar);
-
-		return () => {
-			window.removeEventListener('scroll', changeNavbar);
-		};
-	});
-
 	const { brandText } = props;
 
 	// Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
 	let mainText = useColorModeValue('navy.700', 'white');
 	let secondaryText = useColorModeValue('gray.700', 'white');
-	let navbarFilter = 'none';
 	let navbarBackdrop = 'blur(20px)';
-	let navbarShadow = 'none';
 	let navbarBg = useColorModeValue('rgba(244, 247, 254, 0.2)', 'rgba(11,20,55,0.5)');
-	let navbarBorder = 'transparent';
-	let secondaryMargin = '0px';
-	let paddingX = '15px';
-	let gap = '0px';
-	const changeNavbar = () => {
-		if (window.scrollY > 1) {
-			setScrolled(true);
-		} else {
-			setScrolled(false);
-		}
-	};
+	const route = getActiveRoute(useLocation(), routes)
 
 	return (
 		<Box
 			zIndex='sticky'
 			pos="sticky"
-			boxShadow={navbarShadow}
 			bg={navbarBg}
-			borderColor={navbarBorder}
-			filter={navbarFilter}
 			backdropFilter={navbarBackdrop}
 			backgroundPosition='center'
 			backgroundSize='cover'
@@ -70,10 +47,9 @@ export default function AdminNavbar(props: {
 			justifyContent={{ xl: 'center' }}
 			lineHeight='25.6px'
 			mx='auto'
-			mt={secondaryMargin}
 			pb='8px'
 			px={{
-				sm: paddingX,
+				sm: '15px',
 				md: '10px'
 			}}
 			ps={{
@@ -90,7 +66,7 @@ export default function AdminNavbar(props: {
 					md: 'row'
 				}}
 				alignItems={{ xl: 'center' }}
-				mb={gap}>
+			>
 				<Box mb={{ sm: '8px', md: '0px' }}>
 					<Breadcrumb>
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
@@ -105,7 +81,6 @@ export default function AdminNavbar(props: {
 							</BreadcrumbLink>
 						</BreadcrumbItem>
 					</Breadcrumb>
-					{/* Here we create navbar brand, based on route name */}
 					<Link
 						color={mainText}
 						href='#'
@@ -126,7 +101,7 @@ export default function AdminNavbar(props: {
 					</Link>
 				</Box>
 				<Box ms='auto' w={{ sm: '100%', md: 'unset' }}>
-					<AdminNavbarLinks />
+					{route?.navbar || <AdminNavbarLinks />}
 				</Box>
 			</Flex> 
 		</Box>

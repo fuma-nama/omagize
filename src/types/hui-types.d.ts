@@ -7,12 +7,9 @@ declare global {
    * Now declare things that go in the global namespace,
    * or augment existing declarations in the global namespace.
    */
-	interface RoutesType {
+	interface RoutesType extends IRoute {
 		name: string;
 		icon?: JSX.Element | string;
-		layout: string;
-		component: ReactNode;
-		path: string;
 		hidden?: boolean;
 	}
 
@@ -22,5 +19,6 @@ declare global {
 		layout: string;
 		path: string;
 		component: ReactNode;
+		navbar?: ReactNode
 	}
 }

@@ -13,11 +13,11 @@ export const layouts: LayoutType[] = [
         path: "/user",
         component: <AdminLayout />,
         index: "/user/default",
-        requireLogin: true
+        requireLogin: true,
     }
 ]
 
-type LayoutType = {
+export type LayoutType = {
     path: string
     component: ReactNode
     index?: string

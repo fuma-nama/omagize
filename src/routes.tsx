@@ -8,7 +8,9 @@ import Profile from 'views/admin/profile';
 
 // Auth Imports
 import SignInCentered from 'views/auth/signIn';
-import GroupChat from "./views/admin/group";
+import GroupOverview from "./views/admin/group";
+import GroupChat from "./views/admin/chat/group/GroupChat";
+import GroupNavbar from "./views/admin/chat/navbar/GroupNavbar";
 
 const routes: RoutesType[] = [
 	{
@@ -47,8 +49,14 @@ export const dynamicRoutes: DynamicRoute[] = [
 	{
 		layout: '/user',
 		path: '/:group',
-		component: <GroupChat />,
+		component: <GroupOverview />,
 	},
+	{
+		layout: '/user',
+		path: '/chat/:group',
+		component: <GroupChat />,
+		navbar: <GroupNavbar />
+	}
 ]
 
 export default routes;

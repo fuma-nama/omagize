@@ -36,8 +36,6 @@ export default function AdminNavbar(props: {
 			backgroundPosition='center'
 			backgroundSize='cover'
 			borderRadius='16px'
-			borderWidth='1.5px'
-			borderStyle='solid'
 			transitionDelay='0s, 0s, 0s, 0s'
 			transitionDuration=' 0.25s, 0.25s, 0.25s, 0s'
 			transition-property='box-shadow, background-color, filter, border'

@@ -13,7 +13,7 @@ import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
 import {ChakraProps} from "@chakra-ui/system/src/system.types";
 import {getActiveRoute} from "../../utils/RouteUtil";
 import {useLocation} from "react-router-dom";
-import routes from "routes";
+import routes, {dynamicRoutes} from "routes";
 
 export default function AdminNavbar(props: {
 	brandText: string;
@@ -25,7 +25,7 @@ export default function AdminNavbar(props: {
 	let secondaryText = useColorModeValue('gray.700', 'white');
 	let navbarBackdrop = 'blur(20px)';
 	let navbarBg = useColorModeValue('rgba(244, 247, 254, 0.2)', 'rgba(11,20,55,0.5)');
-	const route = getActiveRoute(useLocation(), routes)
+	const route = getActiveRoute(useLocation(), [...dynamicRoutes, ...routes])
 
 	return (
 		<Box

@@ -1,6 +1,6 @@
 import {Location, matchRoutes} from "react-router-dom";
 
-export function getActiveRoute(location: Location, routes: RoutesType[]): RoutesType | null {
+export function getActiveRoute<T extends IRoute>(location: Location, routes: T[]): T | null {
     const matches = matchRoutes(routes
         .map(route => ({
             path: route.layout + route.path

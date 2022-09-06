@@ -42,7 +42,7 @@ export default function HeaderLinks() {
 
 	return (
 		<Flex
-			w={{ sm: '100%', md: 'auto' }}
+			w={{ base: '100%', md: 'auto' }}
 			alignItems='center'
 			flexDirection='row'
 			bg={menuBg}

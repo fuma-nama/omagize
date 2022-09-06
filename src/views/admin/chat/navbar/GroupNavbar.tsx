@@ -1,5 +1,6 @@
 import {
-    Flex,
+    Button,
+    Flex, HStack,
     Icon,
     Menu,
     MenuButton,
@@ -16,7 +17,10 @@ import {MdNotificationsNone} from "react-icons/md";
 import {ItemContent} from "../../../../components/menu/ItemContent";
 import ThemeSwitch from "../../../../components/navbar/components/ThemeSwitch";
 import {UserMenu} from "../../../../components/navbar/profile/UserMenu";
-import React from "react";
+import React, {useContext} from "react";
+import {BiArrowBack} from "react-icons/bi";
+import {useNavigate} from "react-router-dom";
+import {PageContext} from "../../../../contexts/PageContext";
 
 export default function GroupNavbar() {
     // Chakra Color Mode
@@ -28,25 +32,34 @@ export default function GroupNavbar() {
         '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
         '14px 17px 40px 4px rgba(112, 144, 176, 0.06)'
     );
+    const {selectedGroup} = useContext(PageContext)
+    const navigate = useNavigate()
 
     return (
         <Flex
-            w={{ sm: '100%', md: 'auto' }}
-            alignItems='center'
-            flexDirection='row'
+            w={{ base: '100%', md: 'auto' }}
+            direction='column'
+            gap={2}
             bg={menuBg}
             p='10px'
             borderRadius='30px'
             boxShadow={shadow}>
-            <SearchBar
-                mb='unset'
-                me='10px'
-                borderRadius='30px'
-            />
-            <SidebarResponsive routes={routes} />
+            <HStack ml={2}>
+                <Button leftIcon={<BiArrowBack />} onClick={() => navigate(`/user/${selectedGroup}`)} variant="link">
+                    Back
+                </Button>
+            </HStack>
+            <HStack align='center'>
+                <SearchBar
+                    mb='unset'
+                    me='10px'
+                    borderRadius='30px'
+                />
+                <SidebarResponsive routes={routes} />
 
-            <ThemeSwitch color={navbarIcon} />
-            <UserMenu color={textColor} shadow={shadow} bg={menuBg} />
+                <ThemeSwitch color={navbarIcon} />
+                <UserMenu color={textColor} shadow={shadow} bg={menuBg} />
+            </HStack>
         </Flex>
     );
 }

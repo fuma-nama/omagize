@@ -31,7 +31,7 @@ function Content(props: {notifications: GroupNotification[]}) {
             <Button variant='action'>Clear all</Button>
         </Flex>
         {
-            notifications.map(n => <GroupNotificationItem {...n} />)
+            notifications.map((n, i) => <GroupNotificationItem key={i} {...n} />)
         }
     </Card>
 }

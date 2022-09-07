@@ -1,11 +1,11 @@
 // Chakra imports
-import {Portal, Box, useDisclosure, Flex} from '@chakra-ui/react';
+import {Portal, Box, useDisclosure, Flex, useCallbackRef} from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin';
 import Sidebar from 'components/sidebar/Sidebar';
 import { SidebarContext } from 'contexts/SidebarContext';
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 import {Outlet, useLocation} from 'react-router-dom';
 import routes from 'routes';
 import {PageContext, PageContextProvider} from "contexts/PageContext";

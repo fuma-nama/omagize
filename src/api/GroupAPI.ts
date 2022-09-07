@@ -14,7 +14,7 @@ export type GroupDetail = Group & {
 }
 
 export type Member = {
-    id: string
+    id: string //equal to user id
     username: string
     avatar?: string
 }

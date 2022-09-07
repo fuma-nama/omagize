@@ -12,6 +12,9 @@ import { Notifications } from "./components/Notifications";
 import ChatView from "components/views/ChatView";
 import {BiArrowBack} from "react-icons/bi";
 import {useNavigate} from "react-router-dom";
+import {fetchMessagesLatest} from "../../../api/MessageAPI";
+import { useQuery } from "@tanstack/react-query";
+import MessageItem, {MessageItemSkeleton} from "../../../components/card/chat/MessageItem";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -47,7 +50,7 @@ function Content(props: {group: GroupDetail}) {
                         <Heading fontSize='24px'>Messages</Heading>
                         <Button ml='auto' variant="brand" onClick={() => navigate(`/user/chat/${group.id}`)}>Open</Button>
                     </Card>
-                    <ChatView />
+                    <MessagesPreview />
                 </Box>
             </Flex>
             <Flex direction='column' gap="20px" gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}>
@@ -58,4 +61,24 @@ function Content(props: {group: GroupDetail}) {
             </Flex>
         </Grid>
     );
+}
+
+function MessagesPreview() {
+    const {selectedGroup} = useContext(PageContext)
+    const query = useQuery(
+        ["messages_overview", selectedGroup],
+        () => fetchMessagesLatest(selectedGroup, 5)
+    )
+    if (query.isLoading) {
+        return <>
+            <MessageItemSkeleton noOfLines={4} />
+            <MessageItemSkeleton noOfLines={2} />
+            <MessageItemSkeleton noOfLines={6} />
+            <MessageItemSkeleton noOfLines={1} />
+        </>
+    }
+
+    return <>
+        {query.data.map(message => <MessageItem key={message.id} {...message} />)}
+    </>
 }

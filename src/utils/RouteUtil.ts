@@ -1,4 +1,9 @@
-import {Location, matchRoutes} from "react-router-dom";
+import {Location, matchRoutes, useLocation} from "react-router-dom";
+
+export function useActiveRoute<T extends IRoute>(routes: T[]): T | null {
+    const location = useLocation()
+    return getActiveRoute(location, routes)
+}
 
 export function getActiveRoute<T extends IRoute>(location: Location, routes: T[]): T | null {
     const matches = matchRoutes(routes

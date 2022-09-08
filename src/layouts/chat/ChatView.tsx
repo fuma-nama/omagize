@@ -13,24 +13,22 @@ export default function ChatView() {
     const textColor = useColorModeValue('secondaryGray.900', 'white');
     const textColorBrand = useColorModeValue('brand.500', 'white');
     const {selectedGroup} = useContext(PageContext)
-    const [ready, ref, scroll] = useBottomScroll()
+
+    const [ready, ref] = useBottomScroll()
     const {
         data,
         error,
         fetchPreviousPage,
         hasPreviousPage,
         isFetching,
-        isFetchingPreviousPage,
     } = useInfiniteQuery(["messages", selectedGroup],
         ({ pageParam }) => pageParam == null?
             fetchMessagesLatest(selectedGroup) :
-            fetchMessagesBefore(selectedGroup, pageParam),
-        {
-            onSuccess() {
-                scroll()
-            },
+            fetchMessagesBefore(selectedGroup, pageParam), {
+            refetchOnMount: false,
             getPreviousPageParam: (first) => first[0],
     })
+
     function mapPage(messages: Message[]) {
         return messages.map(message => <MessageItem key={message.id} {...message} />)
     }
@@ -40,16 +38,18 @@ export default function ChatView() {
         overflow='auto'
         direction="column-reverse" h='full' minH='400px' gap={2}
     >
-        {isFetching || data == null? null : [].concat(...data.pages.map(mapPage)).reverse()}
-        {ready && hasPreviousPage && <LoadingBlock isFetching={isFetching || isFetchingPreviousPage} onFetch={() => ready && fetchPreviousPage()}/>}
+        {data == null? null : [].concat(...data.pages.map(mapPage)).reverse()}
+        {hasPreviousPage && <LoadingBlock isFetching={isFetching || !ready} onFetch={() => fetchPreviousPage()}/>}
     </Flex>
 }
 
 function useBottomScroll(): [boolean, MutableRefObject<HTMLDivElement>, () => void] {
     const ref = useRef<HTMLDivElement>()
     const scroll = () => {
-        if (ref.current) {
-            ref.current.scrollIntoView(false)
+        const element = ref.current
+        if (element) {
+            console.log("scrolled", element.scrollTop, element.scrollHeight)
+            element.scrollTo(element.scrollLeft, element.scrollHeight)
         }
     }
     const ready = useMemo<boolean>(
@@ -78,9 +78,3 @@ function LoadingBlock(props: {isFetching: boolean, onFetch: () => void}) {
         <MessageItemSkeleton noOfLines={3} />
     </Flex>
 }
-/*
-export type ChatViewContextType = {
-
-}
-export const ChatViewContext = createContext<ChatViewContextType>(null)
- */

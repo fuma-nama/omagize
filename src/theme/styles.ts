@@ -80,6 +80,13 @@ export const globalStyles = {
 	},
 	styles: {
 		global: (props: any) => ({
+			"::-webkit-scrollbar": {
+				bg: 'transparent'
+			},
+			"::-webkit-scrollbar-thumb": {
+				borderRadius: "10px",
+				bg: mode("rgba(0, 0, 0, 0.2)", "rgba(255, 255, 255, 0.2)")(props)
+			},
 			body: {
 				overflowX: 'hidden',
 				bg: mode('secondaryGray.300', 'navy.900')(props),
@@ -95,3 +102,13 @@ export const globalStyles = {
 		})
 	}
 };
+/*
+::-webkit-scrollbar {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2)
+}
+ */

@@ -13,13 +13,28 @@ export const inputStyles = {
 				main: (props: any) => ({
 					field: {
 						bg: mode('transparent', 'navy.800')(props),
-						border: '1px solid',
+						border: '2px solid',
 						color: mode('secondaryGray.900', 'white')(props),
-						borderColor: mode('secondaryGray.100', 'whiteAlpha.100')(props),
+						borderColor: mode('secondaryGray.400', 'navy.600')(props),
 						borderRadius: '16px',
 						fontSize: 'sm',
 						p: '20px',
 						_placeholder: { color: 'secondaryGray.400' }
+					}
+				}),
+				message: (props: any) => ({
+					field: {
+						bg: mode('transparent', 'navy.800')(props),
+						border: '2px solid',
+						_focus: {
+							borderColor: mode('brand.300', 'brand.400')(props),
+						},
+						color: mode('secondaryGray.900', 'white')(props),
+						borderColor: mode('secondaryGray.400', 'navy.600')(props),
+						borderRadius: '16px',
+						fontSize: 'sm',
+						p: '20px',
+						_placeholder: { color: mode('secondaryGray.700', 'secondaryGray.600')(props) }
 					}
 				}),
 				auth: (props: any) => ({

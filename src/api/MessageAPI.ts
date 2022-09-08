@@ -12,7 +12,6 @@ export type Message = {
 export async function fetchMessagesLatest(groupID: string, limit: number = 20): Promise<Message[]> {
     console.log("latest", messages.slice(messages.length - limit - 1, messages.length))
     await delay(2000)
-    throw "Unknow Error"
     return messages.slice(messages.length - limit - 1)
 }
 

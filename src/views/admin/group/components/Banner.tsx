@@ -1,6 +1,5 @@
 // Chakra imports
 import {
-	Avatar,
 	AvatarGroup,
 	Flex,
 	Heading,
@@ -9,10 +8,10 @@ import {
 	Text,
 	useColorModeValue,
 } from '@chakra-ui/react';
+import Avatar from "components/icons/Avatar"
 
 // Assets
 import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
-import {AvatarBg} from "variables/colors";
 import {useContext} from "react";
 import {PageContext} from "contexts/PageContext";
 
@@ -46,7 +45,7 @@ function Content(props: {group: GroupDetail}) {
 				blur='sm'
 				brightness={0.5}
 			/>}
-			<Avatar src={group.icon} name={group.name} bg={AvatarBg}
+			<Avatar src={group.icon} name={group.name}
 					display={{base: "none", md: "block"}}
 					w={{base: "100px", "2xl": "200px"}} h={{base: "100px", "2xl": "200px"}}
 			/>

@@ -22,7 +22,7 @@ export default extendTheme(
 	inputStyles, // input styles
 	textareaStyles, // textarea styles
 	switchStyles, // switch styles
-	CardComponent // card component
+	CardComponent, // card component
 );
 
 export interface CustomCardProps extends HTMLChakraProps<'div'>, ThemingProps {}

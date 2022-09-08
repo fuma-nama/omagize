@@ -1,5 +1,5 @@
 import {
-  Avatar, Box,
+  Box,
   Button,
   Flex, HStack, Image,
   Text,
@@ -8,6 +8,7 @@ import {
 import React from "react";
 import {GroupDetail, Member} from "api/GroupAPI";
 import Card from "components/card/Card";
+import Avatar from "components/icons/Avatar"
 
 export default function ActiveMembers(props: { group: GroupDetail}) {
   const { group } = props;
@@ -65,7 +66,7 @@ function MemberCard(props: {member: Member}) {
     </Box>
 
     <HStack gap='10px' pos='relative'>
-      <Avatar name={member.username} src={member.avatar} />
+      <Avatar name={member.username} src={member.avatar} variant='normal' />
       <Text fontSize='xl' fontWeight='bold'>{member.username}</Text>
     </HStack>
   </Card>

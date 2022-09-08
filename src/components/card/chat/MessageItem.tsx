@@ -1,13 +1,14 @@
 import {Message} from "api/MessageAPI";
-import {Avatar, Flex, HStack, SkeletonCircle, SkeletonText, Text, useColorModeValue} from "@chakra-ui/react";
-import {AvatarBg} from "variables/colors";
+import {Flex, HStack, SkeletonCircle, SkeletonText, Text, useColorModeValue} from "@chakra-ui/react";
+import Avatar from "components/icons/Avatar"
 
 export default function MessageItem(props: Message) {
     const {author} = props
     const secondaryText = useColorModeValue('gray.400', 'white');
+    const hoverBg = useColorModeValue("white", "navy.800")
 
-    return <Flex direction="row" _hover={{bg: "navy.800"}} p={7} transition="all 0.2s" rounded='xl'>
-        <Avatar name={author.username} src={author.avatar} bg={AvatarBg} />
+    return <Flex direction="row" _hover={{bg: hoverBg}} p={7} transition="all 0.2s" rounded='xl'>
+        <Avatar name={author.username} src={author.avatar} />
         <Flex direction='column' align='start' ml={2}>
             <HStack>
                 <Text fontWeight='bold' fontSize='lg'>{author.username}</Text>

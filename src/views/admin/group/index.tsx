@@ -9,8 +9,6 @@ import Card from 'components/card/Card';
 import {PageContext} from "contexts/PageContext";
 import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
 import { Notifications } from "./components/Notifications";
-import ChatView from "components/views/ChatView";
-import {BiArrowBack} from "react-icons/bi";
 import {useNavigate} from "react-router-dom";
 import {fetchMessagesLatest} from "../../../api/MessageAPI";
 import { useQuery } from "@tanstack/react-query";

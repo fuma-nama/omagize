@@ -1,6 +1,7 @@
 import AuthLayout from './layouts/auth';
 import AdminLayout from './layouts/admin';
 import {ReactNode} from "react";
+import ChatLayout from "./layouts/chat";
 
 export const layouts: LayoutType[] = [
     {
@@ -14,6 +15,11 @@ export const layouts: LayoutType[] = [
         component: <AdminLayout />,
         index: "/user/default",
         requireLogin: true,
+    },
+    {
+        path: "/chat",
+        component: <ChatLayout />,
+        requireLogin: true
     }
 ]
 

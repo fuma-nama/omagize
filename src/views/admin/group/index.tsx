@@ -1,18 +1,17 @@
-import React, {useContext, useEffect, useMemo} from "react";
+import React, {useContext, useEffect} from "react";
 // Chakra imports
-import {Box, Button, Flex, Grid, Heading, HStack, useDisclosure} from '@chakra-ui/react';
+import {Box, Button, Flex, Grid, Heading} from '@chakra-ui/react';
 
 // Custom components
 import Banner from './components/Banner';
 import ActiveMembers from './components/ActiveMembers';
 import Card from 'components/card/Card';
-import {PageContext} from "contexts/PageContext";
+import {PageContext, useGroupChat} from "contexts/PageContext";
 import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
 import { Notifications } from "./components/Notifications";
-import {useNavigate} from "react-router-dom";
-import {fetchMessagesLatest} from "../../../api/MessageAPI";
+import {fetchMessagesLatest} from "api/MessageAPI";
 import { useQuery } from "@tanstack/react-query";
-import MessageItem, {MessageItemSkeleton} from "../../../components/card/chat/MessageItem";
+import MessageItem, {MessageItemSkeleton} from "components/card/chat/MessageItem";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -28,7 +27,7 @@ export default function GroupOverview() {
 
 function Content(props: {group: GroupDetail}) {
     const {group} = props
-    const navigate = useNavigate()
+    const {open} = useGroupChat(group.id)
 
     return (
         <Grid
@@ -46,7 +45,7 @@ function Content(props: {group: GroupDetail}) {
                 >
                     <Card flexDirection='row' mb='20px' alignItems='center'>
                         <Heading fontSize='24px'>Messages</Heading>
-                        <Button ml='auto' variant="brand" onClick={() => navigate(`/user/chat/${group.id}`)}>Open</Button>
+                        <Button ml='auto' variant="brand" onClick={open}>Open</Button>
                     </Card>
                     <MessagesPreview />
                 </Box>

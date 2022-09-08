@@ -12,6 +12,7 @@ import { Notifications } from "./components/Notifications";
 import {fetchMessagesLatest} from "api/MessageAPI";
 import { useQuery } from "@tanstack/react-query";
 import MessageItem, {MessageItemSkeleton} from "components/card/chat/MessageItem";
+import {QueryErrorPanel} from "../../../components/card/ErrorPanel";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -66,6 +67,11 @@ function MessagesPreview() {
         ["messages_overview", selectedGroup],
         () => fetchMessagesLatest(selectedGroup, 5)
     )
+    if (query.error) {
+        return <Box flexGrow={1}>
+            <QueryErrorPanel query={query} />
+        </Box>
+    }
     if (query.isLoading) {
         return <>
             <MessageItemSkeleton noOfLines={4} />

@@ -10,7 +10,14 @@ import routes, {dynamicRoutes} from "./routes";
 import {layouts, LayoutType} from "./layouts";
 import {useLoggedInQuery} from "./api/AccountAPI";
 
-const client = new QueryClient()
+const client = new QueryClient({
+	defaultOptions: {
+		queries: {
+			refetchOnWindowFocus: false,
+			retry: 1
+		}
+	}
+})
 function getRoutes(layout: LayoutType): any {
 	const mapper = (route: IRoute, key: number) => {
 		if (route.layout === layout.path) {

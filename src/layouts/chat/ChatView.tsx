@@ -57,7 +57,7 @@ export default function ChatView() {
 function MessageBar() {
     const [message, setMessage] = useState("")
 
-    return <Box w='full' px="20px" pb={5}>
+    return <Box w='full' px="20px" pb={5} mt='auto'>
         <Card flexDirection='row' alignItems='center' gap={2}>
             <IconButton aria-label='add-file' icon={<FiFile />} />
             <IconButton aria-label='add-emoji' icon={<GrEmoji />} />

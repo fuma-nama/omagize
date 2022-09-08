@@ -35,10 +35,18 @@ function Content({...rest}) {
 		transitionDuration='.2s, .2s, .35s'
 		transitionProperty='top, bottom, width'
 		transitionTimingFunction='linear, linear, ease'>
-		<Navbar
-			brandText={activeRoute?.name || info?.title}
-			{...rest}
-		/>
+		<Box
+			pos='sticky'
+			top={0}
+			px='20px'
+			py='10px'
+			w='full'
+		>
+			<Navbar
+				brandText={activeRoute?.name || info?.title}
+				{...rest}
+			/>
+		</Box>
 		<Outlet />
 	</Flex>
 }

@@ -1,4 +1,4 @@
-import ChatView from "components/views/ChatView";
+import ChatView from "layouts/chat/ChatView";
 import {useContext, useEffect} from "react";
 import {PageContext} from "contexts/PageContext";
 import {useGroupDetailQuery} from "api/GroupAPI";

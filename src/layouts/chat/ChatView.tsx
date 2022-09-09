@@ -2,8 +2,7 @@ import {
     Box,
     Flex, IconButton, Input,
 } from "@chakra-ui/react";
-import { fetchMessagesBefore, fetchMessagesLatest, Message} from "../../api/MessageAPI";
-import {useInfiniteQuery} from "@tanstack/react-query";
+import {Message, useInfiniteMessageQuery} from "../../api/MessageAPI";
 import {MutableRefObject, useContext, useMemo, useRef, useState} from "react";
 import {PageContext} from "../../contexts/PageContext";
 import {useInView} from "react-intersection-observer";
@@ -25,14 +24,7 @@ export default function ChatView() {
         hasPreviousPage,
         isFetching,
         refetch
-    } = useInfiniteQuery(["messages", selectedGroup],
-        ({ pageParam }) => pageParam == null?
-            fetchMessagesLatest(selectedGroup) :
-            fetchMessagesBefore(selectedGroup, pageParam), {
-            refetchOnMount: false,
-            getPreviousPageParam: (first) => first[0],
-            refetchOnWindowFocus: false
-    })
+    } = useInfiniteMessageQuery(selectedGroup)
 
     function mapPage(messages: Message[]) {
         return messages.map(message => <MessageItem key={message.id} {...message} />)

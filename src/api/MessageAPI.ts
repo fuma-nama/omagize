@@ -1,5 +1,6 @@
 import {Member} from "./GroupAPI";
 import {messages} from "./model";
+import {useInfiniteQuery} from "@tanstack/react-query";
 
 export type Message = {
     id: number
@@ -30,4 +31,15 @@ export async function fetchMessagesBefore(groupID: string, message: Message, lim
     const fetched = messages.filter(m => m.order_id < message.order_id)
     await delay(2000)
     return fetched.slice(fetched.length - limit - 1)
+}
+
+export function useInfiniteMessageQuery(group: string) {
+    return useInfiniteQuery(["messages", group],
+        ({ pageParam }) => pageParam == null?
+            fetchMessagesLatest(group) :
+            fetchMessagesBefore(group, pageParam), {
+            refetchOnMount: false,
+            getPreviousPageParam: (first) => first[0],
+            refetchOnWindowFocus: false
+        })
 }

@@ -81,6 +81,7 @@ export const globalStyles = {
 	styles: {
 		global: (props: any) => ({
 			"::-webkit-scrollbar": {
+				w: "5px",
 				bg: 'transparent'
 			},
 			"::-webkit-scrollbar-thumb": {
@@ -102,13 +103,3 @@ export const globalStyles = {
 		})
 	}
 };
-/*
-::-webkit-scrollbar {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.2)
-}
- */

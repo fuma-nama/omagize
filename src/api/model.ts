@@ -16,9 +16,7 @@ export const users: UserType[] = [
 ]
 
 export const members: Member[] = users.map(user => ({
-    id: user.id,
-    username: user.username,
-    avatar: user.avatarUrl
+    ...user
 }))
 
 export const groups = [

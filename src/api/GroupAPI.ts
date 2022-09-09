@@ -1,5 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
-import {groups} from "./model";
+import {groups, members} from "./model";
+import {UserType} from "./UserAPI";
 
 export type Group = {
     id: string
@@ -13,10 +14,8 @@ export type GroupDetail = Group & {
     activeMembers: Member[] //Should be always a 5-length array
 }
 
-export type Member = {
-    id: string //equal to user id
-    username: string
-    avatar?: string
+export type Member = UserType & {
+    role?: number
 }
 
 export type MentionNotification = {
@@ -34,18 +33,8 @@ export function fetchGroup(id: string): Group {
 
 export function fetchGroupDetail(id: string): GroupDetail {
     return {
-        memberCount: 2,
-        activeMembers: [
-            {
-                id: "4324232344324543",
-                username: "MONEY",
-                avatar: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
-            },
-            {
-                id: "4324232344324443",
-                username: "Kane",
-            }
-        ],
+        memberCount: members.length,
+        activeMembers: members,
         ...groups.find(g => g.id === id)
     }
 }

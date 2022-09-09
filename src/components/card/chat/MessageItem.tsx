@@ -8,7 +8,7 @@ export default function MessageItem(props: Message) {
     const hoverBg = useColorModeValue("white", "navy.800")
 
     return <Flex direction="row" _hover={{bg: hoverBg}} p={7} transition="all 0.2s" rounded='xl'>
-        <Avatar name={author.username} src={author.avatar} />
+        <Avatar name={author.username} src={author.avatarUrl} />
         <Flex direction='column' align='start' ml={2}>
             <HStack>
                 <Text fontWeight='bold' fontSize='lg'>{author.username}</Text>

@@ -1,4 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
+import {users} from "./model";
 
 export type UserType = {
     id: string
@@ -8,12 +9,7 @@ export type UserType = {
 }
 
 export function fetchUser(): UserType {
-    return {
-        id: "432423423432423",
-        username: "MONEY",
-        avatarUrl: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
-        bannerUrl: "https://img.moelong.com/images/LycorisRecoiltwnews/LycorisRecoiltwnews09.webp"
-    }
+    return users[0]
 }
 
 export function useUserQuery() {

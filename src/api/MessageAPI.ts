@@ -1,5 +1,5 @@
 import {Member} from "./GroupAPI";
-import {messages} from "./model";
+import {delay, messages} from "./model";
 import {useInfiniteQuery} from "@tanstack/react-query";
 
 export type Message = {
@@ -15,13 +15,6 @@ export async function fetchMessagesLatest(groupID: string, limit: number = 20): 
     await delay(2000)
     return messages.slice(messages.length - limit - 1)
 }
-
-function delay(timeout: number) {
-    return new Promise(re => {
-        setTimeout(re, timeout)
-    })
-}
-
 
 /**
  * Find messages sent before the specified message

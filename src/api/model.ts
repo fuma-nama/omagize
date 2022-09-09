@@ -2,6 +2,12 @@ import {Message} from "./MessageAPI";
 import {UserType} from "./UserAPI";
 import {Member} from "./GroupAPI";
 
+export function delay(timeout: number) {
+    return new Promise(re => {
+        setTimeout(re, timeout)
+    })
+}
+
 export const users: UserType[] = [
     {
         id: "432423423432423",

@@ -1,13 +1,9 @@
 import {InputHTMLAttributes, LegacyRef, useMemo, useRef, useState} from "react";
 
 export function useImagePickerAuto(props?: InputHTMLAttributes<HTMLInputElement>) {
-    const [value, setValue] = useState(null)
+    const [value, setValue] = useState<File>(null)
 
-    return {
-        value,
-        setValue,
-        ...useImagePicker(value, setValue, props)
-    }
+    return useImagePicker(value, setValue, props)
 }
 
 export function useImagePicker(value: File, onChange: (file: File) => void, props?: InputHTMLAttributes<HTMLInputElement>) {
@@ -15,6 +11,8 @@ export function useImagePicker(value: File, onChange: (file: File) => void, prop
     const url = useImageUrl(value)
 
     return {
+        value,
+        setValue: onChange,
         select() {
             ref.current.click()
         },

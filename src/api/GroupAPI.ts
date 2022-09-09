@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {groups, members} from "./model";
+import {delay, groups, members} from "./model";
 import {UserType} from "./UserAPI";
 
 export type Group = {
@@ -56,8 +56,8 @@ export function fetchGroups(): Group[] {
     return groups
 }
 
-export function createGroup(name: string, icon?: string, banner?: string) {
-    
+export async function createGroup(name: string, icon?: File, banner?: File) {
+    await delay(3000)
 }
 
 export function useGroupsQuery() {

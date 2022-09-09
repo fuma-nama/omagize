@@ -15,7 +15,7 @@ import Avatar from "../icons/Avatar";
 import {useImagePicker} from "utils/ImageUtils";
 import {VscNewFile} from "react-icons/vsc";
 import {useMutation} from "@tanstack/react-query";
-import {createGroup} from "../../api/GroupAPI";
+import {createGroup} from "api/GroupAPI";
 
 export default function CreateGroupModal(props: {isOpen: boolean, onClose: () => void}) {
     const {isOpen, onClose} = props
@@ -24,6 +24,7 @@ export default function CreateGroupModal(props: {isOpen: boolean, onClose: () =>
         ['create_group'],
         () => createGroup(value.name, value.icon, value.banner), {
             onSuccess() {
+                setValue({name: ""})
                 onClose()
             }
         }

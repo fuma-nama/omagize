@@ -19,7 +19,7 @@ export const inputStyles = {
 						borderRadius: '16px',
 						fontSize: 'sm',
 						p: '20px',
-						_placeholder: { color: 'secondaryGray.400' }
+						_placeholder: { color: mode('secondaryGray.700', 'secondaryGray.600')(props) }
 					}
 				}),
 				message: (props: any) => ({

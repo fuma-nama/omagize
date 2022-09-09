@@ -4,12 +4,16 @@ import {Dict} from "@chakra-ui/utils";
 export const modalStyles: Dict = {
     components: {
         Modal: {
-            parts: ['content'],
-            baseStyle: {
+            parts: ['content', 'overlay'],
+            baseStyle: (props: any) => ({
                 dialog: {
-                    bg: "navy.900"
+                    bg: mode("secondaryGray.300", "navy.900")(props)
                 },
-            },
+                overlay: {
+                    backdropFilter: 'auto',
+                    backdropBlur: 'lg'
+                },
+            }),
         }
     }
 }

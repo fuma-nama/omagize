@@ -56,6 +56,10 @@ export function fetchGroups(): Group[] {
     return groups
 }
 
+export function createGroup(name: string, icon?: string, banner?: string) {
+    
+}
+
 export function useGroupsQuery() {
     return useQuery(["groups"], () => fetchGroups())
 }

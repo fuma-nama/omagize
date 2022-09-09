@@ -10,6 +10,7 @@ import { switchStyles } from './components/switch';
 import { linkStyles } from './components/link';
 import { breakpoints } from './foundations/breakpoints';
 import { globalStyles } from './styles';
+import {modalStyles} from "./components/modal";
 
 export default extendTheme(
 	{ breakpoints }, // Breakpoints
@@ -23,6 +24,8 @@ export default extendTheme(
 	textareaStyles, // textarea styles
 	switchStyles, // switch styles
 	CardComponent, // card component
+	modalStyles,
+
 );
 
 export interface CustomCardProps extends HTMLChakraProps<'div'>, ThemingProps {}

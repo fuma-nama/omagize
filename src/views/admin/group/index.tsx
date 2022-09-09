@@ -9,7 +9,7 @@ import Card from 'components/card/Card';
 import {PageContext, useGroupChat} from "contexts/PageContext";
 import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
 import { Notifications } from "./components/Notifications";
-import {fetchMessagesLatest} from "api/MessageAPI";
+import {fetchMessagesLatest, useInfiniteMessageQuery} from "api/MessageAPI";
 import { useQuery } from "@tanstack/react-query";
 import MessageItem, {MessageItemSkeleton} from "components/card/chat/MessageItem";
 import {QueryErrorPanel} from "../../../components/card/ErrorPanel";
@@ -63,10 +63,8 @@ function Content(props: {group: GroupDetail}) {
 
 function MessagesPreview() {
     const {selectedGroup} = useContext(PageContext)
-    const query = useQuery(
-        ["messages_overview", selectedGroup],
-        () => fetchMessagesLatest(selectedGroup, 5)
-    )
+    const query = useInfiniteMessageQuery(selectedGroup)
+
     if (query.error) {
         return <Box flexGrow={1}>
             <QueryErrorPanel query={query} />
@@ -81,7 +79,9 @@ function MessagesPreview() {
         </>
     }
 
-    return <>
-        {query.data.map(message => <MessageItem key={message.id} {...message} />)}
-    </>
+    const pages = query.data.pages
+    const lastPage = pages[pages.length - 1]
+    return <Flex direction='column-reverse' maxH="800px" overflow='auto'>
+        {lastPage.slice(lastPage.length - 9, lastPage.length - 1).map(message => <MessageItem key={message.id} {...message} />)}
+    </Flex>
 }

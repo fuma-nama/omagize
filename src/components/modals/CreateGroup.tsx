@@ -1,17 +1,19 @@
 import {
-    Button, Center, FormControl, FormErrorMessage, FormLabel, Input, InputGroup,
+    Box,
+    Button, Center, Circle, FormControl, FormErrorMessage, FormLabel, Input, InputGroup,
     Modal,
     ModalBody,
     ModalCloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
-    ModalOverlay, Text
+    ModalOverlay, Text, useColorModeValue
 } from "@chakra-ui/react";
-import {useState} from "react";
+import {MouseEventHandler, useState} from "react";
 import {BiRightArrow} from "react-icons/bi";
 import Avatar from "../icons/Avatar";
 import {useImagePickerAuto} from "utils/ImageUtils";
+import {VscNewFile} from "react-icons/vsc";
 
 export default function CreateGroupModal(props: {isOpen: boolean, onClose: () => void}) {
     const {isOpen, onClose} = props
@@ -48,16 +50,19 @@ function Form() {
             {icon.picker}
             {banner.picker}
             <Text mx='auto'>Pick a Icon</Text>
-            <Center w='full' bgImg={banner.url} onClick={banner.select} p={5} rounded='xl' _hover={{cursor: 'pointer'}}>
-                <Avatar
-                    src={icon.url} name={name}
-                    onClick={e => {
-                        icon.select()
-                        e.stopPropagation()
-                    }}
-                    size='xl'
-                />
-            </Center>
+            <Pick onClick={banner.select}>
+                <Center w='full' bgImg={banner.url} p={5} rounded='xl'>
+                    <Pick
+                        onClick={e => {
+                            icon.select()
+                            e.stopPropagation()
+                        }}
+                    >
+                        <Avatar src={icon.url} name={name} size='xl' />
+                    </Pick>
+                </Center>
+            </Pick>
+
             <Button mx='auto' onClick={() => {
                 icon.setValue(null)
                 banner.setValue(null)
@@ -69,4 +74,29 @@ function Form() {
         <FormLabel>Group Name</FormLabel>
         <Input value={name} onChange={e => setName(e.target.value)} variant="main" placeholder="Give your Group a name" />
     </FormControl>
+}
+
+function Pick(props: {onClick: MouseEventHandler<HTMLDivElement>, children: any}) {
+    const iconBg = useColorModeValue('white', 'brand.400')
+
+    return <Box
+        className='pick'
+        pos='relative' onClick={props.onClick} _hover={{cursor: 'pointer'}}
+        css={{
+            "&:has(.pick:hover) > .tip": {
+                opacity: 0
+            },
+            "&:hover > .tip": {
+                opacity: 1
+            },
+            "& > .tip": {
+                opacity: 0
+            }
+        }}
+    >
+        {props.children}
+        <Circle className='tip' pos='absolute' bottom={0} right={0} bg={iconBg} p={2} transition='all 0.1s'>
+            <VscNewFile />
+        </Circle>
+    </Box>
 }

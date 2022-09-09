@@ -46,7 +46,6 @@ function MemberCard(props: {member: Member}) {
   const [brand] = useToken("color", ["brand.400"])
   const image = member.bannerUrl ?? member.avatarUrl
 
-  console.log(image, member.bannerUrl, member.avatarUrl)
   return <Card
       _hover={{opacity: 0.5, cursor: 'pointer'}}
       transition='0.2s linear'

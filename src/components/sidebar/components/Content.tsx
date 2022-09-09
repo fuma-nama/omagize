@@ -8,6 +8,7 @@ import {useGroupsQuery} from "../../../api/GroupAPI";
 import {ChatGroup, ChatGroupSkeleton} from "../../card/ChatGroup";
 import {useContext} from "react";
 import {PageContext} from "../../../contexts/PageContext";
+import ActionBar from "./ActionBar";
 
 // FUNCTIONS
 
@@ -23,6 +24,9 @@ function SidebarContent(props: { routes: RoutesType[] }) {
 			<Stack direction='column' mt='18px' mb='auto'>
 				<Box ps='10px'>
 					<Links routes={routes} />
+				</Box>
+				<Box px='10px'>
+					<ActionBar />
 				</Box>
 
 				<Flex direction='column' ps='10px' gap={3}>

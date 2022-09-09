@@ -28,7 +28,7 @@ export default function CreateGroupModal(props: {isOpen: boolean, onClose: () =>
             </ModalBody>
 
             <ModalFooter>
-                <Button variant='action' mr={3} onClick={onClose}>
+                <Button mr={3} onClick={onClose}>
                     Close
                 </Button>
                 <Button variant='brand' rightIcon={<BiRightArrow />}>Create</Button>
@@ -51,14 +51,14 @@ function Form() {
             {banner.picker}
             <Text mx='auto'>Pick a Icon</Text>
             <Pick onClick={banner.select}>
-                <Center w='full' bgImg={banner.url} p={5} rounded='xl'>
+                <Center w='full' bgImg={banner.url} p={5} my={2} rounded='xl'>
                     <Pick
                         onClick={e => {
                             icon.select()
                             e.stopPropagation()
                         }}
                     >
-                        <Avatar src={icon.url} name={name} size='xl' />
+                        <Avatar border='auto' borderWidth={2} borderStyle='solid' borderColor='navy.800' src={icon.url} name={name} size='xl' />
                     </Pick>
                 </Center>
             </Pick>

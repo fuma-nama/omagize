@@ -6,6 +6,7 @@ export type UserType = {
     username: string
     bannerUrl?: string
     avatarUrl?: string
+    description?: string
 }
 
 export function fetchUser(): UserType {

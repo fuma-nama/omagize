@@ -12,8 +12,7 @@ import {
 import {MouseEventHandler, useState} from "react";
 import {BiRightArrow} from "react-icons/bi";
 import Avatar from "../icons/Avatar";
-import {useImagePicker} from "utils/ImageUtils";
-import {VscNewFile} from "react-icons/vsc";
+import {useImagePicker, Pick} from "utils/ImageUtils";
 import {useMutation} from "@tanstack/react-query";
 import {createGroup} from "api/GroupAPI";
 
@@ -87,7 +86,7 @@ function Form(props: {value: GroupOptions, onChange: (options: Partial<GroupOpti
             <Text mx='auto'>Style your Group</Text>
             <Center
                 onClick={banner.select}
-                w='full'
+                w='full' bgSize='cover'
                 bg={banner.url? null : bannerBg} bgImg={banner.url}
                 p={5} my={2} rounded='xl' _hover={{cursor: 'pointer'}} >
                 <Pick
@@ -111,29 +110,4 @@ function Form(props: {value: GroupOptions, onChange: (options: Partial<GroupOpti
         <FormLabel>Group Name</FormLabel>
         <Input value={name} onChange={e => setName(e.target.value)} variant="main" placeholder="Give your Group a name" />
     </FormControl>
-}
-
-function Pick(props: {onClick: MouseEventHandler<HTMLDivElement>, children: any}) {
-    const iconBg = useColorModeValue('white', 'brand.400')
-
-    return <Box
-        className='pick'
-        pos='relative' onClick={props.onClick} _hover={{cursor: 'pointer'}}
-        css={{
-            "&:has(.pick:hover) > .tip": {
-                opacity: 0
-            },
-            "&:hover > .tip": {
-                opacity: 1
-            },
-            "& > .tip": {
-                opacity: 0
-            }
-        }}
-    >
-        {props.children}
-        <Circle className='tip' pos='absolute' bottom={0} right={0} bg={iconBg} p={2} transition='all 0.1s'>
-            <VscNewFile />
-        </Circle>
-    </Box>
 }

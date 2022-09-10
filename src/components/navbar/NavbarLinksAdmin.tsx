@@ -55,7 +55,9 @@ export default function HeaderLinks() {
 				borderRadius='30px'
 			/>
 			<SidebarResponsive routes={routes} />
-			<Menu>
+			<Menu styleConfig={{
+				"min-width": "0"
+			}}>
 				<MenuButton p='0px'>
 					<Icon mt='6px' as={MdNotificationsNone} color={navbarIcon} w='18px' h='18px' me='10px' />
 				</MenuButton>
@@ -65,10 +67,7 @@ export default function HeaderLinks() {
 					borderRadius='20px'
 					bg={menuBg}
 					border='none'
-					mt='22px'
-					me={{ base: '30px', md: 'unset' }}
-					minW={{ base: 'unset', md: '400px', xl: '450px' }}
-					maxW={{ base: '360px', md: 'unset' }}>
+					w={{ base: '300px', md: '100%' }}>
 					<Flex w='100%' mb='20px'>
 						<Text fontSize='md' fontWeight='600' color={textColor}>
 							Notifications

@@ -1,12 +1,40 @@
-import {InputHTMLAttributes, LegacyRef, useMemo, useRef, useState} from "react";
+import {InputHTMLAttributes, LegacyRef, MouseEventHandler, useMemo, useRef, useState} from "react";
+import {Box, Circle, useColorModeValue} from "@chakra-ui/react";
+import {VscNewFile} from "react-icons/vsc";
+import {Reset} from "../api/AccountAPI";
 
-export function useImagePickerAuto(props?: InputHTMLAttributes<HTMLInputElement>) {
-    const [value, setValue] = useState<File>(null)
+export function url(initial: string, image?: string | Reset): string {
+    if (image == null || image === 'reset') return initial
 
-    return useImagePicker(value, setValue, props)
+    return image
 }
 
-export function useImagePicker(value: File, onChange: (file: File) => void, props?: InputHTMLAttributes<HTMLInputElement>) {
+export function Pick(props: {onClick: MouseEventHandler<HTMLDivElement>, children: any}) {
+    const iconBg = useColorModeValue('white', 'brand.400')
+
+    return <Box
+        className='pick'
+        pos='relative' onClick={props.onClick} _hover={{cursor: 'pointer'}}
+        css={{
+            "&:has(.pick:hover) > .tip": {
+                opacity: 0
+            },
+            "&:hover > .tip": {
+                opacity: 1
+            },
+            "& > .tip": {
+                opacity: 0
+            }
+        }}
+    >
+        {props.children}
+        <Circle className='tip' pos='absolute' bottom={0} right={0} bg={iconBg} p={2} transition='all 0.1s'>
+            <VscNewFile />
+        </Circle>
+    </Box>
+}
+
+export function useImagePicker<T extends File | Reset>(value: T, onChange: (file: T) => void, props?: InputHTMLAttributes<HTMLInputElement>) {
     const ref = useRef<HTMLInputElement>()
     const url = useImageUrl(value)
 
@@ -39,9 +67,9 @@ export function FilePicker(props: { onChange: (file: File) => void, inputRef: Le
     />
 }
 
-export function useImageUrl(file: any) {
+export function useImageUrl(file: File | Reset) {
     return useMemo(
-        () => file && URL.createObjectURL(file),
+        () => file && file !== 'reset' && URL.createObjectURL(file),
         [file]
     )
 }

@@ -10,6 +10,8 @@ import Project from 'views/admin/profile/components/Project';
 import {useColors} from "../../../../variables/colors";
 import {Group, useGroupsQuery} from "../../../../api/GroupAPI";
 import FadeImage from "../../../../components/card/FadeImage";
+import {useContext} from "react";
+import {PageContext} from "../../../../contexts/PageContext";
 
 export default function OwnedGroups(props: { [x: string]: any }) {
 	const { ...rest } = props;
@@ -41,8 +43,12 @@ function GroupItem(group: Group) {
 	const {brand, borderColor} = useColors()
 	const cardShadow = useColorModeValue('0px 18px 40px rgba(112, 144, 176, 0.12)', 'unset');
 	const bg = useColorModeValue('white', 'navy.700');
+	const {setSelectedGroup} = useContext(PageContext)
 
-	return <Card pos='relative' bg={bg} boxShadow={cardShadow} overflow='hidden'>
+	return <Card
+		pos='relative' bg={bg} boxShadow={cardShadow} overflow='hidden'
+		_hover={{cursor: 'pointer'}} onClick={() => setSelectedGroup(group.id)}
+	>
 		<FadeImage
 			src={group.banner}
 			direction='to left'

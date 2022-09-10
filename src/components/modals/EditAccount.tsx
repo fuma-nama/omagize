@@ -8,12 +8,12 @@ import {
     ModalOverlay, useColorModeValue
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
-import {useState} from "react";
 import {Pick, url, useImagePicker} from "utils/ImageUtils";
 import Avatar from "../icons/Avatar";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {SelfUser, updateProfile, useUserQuery} from "api/UserAPI";
 import { Reset } from "api/AccountAPI";
+import {useModalState} from "./Modal";
 
 type ProfileOptions = {
     name?: string
@@ -22,8 +22,10 @@ type ProfileOptions = {
 }
 
 export default function EditAccountModal(props: {isOpen: boolean, onClose: () => void}) {
+    const {isOpen} = props
+
     const query = useUserQuery()
-    const [value, setValue] = useState<ProfileOptions>({})
+    const [onClose, value, setValue] = useModalState<ProfileOptions>(props.onClose, {})
     const client = useQueryClient()
     const mutation = useMutation(
         ['edit_profile'],
@@ -34,16 +36,10 @@ export default function EditAccountModal(props: {isOpen: boolean, onClose: () =>
             }
         }
     )
-    const {isOpen} = props
-    const onClose = () => {
-        setValue({})
-        props.onClose()
-    }
 
     if (query.isLoading) return <></>
 
     const canSave = (!!value.name || !!value.avatar || !!value.banner) && (value.name == null || value.name.length > 0)
-    console.log(value)
     return <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>

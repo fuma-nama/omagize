@@ -1,6 +1,5 @@
 import {
-    Box,
-    Button, Center, Circle, FormControl, FormErrorMessage, FormLabel, Input, InputGroup,
+    Button, Center, FormControl, FormErrorMessage, FormLabel, Input, InputGroup,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -9,16 +8,16 @@ import {
     ModalHeader,
     ModalOverlay, Text, useColorModeValue
 } from "@chakra-ui/react";
-import {MouseEventHandler, useState} from "react";
 import {BiRightArrow} from "react-icons/bi";
 import Avatar from "../icons/Avatar";
 import {useImagePicker, Pick} from "utils/ImageUtils";
 import {useMutation} from "@tanstack/react-query";
 import {createGroup} from "api/GroupAPI";
+import {useModalState} from "./Modal";
 
 export default function CreateGroupModal(props: {isOpen: boolean, onClose: () => void}) {
-    const {isOpen, onClose} = props
-    const [value, setValue] = useState<GroupOptions>({name: ""})
+    const {isOpen} = props
+    const [onClose, value, setValue] = useModalState<GroupOptions>(props.onClose, {name: ""})
     const mutation = useMutation(
         ['create_group'],
         () => createGroup(value.name, value.icon, value.banner), {

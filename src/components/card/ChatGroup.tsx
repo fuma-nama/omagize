@@ -3,6 +3,7 @@ import {Group} from "../../api/GroupAPI";
 import {Avatar, Box, Image, SkeletonCircle, SkeletonText, Text} from "@chakra-ui/react";
 import {PageContext} from "../../contexts/PageContext";
 import {useContext} from "react";
+import FadeImage from "./FadeImage";
 
 export function ChatGroup(props: {group: Group, active: boolean}) {
     const {group, active} = props
@@ -16,15 +17,15 @@ export function ChatGroup(props: {group: Group, active: boolean}) {
         onClick={() => setSelectedGroup(group.id)}
         _hover={{ cursor: 'pointer' }}>
         <Card pos='relative' overflow='hidden'>
-            <Box top={0} left={0} w='full' h='full' pos='absolute' bg={active? activeColor : 'black'}>
-                <Image alt="banner"
-                       w='full'
-                       h='full'
-                       bg={group.banner? null : activeColor}
-                       css={{maskImage: `linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0))`}}
-                       src={group.banner} objectFit='cover'
-                       filter='auto' brightness={active? 0.9 : 0.7} />
-            </Box>
+            <FadeImage
+                src={group.banner}
+                direction='to left'
+                bg={active? activeColor : 'black'}
+                image={{
+                    bg: group.banner? null : activeColor,
+                    filter: 'auto', brightness: active? 0.9 : 0.7
+                }}
+            />
 
             <Box pos='relative' maxW='70%' color='white'>
                 <Avatar name={group.name} src={group.icon} />

@@ -17,7 +17,7 @@ export default function GeneralInformation(props: { [x: string]: any }) {
 	const user = query.data
 
 	return (
-		<Card mb={{ base: '0px', '2xl': '20px' }} {...props}>
+		<Card {...props}>
 			<Text color={textColorPrimary} fontWeight='bold' fontSize='2xl' mt='10px' mb='4px'>
 				General Information
 			</Text>

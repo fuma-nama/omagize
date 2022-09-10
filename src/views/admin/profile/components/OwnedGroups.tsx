@@ -1,5 +1,5 @@
 // Chakra imports
-import { Text, useColorModeValue } from '@chakra-ui/react';
+import {Avatar, Box, Flex, Image, Text, useColorModeValue} from '@chakra-ui/react';
 // Assets
 import Project1 from 'assets/img/profile/Project1.png';
 import Project2 from 'assets/img/profile/Project2.png';
@@ -7,44 +7,54 @@ import Project3 from 'assets/img/profile/Project3.png';
 // Custom components
 import Card from 'components/card/Card';
 import Project from 'views/admin/profile/components/Project';
+import {useColors} from "../../../../variables/colors";
+import {Group, useGroupsQuery} from "../../../../api/GroupAPI";
+import FadeImage from "../../../../components/card/FadeImage";
 
 export default function OwnedGroups(props: { [x: string]: any }) {
 	const { ...rest } = props;
 	// Chakra Color Mode
-	const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
-	const textColorSecondary = 'gray.400';
-	const cardShadow = useColorModeValue('0px 18px 40px rgba(112, 144, 176, 0.12)', 'unset');
+	const {textColorPrimary, textColorSecondary} = useColors()
+
+	const query = useGroupsQuery()
+
+	if (query.isLoading) return <></>
+	const groups = query.data
 	return (
-		<Card mb={{ base: '0px', '2xl': '20px' }} {...rest}>
+		<Card {...rest}>
 			<Text color={textColorPrimary} fontWeight='bold' fontSize='2xl' mt='10px' mb='4px'>
 				Owned Groups
 			</Text>
 			<Text color={textColorSecondary} fontSize='md' me='26px' mb='40px'>
 				All groups which is owned by you
 			</Text>
-			<Project
-				boxShadow={cardShadow}
-				mb='20px'
-				image={Project1}
-				ranking='1'
-				link='#'
-				title='Technology behind the Blockchain'
-			/>
-			<Project
-				boxShadow={cardShadow}
-				mb='20px'
-				image={Project2}
-				ranking='2'
-				link='#'
-				title='Greatest way to a good Economy'
-			/>
-			<Project
-				boxShadow={cardShadow}
-				image={Project3}
-				ranking='3'
-				link='#'
-				title='Most essential tips for Burnout'
-			/>
+			<Flex direction='column' gap={3}>
+				{groups.filter(group => group.owner).map(group =>
+					<GroupItem key={group.id} {...group} />
+				)}
+			</Flex>
 		</Card>
 	);
+}
+
+function GroupItem(group: Group) {
+	const {brand, borderColor} = useColors()
+	const cardShadow = useColorModeValue('0px 18px 40px rgba(112, 144, 176, 0.12)', 'unset');
+	const bg = useColorModeValue('white', 'navy.700');
+
+	return <Card pos='relative' bg={bg} boxShadow={cardShadow} overflow='hidden'>
+		<FadeImage
+			src={group.banner}
+			direction='to left'
+			image={{
+				bg: group.banner? null : brand,
+				filter: 'auto', brightness: 0.9
+			}}
+		/>
+
+		<Flex direction={{base: 'column', lg: 'row'}} pos='relative' gap={2}>
+			<Avatar name={group.name} src={group.icon} border='4px solid' w='100px' h='100px' borderColor={borderColor} />
+			<Text fontSize='2xl' fontWeight='bold' mt='10px' maxW={{base: '80%', lg: '40%'}}>{group.name}</Text>
+		</Flex>
+	</Card>
 }

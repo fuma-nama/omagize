@@ -35,7 +35,7 @@ export default function Overview() {
 				templateRows='auto auto'
 				gap={{ base: '20px', xl: '20px' }}>
 				<OwnedGroups />
-				<General minH='365px' pe='20px' />
+				<General pe='20px' />
 			</Grid>
 		</Box>
 	);

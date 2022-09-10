@@ -12,17 +12,10 @@ import {
 	useColorModeValue
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import {useUserQuery} from "../../../../api/UserAPI";
-import {useGroupsQuery} from "../../../../api/GroupAPI";
+import {useUserQuery} from "api/UserAPI";
+import {useGroupsQuery} from "api/GroupAPI";
+import {useColors} from "variables/colors";
 
-function useColors() {
-
-	return {
-		textColorPrimary: useColorModeValue('secondaryGray.900', 'white'),
-		textColorSecondary: 'gray.400',
-		borderColor: useColorModeValue('white !important', '#111C44 !important')
-	}
-}
 export default function Banner(props: any) {
 	const query = useUserQuery()
 	const groupsQuery = useGroupsQuery()

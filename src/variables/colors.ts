@@ -6,3 +6,12 @@ export function useItemHoverBg() {
         { bg: 'navy.700', boxShadow: 'unset' }
     );
 }
+
+export function useColors() {
+
+    return {
+        textColorPrimary: useColorModeValue('secondaryGray.900', 'white'),
+        textColorSecondary: 'gray.400',
+        borderColor: useColorModeValue('white !important', '#111C44 !important')
+    }
+}

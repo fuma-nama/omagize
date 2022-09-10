@@ -9,8 +9,17 @@ export type UserType = {
     description?: string
 }
 
-export function fetchUser(): UserType {
-    return users[0]
+export type SelfUser = UserType & {
+    createdAt: Date
+    email: string
+}
+
+export function fetchUser(): SelfUser {
+    return {
+        email: "xred379@gmail.com",
+        createdAt: new Date(Date.now()),
+        ...users[0]
+    }
 }
 
 export function useUserQuery() {

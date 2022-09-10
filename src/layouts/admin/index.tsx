@@ -8,19 +8,10 @@ import {Outlet} from 'react-router-dom';
 import routes from 'routes';
 import {PageContext} from "contexts/PageContext";
 import {useActiveRoute} from "utils/RouteUtil";
-import PageLayout from "../PageLayout";
 
 export default function Dashboard() {
 	document.documentElement.dir = 'ltr';
 
-	return (
-		<PageLayout>
-			<Content />
-		</PageLayout>
-	);
-}
-
-function Content({...rest}) {
 	const {info} = useContext(PageContext)
 	const activeRoute = useActiveRoute(routes)
 	return <Flex
@@ -39,7 +30,6 @@ function Content({...rest}) {
 		transitionTimingFunction='linear, linear, ease'>
 		<Navbar
 			brandText={activeRoute?.name || info?.title}
-			{...rest}
 		/>
 		<Box mx='auto' w='full' pe='20px' padding={0} flex='1 1' mt='50px'>
 			<Outlet />

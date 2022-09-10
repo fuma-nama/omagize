@@ -8,19 +8,10 @@ import {Outlet} from 'react-router-dom';
 import routes from 'routes';
 import {PageContext} from "contexts/PageContext";
 import {useActiveRoute} from "utils/RouteUtil";
-import PageLayout from "../PageLayout";
 
 export default function ChatLayout() {
 	document.documentElement.dir = 'ltr';
 
-	return (
-		<PageLayout>
-			<Content />
-		</PageLayout>
-	);
-}
-
-function Content({...rest}) {
 	const {info} = useContext(PageContext)
 	const activeRoute = useActiveRoute(routes)
 
@@ -44,7 +35,6 @@ function Content({...rest}) {
 		>
 			<Navbar
 				brandText={activeRoute?.name || info?.title}
-				{...rest}
 			/>
 		</Box>
 		<Outlet />

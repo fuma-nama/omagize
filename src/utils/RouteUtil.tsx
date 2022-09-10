@@ -1,4 +1,6 @@
-import {Location, matchRoutes, useLocation} from "react-router-dom";
+import {Location, matchRoutes, Route, useLocation} from "react-router-dom";
+import routes, {dynamicRoutes} from "../routes";
+import React from "react";
 
 export function useActiveRoute<T extends IRoute>(routes: T[]): T | null {
     const location = useLocation()
@@ -17,4 +19,19 @@ export function getActiveRoute<T extends IRoute>(location: Location, routes: T[]
             match.route.path === route.layout + route.path
         )
     )
+}
+
+export function getRoutesByLayout(layout: string): any {
+    const mapper = (route: IRoute, key: number) => {
+        if (route.layout === layout) {
+            return <Route path={route.path.substring(1)} element={route.component} key={key} />
+        } else {
+            return null;
+        }
+    }
+
+    return [
+        ...routes.map(mapper),
+        ...dynamicRoutes.map(mapper)
+    ]
 }

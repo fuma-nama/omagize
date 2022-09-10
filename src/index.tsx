@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import './assets/css/App.css';
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 
-import {Box, ChakraProvider} from '@chakra-ui/react';
+import {ChakraProvider} from '@chakra-ui/react';
 import theme from './theme/theme';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import routes, {dynamicRoutes} from "./routes";
-import {layouts, LayoutType} from "./layouts";
+import {layouts, NestedLayout, RootLayout} from "./layouts";
 import {useLoggedInQuery} from "./api/AccountAPI";
+import {getRoutesByLayout} from "./utils/RouteUtil";
 
 const client = new QueryClient({
 	defaultOptions: {
@@ -18,20 +18,7 @@ const client = new QueryClient({
 		}
 	}
 })
-function getRoutes(layout: LayoutType): any {
-	const mapper = (route: IRoute, key: number) => {
-		if (route.layout === layout.path) {
-			return <Route path={route.layout + route.path} element={route.component} key={key} />
-		} else {
-			return null;
-		}
-	}
 
-	return [
-		...routes.map(mapper),
-		...dynamicRoutes.map(mapper)
-	]
-}
 
 function Pages() {
 	const query = useLoggedInQuery();
@@ -39,20 +26,35 @@ function Pages() {
 	if (query.isLoading) return <></>
 	const loggedIn = query.data
 
-	return <Routes>
-		{
-			layouts
-				.filter(layout => layout.requireLogin == loggedIn)
-				.map((layout, i) =>
-					<Route key={i} path={layout.path} element={layout.component}>
-						{getRoutes(layout)}
-						{layout.index && <Route index element={<Navigate to={layout.index}/>}/>}
-						{layout.default && <Route path="*" element={<Navigate to={layout.default}/>}/>}
-					</Route>
-				)
+	function mapNestedLayout(layout: NestedLayout, key: number) {
+
+		return <Route key={key} index={layout.index} path={layout.path} element={layout.component}>
+			{layout.routes && getRoutesByLayout(layout.routes)}
+			{layout.subLayouts && layout.subLayouts.map(mapNestedLayout)}
+		</Route>
+	}
+
+	function mapLayout(layout: RootLayout, key: number) {
+		if (layout.requireLogin != loggedIn) {
+			return null
 		}
 
-		<Route path='*' element={loggedIn? <Navigate to="/user" /> : <Navigate to="/auth" />} />
+		switch (layout.type) {
+			case "normal": return mapNestedLayout(layout, key)
+			case "auto": return <Route key={key} path={layout.path} element={layout.component}>
+				{getRoutesByLayout(layout.path)}
+				{layout.index && <Route index element={<Navigate to={layout.index}/>}/>}
+				{layout.default && <Route path="*" element={<Navigate to={layout.default}/>}/>}
+			</Route>
+		}
+	}
+
+	return <Routes>
+		{
+			layouts.map(mapLayout)
+		}
+
+		<Route path="*" element={<Navigate to='/user/default' />}/>
 	</Routes>
 }
 

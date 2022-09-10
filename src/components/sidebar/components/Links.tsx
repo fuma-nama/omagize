@@ -19,9 +19,7 @@ export function SidebarLinks(props: {
 	) => {
 		const active = getActiveRoute(location, routes)
 
-		return routes.filter(route =>
-			layouts.some(layout => layout.path === route.layout) && !route.hidden
-		).map(
+		return routes.filter(route => !route.hidden).map(
 			(
 				route: RoutesType,
 				index: number

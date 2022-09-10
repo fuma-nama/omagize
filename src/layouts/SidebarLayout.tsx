@@ -4,8 +4,9 @@ import {Flex} from "@chakra-ui/react";
 import {ReactNode, useState} from "react";
 import Sidebar from "../components/sidebar/Sidebar";
 import routes from "../routes";
+import {Outlet} from "react-router-dom";
 
-export default function PageLayout(props: {sidebar?: ReactNode, children: ReactNode}) {
+export default function SidebarLayout(props: {sidebar?: ReactNode}) {
     const [ toggleSidebar, setToggleSidebar ] = useState(false);
 
     return <Flex direction='row' h='full'>
@@ -16,7 +17,7 @@ export default function PageLayout(props: {sidebar?: ReactNode, children: ReactN
                     setToggleSidebar
                 }}>
                 {props.sidebar || <Sidebar routes={routes} display='none'/>}
-                {props.children}
+                <Outlet />
             </SidebarContext.Provider>
         </PageContextProvider>
     </Flex>

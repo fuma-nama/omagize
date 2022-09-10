@@ -52,7 +52,7 @@ export const dynamicRoutes: DynamicRoute[] = [
 		component: <GroupOverview />,
 	},
 	{
-		layout: '/chat',
+		layout: '/user/chat',
 		path: '/:group',
 		component: <GroupChat />,
 		navbar: <GroupNavbar />

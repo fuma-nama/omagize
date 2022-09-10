@@ -29,6 +29,7 @@ export default function Banner(props: any) {
 
 	// Chakra Color Mode
 	const {textColorPrimary, textColorSecondary, borderColor} = useColors()
+	const avatarSize = '120px'
 
 	if (query.isLoading) return <BannerSkeleton />
 	const user = query.data
@@ -36,8 +37,8 @@ export default function Banner(props: any) {
 
 	return (
 		<Card mb={{ base: '0px', lg: '20px' }} alignItems='center' {...props}>
-			<Box bgImg={user.bannerUrl} bgSize='cover' borderRadius='16px' h='131px' w='100%' />
-			<Avatar mx='auto' src={user.avatarUrl} h='87px' w='87px' mt='-43px' border='4px solid' borderColor={borderColor} />
+			<Box bgImg={user.bannerUrl} bgSize='cover' borderRadius='16px' h='200px' w='100%' />
+			<Avatar mx='auto' src={user.avatarUrl} h={avatarSize} w={avatarSize} mt='-43px' border='4px solid' borderColor={borderColor} />
 			<Text color={textColorPrimary} fontWeight='bold' fontSize='xl' mt='10px'>
 				{user.username}
 			</Text>
@@ -72,10 +73,11 @@ export default function Banner(props: any) {
 
 function BannerSkeleton(props: any) {
 	const {textColorSecondary, borderColor} = useColors()
+	const avatarSize = '120px'
 
 	return <Card mb={{ base: '0px', lg: '20px' }} alignItems='center' {...props}>
-		<Skeleton bgSize='cover' borderRadius='16px' h='131px' w='100%' />
-		<SkeletonCircle mx='auto' h='87px' w='87px' mt='-43px' border='4px solid' borderColor={borderColor} />
+		<Skeleton bgSize='cover' borderRadius='16px' h='200px' w='100%' />
+		<SkeletonCircle mx='auto' h={avatarSize} w={avatarSize} mt='-43px' border='4px solid' borderColor={borderColor} />
 		<Skeleton w='200px' h='30px' my='10px' />
 		<SkeletonText w='300px' />
 		<SimpleGrid columns={2} mx='auto' mt='26px' gap={5}>

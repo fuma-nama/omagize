@@ -36,7 +36,7 @@ export function useGroupChat(group: string) {
 
     return {
         open() {
-            navigate(`/chat/${group}`)
+            navigate(`/user/chat/${group}`)
         }
     }
 }

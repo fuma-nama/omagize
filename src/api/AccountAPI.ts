@@ -1,4 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+export type Reset = 'reset'
 
 export function loggedIn() {
     return true

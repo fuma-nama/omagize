@@ -13,7 +13,7 @@ import Avatar from "../icons/Avatar";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {SelfUser, updateProfile, useUserQuery} from "api/UserAPI";
 import { Reset } from "api/AccountAPI";
-import {useModalState} from "./Modal";
+import {ProfilePicker, useModalState} from "./Modal";
 
 type ProfileOptions = {
     name?: string
@@ -43,7 +43,7 @@ export default function EditAccountModal(props: {isOpen: boolean, onClose: () =>
     return <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-            <ModalHeader>Create Group</ModalHeader>
+            <ModalHeader>Edit Profile</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
                 <Form user={query.data} value={value} onChange={v => {
@@ -82,27 +82,15 @@ function Form(props: {user: SelfUser, value: ProfileOptions, onChange: (options:
         {accept: acceptedFileTypes}
     )
     const invalid = false
-    const bannerBg = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
 
     return <FormControl isInvalid={invalid} isRequired>
         <InputGroup flexDirection='column'>
             {icon.picker}
             {banner.picker}
-            <Center
-                onClick={banner.select}
-                w='full'
-                bg={banner.url? null : bannerBg} bgImg={url(user.bannerUrl, banner.url)}
-                bgSize='cover'
-                p={5} my={2} rounded='xl' _hover={{cursor: 'pointer'}} >
-                <Pick
-                    onClick={e => {
-                        icon.select()
-                        e.stopPropagation()
-                    }}
-                >
-                    <Avatar border='auto' borderWidth={2} borderStyle='solid' borderColor='navy.800' src={url(user.avatarUrl, icon.url)} name={name} size='xl' />
-                </Pick>
-            </Center>
+            <ProfilePicker
+                selectBanner={banner.select} selectIcon={icon.select}
+                bannerUrl={url(user.bannerUrl, banner.url)} iconUrl={url(user.avatarUrl, icon.url)}
+            />
 
             <Button mx='auto' onClick={() => {
 

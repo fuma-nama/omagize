@@ -13,7 +13,7 @@ import Avatar from "../icons/Avatar";
 import {useImagePicker, Pick} from "utils/ImageUtils";
 import {useMutation} from "@tanstack/react-query";
 import {createGroup} from "api/GroupAPI";
-import {useModalState} from "./Modal";
+import {ProfilePicker, useModalState} from "./Modal";
 
 export default function CreateGroupModal(props: {isOpen: boolean, onClose: () => void}) {
     const {isOpen} = props
@@ -83,20 +83,10 @@ function Form(props: {value: GroupOptions, onChange: (options: Partial<GroupOpti
             {icon.picker}
             {banner.picker}
             <Text mx='auto'>Style your Group</Text>
-            <Center
-                onClick={banner.select}
-                w='full' bgSize='cover'
-                bg={banner.url? null : bannerBg} bgImg={banner.url}
-                p={5} my={2} rounded='xl' _hover={{cursor: 'pointer'}} >
-                <Pick
-                    onClick={e => {
-                        icon.select()
-                        e.stopPropagation()
-                    }}
-                >
-                    <Avatar border='auto' borderWidth={2} borderStyle='solid' borderColor='navy.800' src={icon.url} name={name} size='xl' />
-                </Pick>
-            </Center>
+            <ProfilePicker
+                selectBanner={banner.select} selectIcon={icon.select}
+                bannerUrl={banner.url} iconUrl={icon.url}
+            />
 
             <Button mx='auto' onClick={() => {
                 icon.setValue(null)

@@ -1,6 +1,6 @@
 import {Message} from "./MessageAPI";
 import {UserType} from "./UserAPI";
-import {Member} from "./GroupAPI";
+import {Group, Member} from "./GroupAPI";
 
 export function delay(timeout: number) {
     return new Promise(re => {
@@ -25,17 +25,19 @@ export const members: Member[] = users.map(user => ({
     ...user
 }))
 
-export const groups = [
+export const groups: Group[] = [
     {
         id: "54352234532456325433",
         name: "Study Group",
         icon: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
-        banner: "https://img.moelong.com/images/LycorisRecoiltwnews/LycorisRecoiltwnews09.webp"
+        banner: "https://img.moelong.com/images/LycorisRecoiltwnews/LycorisRecoiltwnews09.webp",
+        owner: true
     },
     {
         id: "5435234532456335333",
         name: "My Funny Chat Group",
         icon: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
+        owner: false
     },
 ]
 const modalMessages = [

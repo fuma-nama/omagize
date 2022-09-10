@@ -7,6 +7,10 @@ export type Group = {
     name: string
     icon?: string
     banner?: string
+    /**
+     * true if the user is the owner of group
+     */
+    owner: boolean
 }
 
 export type GroupDetail = Group & {

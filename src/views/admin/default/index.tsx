@@ -139,7 +139,7 @@ export default function UserReports() {
 function Events() {
 	const query = useGroupEventsQuery()
 
-	const empty = query.data != null && query.data.length === 0 || true
+	const empty = query.data != null && query.data.length === 0
 	return <Flex direction='column' gap={3}>
 		<Text fontSize='2xl' fontWeight='700'>Group Events</Text>
 		{empty?

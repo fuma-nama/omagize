@@ -21,7 +21,7 @@ export function NotificationSkeleton() {
         </Flex>
     </Card>
 }
-export function GenericItem({icon, title, time}: {icon: IconType, title: string, time: string}) {
+export function GenericItem({icon, title, description, time}: {icon: IconType, title: string, description?: string, time: string}) {
     const {textColorPrimary, textColorSecondary} = useColors()
     const bgItem = useItemHoverBg()
 
@@ -43,7 +43,7 @@ export function GenericItem({icon, title, time}: {icon: IconType, title: string,
                     {title}
                 </Text>
                 <Text color={textColorSecondary}>
-                    {title}
+                    {description}
                 </Text>
             </Flex>
             <Text ms='auto' fontWeight='700' fontSize='sm' color={textColorSecondary}>

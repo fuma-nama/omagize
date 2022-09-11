@@ -10,5 +10,10 @@ export default function UserNotificationItem(props: UserNotification) {
 }
 
 function LoginNotificationItem({from, time}: LoginNotification) {
-    return <GenericItem icon={AiFillWarning} title={`Something Logged in to your Account From ${from}`} time={time.toLocaleTimeString()} />
+    return <GenericItem
+        icon={AiFillWarning}
+        title={`New Login From ${from}`}
+        description={`Something Logged in to your Account From ${from}`}
+        time={time.toLocaleTimeString()}
+    />
 }

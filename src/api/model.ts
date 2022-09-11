@@ -1,12 +1,23 @@
 import {Message} from "./MessageAPI";
 import {UserType} from "./UserAPI";
-import {Group, Member} from "./GroupAPI";
+import {Group, GroupNotification, Member} from "./GroupAPI";
 
 export function delay(timeout: number) {
     return new Promise(re => {
         setTimeout(re, timeout)
     })
 }
+
+export const notifications: GroupNotification[] = [
+    {
+        type: "mention",
+        author: {
+            id: "4324232344324543",
+            username: "MONEY",
+        },
+        date: new Date(Date.now())
+    }
+]
 
 export const users: UserType[] = [
     {

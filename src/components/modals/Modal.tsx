@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from "react";
+import React, {useRef, useState} from "react";
 import {cropImage, Pick} from "utils/ImageUtils";
 import Avatar from "../icons/Avatar";
 import {Center, useColorModeValue, Image, HStack, Button, ButtonProps} from "@chakra-ui/react";
@@ -17,15 +17,16 @@ export type CropOptions = {
 export function ProfileCropPicker(props: ProfilePickerProps & {
     crop: CropOptions, buttonStyle?: ButtonProps
 }) {
+    const ref = useRef<HTMLImageElement>()
     if (props.crop) {
         const {value, setCrop, onCrop} = props.crop
 
         return <>
-            <ReactCrop crop={value.crop} onChange={v => setCrop({image: value.image, crop: v})}>
-                <Image src={value.image} />
+            <ReactCrop crop={value.crop} onChange={(v) => setCrop({image: value.image, crop: v})}>
+                <Image src={value.image} ref={ref} />
             </ReactCrop>
             <HStack justify='center' mt={3}>
-                <Button {...props.buttonStyle} onClick={() => cropImage(value).then(onCrop)}>Done</Button>
+                <Button {...props.buttonStyle} onClick={() => onCrop(cropImage(value, ref.current))}>Done</Button>
             </HStack>
         </>
     }

@@ -12,28 +12,47 @@ export function url(initial: string, image?: string | Reset): string {
     return image
 }
 
-export function cropImage({crop, image}: CropImage): Promise<string> {
+export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement): string {
     const canvas = document.createElement("canvas");
+
     const context = canvas.getContext('2d');
-    const imageObj = new Image()
 
-    imageObj.src = image
-    return new Promise(resolve => {
-        imageObj.onload = () => {
-            const sourceX = 0;
-            const sourceY = 0;
-            const sourceWidth = canvas.width = imageObj.naturalWidth;
-            const sourceHeight = canvas.height = imageObj.naturalHeight;
+    if (crop == null) {
+        canvas.width = imageObj.width
+        canvas.height = imageObj.height
 
-            if (crop == null) {
-                context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight);
-            } else {
-                context.drawImage(imageObj, crop.x, crop.y, crop.width, crop.height);
-            }
+        context.drawImage(imageObj, 0, 0);
+        return canvas.toDataURL()
+    } else {
+        const scaleX = imageObj.naturalWidth / imageObj.width
+        const scaleY = imageObj.naturalHeight / imageObj.height
+        // devicePixelRatio slightly increases sharpness on retina devices
+        // at the expense of slightly slower render times and needing to
+        // size the image back down if you want to download/upload and be
+        // true to the images natural size.
+        const pixelRatio = window.devicePixelRatio
 
-            resolve(canvas.toDataURL())
-        }
-    })
+        canvas.width = Math.floor(crop.width * scaleX * pixelRatio)
+        canvas.height = Math.floor(crop.height * scaleY * pixelRatio)
+
+        context.scale(pixelRatio, pixelRatio)
+        context.imageSmoothingQuality = 'high'
+
+        const cropX = crop.x * scaleX
+        const cropY = crop.y * scaleY
+
+        // 5) Move the crop origin to the canvas origin (0,0)
+        context.translate(-cropX, -cropY)
+        context.drawImage(
+            imageObj,
+            0,
+            0,
+            imageObj.naturalWidth,
+            imageObj.naturalHeight,
+        )
+    }
+
+    return canvas.toDataURL()
 }
 
 export function Pick(props: {onClick: MouseEventHandler<HTMLDivElement>, children: any}) {

@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {delay, groups, members} from "./model";
+import {delay, groups, members, notifications} from "./model";
 import {UserType} from "./UserAPI";
 
 export type Group = {
@@ -44,16 +44,7 @@ export function fetchGroupDetail(id: string): GroupDetail {
 }
 
 export function fetchGroupNotifications(id: string): GroupNotification[] {
-    return [
-        {
-            type: "mention",
-            author: {
-                id: "4324232344324543",
-                username: "MONEY",
-            },
-            date: new Date(Date.now())
-        }
-    ]
+    return notifications
 }
 
 export function fetchGroups(): Group[] {

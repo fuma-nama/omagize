@@ -5,6 +5,7 @@ import {Button, Flex, Icon, Image, Text, useColorModeValue} from "@chakra-ui/rea
 
 import Card from "components/card/Card";
 import {GroupNotificationItem, NotificationSkeleton} from "components/card/notification/Notification";
+import {Holder} from "../../../../utils/Container";
 
 export function Notifications() {
     const {selectedGroup} = useContext(PageContext)
@@ -24,15 +25,21 @@ export function Notifications() {
             </Text>
             <Button variant='action'>Clear all</Button>
         </Flex>
-        {query.isLoading?
-            <>
-                <NotificationSkeleton />
-                <NotificationSkeleton />
-                <NotificationSkeleton />
-            </> :
-            query.data.map((n, i) =>
-                <GroupNotificationItem key={i} {...n} />
-            )
-        }
+        <Holder
+            text="No Notifications" array={query.data}
+            skeleton={
+                <>
+                    <NotificationSkeleton />
+                    <NotificationSkeleton />
+                    <NotificationSkeleton />
+                </>
+            }
+        >
+            {() =>
+                query.data.map((n, i) =>
+                    <GroupNotificationItem key={i} {...n} />
+                )
+            }
+        </Holder>
     </Card>
 }

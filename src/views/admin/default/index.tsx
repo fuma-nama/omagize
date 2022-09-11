@@ -1,5 +1,16 @@
 // Chakra imports
-import { Avatar, Box, Flex, FormLabel, Icon, Select, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
+import {
+	Avatar,
+	Box,
+	Flex,
+	FormLabel,
+	Heading,
+	HStack,
+	Icon,
+	Select,
+	SimpleGrid,
+	useColorModeValue
+} from '@chakra-ui/react';
 // Assets
 import Usa from 'assets/img/dashboards/usa.png';
 // Custom components
@@ -18,7 +29,9 @@ import { columnsDataCheck, columnsDataComplex } from 'views/admin/default/variab
 import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
 import tableDataComplex from 'views/admin/default/variables/tableDataComplex.json';
 import Banner from "./components/Banner";
-import {useUserQuery} from "../../../api/UserAPI";
+import {useGroupEventsQuery, useUserQuery} from "../../../api/UserAPI";
+import {Holder} from "../../../utils/Container";
+import GroupEventItem, {GroupEventSkeleton} from "../../../components/card/GroupEventItem";
 
 export default function UserReports() {
 	// Chakra Color Mode
@@ -26,7 +39,7 @@ export default function UserReports() {
 	const brandColor = useColorModeValue('brand.500', 'white');
 	const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
 
-	if (query.isLoading) return
+	if (query.isLoading) return <></>
 	return (
 		<Flex direction='column' gap={5}>
 			<Banner user={query.data} />
@@ -98,7 +111,7 @@ export default function UserReports() {
 					value='2935'
 				/>
 			</SimpleGrid>
-
+			<Events />
 			<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>
 				<TotalSpent />
 				<WeeklyRevenue />
@@ -119,4 +132,27 @@ export default function UserReports() {
 			</SimpleGrid>
 		</Flex>
 	);
+}
+
+function Events() {
+	const query = useGroupEventsQuery()
+
+	return <Flex direction='column' gap={3}>
+		<Heading>Group Events</Heading>
+		<SimpleGrid columns={{base: 1, "3sm": 2, lg: 3}} gap={3}>
+			<Holder text='No Events' array={query.data} skeleton={
+				<>
+					<GroupEventSkeleton />
+					<GroupEventSkeleton />
+					<GroupEventSkeleton />
+				</>
+			}>
+				{() =>
+					query.data.map(event =>
+						<GroupEventItem key={event.id} {...event} />
+					)
+				}
+			</Holder>
+		</SimpleGrid>
+	</Flex>
 }

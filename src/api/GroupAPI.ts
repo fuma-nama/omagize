@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {delay, groups, members, notifications} from "./model";
+import {delay, events, groups, members, notifications, users} from "./model";
 import {UserType} from "./UserAPI";
 
 export type Group = {
@@ -15,7 +15,8 @@ export type Group = {
 
 export type GroupDetail = Group & {
     memberCount: number,
-    activeMembers: Member[] //Should be always a 5-length array
+    activeMembers: Member[], //Should be always a 5-length array
+    membersPreview?: Member[]
 }
 
 export type Member = UserType & {
@@ -30,6 +31,20 @@ export type MentionNotification = {
 }
 
 export type GroupNotification = MentionNotification
+
+/**
+ * Let group members join your Birthdays, parties, and more!
+ */
+export type GroupEvent = {
+    id: number
+    image?: string
+    name: string
+    description?: string
+    startAt: Date
+    place?: string
+    group: string
+    author: UserType
+}
 
 export function fetchGroup(id: string): Group {
     return groups.find(g => g.id === id)
@@ -61,6 +76,10 @@ export function useGroupsQuery() {
 
 export function useGroupQuery(id: string) {
     return useQuery(["group", id], () => fetchGroup(id))
+}
+
+export function fetchGroupEvents(group: string): GroupEvent[] {
+    return events
 }
 
 export function useGroupNotificationsQuery(id: string) {

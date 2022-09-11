@@ -15,14 +15,14 @@ export type CropOptions = {
 }
 
 export function ProfileCropPicker(props: ProfilePickerProps & {
-    crop: CropOptions, buttonStyle?: ButtonProps
+    crop: CropOptions, buttonStyle?: ButtonProps, aspect?: number
 }) {
     const ref = useRef<HTMLImageElement>()
     if (props.crop) {
         const {value, setCrop, onCrop} = props.crop
 
         return <>
-            <ReactCrop crop={value.crop} onChange={(v) => setCrop({image: value.image, crop: v})}>
+            <ReactCrop aspect={props.aspect ?? 1} crop={value.crop} onChange={(v) => setCrop({image: value.image, crop: v})}>
                 <Image src={value.image} ref={ref} />
             </ReactCrop>
             <HStack justify='center' mt={3}>

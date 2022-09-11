@@ -46,6 +46,10 @@ export function fetchUserNotifications(): UserNotification[] {
     ]
 }
 
+export async function clearUserNotifications() {
+    await delay(2000)
+}
+
 export function fetchUser(): SelfUser {
     return {
         email: "xred379@gmail.com",

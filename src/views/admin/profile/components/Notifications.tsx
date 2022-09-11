@@ -2,13 +2,12 @@
 import {Button, Flex, Text} from '@chakra-ui/react';
 import Card from 'components/card/Card';
 // Custom components
-import Menu from 'components/menu/MainMenu';
-import {UserNotification, useUserNotificationsQuery} from "api/UserAPI";
+import {clearUserNotifications, useUserNotificationsQuery} from "api/UserAPI";
 import {useColors} from "variables/colors";
 import UserNotificationItem from "components/card/notification/UserNotification";
 import {NotificationSkeleton} from "components/card/notification/Notification";
-import {Holder} from "../../../../utils/Container";
-import {GroupNotification} from "../../../../api/GroupAPI";
+import {Holder} from "utils/Container";
+import {useMutation} from "@tanstack/react-query";
 
 export default function Notifications(props: { [x: string]: any }) {
 	const { ...rest } = props;
@@ -16,6 +15,10 @@ export default function Notifications(props: { [x: string]: any }) {
 	const {textColorPrimary} = useColors()
 
 	const query = useUserNotificationsQuery()
+	const mutation = useMutation(
+		['clear_user_notifications'],
+		() => clearUserNotifications()
+	)
 
 	return (
 		<Card p={1} mb='20px' {...rest}>
@@ -23,7 +26,7 @@ export default function Notifications(props: { [x: string]: any }) {
 				<Text color={textColorPrimary} fontWeight='bold' fontSize='2xl' mb='4px'>
 					Notifications
 				</Text>
-				<Button variant='action'>Read All</Button>
+				<Button variant='action' onClick={() => mutation.mutate()} isLoading={mutation.isLoading}>Read All</Button>
 			</Flex>
 			<Holder array={query.data} text="No Notifications" skeleton={
 				<>

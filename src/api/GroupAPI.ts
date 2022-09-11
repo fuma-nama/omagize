@@ -67,6 +67,10 @@ export function useGroupNotificationsQuery(id: string) {
     return useQuery(["group_notifications", id], () => fetchGroupNotifications(id))
 }
 
+export async function clearGroupNotifications() {
+    await delay(3000)
+}
+
 export function useGroupDetailQuery(id: string) {
     return useQuery(["group_detail", id], () => fetchGroupDetail(id))
 }

@@ -1,15 +1,25 @@
-import {GroupNotification, MentionNotification, useGroupNotificationsQuery} from "api/GroupAPI";
+import {
+    clearGroupNotifications,
+    GroupNotification,
+    MentionNotification,
+    useGroupNotificationsQuery
+} from "api/GroupAPI";
 import React, {useContext} from "react";
 import {PageContext} from "contexts/PageContext";
 import {Button, Flex, Icon, Image, Text, useColorModeValue} from "@chakra-ui/react";
 
 import Card from "components/card/Card";
 import {GroupNotificationItem, NotificationSkeleton} from "components/card/notification/Notification";
-import {Holder} from "../../../../utils/Container";
+import {Holder} from "utils/Container";
+import {useMutation} from "@tanstack/react-query";
 
 export function Notifications() {
     const {selectedGroup} = useContext(PageContext)
     const query = useGroupNotificationsQuery(selectedGroup)
+    const mutation = useMutation(
+        ['clear_group_notifications'],
+        () => clearGroupNotifications()
+    )
 
     const textColor = useColorModeValue('secondaryGray.900', 'white');
 
@@ -23,7 +33,7 @@ export function Notifications() {
             <Text color={textColor} fontSize='xl' fontWeight='600'>
                 Notifications
             </Text>
-            <Button variant='action'>Clear all</Button>
+            <Button variant='action' isLoading={mutation.isLoading} onClick={() => mutation.mutate()}>Clear all</Button>
         </Flex>
         <Holder
             text="No Notifications" array={query.data}

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/css/App.css';
+import 'react-image-crop/dist/ReactCrop.css'
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 
 import {ChakraProvider} from '@chakra-ui/react';

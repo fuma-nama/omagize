@@ -10,10 +10,10 @@ import {
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
 import Avatar from "../icons/Avatar";
-import {useImagePicker, Pick} from "utils/ImageUtils";
+import {useImagePicker, Pick, useImagePickerCrop} from "utils/ImageUtils";
 import {useMutation} from "@tanstack/react-query";
 import {createGroup} from "api/GroupAPI";
-import {ProfilePicker, useModalState} from "./Modal";
+import {ProfileCropPicker, ProfilePicker, useModalState} from "./Modal";
 
 export default function CreateGroupModal(props: {isOpen: boolean, onClose: () => void}) {
     const {isOpen} = props
@@ -65,7 +65,7 @@ function Form(props: {value: GroupOptions, onChange: (options: Partial<GroupOpti
     const acceptedFileTypes = ".png, .jpg, .gif"
 
     const [name, setName] = [value.name, (v: string) => onChange({name: v})]
-    const icon = useImagePicker(
+    const icon = useImagePickerCrop(
         value.icon,
         v => onChange({icon: v}),
         {accept: acceptedFileTypes}
@@ -76,22 +76,24 @@ function Form(props: {value: GroupOptions, onChange: (options: Partial<GroupOpti
         {accept: acceptedFileTypes}
     )
     const invalid = false
-    const bannerBg = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
 
     return <FormControl isInvalid={invalid} isRequired>
         <InputGroup flexDirection='column'>
             {icon.picker}
             {banner.picker}
             <Text mx='auto'>Style your Group</Text>
-            <ProfilePicker
+            <ProfileCropPicker
                 selectBanner={banner.select} selectIcon={icon.select}
                 bannerUrl={banner.url} iconUrl={icon.url}
+                crop={icon.crop}
             />
 
-            <Button mx='auto' onClick={() => {
-                icon.setValue(null)
-                banner.setValue(null)
-            }} variant='action'>Reset</Button>
+            {
+                !icon.crop && <Button mx='auto' onClick={() => {
+                    icon.setValue(null)
+                    banner.setValue(null)
+                }} variant='action'>Reset</Button>
+            }
         </InputGroup>
         <FormErrorMessage>
             {invalid}

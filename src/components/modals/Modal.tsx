@@ -1,9 +1,43 @@
-import React, {useState} from "react";
-import {Pick} from "../../utils/ImageUtils";
+import React, {ReactNode, useState} from "react";
+import {cropImage, Pick} from "utils/ImageUtils";
 import Avatar from "../icons/Avatar";
-import {Center, useColorModeValue} from "@chakra-ui/react";
+import {Center, useColorModeValue, Image, HStack, Button, ButtonProps} from "@chakra-ui/react";
+import ReactCrop, {Crop} from "react-image-crop";
 
-export function ProfilePicker(props: {selectBanner: () => void, selectIcon: () => void, bannerUrl: string, iconUrl: string, name?: string}) {
+export type CropImage = {
+    image: string
+    crop: Crop
+}
+export type CropOptions = {
+    value: CropImage,
+    setCrop: (crop: CropImage) => void,
+    onCrop: (base64: string) => void
+}
+
+export function ProfileCropPicker(props: ProfilePickerProps & {
+    crop: CropOptions, buttonStyle?: ButtonProps
+}) {
+    if (props.crop) {
+        const {value, setCrop, onCrop} = props.crop
+
+        return <>
+            <ReactCrop crop={value.crop} onChange={v => setCrop({image: value.image, crop: v})}>
+                <Image src={value.image} />
+            </ReactCrop>
+            <HStack justify='center' mt={3}>
+                <Button {...props.buttonStyle} onClick={() => cropImage(value).then(onCrop)}>Done</Button>
+            </HStack>
+        </>
+    }
+
+    return <ProfilePicker {...props} />
+}
+
+export type ProfilePickerProps = {
+    selectBanner: () => void, selectIcon: () => void,
+    bannerUrl: string, iconUrl: string, name?: string,
+}
+export function ProfilePicker(props: ProfilePickerProps) {
     const bannerBg = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
 
     return <Center

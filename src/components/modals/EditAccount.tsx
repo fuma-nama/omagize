@@ -8,12 +8,13 @@ import {
     ModalOverlay, useColorModeValue
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
-import {Pick, url, useImagePicker} from "utils/ImageUtils";
+import {Pick, url, useImagePicker, useImagePickerCrop} from "utils/ImageUtils";
 import Avatar from "../icons/Avatar";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {SelfUser, updateProfile, useUserQuery} from "api/UserAPI";
 import { Reset } from "api/AccountAPI";
-import {ProfilePicker, useModalState} from "./Modal";
+import {ProfileCropPicker, ProfilePicker, useModalState} from "./Modal";
+import {useState} from "react";
 
 type ProfileOptions = {
     name?: string
@@ -71,7 +72,7 @@ function Form(props: {user: SelfUser, value: ProfileOptions, onChange: (options:
     const acceptedFileTypes = ".png, .jpg, .gif"
 
     const [name, setName] = [value.name, (v: string) => onChange({name: v})]
-    const icon = useImagePicker(
+    const icon = useImagePickerCrop(
         value.avatar,
         v => onChange({avatar: v}),
         {accept: acceptedFileTypes}
@@ -81,22 +82,25 @@ function Form(props: {user: SelfUser, value: ProfileOptions, onChange: (options:
         v => onChange({banner: v}),
         {accept: acceptedFileTypes}
     )
+
     const invalid = false
 
     return <FormControl isInvalid={invalid} isRequired>
         <InputGroup flexDirection='column'>
             {icon.picker}
             {banner.picker}
-            <ProfilePicker
+            <ProfileCropPicker
                 selectBanner={banner.select} selectIcon={icon.select}
                 bannerUrl={url(user.bannerUrl, banner.url)} iconUrl={url(user.avatarUrl, icon.url)}
+                crop={icon.crop}
             />
 
-            <Button mx='auto' onClick={() => {
-
-                icon.setValue('reset')
-                banner.setValue('reset')
-            }} variant='action'>Reset</Button>
+            {
+                !icon.crop && <Button mx='auto' onClick={() => {
+                    icon.setValue('reset')
+                    banner.setValue('reset')
+                }} variant='action'>Reset</Button>
+            }
         </InputGroup>
         <FormErrorMessage>
             {invalid}

@@ -1,8 +1,7 @@
 import {useQuery} from "@tanstack/react-query";
-import {delay, groups, notifications, users} from "./model";
+import {delay, events, groups, notifications, users} from "./model";
 import {Reset} from "./AccountAPI";
-import {GroupNotification} from "./GroupAPI";
-import { time } from "console";
+import {GroupEvent, GroupNotification} from "./GroupAPI";
 
 export type UserNotification = GroupNotification & { group: string } | LoginNotification
 export type LoginNotification = {
@@ -50,6 +49,10 @@ export async function clearUserNotifications() {
     await delay(2000)
 }
 
+export function fetchGroupEvents(): GroupEvent[] {
+    return events
+}
+
 export function fetchUser(): SelfUser {
     return {
         email: "xred379@gmail.com",
@@ -66,5 +69,12 @@ export function useUserNotificationsQuery() {
     return useQuery(
         ["user_notifications"],
         () => fetchUserNotifications()
+    )
+}
+
+export function useGroupEventsQuery() {
+    return useQuery(
+        ["all_group_event"],
+        () => fetchGroupEvents()
     )
 }

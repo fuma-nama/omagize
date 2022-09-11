@@ -1,6 +1,6 @@
 import {Message} from "./MessageAPI";
 import {UserType} from "./UserAPI";
-import {Group, GroupNotification, Member} from "./GroupAPI";
+import {Group, GroupEvent, GroupNotification, Member} from "./GroupAPI";
 
 export function delay(timeout: number) {
     return new Promise(re => {
@@ -80,3 +80,15 @@ export const messages: Message[] = [...Array(100)]
         content: m.content + i
     })
 )
+
+export const events: GroupEvent[] = [
+    {
+        id: 432,
+        image: "https://img.moelong.com/images/LycorisRecoiltwnews/LycorisRecoiltwnews09.webp",
+        name: "My Birthday",
+        author: users[0],
+        place: "Hong Kong",
+        group: groups[0].id,
+        startAt: new Date(Date.now())
+    }
+]

@@ -28,7 +28,7 @@ export default function Notifications(props: { [x: string]: any }) {
 				</Text>
 				<Button variant='action' onClick={() => mutation.mutate()} isLoading={mutation.isLoading}>Read All</Button>
 			</Flex>
-			<Holder array={query.data} text="No Notifications" skeleton={
+			<Holder array={query.data} placeholder="No Notifications" skeleton={
 				<>
 					<NotificationSkeleton />
 					<NotificationSkeleton />

@@ -1,14 +1,14 @@
 // Chakra imports
 import {
 	Avatar,
-	Box,
+	Box, Center,
 	Flex,
 	FormLabel,
 	Heading,
 	HStack,
 	Icon,
 	Select,
-	SimpleGrid,
+	SimpleGrid, Text,
 	useColorModeValue
 } from '@chakra-ui/react';
 // Assets
@@ -30,8 +30,10 @@ import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
 import tableDataComplex from 'views/admin/default/variables/tableDataComplex.json';
 import Banner from "./components/Banner";
 import {useGroupEventsQuery, useUserQuery} from "../../../api/UserAPI";
-import {Holder} from "../../../utils/Container";
+import {Holder, Placeholder} from "../../../utils/Container";
 import GroupEventItem, {GroupEventSkeleton} from "../../../components/card/GroupEventItem";
+import Card from "../../../components/card/Card";
+import {useColors} from "../../../variables/colors";
 
 export default function UserReports() {
 	// Chakra Color Mode
@@ -137,22 +139,29 @@ export default function UserReports() {
 function Events() {
 	const query = useGroupEventsQuery()
 
+	const empty = query.data != null && query.data.length === 0 || true
 	return <Flex direction='column' gap={3}>
-		<Heading>Group Events</Heading>
-		<SimpleGrid columns={{base: 1, "3sm": 2, lg: 3}} gap={3}>
-			<Holder text='No Events' array={query.data} skeleton={
-				<>
-					<GroupEventSkeleton />
-					<GroupEventSkeleton />
-					<GroupEventSkeleton />
-				</>
-			}>
-				{() =>
-					query.data.map(event =>
-						<GroupEventItem key={event.id} {...event} />
-					)
-				}
-			</Holder>
-		</SimpleGrid>
+		<Text fontSize='2xl' fontWeight='700'>Group Events</Text>
+		{empty?
+			<Placeholder>No Group Events</Placeholder> :
+			<SimpleGrid columns={{base: 1, "3sm": 2, lg: 3}} gap={3}>
+				<Holder
+					array={query.data}
+					skeleton={
+						<>
+							<GroupEventSkeleton />
+							<GroupEventSkeleton />
+							<GroupEventSkeleton />
+						</>
+					}
+				>
+					{() =>
+						query.data.map(event =>
+							<GroupEventItem key={event.id} {...event} />
+						)
+					}
+				</Holder>
+			</SimpleGrid>
+		}
 	</Flex>
 }

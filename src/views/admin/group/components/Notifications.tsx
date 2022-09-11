@@ -36,7 +36,7 @@ export function Notifications() {
             <Button variant='action' isLoading={mutation.isLoading} onClick={() => mutation.mutate()}>Clear all</Button>
         </Flex>
         <Holder
-            text="No Notifications" array={query.data}
+            placeholder="No Notifications" array={query.data}
             skeleton={
                 <>
                     <NotificationSkeleton />

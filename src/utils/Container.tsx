@@ -1,10 +1,17 @@
 import {ReactNode} from "react";
-import {Text} from "@chakra-ui/react"
+import {Center, CenterProps, Text} from "@chakra-ui/react"
 import {useColors} from "../variables/colors";
 
+export function Placeholder({children, ...rest}: {children: string} & CenterProps) {
+    const {textColorSecondary, cardBg} = useColors()
+
+    return <Center w='full' py='50px' bg={cardBg} rounded='xl' {...rest}>
+        <Text color={textColorSecondary} fontSize='xl' align='center'>{children}</Text>
+    </Center>
+}
 export function Holder(
-    {array, text, skeleton, children}: {
-        array?: any[], text: string, skeleton?: ReactNode, children: ReactNode | (() => ReactNode)
+    {array, placeholder, skeleton, children}: {
+        array?: any[], placeholder?: string | ReactNode, skeleton?: ReactNode, children: ReactNode | (() => ReactNode)
     }) {
     const {textColorSecondary} = useColors()
     if (array == null) {
@@ -14,7 +21,11 @@ export function Holder(
     }
 
     if (array.length === 0) {
-        return <Text mx='auto' color={textColorSecondary}>{text}</Text>
+        if (typeof placeholder === 'string') {
+            return <Text mx='auto' color={textColorSecondary}>{placeholder}</Text>
+        } else {
+            return <> {placeholder} </>
+        }
     } else {
         return <>
             {typeof children === 'function'? children() : children}

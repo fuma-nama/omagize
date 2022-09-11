@@ -13,6 +13,7 @@ export function useColors() {
         brand: useColorModeValue('brand.500', 'brand.400'),
         textColorPrimary: useColorModeValue('secondaryGray.900', 'white'),
         textColorSecondary: 'gray.400',
-        borderColor: useColorModeValue('white !important', '#111C44 !important')
+        borderColor: useColorModeValue('white !important', '#111C44 !important'),
+        cardBg: useColorModeValue('white', 'navy.800')
     }
 }

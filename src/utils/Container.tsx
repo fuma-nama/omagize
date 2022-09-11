@@ -14,7 +14,7 @@ export function Holder(
     }
 
     if (array.length === 0) {
-        return <Text color={textColorSecondary}>{text}</Text>
+        return <Text mx='auto' color={textColorSecondary}>{text}</Text>
     } else {
         return <>
             {typeof children === 'function'? children() : children}

@@ -12,9 +12,20 @@ export function url(initial: string, image?: string | Reset): string {
     return image
 }
 
-export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement): string {
-    const canvas = document.createElement("canvas");
+function toBase64(blob: Blob): Promise<string> {
+    return new Promise(resolve => {
+        const reader = new FileReader()
+        reader.addEventListener('load', () => {
+            if (typeof reader.result === 'string') {
+                resolve(reader.result)
+            }
+        })
+        reader.readAsDataURL(blob)
+    })
+}
 
+export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement): Promise<string> {
+    const canvas = document.createElement("canvas");
     const context = canvas.getContext('2d');
 
     if (crop == null) {
@@ -22,7 +33,6 @@ export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement):
         canvas.height = imageObj.height
 
         context.drawImage(imageObj, 0, 0);
-        return canvas.toDataURL()
     } else {
         const scaleX = imageObj.naturalWidth / imageObj.width
         const scaleY = imageObj.naturalHeight / imageObj.height
@@ -52,7 +62,7 @@ export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement):
         )
     }
 
-    return canvas.toDataURL()
+    return new Promise(r => r(canvas.toDataURL("image/webp")))
 }
 
 export function Pick(props: {onClick: MouseEventHandler<HTMLDivElement>, children: any}) {
@@ -87,16 +97,9 @@ export function useImagePickerCrop<T extends UploadImage>(value: T, onChange: (f
     return {
         ...base,
         picker: <FilePicker {...props} onChange={(v: File) => {
-            const reader = new FileReader()
-            reader.addEventListener('load', () => {
-                const result = reader.result
-
-                if (typeof result === 'string') {
-                    setCrop({image: result, crop: null})
-                }
+            toBase64(v).then(result => {
+                setCrop({image: result, crop: null})
             })
-
-            reader.readAsDataURL(v)
         }} inputRef={base.ref} />,
         crop: crop && {
             value: crop, setCrop,

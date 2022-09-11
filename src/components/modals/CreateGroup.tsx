@@ -92,7 +92,7 @@ function Form(props: {value: GroupOptions, onChange: (options: Partial<GroupOpti
                 !icon.crop && <Button mx='auto' onClick={() => {
                     icon.setValue(null)
                     banner.setValue(null)
-                }} variant='action'>Reset</Button>
+                }}>Reset</Button>
             }
         </InputGroup>
         <FormErrorMessage>

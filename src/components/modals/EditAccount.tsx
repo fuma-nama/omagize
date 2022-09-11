@@ -99,7 +99,7 @@ function Form(props: {user: SelfUser, value: ProfileOptions, onChange: (options:
                 !icon.crop && <Button mx='auto' onClick={() => {
                     icon.setValue('reset')
                     banner.setValue('reset')
-                }} variant='action'>Reset</Button>
+                }}>Reset</Button>
             }
         </InputGroup>
         <FormErrorMessage>

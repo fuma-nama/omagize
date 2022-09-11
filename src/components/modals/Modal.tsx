@@ -26,7 +26,11 @@ export function ProfileCropPicker(props: ProfilePickerProps & {
                 <Image src={value.image} ref={ref} />
             </ReactCrop>
             <HStack justify='center' mt={3}>
-                <Button {...props.buttonStyle} onClick={() => onCrop(cropImage(value, ref.current))}>Done</Button>
+                <Button {...props.buttonStyle} variant='action' onClick={() => {
+                    if (ref.current.complete) {
+                        onCrop(cropImage(value, ref.current))
+                    }
+                }}>Done</Button>
             </HStack>
         </>
     }

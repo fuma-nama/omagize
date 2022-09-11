@@ -10,14 +10,10 @@ export function NotificationSkeleton() {
     const bgItem = useItemHoverBg()
 
     return <Card _hover={bgItem} bg='transparent' px='24px' py='21px' transition='0.2s linear'>
-        <Flex direction='row' align='center' justify='center' gap='12px'>
-            <Skeleton p='10px' rounded='xl' />
-            <Flex
-                direction='column'
-                me={{base: '4px', md: '32px', xl: '10px', '3xl': '32px'}}>
-                <SkeletonText mb='5px' noOfLines={2} />
-            </Flex>
-            <Skeleton ms='auto' w='40x' h='20px' />
+        <Flex direction='row' align='center' justify='center' gap='12px' w='full'>
+            <Skeleton w='50px' h='50px' rounded='xl' />
+            <SkeletonText flexGrow={1} mb='5px' noOfLines={2} me={{base: '4px', md: '32px', xl: '10px', '3xl': '32px'}} />
+            <Skeleton w='40px' h='20px' ms='auto' />
         </Flex>
     </Card>
 }

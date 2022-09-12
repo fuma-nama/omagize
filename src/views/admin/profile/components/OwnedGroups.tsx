@@ -1,17 +1,12 @@
 // Chakra imports
 import {Avatar, Box, Flex, Image, Text, useColorModeValue} from '@chakra-ui/react';
-// Assets
-import Project1 from 'assets/img/profile/Project1.png';
-import Project2 from 'assets/img/profile/Project2.png';
-import Project3 from 'assets/img/profile/Project3.png';
 // Custom components
 import Card from 'components/card/Card';
-import Project from 'views/admin/profile/components/Project';
-import {useColors} from "../../../../variables/colors";
-import {Group, useGroupsQuery} from "../../../../api/GroupAPI";
-import FadeImage from "../../../../components/card/FadeImage";
+import {useColors} from "variables/colors";
+import {Group, useGroupsQuery} from "api/GroupAPI";
+import FadeImage from "components/card/FadeImage";
 import {useContext} from "react";
-import {PageContext} from "../../../../contexts/PageContext";
+import {PageContext} from "contexts/PageContext";
 
 export default function OwnedGroups(props: { [x: string]: any }) {
 	const { ...rest } = props;

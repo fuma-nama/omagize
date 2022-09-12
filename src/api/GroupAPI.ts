@@ -15,8 +15,8 @@ export type Group = {
 
 export type GroupDetail = Group & {
     memberCount: number,
-    activeMembers: Member[], //Should be always a 5-length array
-    membersPreview?: Member[]
+    admins: Member[], //admins of the group
+    membersPreview: Member[] //first 6 members of the group
     events: GroupEvent[]
 }
 
@@ -55,7 +55,8 @@ export function fetchGroup(id: string): Group {
 export function fetchGroupDetail(id: string): GroupDetail {
     return {
         memberCount: members.length,
-        activeMembers: members,
+        admins: [members[0]],
+        membersPreview: members,
         events: events,
         ...groups.find(g => g.id === id)
     }

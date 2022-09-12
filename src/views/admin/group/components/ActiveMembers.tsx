@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import {GroupDetail} from "api/GroupAPI";
-import UserItem from "../../../../components/card/UserItem";
+import UserItem from "components/card/UserItem";
 
 export default function ActiveMembers(props: { group: GroupDetail}) {
   const { group } = props;
@@ -26,13 +26,13 @@ export default function ActiveMembers(props: { group: GroupDetail}) {
           mb='10px'
           boxShadow='0px 40px 58px -20px rgba(112, 144, 176, 0.26)'>
           <Text color={textColor} fontSize='xl' fontWeight='600'>
-            Active Members
+            Group Admins
           </Text>
           <Button variant='action'>All Members</Button>
         </Flex>
         <VStack>
           {
-            group.activeMembers.map(member => <UserItem key={member.id} user={member} />)
+            group.admins.map(member => <UserItem key={member.id} user={member} />)
           }
         </VStack>
       </Flex>

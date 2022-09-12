@@ -58,7 +58,7 @@ function Content(props: {group: GroupDetail}) {
 				<HStack>
 					<AvatarGroup max={5}>
 						{
-							group.activeMembers.map(a => <Avatar key={a.id} src={a.avatarUrl} name={a.username} />)
+							group.membersPreview.map(a => <Avatar key={a.id} src={a.avatarUrl} name={a.username} />)
 						}
 					</AvatarGroup>
 					<Text>{group.memberCount} Members</Text>

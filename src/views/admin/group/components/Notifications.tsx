@@ -47,7 +47,7 @@ export function Notifications() {
         >
             {() =>
                 query.data.map((n, i) =>
-                    <GroupNotificationItem key={i} {...n} />
+                    <GroupNotificationItem key={n.id} {...n} />
                 )
             }
         </Holder>

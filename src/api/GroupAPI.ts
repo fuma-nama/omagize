@@ -25,6 +25,7 @@ export type Member = UserType & {
 }
 
 export type MentionNotification = {
+    id: string
     type: "mention"
     author: Member
     url?: string

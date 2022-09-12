@@ -36,8 +36,8 @@ export default function Notifications(props: { [x: string]: any }) {
 				</>
 			}>
 				{() =>
-					query.data.map((n, i) =>
-						<UserNotificationItem key={i} {...n} />
+					query.data.map(n =>
+						<UserNotificationItem key={n.id} {...n} />
 					)
 				}
 			</Holder>

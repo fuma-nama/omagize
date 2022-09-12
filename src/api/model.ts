@@ -10,6 +10,7 @@ export function delay(timeout: number) {
 
 export const notifications: GroupNotification[] = [
     {
+        id: "43434343",
         type: "mention",
         author: {
             id: "4324232344324543",

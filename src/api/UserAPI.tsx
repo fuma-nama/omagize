@@ -5,6 +5,7 @@ import {GroupEvent, GroupNotification} from "./GroupAPI";
 
 export type UserNotification = GroupNotification & { group: string } | LoginNotification
 export type LoginNotification = {
+    id: string
     type: 'login'
     time: Date
     from: string //from ip address
@@ -38,6 +39,7 @@ export function fetchUserNotifications(): UserNotification[] {
             group: groups[0].id
         })),
         {
+            id: "32423432",
             type: "login",
             time: new Date(Date.now()),
             from: "Hong Kong"

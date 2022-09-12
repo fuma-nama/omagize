@@ -9,6 +9,8 @@ import React from "react";
 import {GroupDetail, Member} from "api/GroupAPI";
 import Card from "components/card/Card";
 import Avatar from "components/icons/Avatar"
+import {useColors} from "../../../../variables/colors";
+import FadeImage from "../../../../components/card/FadeImage";
 
 export default function ActiveMembers(props: { group: GroupDetail}) {
   const { group } = props;
@@ -44,6 +46,7 @@ export default function ActiveMembers(props: { group: GroupDetail}) {
 function MemberCard(props: {member: Member}) {
   const {member} = props
   const [brand] = useToken("color", ["brand.400"])
+  const {textColorPrimary, textColorSecondary} = useColors()
   const image = member.bannerUrl ?? member.avatarUrl
 
   return <Card
@@ -51,24 +54,18 @@ function MemberCard(props: {member: Member}) {
       transition='0.2s linear'
       overflow='hidden'
       pos='relative'>
-    <Box
-        pos='absolute'
-        top={0} left={0}
-        w='full' h='full'
-        bgGradient={image? null : `linear-gradient(to right, transparent 30%, ${brand})`}
-        css={{maskImage: "linear-gradient(to right, transparent 30%, black)"}}>
-      {image && <Image
-          w='full' h='full'
-          src={image}
-          objectFit="cover"
-          filter='auto'
-          brightness={0.5}/>
-      }
-    </Box>
+    <FadeImage
+        direction='to left' src={image}
+        placeholder={brand}
+        image={{
+          filter:'auto',
+          brightness: 0.5
+        }} />
 
     <HStack gap='10px' pos='relative'>
       <Avatar name={member.username} src={member.avatarUrl} variant='normal' />
-      <Text fontSize='xl' fontWeight='bold'>{member.username}</Text>
+      <Text color={textColorPrimary} fontSize='xl' fontWeight='bold'>{member.username}</Text>
+      <Text color={textColorSecondary}>{member.description}</Text>
     </HStack>
   </Card>
 }

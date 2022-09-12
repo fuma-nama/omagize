@@ -20,9 +20,9 @@ export function ChatGroup(props: {group: Group, active: boolean}) {
             <FadeImage
                 src={group.banner}
                 direction='to left'
+                placeholder={activeColor}
                 bg={active? activeColor : 'black'}
                 image={{
-                    bg: group.banner? null : activeColor,
                     filter: 'auto', brightness: active? 0.9 : 0.7
                 }}
             />

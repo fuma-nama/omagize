@@ -51,9 +51,9 @@ function GroupItem(group: Group) {
 	>
 		<FadeImage
 			src={group.banner}
+			placeholder={brand}
 			direction='to left'
 			image={{
-				bg: group.banner? null : brand,
 				filter: 'auto', brightness: 0.9
 			}}
 		/>

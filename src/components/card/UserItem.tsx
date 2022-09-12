@@ -69,7 +69,7 @@ export function FriendRequestItem(
                 <Flex direction='column'>
 
                     <Text color={textColorPrimary} fontSize='xl' fontWeight='bold'>{user.username}</Text>
-                    <Text color={textColorSecondary}>{user.description}</Text>
+                    <Text color={textColorSecondary}>{request.message}</Text>
                 </Flex>
             </HStack>
         </Box>

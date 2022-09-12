@@ -15,6 +15,12 @@ export const buttonStyles = {
 				}
 			},
 			variants: {
+				danger: () => ({
+					color:'white',
+					bg: 'red.500',
+					_hover: {bg: "red.400"},
+					_active: {bg: "red.300"}
+				}),
 				outline: () => ({
 					borderRadius: '16px'
 				}),

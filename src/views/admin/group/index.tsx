@@ -1,6 +1,6 @@
 import React, {useContext, useEffect} from "react";
 // Chakra imports
-import {Box, Button, Flex, Grid, Heading} from '@chakra-ui/react';
+import {Box, Button, Flex, Grid, Heading, SimpleGrid} from '@chakra-ui/react';
 
 // Custom components
 import Banner from './components/Banner';
@@ -12,6 +12,7 @@ import { Notifications } from "./components/Notifications";
 import {useInfiniteMessageQuery} from "api/MessageAPI";
 import MessageItem, {MessageItemSkeleton} from "components/card/chat/MessageItem";
 import {QueryErrorPanel} from "components/card/ErrorPanel";
+import GroupEventItem from "components/card/GroupEventItem";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -38,17 +39,20 @@ function Content(props: {group: GroupDetail}) {
             display={{ base: 'block', xl: 'grid' }}>
             <Flex flexDirection='column' gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}>
                 <Banner />
-                <Box
+                <Flex
+                    direction='column'
                     flexGrow={1}
-                    mt='45px'
+                    mt='25px'
                     mb='20px'
+                    gap={5}
                 >
+                    <GroupEvents detail={group} />
                     <Card flexDirection='row' mb='20px' alignItems='center'>
                         <Heading fontSize='24px'>Messages</Heading>
                         <Button ml='auto' variant="brand" onClick={open}>Open</Button>
                     </Card>
                     <MessagesPreview />
-                </Box>
+                </Flex>
             </Flex>
             <Flex direction='column' gap="20px" gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}>
                 <Card px='0px'>
@@ -58,6 +62,14 @@ function Content(props: {group: GroupDetail}) {
             </Flex>
         </Grid>
     );
+}
+
+function GroupEvents({detail}: {detail: GroupDetail}) {
+    return <SimpleGrid columns={{base: 1, "3sm": 2, "xl": 3}}>
+        {detail.events.map(e =>
+            <GroupEventItem key={e.id} {...e} />
+        )}
+    </SimpleGrid>
 }
 
 function MessagesPreview() {

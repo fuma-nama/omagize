@@ -17,6 +17,7 @@ export type GroupDetail = Group & {
     memberCount: number,
     activeMembers: Member[], //Should be always a 5-length array
     membersPreview?: Member[]
+    events: GroupEvent[]
 }
 
 export type Member = UserType & {
@@ -54,6 +55,7 @@ export function fetchGroupDetail(id: string): GroupDetail {
     return {
         memberCount: members.length,
         activeMembers: members,
+        events: events,
         ...groups.find(g => g.id === id)
     }
 }
@@ -76,10 +78,6 @@ export function useGroupsQuery() {
 
 export function useGroupQuery(id: string) {
     return useQuery(["group", id], () => fetchGroup(id))
-}
-
-export function fetchGroupEvents(group: string): GroupEvent[] {
-    return events
 }
 
 export function useGroupNotificationsQuery(id: string) {

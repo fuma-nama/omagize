@@ -14,15 +14,14 @@ export default function Friends() {
             <Button onClick={onOpen} variant='brand'>Add</Button>
             <AddFriendModal isOpen={isOpen} onClose={onClose} />
         </HStack>
-        <Content {...query.data} />
+        <Content data={query.data} />
     </Flex>
 }
 
-function Content(data: FriendsData) {
+function Content({data}: { data: FriendsData }) {
     if (data != null && data.friends.length == 0 && data.requests.length === 0) {
         return <Placeholder>You don't have a Friend yet</Placeholder>
     }
-    const {friends, requests} = data
 
     return <SimpleGrid columns={{base: 1, lg: 2, "2xl": 3}} gap={5}>
         <Holder
@@ -34,10 +33,10 @@ function Content(data: FriendsData) {
                     <UserItemSkeleton />
                 </>}
         >
-            {requests?.map(request =>
+            {data?.requests?.map(request =>
                 <FriendRequestItem key={request.user.id} request={request} />
             )}
-            {friends?.map(friend =>
+            {data?.friends?.map(friend =>
                 <UserItem key={friend.id} user={friend} />
             )}
         </Holder>

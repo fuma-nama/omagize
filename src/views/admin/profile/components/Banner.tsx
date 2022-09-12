@@ -12,7 +12,7 @@ import {
 	useDisclosure
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import {useUserQuery} from "api/UserAPI";
+import {useFriendsQuery, useUserQuery} from "api/UserAPI";
 import {useGroupsQuery} from "api/GroupAPI";
 import {useColors} from "variables/colors";
 import {EditIcon} from "@chakra-ui/icons";
@@ -21,6 +21,7 @@ import EditAccountModal from "components/modals/EditAccount";
 export default function Banner(props: any) {
 	const query = useUserQuery()
 	const groupsQuery = useGroupsQuery()
+	const friendsQuery = useFriendsQuery()
 	const {isOpen, onOpen, onClose} = useDisclosure()
 
 	// Chakra Color Mode
@@ -30,6 +31,7 @@ export default function Banner(props: any) {
 	if (query.isLoading) return <BannerSkeleton />
 	const user = query.data
 	const groups = groupsQuery.data
+	const friends = friendsQuery.data?.friends
 
 	return (
 		<Card mb={{ base: '0px', lg: '20px' }} alignItems='center' {...props}>
@@ -64,9 +66,12 @@ export default function Banner(props: any) {
 					</Text>
 				</Flex>
 				<Flex alignItems='center' flexDirection='column'>
-					<Text color={textColorPrimary} fontSize='2xl' fontWeight='700'>
-						{33}
-					</Text>
+					{friends?
+						<Text color={textColorPrimary} fontSize='2xl' fontWeight='700'>
+							{friends.length}
+						</Text> :
+						<Skeleton w='60px' h='30px'/>
+					}
 					<Text color={textColorSecondary} fontSize='sm' fontWeight='400'>
 						Friends
 					</Text>

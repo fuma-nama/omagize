@@ -71,6 +71,11 @@ export function fetchFriends(): Friend[] {
     ]
 }
 
+export async function sendFriendRequest(friendID: string) {
+    if (friendID === "000000") throw new Error("Friend ID doesn't exist")
+    await delay(2000)
+}
+
 export function useUserQuery() {
     return useQuery(["user"], () => fetchUser())
 }

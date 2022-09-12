@@ -41,7 +41,7 @@ export default function UserReports() {
 		<Flex direction='column' gap={5}>
 			<Banner user={query.data} />
 
-			<SimpleGrid columns={{ base: 1, md: 2, lg: 3, '2xl': 6 }} gap='20px' mb='20px'>
+			<SimpleGrid columns={{ base: 1, md: 2, lg: 3, '2xl': 6 }} gap='20px' mt='20px'>
 				<MiniStatistics
 					startContent={
 						<IconBox

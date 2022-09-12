@@ -44,10 +44,10 @@ function Content(props: {group: GroupDetail}) {
                     flexGrow={1}
                     mt='25px'
                     mb='20px'
-                    gap={5}
+                    gap={2}
                 >
                     <GroupEvents detail={group} />
-                    <Card flexDirection='row' mb='20px' alignItems='center'>
+                    <Card flexDirection='row' alignItems='center' mt={3}>
                         <Heading fontSize='24px'>Messages</Heading>
                         <Button ml='auto' variant="brand" onClick={open}>Open</Button>
                     </Card>

@@ -34,7 +34,7 @@ export default function CreateGroupModal(props: {isOpen: boolean, onClose: () =>
             <ModalHeader>Create Group</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-                <Form value={value} onChange={v => {
+                <Form error={mutation.error} value={value} onChange={v => {
                     if (!mutation.isLoading) {
                         setValue(prev => ({...prev, ...v}))
                     }
@@ -60,8 +60,10 @@ type GroupOptions = {
     banner?: File
 }
 
-function Form(props: {value: GroupOptions, onChange: (options: Partial<GroupOptions>) => void}) {
-    const {value, onChange} = props
+function Form(
+    {value, onChange, error}: {
+        value: GroupOptions, onChange: (options: Partial<GroupOptions>) => void, error?: any
+    }) {
     const acceptedFileTypes = ".png, .jpg, .gif"
 
     const [name, setName] = [value.name, (v: string) => onChange({name: v})]
@@ -75,9 +77,8 @@ function Form(props: {value: GroupOptions, onChange: (options: Partial<GroupOpti
         v => onChange({banner: v}),
         {accept: acceptedFileTypes}
     )
-    const invalid = false
 
-    return <FormControl isInvalid={invalid} isRequired>
+    return <FormControl isRequired isInvalid={!!error}>
         <InputGroup flexDirection='column'>
             {icon.picker}
             {banner.picker}
@@ -87,7 +88,6 @@ function Form(props: {value: GroupOptions, onChange: (options: Partial<GroupOpti
                 bannerUrl={banner.url} iconUrl={icon.url}
                 crop={icon.crop}
             />
-
             {
                 !icon.crop && <Button mx='auto' onClick={() => {
                     icon.setValue(null)
@@ -95,10 +95,8 @@ function Form(props: {value: GroupOptions, onChange: (options: Partial<GroupOpti
                 }}>Reset</Button>
             }
         </InputGroup>
-        <FormErrorMessage>
-            {invalid}
-        </FormErrorMessage>
         <FormLabel>Group Name</FormLabel>
         <Input value={name} onChange={e => setName(e.target.value)} variant="main" placeholder="Give your Group a name" />
+        <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
 }

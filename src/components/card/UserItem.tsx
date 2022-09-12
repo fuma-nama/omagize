@@ -4,9 +4,11 @@ import Card from "./Card";
 import FadeImage from "./FadeImage";
 import Avatar from "../icons/Avatar";
 import React from "react";
-import {FriendRequest, UserType} from "api/UserAPI";
+import {acceptFriendRequest, denyFriendRequest, FriendRequest, UserType} from "api/UserAPI";
 import {CustomCardProps} from "theme/theme";
 import {AiOutlineClose} from "react-icons/ai";
+import {useMutation} from "@tanstack/react-query";
+import {WarningIcon} from "@chakra-ui/icons";
 
 export default function UserItem({user}: {user: UserType}) {
     const [brand] = useToken("color", ["brand.400"])
@@ -36,8 +38,17 @@ export default function UserItem({user}: {user: UserType}) {
 export function FriendRequestItem(
     {request, ...card}: {request: FriendRequest} & CustomCardProps
 ) {
-    const {cardBg, brand} = useColors()
-    const {textColorPrimary, textColorSecondary} = useColors()
+    const accept = useMutation(
+        ["accept_friend_request", request.user.id],
+        () => acceptFriendRequest(request.user.id)
+    )
+    const deny = useMutation(
+        ["deny_friend_request", request.user.id],
+        () => denyFriendRequest(request.user.id)
+    )
+
+    const {textColorPrimary, textColorSecondary, cardBg, brand} = useColors()
+    const breakpoint = '3sm'
 
     const {user} = request
     const image = user.bannerUrl ?? user.avatarUrl
@@ -45,12 +56,18 @@ export function FriendRequestItem(
     return <Flex
         rounded='2xl'
         overflow='hidden'
+        direction={{base: 'column', [breakpoint]: 'row'}}
         {...card}
     >
-        <Box bg={cardBg} p='21px' flex={1}>
-            <HStack gap='10px' pos='relative' align='start'>
+        <Box bg={cardBg} flex={1} p='21px'>
+            <HStack mb={3}>
+                <WarningIcon />
+                <Text>Friend Request</Text>
+            </HStack>
+            <HStack gap='10px' align='start'>
                 <Avatar name={user.username} src={user.avatarUrl} variant='normal' />
                 <Flex direction='column'>
+
                     <Text color={textColorPrimary} fontSize='xl' fontWeight='bold'>{user.username}</Text>
                     <Text color={textColorSecondary}>{user.description}</Text>
                 </Flex>
@@ -62,14 +79,21 @@ export function FriendRequestItem(
             p={2}
             flexShrink={0}
             minW='fit-content'
-            w='40%'
-            h='full'
+            w={{[breakpoint]: '40%'}}
+            h={{[breakpoint]: 'full'}}
             bg={brand}
             bgImg={image}
             bgSize='cover'
         >
-            <Button variant='action'>Accept</Button>
-            <IconButton aria-label='deny' icon={<AiOutlineClose />} variant='danger' />
+            <Button
+                isLoading={accept.isLoading} onClick={() => accept.mutate()}
+                variant='action'>
+                Accept
+            </Button>
+            <IconButton
+                isLoading={deny.isLoading} onClick={() => deny.mutate()}
+                aria-label='deny' icon={<AiOutlineClose />} variant='danger'
+            />
         </HStack>
     </Flex>
 }

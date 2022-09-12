@@ -1,7 +1,7 @@
 import {Button, Flex, HStack, SimpleGrid, Text, useDisclosure} from "@chakra-ui/react";
-import {Friend, FriendRequest, useFriendsQuery} from "api/UserAPI";
+import {Friend, FriendRequest, FriendsData, useFriendsQuery} from "api/UserAPI";
 import UserItem, {FriendRequestItem, UserItemSkeleton} from "components/card/UserItem";
-import {Holder, Placeholder} from "utils/Container";
+import {ArrayHolder, Holder, Placeholder} from "utils/Container";
 import AddFriendModal from "components/modals/AddFriendModal";
 
 export default function Friends() {
@@ -14,34 +14,19 @@ export default function Friends() {
             <Button onClick={onOpen} variant='brand'>Add</Button>
             <AddFriendModal isOpen={isOpen} onClose={onClose} />
         </HStack>
-        <FriendRequests requests={query.data?.requests} />
-        <Content friends={query.data?.friends} />
+        <Content {...query.data} />
     </Flex>
 }
 
-function FriendRequests({requests}: {requests?: FriendRequest[]}) {
-    if (requests == null || requests.length === 0) {
-        return <></>
-    }
-
-    return <>
-        <Text fontWeight='bold'>Friend Requests</Text>
-        <SimpleGrid columns={{base: 1, md: 2, "2xl": 3}} gap={5} mb='20px'>
-            {requests.map(request =>
-                <FriendRequestItem key={request.user.id} request={request} />
-            )}
-        </SimpleGrid>
-    </>
-}
-
-function Content({friends}: {friends?: Friend[]}) {
-    if (friends != null && friends.length == 0) {
+function Content(data: FriendsData) {
+    if (data != null && data.friends.length == 0 && data.requests.length === 0) {
         return <Placeholder>You don't have a Friend yet</Placeholder>
     }
+    const {friends, requests} = data
 
-    return <SimpleGrid columns={{base: 1, "3sm": 2, lg: 3, "2xl": 4}} gap={5}>
+    return <SimpleGrid columns={{base: 1, lg: 2, "2xl": 3}} gap={5}>
         <Holder
-            array={friends}
+            isLoading={data == null}
             skeleton={
                 <>
                     <UserItemSkeleton />
@@ -49,10 +34,12 @@ function Content({friends}: {friends?: Friend[]}) {
                     <UserItemSkeleton />
                 </>}
         >
-            {() =>
-                friends.map(friend =>
-                    <UserItem key={friend.id} user={friend} />
-                )}
+            {requests?.map(request =>
+                <FriendRequestItem key={request.user.id} request={request} />
+            )}
+            {friends?.map(friend =>
+                <UserItem key={friend.id} user={friend} />
+            )}
         </Holder>
     </SimpleGrid>
 }

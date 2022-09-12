@@ -93,6 +93,14 @@ export async function sendFriendRequest(friendID: string) {
     await delay(2000)
 }
 
+export async function acceptFriendRequest(friendID: string) {
+    await delay(2000)
+}
+
+export async function denyFriendRequest(friendID: string) {
+    await delay(2000)
+}
+
 export function useUserQuery() {
     return useQuery(["user"], () => fetchUser())
 }

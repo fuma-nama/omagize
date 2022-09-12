@@ -1,16 +1,12 @@
 import {
-  Box,
-  Button,
-  Flex, HStack, Image,
-  Text,
-  useColorModeValue, useToken, VStack,
+    Button,
+    Flex,
+    Text,
+    useColorModeValue, VStack,
 } from "@chakra-ui/react";
 import React from "react";
-import {GroupDetail, Member} from "api/GroupAPI";
-import Card from "components/card/Card";
-import Avatar from "components/icons/Avatar"
-import {useColors} from "../../../../variables/colors";
-import FadeImage from "../../../../components/card/FadeImage";
+import {GroupDetail} from "api/GroupAPI";
+import UserItem from "../../../../components/card/UserItem";
 
 export default function ActiveMembers(props: { group: GroupDetail}) {
   const { group } = props;
@@ -36,36 +32,9 @@ export default function ActiveMembers(props: { group: GroupDetail}) {
         </Flex>
         <VStack>
           {
-            group.activeMembers.map(member => <MemberCard key={member.id} member={member} />)
+            group.activeMembers.map(member => <UserItem key={member.id} user={member} />)
           }
         </VStack>
       </Flex>
   );
-}
-
-function MemberCard(props: {member: Member}) {
-  const {member} = props
-  const [brand] = useToken("color", ["brand.400"])
-  const {textColorPrimary, textColorSecondary} = useColors()
-  const image = member.bannerUrl ?? member.avatarUrl
-
-  return <Card
-      _hover={{opacity: 0.5, cursor: 'pointer'}}
-      transition='0.2s linear'
-      overflow='hidden'
-      pos='relative'>
-    <FadeImage
-        direction='to left' src={image}
-        placeholder={brand}
-        image={{
-          filter:'auto',
-          brightness: 0.5
-        }} />
-
-    <HStack gap='10px' pos='relative'>
-      <Avatar name={member.username} src={member.avatarUrl} variant='normal' />
-      <Text color={textColorPrimary} fontSize='xl' fontWeight='bold'>{member.username}</Text>
-      <Text color={textColorSecondary}>{member.description}</Text>
-    </HStack>
-  </Card>
 }

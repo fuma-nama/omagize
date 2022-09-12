@@ -1,6 +1,6 @@
-import {Box, Button, Flex, HStack, SimpleGrid, Text, useDisclosure} from "@chakra-ui/react";
-import {Friend, useFriendsQuery} from "api/UserAPI";
-import UserItem, {UserItemSkeleton} from "components/card/UserItem";
+import {Button, Flex, HStack, SimpleGrid, Text, useDisclosure} from "@chakra-ui/react";
+import {Friend, FriendRequest, useFriendsQuery} from "api/UserAPI";
+import UserItem, {FriendRequestItem, UserItemSkeleton} from "components/card/UserItem";
 import {Holder, Placeholder} from "utils/Container";
 import AddFriendModal from "components/modals/AddFriendModal";
 
@@ -14,11 +14,27 @@ export default function Friends() {
             <Button onClick={onOpen} variant='brand'>Add</Button>
             <AddFriendModal isOpen={isOpen} onClose={onClose} />
         </HStack>
-        <Content friends={query.data} />
+        <FriendRequests requests={query.data?.requests} />
+        <Content friends={query.data?.friends} />
     </Flex>
 }
 
-function Content({friends}: {friends: Friend[]}) {
+function FriendRequests({requests}: {requests?: FriendRequest[]}) {
+    if (requests == null || requests.length === 0) {
+        return <></>
+    }
+
+    return <>
+        <Text fontWeight='bold'>Friend Requests</Text>
+        <SimpleGrid columns={{base: 1, md: 2, "2xl": 3}} gap={5} mb='20px'>
+            {requests.map(request =>
+                <FriendRequestItem key={request.user.id} request={request} />
+            )}
+        </SimpleGrid>
+    </>
+}
+
+function Content({friends}: {friends?: Friend[]}) {
     if (friends != null && friends.length == 0) {
         return <Placeholder>You don't have a Friend yet</Placeholder>
     }

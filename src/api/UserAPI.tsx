@@ -20,6 +20,15 @@ export type UserType = {
 }
 
 export type Friend = UserType
+export type FriendRequest = {
+    user: UserType
+    message?: string
+}
+
+export type FriendsData = {
+    friends: Friend[],
+    requests: FriendRequest[]
+}
 
 export type SelfUser = UserType & {
     createdAt: Date
@@ -65,10 +74,18 @@ export function fetchUser(): SelfUser {
     }
 }
 
-export function fetchFriends(): Friend[] {
-    return [
-        ...users
-    ]
+export function fetchFriends(): FriendsData {
+    return {
+        friends: [
+            ...users
+        ],
+        requests: [
+            {
+                user: users[0],
+                message: "I seen you in Gay Party"
+            }
+        ]
+    }
 }
 
 export async function sendFriendRequest(friendID: string) {

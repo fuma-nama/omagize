@@ -1,26 +1,17 @@
 import {
     Button,
     Flex, HStack,
-    Icon,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuList,
-    Text,
-    useColorMode,
     useColorModeValue
 } from "@chakra-ui/react";
-import {SearchBar} from "../../../../components/navbar/searchBar/SearchBar";
-import {SidebarResponsive} from "../../../../components/sidebar/Sidebar";
-import routes from "../../../../routes";
-import {MdNotificationsNone} from "react-icons/md";
-import {ItemContent} from "../../../../components/menu/ItemContent";
-import ThemeSwitch from "../../../../components/navbar/components/ThemeSwitch";
-import {UserMenu} from "../../../../components/navbar/profile/UserMenu";
+import {SearchBar} from "components/navbar/searchBar/SearchBar";
+import {SidebarResponsive} from "components/sidebar/Sidebar";
+import routes from "routes";
+import ThemeSwitch from "components/navbar/components/ThemeSwitch";
+import {UserMenu} from "components/navbar/menu/UserMenu";
 import React, {useContext} from "react";
 import {BiArrowBack} from "react-icons/bi";
 import {useNavigate} from "react-router-dom";
-import {PageContext} from "../../../../contexts/PageContext";
+import {PageContext} from "contexts/PageContext";
 
 export default function GroupNavbar() {
     // Chakra Color Mode

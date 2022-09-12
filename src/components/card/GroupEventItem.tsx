@@ -1,4 +1,4 @@
-import {GroupEvent} from "api/GroupAPI";
+import {GroupEvent, useGroupQuery} from "api/GroupAPI";
 import Card from "./Card";
 import {Avatar, Flex, HStack, Image, Skeleton, SkeletonCircle, SkeletonText, StackProps, Text} from "@chakra-ui/react";
 import {useColors} from "variables/colors";
@@ -12,11 +12,30 @@ function Info({name, value, ...rest}: {name: string, value: any} & StackProps) {
     </HStack>
 }
 
-export default function GroupEventItem(props: GroupEvent) {
+export default function GroupEventItem({fetchGroup, ...event}: GroupEvent & { fetchGroup?: boolean }) {
     const {textColorPrimary, textColorSecondary} = useColors()
 
+    function GroupInfo() {
+        const query = useGroupQuery(event.group)
+        const group = query.data
+        const iconSize = '30px'
+
+        return <HStack mb={2} align='start'>
+            {query.isLoading? <>
+                    <SkeletonCircle w={iconSize} h={iconSize}/>
+                    <SkeletonText noOfLines={2} w='100px' h='23px'/>
+                </> :
+                <>
+                    <Avatar src={group.icon} name={group.name} w={iconSize} h={iconSize}/>
+                    <Text fontWeight='bold'>{group.name}</Text>
+                </>
+            }
+        </HStack>
+    }
+
     return <Card overflow='hidden' gap={3}>
-        <Image w='full' objectFit='cover' src={props.image} maxH='200px' rounded='lg' />
+        {fetchGroup && <GroupInfo />}
+        <Image w='full' objectFit='cover' src={event.image} maxH='200px' rounded='lg' />
 
         <HStack justify='space-between'>
             <Flex direction='column'>
@@ -25,18 +44,18 @@ export default function GroupEventItem(props: GroupEvent) {
                     fontWeight='bold'
                     fontSize='md'
                 >
-                    {props.name}
+                    {event.name}
                 </Text>
-                <Text color={textColorSecondary}>{props.description}</Text>
-                <Text color={textColorSecondary}>By {props.author.username}</Text>
+                <Text color={textColorSecondary}>{event.description}</Text>
+                <Text color={textColorSecondary}>By {event.author.username}</Text>
             </Flex>
-            <Avatar src={props.author.avatarUrl} name={props.author.username} />
+            <Avatar src={event.author.avatarUrl} name={event.author.username} />
         </HStack>
 
         <Flex direction='row' flexWrap='wrap' gap={4} mt={2}>
-            <Info name='Take Place At' value={props.place} />
+            <Info name='Take Place At' value={event.place} />
 
-            <Info name='Starting At' value={props.startAt.toLocaleTimeString()} />
+            <Info name='Starting At' value={event.startAt.toLocaleTimeString()} />
         </Flex>
     </Card>
 }

@@ -10,7 +10,7 @@ import {Button, Flex, Icon, Image, Text, useColorModeValue} from "@chakra-ui/rea
 
 import Card from "components/card/Card";
 import {GroupNotificationItem, NotificationSkeleton} from "components/card/notification/Notification";
-import {Holder} from "utils/Container";
+import {ArrayHolder, Holder} from "utils/Container";
 import {useMutation} from "@tanstack/react-query";
 
 export function Notifications() {
@@ -35,7 +35,7 @@ export function Notifications() {
             </Text>
             <Button variant='action' isLoading={mutation.isLoading} onClick={() => mutation.mutate()}>Clear all</Button>
         </Flex>
-        <Holder
+        <ArrayHolder
             placeholder="No Notifications" array={query.data}
             skeleton={
                 <>
@@ -50,6 +50,6 @@ export function Notifications() {
                     <GroupNotificationItem key={n.id} {...n} />
                 )
             }
-        </Holder>
+        </ArrayHolder>
     </Card>
 }

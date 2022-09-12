@@ -1,5 +1,5 @@
 // Chakra imports
-import {Avatar, Box, Flex, Image, Text, useColorModeValue} from '@chakra-ui/react';
+import {Avatar, Flex, Text, useColorModeValue} from '@chakra-ui/react';
 // Custom components
 import Card from 'components/card/Card';
 import {useColors} from "variables/colors";

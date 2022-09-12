@@ -6,7 +6,7 @@ import {clearUserNotifications, useUserNotificationsQuery} from "api/UserAPI";
 import {useColors} from "variables/colors";
 import UserNotificationItem from "components/card/notification/UserNotification";
 import {NotificationSkeleton} from "components/card/notification/Notification";
-import {Holder} from "utils/Container";
+import {ArrayHolder, Holder} from "utils/Container";
 import {useMutation} from "@tanstack/react-query";
 
 export default function Notifications(props: { [x: string]: any }) {
@@ -28,7 +28,7 @@ export default function Notifications(props: { [x: string]: any }) {
 				</Text>
 				<Button variant='action' onClick={() => mutation.mutate()} isLoading={mutation.isLoading}>Read All</Button>
 			</Flex>
-			<Holder array={query.data} placeholder="No Notifications" skeleton={
+			<ArrayHolder array={query.data} placeholder="No Notifications" skeleton={
 				<>
 					<NotificationSkeleton />
 					<NotificationSkeleton />
@@ -40,7 +40,7 @@ export default function Notifications(props: { [x: string]: any }) {
 						<UserNotificationItem key={n.id} {...n} />
 					)
 				}
-			</Holder>
+			</ArrayHolder>
 		</Card>
 	);
 }

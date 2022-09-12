@@ -9,26 +9,35 @@ export function Placeholder({children, ...rest}: {children: string} & CenterProp
         <Text color={textColorSecondary} fontSize='xl' align='center'>{children}</Text>
     </Center>
 }
-export function Holder(
-    {array, placeholder, skeleton, children}: {
+export function ArrayHolder(
+    {array, placeholder, ...props}: {
         array?: any[], placeholder?: string | ReactNode, skeleton?: ReactNode, children: ReactNode | (() => ReactNode)
     }) {
     const {textColorSecondary} = useColors()
-    if (array == null) {
-        return <>
-            {skeleton}
-        </>
-    }
+    const empty = array && array.length === 0
 
-    if (array.length === 0) {
+    if (empty) {
         if (typeof placeholder === 'string') {
             return <Text mx='auto' color={textColorSecondary}>{placeholder}</Text>
         } else {
             return <> {placeholder} </>
         }
-    } else {
+    }
+
+    return <Holder isLoading={array == null} {...props}>{props.children}</Holder>
+}
+
+export function Holder(
+    {isLoading, skeleton, children}: {
+        isLoading?: boolean, skeleton?: ReactNode, children: ReactNode | (() => ReactNode)
+    }) {
+    if (isLoading) {
         return <>
-            {typeof children === 'function'? children() : children}
+            {skeleton}
         </>
     }
+
+    return <>
+        {typeof children === 'function'? children() : children}
+    </>
 }

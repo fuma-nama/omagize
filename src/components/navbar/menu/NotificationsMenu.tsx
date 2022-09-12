@@ -2,7 +2,7 @@ import {Flex, Icon, Menu, MenuButton, MenuList, Text} from "@chakra-ui/react";
 import React from "react";
 import {useNavbarColors} from "variables/colors";
 import {useUserNotificationsQuery} from "api/UserAPI";
-import {Holder} from "../../../utils/Container";
+import {ArrayHolder} from "utils/Container";
 import {NotificationSkeleton} from "../../card/notification/Notification";
 import UserNotificationItem from "../../card/notification/UserNotification";
 import { MdNotificationsNone } from "react-icons/md";
@@ -32,7 +32,7 @@ export default function NotificationsMenu() {
                 </Text>
             </Flex>
             <Flex flexDirection='column'>
-                <Holder array={query.data} placeholder='No Notifications' skeleton={
+                <ArrayHolder array={query.data} placeholder='No Notifications' skeleton={
                     <>
                         <NotificationSkeleton />
                         <NotificationSkeleton />
@@ -43,7 +43,7 @@ export default function NotificationsMenu() {
                             <UserNotificationItem key={n.id} {...n} />
                         )
                     }
-                </Holder>
+                </ArrayHolder>
             </Flex>
         </MenuList>
     </Menu>

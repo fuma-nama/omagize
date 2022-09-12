@@ -26,7 +26,7 @@ import { columnsDataCheck, columnsDataComplex } from 'views/admin/default/variab
 import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
 import Banner from "./components/Banner";
 import {useGroupEventsQuery, useUserQuery} from "../../../api/UserAPI";
-import {Holder, Placeholder} from "../../../utils/Container";
+import {ArrayHolder, Holder, Placeholder} from "../../../utils/Container";
 import GroupEventItem, {GroupEventSkeleton} from "../../../components/card/GroupEventItem";
 import Friends from "./components/Friends";
 
@@ -134,7 +134,7 @@ function Events() {
 		{empty?
 			<Placeholder>No Group Events</Placeholder> :
 			<SimpleGrid columns={{base: 1, "3sm": 2, lg: 3}} gap={3}>
-				<Holder
+				<ArrayHolder
 					array={query.data}
 					skeleton={
 						<>
@@ -149,7 +149,7 @@ function Events() {
 							<GroupEventItem key={event.id} fetchGroup {...event} />
 						)
 					}
-				</Holder>
+				</ArrayHolder>
 			</SimpleGrid>
 		}
 	</Flex>

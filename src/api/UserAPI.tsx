@@ -19,6 +19,8 @@ export type UserType = {
     description?: string
 }
 
+export type Friend = UserType
+
 export type SelfUser = UserType & {
     createdAt: Date
     email: string
@@ -63,6 +65,12 @@ export function fetchUser(): SelfUser {
     }
 }
 
+export function fetchFriends(): Friend[] {
+    return [
+        ...users
+    ]
+}
+
 export function useUserQuery() {
     return useQuery(["user"], () => fetchUser())
 }
@@ -78,5 +86,12 @@ export function useGroupEventsQuery() {
     return useQuery(
         ["all_group_event"],
         () => fetchGroupEvents()
+    )
+}
+
+export function useFriendsQuery() {
+    return useQuery(
+        ["friends"],
+        () => fetchFriends()
     )
 }

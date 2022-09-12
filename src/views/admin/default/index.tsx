@@ -14,26 +14,21 @@ import {
 // Assets
 import Usa from 'assets/img/dashboards/usa.png';
 // Custom components
-import MiniCalendar from 'components/calendar/MiniCalendar';
 import MiniStatistics from 'components/card/MiniStatistics';
 import IconBox from 'components/icons/IconBox';
 import { MdAddTask, MdAttachMoney, MdBarChart, MdFileCopy } from 'react-icons/md';
 import CheckTable from 'views/admin/default/components/CheckTable';
-import ComplexTable from 'views/admin/default/components/ComplexTable';
 import DailyTraffic from 'views/admin/default/components/DailyTraffic';
 import PieCard from 'views/admin/default/components/PieCard';
-import Tasks from 'views/admin/default/components/Tasks';
 import TotalSpent from 'views/admin/default/components/TotalSpent';
 import WeeklyRevenue from 'views/admin/default/components/WeeklyRevenue';
 import { columnsDataCheck, columnsDataComplex } from 'views/admin/default/variables/columnsData';
 import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
-import tableDataComplex from 'views/admin/default/variables/tableDataComplex.json';
 import Banner from "./components/Banner";
 import {useGroupEventsQuery, useUserQuery} from "../../../api/UserAPI";
 import {Holder, Placeholder} from "../../../utils/Container";
 import GroupEventItem, {GroupEventSkeleton} from "../../../components/card/GroupEventItem";
-import Card from "../../../components/card/Card";
-import {useColors} from "../../../variables/colors";
+import Friends from "./components/Friends";
 
 export default function UserReports() {
 	// Chakra Color Mode
@@ -113,6 +108,7 @@ export default function UserReports() {
 					value='2935'
 				/>
 			</SimpleGrid>
+			<Friends />
 			<Events />
 			<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>
 				<TotalSpent />
@@ -123,13 +119,6 @@ export default function UserReports() {
 				<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px'>
 					<DailyTraffic />
 					<PieCard />
-				</SimpleGrid>
-			</SimpleGrid>
-			<SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
-				<ComplexTable columnsData={columnsDataComplex} tableData={tableDataComplex} />
-				<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px'>
-					<Tasks />
-					<MiniCalendar h='100%' minW='100%' selectRange={false} />
 				</SimpleGrid>
 			</SimpleGrid>
 		</Flex>

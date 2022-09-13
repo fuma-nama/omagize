@@ -28,39 +28,35 @@ export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement):
     const canvas = document.createElement("canvas");
     const context = canvas.getContext('2d');
 
+    const scaleX = imageObj.naturalWidth / imageObj.width
+    const scaleY = imageObj.naturalHeight / imageObj.height
+    // devicePixelRatio slightly increases sharpness on retina devices
+    // at the expense of slightly slower render times and needing to
+    // size the image back down if you want to download/upload and be
+    // true to the images natural size.
+    const pixelRatio = window.devicePixelRatio
+
     if (crop == null) {
-        canvas.width = imageObj.width
-        canvas.height = imageObj.height
-
-        context.drawImage(imageObj, 0, 0);
+        canvas.width = Math.floor(imageObj.naturalWidth * pixelRatio)
+        canvas.height = Math.floor(imageObj.naturalHeight * pixelRatio)
     } else {
-        const scaleX = imageObj.naturalWidth / imageObj.width
-        const scaleY = imageObj.naturalHeight / imageObj.height
-        // devicePixelRatio slightly increases sharpness on retina devices
-        // at the expense of slightly slower render times and needing to
-        // size the image back down if you want to download/upload and be
-        // true to the images natural size.
-        const pixelRatio = window.devicePixelRatio
-
         canvas.width = Math.floor(crop.width * scaleX * pixelRatio)
         canvas.height = Math.floor(crop.height * scaleY * pixelRatio)
-
-        context.scale(pixelRatio, pixelRatio)
         context.imageSmoothingQuality = 'high'
-
         const cropX = crop.x * scaleX
         const cropY = crop.y * scaleY
 
         // 5) Move the crop origin to the canvas origin (0,0)
         context.translate(-cropX, -cropY)
-        context.drawImage(
-            imageObj,
-            0,
-            0,
-            imageObj.naturalWidth,
-            imageObj.naturalHeight,
-        )
     }
+    context.scale(pixelRatio, pixelRatio)
+
+    context.drawImage(
+        imageObj,
+        0, 0,
+        imageObj.naturalWidth,
+        imageObj.naturalHeight,
+    );
 
     return new Promise(r => r(canvas.toDataURL("image/webp")))
 }

@@ -1,5 +1,5 @@
 import {InputHTMLAttributes, LegacyRef, MouseEventHandler, useMemo, useRef, useState} from "react";
-import {Box, Circle, useColorModeValue} from "@chakra-ui/react";
+import {Box, BoxProps, Circle, useColorModeValue} from "@chakra-ui/react";
 import {VscNewFile} from "react-icons/vsc";
 import {Reset} from "../api/AccountAPI";
 import {CropImage, CropOptions} from "../components/modals/Modal";
@@ -65,12 +65,12 @@ export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement):
     return new Promise(r => r(canvas.toDataURL("image/webp")))
 }
 
-export function Pick(props: {onClick: MouseEventHandler<HTMLDivElement>, children: any}) {
+export function Pick({children, ...rest}: {children: any} & BoxProps) {
     const iconBg = useColorModeValue('white', 'brand.400')
 
     return <Box
         className='pick'
-        pos='relative' onClick={props.onClick} _hover={{cursor: 'pointer'}}
+        pos='relative' _hover={{cursor: 'pointer'}}
         css={{
             "&:has(.pick:hover) > .tip": {
                 opacity: 0
@@ -82,8 +82,9 @@ export function Pick(props: {onClick: MouseEventHandler<HTMLDivElement>, childre
                 opacity: 0
             }
         }}
+        {...rest}
     >
-        {props.children}
+        {children}
         <Circle className='tip' pos='absolute' bottom={0} right={0} bg={iconBg} p={2} transition='all 0.1s'>
             <VscNewFile />
         </Circle>

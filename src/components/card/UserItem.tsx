@@ -1,4 +1,4 @@
-import {Box, Button, Flex, HStack, IconButton, Text, useColorModeValue, useToken} from "@chakra-ui/react";
+import {Box, Button, Flex, HStack, IconButton, Text, useToken} from "@chakra-ui/react";
 import {useColors} from "../../variables/colors";
 import Card from "./Card";
 import FadeImage from "./FadeImage";

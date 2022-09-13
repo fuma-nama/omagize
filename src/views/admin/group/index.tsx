@@ -1,6 +1,6 @@
 import React, {useContext, useEffect} from "react";
 // Chakra imports
-import {Box, Button, Flex, Grid, Heading, SimpleGrid} from '@chakra-ui/react';
+import {Box, Button, Center, Flex, Grid, Heading, SimpleGrid, Text, useDisclosure} from '@chakra-ui/react';
 
 // Custom components
 import Banner from './components/Banner';
@@ -13,6 +13,10 @@ import {useInfiniteMessageQuery} from "api/MessageAPI";
 import MessageItem, {MessageItemSkeleton} from "components/card/chat/MessageItem";
 import {QueryErrorPanel} from "components/card/ErrorPanel";
 import GroupEventItem from "components/card/GroupEventItem";
+import {Holder} from "../../../utils/Container";
+import {AddIcon} from "@chakra-ui/icons";
+import {useColors, useItemHoverBg} from "../../../variables/colors";
+import CreateEventModal from "../../../components/modals/CreateEventModal";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -65,10 +69,22 @@ function Content(props: {group: GroupDetail}) {
 }
 
 function GroupEvents({detail}: {detail: GroupDetail}) {
-    return <SimpleGrid columns={{base: 1, "3sm": 2, "xl": 3}}>
+    const max = detail.events.length + 1
+    const {textColorSecondary} = useColors()
+    const {onOpen, isOpen, onClose} = useDisclosure()
+    const hover = useItemHoverBg()
+
+    return <SimpleGrid columns={{base: 1, "3sm": Math.min(2, max), "xl": Math.min(3, max)}} gap={3}>
         {detail.events.map(e =>
             <GroupEventItem key={e.id} {...e} />
         )}
+        <Card transition='0.2s all' _hover={{cursor: 'pointer', ...hover}} onClick={() => onOpen()}>
+            <Center p='50px' color={textColorSecondary} h='full' flexDirection='column' gap={3}>
+                <AddIcon w='50px' h='50px' />
+                <Text>Create Event</Text>
+            </Center>
+        </Card>
+        <CreateEventModal isOpen={isOpen} onClose={onClose} group={detail.id}/>
     </SimpleGrid>
 }
 
@@ -81,18 +97,25 @@ function MessagesPreview() {
             <QueryErrorPanel query={query} />
         </Box>
     }
-    if (query.isLoading) {
-        return <>
-            <MessageItemSkeleton noOfLines={4} />
-            <MessageItemSkeleton noOfLines={2} />
-            <MessageItemSkeleton noOfLines={6} />
-            <MessageItemSkeleton noOfLines={1} />
-        </>
-    }
 
-    const pages = query.data.pages
-    const lastPage = pages[pages.length - 1]
     return <Flex direction='column-reverse' maxH="1000px" overflow='auto'>
-        {lastPage.slice(lastPage.length - 8, lastPage.length - 1).map(message => <MessageItem key={message.id} {...message} />)}
+        <Holder
+            isLoading={query.isLoading}
+            skeleton={
+                <>
+                    <MessageItemSkeleton noOfLines={4} />
+                    <MessageItemSkeleton noOfLines={2} />
+                    <MessageItemSkeleton noOfLines={6} />
+                    <MessageItemSkeleton noOfLines={1} />
+                </>
+            }
+        >
+            {() => {
+                const pages = query.data.pages
+                const lastPage = pages[pages.length - 1]
+
+                return lastPage.slice(lastPage.length - 8, lastPage.length - 1).map(message => <MessageItem key={message.id} {...message} />)
+            }}
+        </Holder>
     </Flex>
 }

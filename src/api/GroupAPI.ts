@@ -1,6 +1,8 @@
 import {useQuery} from "@tanstack/react-query";
 import {delay, events, groups, members, notifications, users} from "./model";
 import {UserType} from "./UserAPI";
+import {UploadImage} from "../utils/ImageUtils";
+import {Reset} from "./AccountAPI";
 
 export type Group = {
     id: string
@@ -60,6 +62,17 @@ export function fetchGroupDetail(id: string): GroupDetail {
         events: events,
         ...groups.find(g => g.id === id)
     }
+}
+
+export async function createGroupEvent(
+    image: UploadImage | null,
+    name: string,
+    description: string | null,
+    startAt: Date,
+    place: string | null,
+    group: string,
+) {
+    await delay(3000)
 }
 
 export function fetchGroupNotifications(id: string): GroupNotification[] {

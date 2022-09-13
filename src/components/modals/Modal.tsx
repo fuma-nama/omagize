@@ -7,7 +7,7 @@ import {FaImage} from "react-icons/fa";
 
 export type CropImage = {
     image: string
-    crop: Crop
+    crop: Crop | null
 }
 export type CropOptions = {
     value: CropImage,

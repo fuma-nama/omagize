@@ -22,7 +22,6 @@ export default function CreateGroupModal(props: {isOpen: boolean, onClose: () =>
         ['create_group'],
         () => createGroup(value.name, value.icon, value.banner), {
             onSuccess() {
-                setValue({name: ""})
                 onClose()
             }
         }

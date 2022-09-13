@@ -11,16 +11,14 @@ export const textareaStyles = {
 
 			variants: {
 				main: (props: any) => ({
-					field: {
-						bg: mode('transparent', 'navy.800')(props),
-						border: '1px solid !important',
-						color: mode('secondaryGray.900', 'white')(props),
-						borderColor: mode('secondaryGray.100', 'whiteAlpha.100')(props),
-						borderRadius: '16px',
-						fontSize: 'sm',
-						p: '20px',
-						_placeholder: { color: 'secondaryGray.400' }
-					}
+					bg: mode('transparent', 'navy.800')(props),
+					border: '2px solid',
+					color: mode('secondaryGray.900', 'white')(props),
+					borderColor: mode('secondaryGray.400', 'navy.600')(props),
+					borderRadius: '16px',
+					fontSize: 'sm',
+					p: '20px',
+					_placeholder: { color: mode('secondaryGray.700', 'secondaryGray.600')(props) }
 				}),
 				auth: () => ({
 					field: {

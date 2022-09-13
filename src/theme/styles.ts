@@ -88,6 +88,9 @@ export const globalStyles = {
 				borderRadius: "10px",
 				bg: mode("rgba(0, 0, 0, 0.2)", "rgba(255, 255, 255, 0.2)")(props)
 			},
+			"::-webkit-calendar-picker-indicator": {
+				filter: mode('none', 'invert(1)')(props)
+			},
 			body: {
 				overflowX: 'hidden',
 				bg: mode('secondaryGray.300', 'navy.900')(props),

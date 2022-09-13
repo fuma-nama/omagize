@@ -124,14 +124,16 @@ function Form(
                     value={value.description} onChange={e => onChange({description: e.target.value})}
                     variant="main" placeholder="Give more details about your event"
                 />
-                <FormErrorMessage>{error}</FormErrorMessage>
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={error}>
                 <FormLabel>Take Place At</FormLabel>
                 <Input
                     value={value.place ?? ""} onChange={e => onChange({place: e.target.value})}
+                    h='100px'
+                    pb='60px'
                     variant="main" placeholder="Where the Event happens?"
                 />
+                <FormErrorMessage>{error}</FormErrorMessage>
             </FormControl>
         </SimpleGrid>
     </Flex>

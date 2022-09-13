@@ -1,8 +1,9 @@
 import React, {useRef, useState} from "react";
 import {cropImage, Pick} from "utils/ImageUtils";
 import Avatar from "../icons/Avatar";
-import {Center, useColorModeValue, Image, HStack, Button, ButtonProps} from "@chakra-ui/react";
+import {Center, useColorModeValue, Image, HStack, Button, ButtonProps, Icon} from "@chakra-ui/react";
 import ReactCrop, {Crop} from "react-image-crop";
+import {FaImage} from "react-icons/fa";
 
 export type CropImage = {
     image: string
@@ -14,15 +15,49 @@ export type CropOptions = {
     onCrop: (base64: string) => void
 }
 
-export function ProfileCropPicker(props: ProfilePickerProps & {
-    crop: CropOptions, buttonStyle?: ButtonProps, aspect?: number
-}) {
+export function ImageCropPicker(props: {
+    select: () => void, url: string | null,
+} & CropProps) {
+    const bannerBg = useColorModeValue('blackAlpha.200', 'whiteAlpha.200')
+
+    if (props.crop) {
+        return <ImageCropper crop={props.crop} buttonStyle={props.buttonStyle} aspect={props.aspect} />
+    }
+
+    return <Pick
+        w='full'
+        onClick={props.select}
+        rounded='xl' overflow='hidden'
+    >
+        {props.url?
+            <Image w='full' maxH='500px' src={props.url} objectFit='contain'/>
+            : <Center
+                w='full' h='200px'
+                bg={bannerBg} p={5}
+            >
+                <Icon as={FaImage} w='100px' h='50px' />
+            </Center>
+        }
+    </Pick>
+}
+
+export function ProfileCropPicker(props: ProfilePickerProps & CropProps) {
+    if (props.crop) {
+        return <ImageCropper crop={props.crop} buttonStyle={props.buttonStyle} aspect={props.aspect ?? 1} />
+    }
+
+    return <ProfilePicker {...props} />
+}
+
+type CropProps = { crop: CropOptions, buttonStyle?: ButtonProps, aspect?: number }
+function ImageCropper(props: CropProps) {
     const ref = useRef<HTMLImageElement>()
+
     if (props.crop) {
         const {value, setCrop, onCrop} = props.crop
 
         return <>
-            <ReactCrop aspect={props.aspect ?? 1} crop={value.crop} onChange={(v) => setCrop({image: value.image, crop: v})}>
+            <ReactCrop aspect={props.aspect} crop={value.crop} onChange={(v) => setCrop({image: value.image, crop: v})}>
                 <Image src={value.image} ref={ref} />
             </ReactCrop>
             <HStack justify='center' mt={3}>
@@ -34,8 +69,6 @@ export function ProfileCropPicker(props: ProfilePickerProps & {
             </HStack>
         </>
     }
-
-    return <ProfilePicker {...props} />
 }
 
 export type ProfilePickerProps = {

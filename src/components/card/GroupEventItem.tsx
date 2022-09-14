@@ -43,7 +43,7 @@ export default function GroupEventItem({fetchGroup, ...event}: GroupEvent & { fe
             }
         </HStack>
     }
-    const happening = event.startAt >= new Date(Date.now()) || true
+    const happening = event.startAt >= new Date(Date.now())
 
     return <Card overflow='hidden' gap={3}>
         {fetchGroup && <GroupInfo />}

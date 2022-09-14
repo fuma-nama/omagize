@@ -83,6 +83,10 @@ export const messages: Message[] = [...Array(100)]
     })
 )
 
+const startDate = new Date(Date.now())
+const endDate = new Date(Date.now())
+endDate.setDate(endDate.getDate() + 1)
+
 export const events: GroupEvent[] = [
     {
         id: 432,
@@ -91,6 +95,7 @@ export const events: GroupEvent[] = [
         author: users[0],
         place: "Hong Kong",
         group: groups[0].id,
-        startAt: new Date(Date.now())
+        startAt: startDate,
+        endAt: endDate
     }
 ]

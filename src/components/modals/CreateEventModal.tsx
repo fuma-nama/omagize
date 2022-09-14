@@ -2,7 +2,7 @@ import {ImageCropPicker, useModalState} from "./Modal";
 import {useMutation} from "@tanstack/react-query";
 import {createGroupEvent} from "../../api/GroupAPI";
 import {
-    Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, InputGroup,
+    Button, Flex, FormControl, FormErrorMessage, FormLabel, Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -16,24 +16,29 @@ import {UploadImage, useImagePickerCrop} from "utils/ImageUtils";
 
 export default function CreateEventModal(props: {group: string, isOpen: boolean, onClose: () => void}) {
     const {group, isOpen} = props
-    const initial = new Date(Date.now())
-    initial.setDate(initial.getDate() + 1)
+    const {minStart: initialStart, minEnd: initialEnd} = useLimits()
 
     const [onClose, value, setValue] = useModalState<EventOptions>(props.onClose, {
         name: "",
-        startAt: initial
+        startAt: initialStart,
+        endAt: initialEnd
     })
 
     const mutation = useMutation(
         ['create_group'],
         () => createGroupEvent(
-            value.image, value.name, value.description, value.startAt, value.place, group
+            value.image, value.name, value.description, value.startAt, value.endAt, value.place, group
         ), {
             onSuccess() {
                 onClose()
             }
         }
     )
+    const {minStart, maxStart, minEnd, maxEnd} = useLimits(value.startAt)
+
+    const canSubmit = value.name.length > 0 &&
+        value.startAt >= minStart && value.startAt <= maxStart &&
+        value.endAt >= minEnd && value.endAt <= maxEnd
 
     return <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl">
         <ModalOverlay />
@@ -54,7 +59,7 @@ export default function CreateEventModal(props: {group: string, isOpen: boolean,
                 </Button>
                 <Button
                     onClick={() => mutation.mutate()} isLoading={mutation.isLoading}
-                    disabled={value.name.length <= 0 || value.startAt <= new Date(Date.now())}
+                    disabled={!canSubmit}
                     variant='brand' rightIcon={<BiRightArrow />}>Create</Button>
             </ModalFooter>
         </ModalContent>
@@ -66,6 +71,7 @@ type EventOptions = {
     name: string,
     description?: string,
     startAt: Date,
+    endAt: Date,
     place?: string,
 }
 
@@ -73,6 +79,7 @@ function Form(
     {value, onChange, error}: {
         value: EventOptions, onChange: (options: Partial<EventOptions>) => void, error?: any
     }) {
+    const {minStart, maxStart, minEnd, maxEnd} = useLimits(value.startAt)
     const acceptedFileTypes = ".png, .jpg, .gif"
 
     const image = useImagePickerCrop(
@@ -103,10 +110,18 @@ function Form(
                     variant="main" placeholder="Give your Event a name"
                 />
             </FormControl>
+            <FormControl>
+                <FormLabel>Take Place At</FormLabel>
+                <Input
+                    value={value.place ?? ""} onChange={e => onChange({place: e.target.value})}
+                    variant="main" placeholder="Where the Event happens?"
+                />
+            </FormControl>
             <FormControl isRequired>
                 <FormLabel>Starting At</FormLabel>
                 <Input
-                    min={formatDate(new Date(Date.now()))}
+                    min={formatDate(minStart)}
+                    max={formatDate(maxStart)}
                     variant="main"
                     type='datetime-local'
                     value={formatDate(value.startAt)}
@@ -116,27 +131,47 @@ function Form(
                     }
                 />
             </FormControl>
-            <FormControl>
-                <FormLabel>Event Description</FormLabel>
-                <Textarea
-                    resize='none'
-                    h='100px'
-                    value={value.description} onChange={e => onChange({description: e.target.value})}
-                    variant="main" placeholder="Give more details about your event"
-                />
-            </FormControl>
-            <FormControl isInvalid={error}>
-                <FormLabel>Take Place At</FormLabel>
+            <FormControl isRequired>
+                <FormLabel>Ending At</FormLabel>
                 <Input
-                    value={value.place ?? ""} onChange={e => onChange({place: e.target.value})}
-                    h='100px'
-                    pb='60px'
-                    variant="main" placeholder="Where the Event happens?"
+                    min={formatDate(minEnd)}
+                    max={formatDate(maxEnd)}
+                    variant="main"
+                    type='datetime-local'
+                    value={formatDate(value.endAt)}
+                    onChange={e => {
+                        onChange({endAt: new Date(e.target.value)})}
+                    }
                 />
-                <FormErrorMessage>{error}</FormErrorMessage>
             </FormControl>
         </SimpleGrid>
+        <FormControl isInvalid={error}>
+            <FormLabel>Event Description</FormLabel>
+            <Textarea
+                resize='none'
+                h='100px'
+                value={value.description} onChange={e => onChange({description: e.target.value})}
+                variant="main" placeholder="Give more details about your event"
+            />
+            <FormErrorMessage>{error}</FormErrorMessage>
+        </FormControl>
     </Flex>
+}
+
+export function useLimits(startAt: Date = new Date(Date.now())) {
+    const minStart = new Date(Date.now())
+
+    //The event must be started within 2 months
+    const maxStart = new Date(Date.now())
+    maxStart.setMonth(maxStart.getMonth() + 2)
+
+    //The event cannot exceed 10 years
+    const maxEnd = new Date(startAt)
+    maxEnd.setFullYear(maxEnd.getFullYear() + 1)
+
+    return {
+        minStart, maxStart, minEnd: startAt, maxEnd
+    }
 }
 
 function formatDate(value: Date): string {

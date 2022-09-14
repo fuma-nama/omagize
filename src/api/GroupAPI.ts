@@ -45,6 +45,7 @@ export type GroupEvent = {
     name: string
     description?: string
     startAt: Date
+    endAt: Date
     place?: string
     group: string
     author: UserType
@@ -68,7 +69,7 @@ export async function createGroupEvent(
     image: UploadImage | null,
     name: string,
     description: string | null,
-    startAt: Date,
+    startAt: Date, endAt: Date,
     place: string | null,
     group: string,
 ) {

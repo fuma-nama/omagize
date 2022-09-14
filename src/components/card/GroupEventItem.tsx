@@ -1,6 +1,17 @@
 import {GroupEvent, useGroupQuery} from "api/GroupAPI";
 import Card from "./Card";
-import {Avatar, Flex, HStack, Image, Skeleton, SkeletonCircle, SkeletonText, StackProps, Text} from "@chakra-ui/react";
+import {
+    Avatar,
+    Box,
+    Flex,
+    HStack,
+    Image,
+    Skeleton,
+    SkeletonCircle,
+    SkeletonText,
+    StackProps,
+    Text
+} from "@chakra-ui/react";
 import {useColors} from "variables/colors";
 
 function Info({name, value, ...rest}: {name: string, value: any} & StackProps) {
@@ -32,9 +43,16 @@ export default function GroupEventItem({fetchGroup, ...event}: GroupEvent & { fe
             }
         </HStack>
     }
+    const happening = event.startAt >= new Date(Date.now()) || true
 
     return <Card overflow='hidden' gap={3}>
         {fetchGroup && <GroupInfo />}
+        {happening &&
+            <HStack>
+                <Text p={2} bg='green.500' rounded='full' fontWeight='bold' fontSize='md'>Event Started</Text>
+                <Info name='End At' value={event.endAt.toLocaleTimeString()} />
+            </HStack>
+        }
         <Image w='full' objectFit='cover' src={event.image} maxH='200px' rounded='lg' />
 
         <HStack justify='space-between'>
@@ -55,7 +73,7 @@ export default function GroupEventItem({fetchGroup, ...event}: GroupEvent & { fe
         <Flex direction='row' flexWrap='wrap' gap={4} mt={2}>
             <Info name='Take Place At' value={event.place} />
 
-            <Info name='Starting At' value={event.startAt.toLocaleTimeString()} />
+            {!happening && <Info name='Starting At' value={event.startAt.toLocaleTimeString()} />}
         </Flex>
     </Card>
 }

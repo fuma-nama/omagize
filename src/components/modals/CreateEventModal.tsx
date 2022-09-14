@@ -2,7 +2,7 @@ import {ImageCropPicker, useModalState} from "./Modal";
 import {useMutation} from "@tanstack/react-query";
 import {createGroupEvent} from "../../api/GroupAPI";
 import {
-    Button, Flex, FormControl, FormErrorMessage, FormLabel, Input,
+    Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -16,7 +16,7 @@ import {UploadImage, useImagePickerCrop} from "utils/ImageUtils";
 
 export default function CreateEventModal(props: {group: string, isOpen: boolean, onClose: () => void}) {
     const {group, isOpen} = props
-    const {minStart: initialStart, minEnd: initialEnd} = useLimits()
+    const {minStart: initialStart, minEnd: initialEnd} = useLimits(new Date(Date.now()))
 
     const [onClose, value, setValue] = useModalState<EventOptions>(props.onClose, {
         name: "",
@@ -118,7 +118,7 @@ function Form(
                 />
             </FormControl>
             <FormControl isRequired>
-                <FormLabel>Starting At</FormLabel>
+                <FormLabel>Start At</FormLabel>
                 <Input
                     min={formatDate(minStart)}
                     max={formatDate(maxStart)}
@@ -130,9 +130,10 @@ function Form(
                         onChange({startAt: new Date(e.target.value)})}
                     }
                 />
+                <FormHelperText>Starting Date must within 2 Months</FormHelperText>
             </FormControl>
             <FormControl isRequired>
-                <FormLabel>Ending At</FormLabel>
+                <FormLabel>End At</FormLabel>
                 <Input
                     min={formatDate(minEnd)}
                     max={formatDate(maxEnd)}
@@ -143,6 +144,7 @@ function Form(
                         onChange({endAt: new Date(e.target.value)})}
                     }
                 />
+                <FormHelperText>Events must be ended within 1 year</FormHelperText>
             </FormControl>
         </SimpleGrid>
         <FormControl isInvalid={error}>
@@ -158,22 +160,25 @@ function Form(
     </Flex>
 }
 
-export function useLimits(startAt: Date = new Date(Date.now())) {
-    const minStart = new Date(Date.now())
+export function useLimits(startAt: Date) {
+    const now = new Date(Date.now())
+    const minStart = new Date(formatDate(now))
+    const minEnd = new Date(formatDate(startAt))
 
     //The event must be started within 2 months
-    const maxStart = new Date(Date.now())
+    const maxStart = new Date(minStart)
     maxStart.setMonth(maxStart.getMonth() + 2)
 
     //The event cannot exceed 10 years
-    const maxEnd = new Date(startAt)
+    const maxEnd = new Date(minEnd)
     maxEnd.setFullYear(maxEnd.getFullYear() + 1)
 
     return {
-        minStart, maxStart, minEnd: startAt, maxEnd
+        minStart, maxStart, minEnd, maxEnd
     }
 }
 
 function formatDate(value: Date): string {
+    //yy-mm-dd-hh-mm
     return value.toISOString().substring(0, 16)
 }

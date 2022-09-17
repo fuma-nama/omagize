@@ -1,12 +1,12 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {call, callReturn} from "./core";
+import {call, callReturn, withDefault} from "./core";
 export type Reset = 'reset'
 
 export async function loggedIn() {
-    const result = await call("/auth", {
+    const result = await call("/auth", withDefault({
         method: "HEAD",
         errorOnFail: false
-    })
+    }))
 
     return result.ok
 }
@@ -36,10 +36,10 @@ export async function signup(
         password: string
     }
 ) {
-    return await callReturn<SignUpReturn>("/signup", {
+    return await callReturn<SignUpReturn>("/signup", withDefault({
         method: "POST",
         body: JSON.stringify(options)
-    })
+    }))
 }
 
 export function useLoggedInQuery() {

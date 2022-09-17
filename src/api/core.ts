@@ -28,3 +28,15 @@ async function handle(res: Response, options: Options) {
 
     return res
 }
+
+export function withDefault(options: Options): Options {
+    return {
+        credentials: "include",
+        ...options,
+
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers
+        },
+    }
+}

@@ -1,5 +1,5 @@
 // Chakra imports
-import { Box, Flex, Icon, Text } from '@chakra-ui/react';
+import {Box, Center, Flex, Grid, Icon, Image, Text} from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import Footer from 'components/footer/FooterAuth';
 import FixedPlugin from 'components/fixedPlugin/FixedPlugin';
@@ -12,16 +12,8 @@ function AuthIllustration(props: { children: JSX.Element | string; illustrationB
 	const { children, illustrationBackground } = props;
 	// Chakra color mode
 	return (
-		<Flex position='relative' h='max-content'>
+		<Grid position='relative' minH='full' templateColumns='1fr 1fr'>
 			<Flex
-				h={{
-					sm: 'initial',
-					md: 'unset',
-					lg: '100vh',
-					xl: '97vh'
-				}}
-				w='100%'
-				maxW={{ md: '66%', lg: '1313px' }}
 				mx='auto'
 				pt={{ sm: '50px', md: '0px' }}
 				px={{ lg: '30px', xl: '0px' }}
@@ -41,37 +33,25 @@ function AuthIllustration(props: { children: JSX.Element | string; illustrationB
 						</Text>
 					</Flex>
 				</NavLink>
-				{children}
-				<Box
-					display={{ base: 'none', md: 'block' }}
-					h='100%'
-					minH='100vh'
-					w={{ lg: '50vw', '2xl': '44vw' }}
-					position='absolute'
-					right='0px'>
-					<Flex
-						bg={`url(${illustrationBackground})`}
-						justify='center'
-						align='end'
-						w='100%'
-						h='100%'
-						bgSize='cover'
-						bgPosition='50%'
-						position='absolute'
-						borderBottomLeftRadius={{ lg: '120px', xl: '200px' }}
-					/>
+				<Box flex={1} mt={{ base: "40px", md: "14vh" }} mb='120px'>
+					{children}
 				</Box>
-				<Footer />
 			</Flex>
+			<Box
+				display={{ base: 'none', lg: 'block' }}
+				h='full'
+				bgImg={illustrationBackground}
+				bgSize='cover'
+				borderBottomLeftRadius='200px'
+			/>
+			<Center pos='absolute' bottom={{base: '15px', xl: '30px'}} w='full'>
+				<Box w='1313px' maxW='full' px='30px'>
+					<Footer />
+				</Box>
+			</Center>
 			<FixedPlugin />
-		</Flex>
+		</Grid>
 	);
 }
-// PROPS
-
-AuthIllustration.propTypes = {
-	illustrationBackground: PropTypes.string,
-	image: PropTypes.any
-};
 
 export default AuthIllustration;

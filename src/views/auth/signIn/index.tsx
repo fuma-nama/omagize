@@ -67,7 +67,7 @@ function SignIn() {
   const handleClick = () => setShow(!show);
 
   return (
-    <DefaultAuth illustrationBackground={illustration} image={illustration}>
+    <DefaultAuth illustrationBackground={illustration}>
       <Flex
         maxW={{ base: "100%", md: "max-content" }}
         w='100%'
@@ -76,9 +76,7 @@ function SignIn() {
         h='100%'
         alignItems='start'
         justifyContent='center'
-        mb={{ base: "30px", md: "60px" }}
         px={{ base: "25px", md: "0px" }}
-        mt={{ base: "40px", md: "14vh" }}
         flexDirection='column'>
         <Box me='auto'>
           <Heading color={textColor} fontSize='36px' mb='10px'>
@@ -105,17 +103,9 @@ function SignIn() {
           mb={{ base: "20px", md: "auto" }}>
           <Button
             fontSize='sm'
-            me='0px'
             mb='26px'
-            py='15px'
-            h='50px'
-            borderRadius='16px'
-            bg={googleBg}
-            color={googleText}
-            fontWeight='500'
-            _hover={buttonHover}
-            _active={buttonActive}
-            _focus={buttonActive}>
+            py='25px'
+            fontWeight='500'>
             <Icon as={FcGoogle} w='20px' h='20px' me='10px' />
             Sign in with Google
           </Button>
@@ -218,7 +208,7 @@ function SignIn() {
             mt='0px'>
             <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
               Not registered yet?
-              <NavLink to='/auth/sign-up'>
+              <NavLink to='/auth/signup'>
                 <Text
                   color={textColorBrand}
                   as='span'

@@ -13,7 +13,7 @@ export default function Auth() {
 	const authBg = useColorModeValue('white', 'navy.900');
 	document.documentElement.dir = 'ltr';
 	return (
-		<Box>
+		<Box h='full'>
 			<SidebarContext.Provider
 				value={{
 					toggleSidebar,
@@ -30,9 +30,7 @@ export default function Auth() {
 					transitionDuration='.2s, .2s, .35s'
 					transitionProperty='top, bottom, width'
 					transitionTimingFunction='linear, linear, ease'>
-					<Box mx='auto' minH='100vh'>
-						<Outlet />
-					</Box>
+					<Outlet />
 				</Box>
 			</SidebarContext.Provider>
 		</Box>

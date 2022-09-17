@@ -12,7 +12,6 @@ export default function PasswordInput(props: {input?: InputProps, group?: InputG
         <Input
             isRequired={true}
             fontSize='sm'
-            mb='24px'
             size='lg'
             type={show ? "text" : "password"}
             variant='auth'

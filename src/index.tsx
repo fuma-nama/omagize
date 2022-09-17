@@ -24,7 +24,7 @@ const client = new QueryClient({
 function Pages() {
 	const query = useLoggedInQuery();
 
-	if (query.isLoading) return <></>
+	if (query.isLoading || query.error) return <></>
 	const loggedIn = query.data
 
 	function mapNestedLayout(layout: NestedLayout, key: number) {
@@ -55,7 +55,9 @@ function Pages() {
 			layouts.map(mapLayout)
 		}
 
-		<Route path="*" element={<Navigate to='/user/default' />}/>
+		<Route path="*" element={<Navigate to={
+			loggedIn? '/user/default' : '/auth'
+		}/>}/>
 	</Routes>
 }
 

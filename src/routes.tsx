@@ -11,6 +11,7 @@ import SignInCentered from 'views/auth/signIn';
 import GroupOverview from "./views/admin/group";
 import GroupChat from "./views/admin/chat/group/GroupChat";
 import GroupNavbar from "./views/admin/chat/navbar/GroupNavbar";
+import SignUp from "./views/auth/signup";
 
 const routes: RoutesType[] = [
 	{
@@ -28,19 +29,25 @@ const routes: RoutesType[] = [
 		component: <NFTMarketplace />,
 	},
 	{
-		name: 'Sign In',
-		layout: '/auth',
-		path: '/signin',
-		icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
-		component: <SignInCentered />,
-		hidden: true
-	},
-	{
 		name: 'Profile',
 		layout: '/user',
 		path: '/profile',
 		icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
 		component: <Profile />,
+		hidden: true
+	},
+	{
+		name: 'Sign In',
+		layout: '/auth',
+		path: '/signin',
+		component: <SignInCentered />,
+		hidden: true
+	},
+	{
+		name: 'Sign Up',
+		layout: '/auth',
+		path: '/signup',
+		component: <SignUp />,
 		hidden: true
 	},
 ];

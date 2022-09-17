@@ -1,8 +1,14 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {call, callReturn} from "./core";
 export type Reset = 'reset'
 
-export function loggedIn() {
-    return true
+export async function loggedIn() {
+    const result = await call("/auth", {
+        method: "HEAD",
+        errorOnFail: false
+    })
+
+    return result.ok
 }
 
 export function logout() {
@@ -16,6 +22,23 @@ export function useLogoutMutation() {
         onSuccess() {
             client.setQueryData(["logged_in"], () => false)
         }
+    })
+}
+
+type SignUpReturn = {
+
+}
+
+export async function signup(
+    options: {
+        username: string,
+        email: string,
+        password: string
+    }
+) {
+    return await callReturn<SignUpReturn>("/signup", {
+        method: "POST",
+        body: JSON.stringify(options)
     })
 }
 

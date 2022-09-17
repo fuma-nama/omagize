@@ -2,7 +2,7 @@ import {
     Box,
     Button, Checkbox,
     Flex,
-    FormControl,
+    FormControl, FormErrorMessage,
     FormLabel,
     Heading,
     Icon,
@@ -19,6 +19,7 @@ import {useAuthColors} from "variables/colors";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {signup} from "api/AccountAPI";
 import PasswordInput from "components/fields/PasswordInput";
+import {SignUpOptions, useVerifySignUp} from "utils/APIUtils";
 
 type Options = {
     username: string,
@@ -26,12 +27,12 @@ type Options = {
     password: string
 }
 
-function Group({title, children}: {title: string, children: ReactNode}) {
+function Group({title, error, children}: {title: string, error?: string, children: ReactNode}) {
     const {
         textColorPrimary: textColor,
     } = useAuthColors()
 
-    return <>
+    return <FormControl mb='24px' isInvalid={!!error}>
         <FormLabel
             ms='4px'
             fontSize='sm'
@@ -40,10 +41,9 @@ function Group({title, children}: {title: string, children: ReactNode}) {
             mb='8px'>
             {title}
         </FormLabel>
-        <Box mb='24px'>
-            {children}
-        </Box>
-    </>
+        {children}
+        <FormErrorMessage>{error}</FormErrorMessage>
+    </FormControl>
 }
 
 export default function SignUp() {
@@ -67,13 +67,14 @@ export default function SignUp() {
 
     const client = useQueryClient()
     const mutation = useMutation(
-        () => signup(options),
+        (options: SignUpOptions) => signup(options),
         {
             onSuccess() {
-                client.setQueryData(['logged_in'], true)
+                return client.setQueryData(['logged_in'], true)
             }
         }
     )
+    const signUp = useVerifySignUp(mutation.mutate)
 
     return (
         <DefaultAuth illustrationBackground={illustration}>
@@ -125,8 +126,8 @@ export default function SignUp() {
                         </Text>
                         <HSeparator />
                     </Flex>
-                    <FormControl>
-                        <Group title='Username'>
+                    <FormControl isInvalid={mutation.isError}>
+                        <Group title='Username' error={signUp.issues.username}>
                             <Input
                                 isRequired={true}
                                 variant='auth'
@@ -139,12 +140,11 @@ export default function SignUp() {
                                 onChange={e => update({username: e.target.value})}
                             />
                         </Group>
-                        <Group title='Email'>
+                        <Group title='Email' error={signUp.issues.email}>
                             <Input
                                 isRequired={true}
                                 variant='auth'
                                 fontSize='sm'
-                                ms={{ base: "0px", md: "0px" }}
                                 type='email'
                                 placeholder='your@email.com'
                                 fontWeight='500'
@@ -153,7 +153,7 @@ export default function SignUp() {
                                 onChange={e => update({email: e.target.value})}
                             />
                         </Group>
-                        <Group title='Password'>
+                        <Group title='Password' error={signUp.issues.password}>
                             <PasswordInput input={{
                                 placeholder: 'Must longer than 8 characters',
                                 value: options.password,
@@ -175,9 +175,10 @@ export default function SignUp() {
                                 Keep me logged in
                             </FormLabel>
                         </FormControl>
+                        <FormErrorMessage>{mutation.error?.toString()}</FormErrorMessage>
                         <Button
                             isLoading={mutation.isLoading}
-                            onClick={() => mutation.mutate()}
+                            onClick={() => signUp.mutate(options)}
                             fontSize='sm'
                             variant='brand'
                             fontWeight='500'

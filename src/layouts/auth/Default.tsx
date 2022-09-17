@@ -12,7 +12,7 @@ function AuthIllustration(props: { children: JSX.Element | string; illustrationB
 	const { children, illustrationBackground } = props;
 	// Chakra color mode
 	return (
-		<Grid position='relative' minH='full' templateColumns='1fr 1fr'>
+		<Grid position='relative' minH='full' templateColumns={{base: '1fr', lg: '1fr 1fr', xl: '1fr 0.8fr'}}>
 			<Flex
 				mx='auto'
 				pt={{ sm: '50px', md: '0px' }}

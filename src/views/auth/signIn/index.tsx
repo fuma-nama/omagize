@@ -48,6 +48,7 @@ import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import {useAuthColors} from "../../../variables/colors";
+import PasswordInput from "../../../components/fields/PasswordInput";
 
 function SignIn() {
   // Chakra color mode
@@ -137,6 +138,7 @@ function SignIn() {
               fontWeight='500'
               size='lg'
             />
+
             <FormLabel
               ms='4px'
               fontSize='sm'
@@ -145,25 +147,9 @@ function SignIn() {
               display='flex'>
               Password<Text color={brandStars}>*</Text>
             </FormLabel>
-            <InputGroup size='md'>
-              <Input
-                isRequired={true}
-                fontSize='sm'
-                placeholder='Min. 8 characters'
-                mb='24px'
-                size='lg'
-                type={show ? "text" : "password"}
-                variant='auth'
-              />
-              <InputRightElement display='flex' alignItems='center' mt='4px'>
-                <Icon
-                  color={textColorSecondary}
-                  _hover={{ cursor: "pointer" }}
-                  as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                  onClick={handleClick}
-                />
-              </InputRightElement>
-            </InputGroup>
+            <PasswordInput input={{
+              placeholder: 'Min. 8 characters'
+            }} />
             <Flex justifyContent='space-between' align='center' mb='24px'>
               <FormControl display='flex' alignItems='center'>
                 <Checkbox

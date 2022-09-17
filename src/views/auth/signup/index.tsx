@@ -6,18 +6,45 @@ import {
     FormLabel,
     Heading,
     Icon,
-    Input, InputGroup, InputRightElement,
+    Input,
     Text
 } from "@chakra-ui/react";
-import React from "react";
+import React, {ReactNode, useState} from "react";
 import DefaultAuth from "layouts/auth/Default";
 import illustration from "assets/img/auth/auth.png";
 import {FcGoogle} from "react-icons/fc";
 import {HSeparator} from "components/separator/Separator";
-import {RiEyeCloseLine} from "react-icons/ri";
-import {MdOutlineRemoveRedEye} from "react-icons/md";
 import {NavLink} from "react-router-dom";
 import {useAuthColors} from "variables/colors";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {signup} from "api/AccountAPI";
+import PasswordInput from "components/fields/PasswordInput";
+
+type Options = {
+    username: string,
+    email: string,
+    password: string
+}
+
+function Group({title, children}: {title: string, children: ReactNode}) {
+    const {
+        textColorPrimary: textColor,
+    } = useAuthColors()
+
+    return <>
+        <FormLabel
+            ms='4px'
+            fontSize='sm'
+            fontWeight='500'
+            color={textColor}
+            mb='8px'>
+            {title}
+        </FormLabel>
+        <Box mb='24px'>
+            {children}
+        </Box>
+    </>
+}
 
 export default function SignUp() {
     // Chakra color mode
@@ -28,8 +55,25 @@ export default function SignUp() {
         textColorBrand,
     } = useAuthColors()
 
-    const [show, setShow] = React.useState(false);
-    const handleClick = () => setShow(!show);
+    const [options, setOptions] = useState<Options>({
+        username: "",
+        email: "",
+        password: ""
+    })
+
+    function update(options: Partial<Options>) {
+        setOptions(prev => ({...prev, ...options}))
+    }
+
+    const client = useQueryClient()
+    const mutation = useMutation(
+        () => signup(options),
+        {
+            onSuccess() {
+                client.setQueryData(['logged_in'], true)
+            }
+        }
+    )
 
     return (
         <DefaultAuth illustrationBackground={illustration}>
@@ -82,71 +126,40 @@ export default function SignUp() {
                         <HSeparator />
                     </Flex>
                     <FormControl>
-                        <FormLabel
-                            ms='4px'
-                            fontSize='sm'
-                            fontWeight='500'
-                            color={textColor}
-                            mb='8px'>
-                            Username
-                        </FormLabel>
-                        <Input
-                            isRequired={true}
-                            variant='auth'
-                            fontSize='sm'
-                            type='email'
-                            placeholder='Henry'
-                            mb='24px'
-                            fontWeight='500'
-                            size='lg'
-                        />
-                        <FormLabel
-                            display='flex'
-                            ms='4px'
-                            fontSize='sm'
-                            fontWeight='500'
-                            color={textColor}
-                            mb='8px'>
-                            Email
-                        </FormLabel>
-                        <Input
-                            isRequired={true}
-                            variant='auth'
-                            fontSize='sm'
-                            ms={{ base: "0px", md: "0px" }}
-                            type='email'
-                            placeholder='your@email.com'
-                            mb='24px'
-                            fontWeight='500'
-                            size='lg'
-                        />
-                        <FormLabel
-                            ms='4px'
-                            fontSize='sm'
-                            fontWeight='500'
-                            color={textColor}
-                            display='flex'>
-                            Password
-                        </FormLabel>
-                        <InputGroup size='md'>
+                        <Group title='Username'>
                             <Input
                                 isRequired={true}
-                                fontSize='sm'
-                                placeholder='Must longer than 8 characters'
-                                mb='24px'
-                                size='lg'
-                                type={show ? "text" : "password"}
                                 variant='auth'
+                                fontSize='sm'
+                                type='email'
+                                placeholder='Henry'
+                                fontWeight='500'
+                                size='lg'
+                                value={options.username}
+                                onChange={e => update({username: e.target.value})}
                             />
-                            <InputRightElement display='flex' alignItems='center' mt='4px'>
-                                <Icon
-                                    color={textColorSecondary}
-                                    _hover={{ cursor: "pointer" }}
-                                    as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                                    onClick={handleClick}
-                                />
-                            </InputRightElement>
-                        </InputGroup>
+                        </Group>
+                        <Group title='Email'>
+                            <Input
+                                isRequired={true}
+                                variant='auth'
+                                fontSize='sm'
+                                ms={{ base: "0px", md: "0px" }}
+                                type='email'
+                                placeholder='your@email.com'
+                                fontWeight='500'
+                                size='lg'
+                                value={options.email}
+                                onChange={e => update({email: e.target.value})}
+                            />
+                        </Group>
+                        <Group title='Password'>
+                            <PasswordInput input={{
+                                placeholder: 'Must longer than 8 characters',
+                                value: options.password,
+                                onChange: e => update({password: e.target.value})
+                            }} />
+                        </Group>
                         <FormControl display='flex' alignItems='center' mb='24px'>
                             <Checkbox
                                 id='remember-login'
@@ -163,6 +176,8 @@ export default function SignUp() {
                             </FormLabel>
                         </FormControl>
                         <Button
+                            isLoading={mutation.isLoading}
+                            onClick={() => mutation.mutate()}
                             fontSize='sm'
                             variant='brand'
                             fontWeight='500'

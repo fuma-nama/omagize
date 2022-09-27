@@ -19,6 +19,17 @@ export async function auth(): Promise<LoginPayload | null> {
     }))
 }
 
+export async function login(options: {
+    email: string,
+    password: string
+}) {
+    return await callReturn<LoginPayload>("/login", withDefault({
+        method: "POST",
+        body: JSON.stringify(options),
+        errorOnFail: true
+    }))
+}
+
 export function logout() {
 }
 

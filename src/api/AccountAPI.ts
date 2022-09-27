@@ -1,14 +1,22 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {call, callReturn, withDefault} from "./core";
+import {call, callReturn, ReturnOptions, withDefault} from "./core";
+import {UserType} from "./UserAPI";
 export type Reset = 'reset'
 
-export async function loggedIn() {
-    const result = await call("/auth", withDefault({
-        method: "HEAD",
-        errorOnFail: false
-    }))
+export const LoginKey = ["login"]
 
-    return result.ok
+type LoginPayload = {
+    self: UserType
+    token: string
+}
+
+export async function auth(): Promise<LoginPayload | null> {
+    return await callReturn<LoginPayload | null>("/auth", withDefault<ReturnOptions<LoginPayload>>({
+        method: "POST",
+        allowed: {
+            401: () => null
+        }
+    }))
 }
 
 export function logout() {
@@ -20,13 +28,9 @@ export function useLogoutMutation() {
     // @ts-ignore
     return useMutation(() => logout(), {
         onSuccess() {
-            client.setQueryData(["logged_in"], () => false)
+            client.setQueryData(LoginKey, () => null)
         }
     })
-}
-
-type SignUpReturn = {
-
 }
 
 export async function signup(
@@ -35,13 +39,20 @@ export async function signup(
         email: string,
         password: string
     }
-) {
-    return await callReturn<SignUpReturn>("/signup", withDefault({
+): Promise<LoginPayload> {
+    return await callReturn<LoginPayload>("/signup", withDefault({
         method: "POST",
-        body: JSON.stringify(options)
+        body: JSON.stringify(options),
+        errorOnFail: true
     }))
 }
 
-export function useLoggedInQuery() {
-    return useQuery(["logged_in"], () => loggedIn())
+export function useLoginQuery() {
+    return useQuery(LoginKey, () => auth(), {
+        refetchOnReconnect: false,
+        refetchOnMount: false,
+        refetchIntervalInBackground: false,
+        refetchOnWindowFocus: false,
+        refetchInterval: false
+    })
 }

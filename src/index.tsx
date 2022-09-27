@@ -8,7 +8,7 @@ import {ChakraProvider} from '@chakra-ui/react';
 import theme from './theme/theme';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {layouts, NestedLayout, RootLayout} from "./layouts";
-import {useLoggedInQuery} from "./api/AccountAPI";
+import {useLoginQuery} from "./api/AccountAPI";
 import {getRoutesByLayout} from "./utils/RouteUtil";
 
 const client = new QueryClient({
@@ -22,10 +22,10 @@ const client = new QueryClient({
 
 
 function Pages() {
-	const query = useLoggedInQuery();
+	const query = useLoginQuery();
 
 	if (query.isLoading || query.error) return <></>
-	const loggedIn = query.data
+	const loggedIn = query.data != null
 
 	function mapNestedLayout(layout: NestedLayout, key: number) {
 

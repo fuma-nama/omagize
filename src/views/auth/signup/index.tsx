@@ -17,7 +17,7 @@ import {HSeparator} from "components/separator/Separator";
 import {NavLink} from "react-router-dom";
 import {useAuthColors} from "variables/colors";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {signup} from "api/AccountAPI";
+import {LoginKey, signup} from "api/AccountAPI";
 import PasswordInput from "components/fields/PasswordInput";
 import {SignUpOptions, useVerifySignUp} from "utils/APIUtils";
 
@@ -69,8 +69,8 @@ export default function SignUp() {
     const mutation = useMutation(
         (options: SignUpOptions) => signup(options),
         {
-            onSuccess() {
-                return client.setQueryData(['logged_in'], true)
+            onSuccess(data) {
+                return client.setQueryData(LoginKey, data)
             }
         }
     )

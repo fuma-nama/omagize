@@ -20,30 +20,12 @@ import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {LoginKey, signup} from "api/AccountAPI";
 import PasswordInput from "components/fields/PasswordInput";
 import {SignUpOptions, useVerifySignUp} from "utils/APIUtils";
+import Group from "../components/VerifyGroup";
 
 type Options = {
     username: string,
     email: string,
     password: string
-}
-
-function Group({title, error, children}: {title: string, error?: string, children: ReactNode}) {
-    const {
-        textColorPrimary: textColor,
-    } = useAuthColors()
-
-    return <FormControl mb='24px' isInvalid={!!error}>
-        <FormLabel
-            ms='4px'
-            fontSize='sm'
-            fontWeight='500'
-            color={textColor}
-            mb='8px'>
-            {title}
-        </FormLabel>
-        {children}
-        <FormErrorMessage>{error}</FormErrorMessage>
-    </FormControl>
 }
 
 export default function SignUp() {

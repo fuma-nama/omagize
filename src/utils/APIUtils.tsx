@@ -3,6 +3,7 @@ import {useState} from "react";
 export type SignUpOptions = {
     username: string, email: string, password: string
 }
+
 export type SignUpIssues = {
     username?: string
     email?: string
@@ -11,10 +12,9 @@ export type SignUpIssues = {
 
 export function verifySignUp({username, email, password}: SignUpOptions): SignUpIssues {
     const errors: SignUpIssues = {}
-    const format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
     if (username.length === 0) errors.username = "Name cannot be Blank"
-    if (!email.match(format)) errors.email = "Invalid Email"
+    if (!validEmail(email)) errors.email = "Invalid Email"
     if (password.length < 8) errors.password = "Password cannot less than 8 characters"
 
     return errors
@@ -35,4 +35,10 @@ export function useVerifySignUp(mutate: (options: SignUpOptions) => void) {
             }
         }
     }
+}
+
+export function validEmail(email: string): boolean {
+    const format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+    return !!email.match(format)
 }

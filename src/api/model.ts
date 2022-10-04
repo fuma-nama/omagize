@@ -26,7 +26,7 @@ export const users: UserType[] = [
         username: "MONEY",
         description: "Kane is a gay",
         avatarUrl: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
-        bannerUrl: "https://img.moelong.com/images/LycorisRecoiltwnews/LycorisRecoiltwnews09.webp"
+        bannerUrl: "https://cdn.mos.cms.futurecdn.net/ZoSDiWzgFVGqSAKhtxJtaM.jpg"
     },
     {
         id: "132423423432453",

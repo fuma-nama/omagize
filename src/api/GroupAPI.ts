@@ -19,7 +19,11 @@ export type GroupDetail = Group & {
     memberCount: number,
     admins: Member[], //admins of the group
     membersPreview: Member[] //first 6 members of the group
-    events: GroupEvent[]
+    events: GroupEvent[],
+    /**
+     * What does this group about
+     */
+    introduction?: string
 }
 
 export type Member = UserType & {
@@ -61,6 +65,7 @@ export function fetchGroupDetail(id: string): GroupDetail {
         admins: [members[0]],
         membersPreview: members,
         events: events,
+        introduction: "A friend Community about Games and Anime\nCreated by MONEY",
         ...groups.find(g => g.id === id)
     }
 }

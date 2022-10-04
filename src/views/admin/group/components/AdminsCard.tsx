@@ -8,7 +8,7 @@ import React from "react";
 import {GroupDetail} from "api/GroupAPI";
 import UserItem from "components/card/UserItem";
 
-export default function ActiveMembers(props: { group: GroupDetail}) {
+export default function AdminsCard(props: { group: GroupDetail}) {
   const { group } = props;
 
   const textColor = useColorModeValue("navy.700", "white");
@@ -28,7 +28,7 @@ export default function ActiveMembers(props: { group: GroupDetail}) {
           <Text color={textColor} fontSize='xl' fontWeight='600'>
             Group Admins
           </Text>
-          <Button variant='action'>All Members</Button>
+          <Button variant='action'>Manage</Button>
         </Flex>
         <VStack>
           {

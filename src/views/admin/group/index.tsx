@@ -16,7 +16,7 @@ import {
 
 // Custom components
 import Banner from './components/Banner';
-import ActiveMembers from './components/ActiveMembers';
+import AdminsCard from './components/AdminsCard';
 import Card, {CardButton} from 'components/card/Card';
 import {PageContext, useGroupChat} from "contexts/PageContext";
 import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
@@ -74,7 +74,7 @@ function Content(props: {group: GroupDetail}) {
             <Flex direction='column' gap="20px" gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}>
                 <About group={group} />
                 <Card px='0px'>
-                    <ActiveMembers group={group} />
+                    <AdminsCard group={group} />
                 </Card>
                 <Notifications />
             </Flex>

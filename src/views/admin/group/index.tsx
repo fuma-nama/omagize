@@ -1,11 +1,23 @@
 import React, {useContext, useEffect} from "react";
 // Chakra imports
-import {Box, Button, Center, Flex, Grid, Heading, SimpleGrid, Text, useDisclosure} from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Center,
+    Flex,
+    Grid,
+    Heading,
+    HStack,
+    Icon, Image,
+    SimpleGrid,
+    Text,
+    useDisclosure
+} from '@chakra-ui/react';
 
 // Custom components
 import Banner from './components/Banner';
 import ActiveMembers from './components/ActiveMembers';
-import Card from 'components/card/Card';
+import Card, {CardButton} from 'components/card/Card';
 import {PageContext, useGroupChat} from "contexts/PageContext";
 import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
 import { Notifications } from "./components/Notifications";
@@ -14,9 +26,14 @@ import MessageItem, {MessageItemSkeleton} from "components/card/chat/MessageItem
 import {QueryErrorPanel} from "components/card/ErrorPanel";
 import GroupEventItem from "components/card/GroupEventItem";
 import {Holder} from "../../../utils/Container";
-import {AddIcon} from "@chakra-ui/icons";
+import {AddIcon, ChatIcon} from "@chakra-ui/icons";
 import {useColors, useItemHoverBg} from "../../../variables/colors";
 import CreateEventModal from "../../../components/modals/CreateEventModal";
+import {BsPeopleFill} from "react-icons/bs";
+import {AiFillSetting} from "react-icons/ai";
+import {CustomCardProps} from "../../../theme/theme";
+import CustomCard from "components/card/Card";
+import Avatar from "../../../components/icons/Avatar";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -32,7 +49,6 @@ export default function GroupOverview() {
 
 function Content(props: {group: GroupDetail}) {
     const {group} = props
-    const {open} = useGroupChat(group.id)
 
     return (
         <Grid
@@ -48,17 +64,15 @@ function Content(props: {group: GroupDetail}) {
                     flexGrow={1}
                     mt='25px'
                     mb='20px'
-                    gap={2}
+                    gap='20px'
                 >
+                    <ActionBar group={group} />
                     <GroupEvents detail={group} />
-                    <Card flexDirection='row' alignItems='center' mt={3}>
-                        <Heading fontSize='24px'>Messages</Heading>
-                        <Button ml='auto' variant="brand" onClick={open}>Open</Button>
-                    </Card>
                     <MessagesPreview />
                 </Flex>
             </Flex>
             <Flex direction='column' gap="20px" gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}>
+                <About group={group} />
                 <Card px='0px'>
                     <ActiveMembers group={group} />
                 </Card>
@@ -68,22 +82,53 @@ function Content(props: {group: GroupDetail}) {
     );
 }
 
+function About({group}: {group: GroupDetail}) {
+    return <Card p={0} overflow='hidden'>
+        {!!group.banner && <Image src={group.banner} height='100px' objectFit='cover' />}
+        <Flex direction='column' p='20px'>
+            <HStack mb='10px'>
+                <Text fontSize='2xl' fontWeight='bold'>About</Text>
+            </HStack>
+            <Text whiteSpace='pre-line'>{group.introduction}</Text>
+        </Flex>
+    </Card>
+}
+
+function ActionBar(props: {group: GroupDetail}) {
+    const {group} = props
+    const {open} = useGroupChat(group.id)
+
+    function Item({text, icon, ...props}: {text: string, icon: any} & CustomCardProps) {
+        return <CardButton alignItems='center' gap={2} {...props}>
+            {icon}
+            <Text fontSize={{base: 'md', md: 'lg'}}>{text}</Text>
+        </CardButton>
+    }
+
+    return <>
+        <SimpleGrid columns={3} gap={5}>
+            <Item text='Chat' icon={<ChatIcon width='30px' height='30px' />} onClick={open} />
+            <Item text='Members' icon={<Icon as={BsPeopleFill} width='30px' height='30px' />} />
+            <Item text='Settings' icon={<Icon as={AiFillSetting} width='30px' height='30px' />} />
+        </SimpleGrid>
+    </>
+}
+
 function GroupEvents({detail}: {detail: GroupDetail}) {
     const max = detail.events.length + 1
     const {textColorSecondary} = useColors()
     const {onOpen, isOpen, onClose} = useDisclosure()
-    const hover = useItemHoverBg()
 
     return <SimpleGrid columns={{base: 1, "3sm": Math.min(2, max), "xl": Math.min(3, max)}} gap={3}>
         {detail.events.map(e =>
             <GroupEventItem key={e.id} {...e} />
         )}
-        <Card transition='0.2s all' _hover={{cursor: 'pointer', ...hover}} onClick={() => onOpen()}>
+        <CardButton onClick={() => onOpen()}>
             <Center p='50px' color={textColorSecondary} h='full' flexDirection='column' gap={3}>
                 <AddIcon w='50px' h='50px' />
                 <Text>Create Event</Text>
             </Center>
-        </Card>
+        </CardButton>
         <CreateEventModal isOpen={isOpen} onClose={onClose} group={detail.id}/>
     </SimpleGrid>
 }

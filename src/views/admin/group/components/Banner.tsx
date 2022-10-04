@@ -1,19 +1,19 @@
 // Chakra imports
 import {
-	AvatarGroup,
+	AvatarGroup, Button,
 	Flex,
 	Heading,
 	HStack,
 	Image,
 	Text,
-	useColorModeValue,
+	useColorModeValue, VStack,
 } from '@chakra-ui/react';
 import Avatar from "components/icons/Avatar"
 
 // Assets
 import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
-import {useContext} from "react";
-import {PageContext} from "contexts/PageContext";
+import React, {useContext} from "react";
+import {PageContext, useGroupChat} from "contexts/PageContext";
 
 export default function Banner() {
 	const {selectedGroup} = useContext(PageContext)
@@ -49,13 +49,13 @@ function Content(props: {group: GroupDetail}) {
 					display={{base: "none", md: "block"}}
 					w={{base: "100px", "2xl": "200px"}} h={{base: "100px", "2xl": "200px"}}
 			/>
+
 			<Flex color='white' direction='column' pos='relative' align='start' gap='20px'>
 				<Heading
-					mt='40px'
-					mb='20px'>
+					mt='40px'>
 					{group.name}
 				</Heading>
-				<HStack>
+				<HStack mt='20px'>
 					<AvatarGroup max={5}>
 						{
 							group.membersPreview.map(a => <Avatar key={a.id} src={a.avatarUrl} name={a.username} />)

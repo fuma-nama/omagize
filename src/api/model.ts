@@ -97,5 +97,14 @@ export const events: GroupEvent[] = [
         group: groups[0].id,
         startAt: startDate,
         endAt: endDate
+    },
+    {
+        id: 433,
+        image: "https://cdn.mos.cms.futurecdn.net/ZoSDiWzgFVGqSAKhtxJtaM.jpg",
+        name: "Cyberpunk: Edgerunners Released",
+        author: users[0],
+        group: groups[0].id,
+        startAt: startDate,
+        endAt: endDate
     }
 ]

@@ -27,13 +27,11 @@ import {QueryErrorPanel} from "components/card/ErrorPanel";
 import GroupEventItem from "components/card/GroupEventItem";
 import {Holder} from "../../../utils/Container";
 import {AddIcon, ChatIcon} from "@chakra-ui/icons";
-import {useColors, useItemHoverBg} from "../../../variables/colors";
+import {useColors} from "../../../variables/colors";
 import CreateEventModal from "../../../components/modals/CreateEventModal";
 import {BsPeopleFill} from "react-icons/bs";
 import {AiFillSetting} from "react-icons/ai";
 import {CustomCardProps} from "../../../theme/theme";
-import CustomCard from "components/card/Card";
-import Avatar from "../../../components/icons/Avatar";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -68,6 +66,7 @@ function Content(props: {group: GroupDetail}) {
                 >
                     <ActionBar group={group} />
                     <GroupEvents detail={group} />
+                    <Text fontSize='2xl' fontWeight='600'>Recent Messages</Text>
                     <MessagesPreview />
                 </Flex>
             </Flex>
@@ -115,22 +114,37 @@ function ActionBar(props: {group: GroupDetail}) {
 }
 
 function GroupEvents({detail}: {detail: GroupDetail}) {
-    const max = detail.events.length + 1
     const {textColorSecondary} = useColors()
     const {onOpen, isOpen, onClose} = useDisclosure()
+    const atBottom = detail.events.length == 0 || detail.events.length % 2 == 0
+    const max = atBottom? detail.events.length : detail.events.length + 1
 
-    return <SimpleGrid columns={{base: 1, "3sm": Math.min(2, max), "xl": Math.min(3, max)}} gap={3}>
-        {detail.events.map(e =>
-            <GroupEventItem key={e.id} {...e} />
-        )}
-        <CardButton onClick={() => onOpen()}>
-            <Center p='50px' color={textColorSecondary} h='full' flexDirection='column' gap={3}>
-                <AddIcon w='50px' h='50px' />
+    return <>
+        <SimpleGrid columns={{
+            base: 1,
+            "3sm": Math.min(2, max),
+            "xl": Math.min(3, max)}
+        } gap={3}>
+            {detail.events.map(e =>
+                <Box>
+                    <GroupEventItem key={e.id} {...e} />
+                </Box>
+            )}
+            {!atBottom && <CardButton onClick={() => onOpen()}>
+                <Center p='50px' color={textColorSecondary} h='full' flexDirection='column' gap={3}>
+                    <AddIcon w='50px' h='50px'/>
+                    <Text>Create Event</Text>
+                </Center>
+            </CardButton>}
+            <CreateEventModal isOpen={isOpen} onClose={onClose} group={detail.id}/>
+        </SimpleGrid>
+        {atBottom && <CardButton p={0} onClick={() => onOpen()}>
+            <HStack p='20px' color={textColorSecondary} justify='center'>
+                <AddIcon w='20px' h='20px' />
                 <Text>Create Event</Text>
-            </Center>
-        </CardButton>
-        <CreateEventModal isOpen={isOpen} onClose={onClose} group={detail.id}/>
-    </SimpleGrid>
+            </HStack>
+        </CardButton>}
+    </>
 }
 
 function MessagesPreview() {

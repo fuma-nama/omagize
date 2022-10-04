@@ -71,7 +71,7 @@ export default function GroupEventItem({fetchGroup, ...event}: GroupEvent & { fe
         </HStack>
 
         <Flex direction='row' flexWrap='wrap' gap={4} mt={2}>
-            <Info name='Take Place At' value={event.place} />
+            {!!event.place && <Info name='Take Place At' value={event.place}/>}
 
             {!happening && <Info name='Starting At' value={event.startAt.toLocaleTimeString()} />}
         </Flex>

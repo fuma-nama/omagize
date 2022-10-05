@@ -46,8 +46,11 @@ function Content(props: {group: GroupDetail}) {
 				brightness={0.5}
 			/>}
 			<Avatar src={group.icon} name={group.name}
-					display={{base: "none", md: "block"}}
-					w={{base: "100px", "2xl": "200px"}} h={{base: "100px", "2xl": "200px"}}
+					top={{base: '20px', "3sm": 'unset'}}
+					right={{base: '20px', "3sm": 'unset'}}
+					pos={{base: 'absolute', "3sm": 'relative'}}
+					w={{base: "50px", "3sm": "100px", "2xl": "200px"}}
+					h={{base: "50px", "3sm": "100px", "2xl": "200px"}}
 			/>
 
 			<Flex color='white' direction='column' pos='relative' align='start' gap='20px'>

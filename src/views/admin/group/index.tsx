@@ -117,14 +117,12 @@ function GroupEvents({detail}: {detail: GroupDetail}) {
     const {textColorSecondary} = useColors()
     const {onOpen, isOpen, onClose} = useDisclosure()
     const atBottom = detail.events.length == 0 || detail.events.length % 2 == 0
-    const max = atBottom? detail.events.length : detail.events.length + 1
 
     return <>
         <SimpleGrid columns={{
             base: 1,
-            "3sm": Math.min(2, max),
-            "xl": Math.min(3, max)}
-        } gap={3}>
+            md: 2,
+        }} gap={3}>
             {detail.events.map(e =>
                 <Box>
                     <GroupEventItem key={e.id} {...e} />

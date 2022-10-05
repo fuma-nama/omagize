@@ -3,18 +3,15 @@ import { SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react';
 // Custom components
 import Card from 'components/card/Card';
 import Information from 'views/admin/profile/components/Information';
-import {useUserQuery} from "api/UserAPI";
 import {useColors} from "variables/colors";
+import {useLoginQuery} from "../../../../api/AccountAPI";
 
 // Assets
 export default function GeneralInformation(props: { [x: string]: any }) {
 	// Chakra Color Mode
 	const {textColorPrimary, textColorSecondary} = useColors()
 	const cardShadow = useColorModeValue('0px 18px 40px rgba(112, 144, 176, 0.12)', 'unset');
-	const query = useUserQuery()
-
-	if (query.isLoading) return <></>
-	const user = query.data
+	const {account, user} = useLoginQuery().data
 
 	return (
 		<Card {...props}>
@@ -25,7 +22,7 @@ export default function GeneralInformation(props: { [x: string]: any }) {
 				Some details of Your Account
 			</Text>
 			<SimpleGrid columns={{base: 1, xl: 2}} gap='20px'>
-				<Information boxShadow={cardShadow} title='Email Address' value={user.email} />
+				<Information boxShadow={cardShadow} title='Email Address' value={account.email} />
 				<Information boxShadow={cardShadow} title='Created At' value={user.createdAt.toLocaleTimeString()} />
 			</SimpleGrid>
 		</Card>

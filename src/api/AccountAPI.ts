@@ -1,13 +1,18 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {call, callReturn, ReturnOptions, withDefault} from "./core";
-import {UserType} from "./UserAPI";
+import {SelfUser, UserType} from "./UserAPI";
 export type Reset = 'reset'
 
 export const LoginKey = ["login"]
 
-type LoginPayload = {
-    self: UserType
+export type LoginPayload = {
+    account: Account,
+    user: SelfUser
     token: string
+}
+
+export type Account = {
+    email: string
 }
 
 export async function auth(): Promise<LoginPayload | null> {

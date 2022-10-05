@@ -7,18 +7,15 @@ import {
 	Text,
 	useColorModeValue
 } from '@chakra-ui/react';
-import {useUserQuery} from "../../../api/UserAPI";
+import {useSelfUser} from "api/UserAPI";
 import {FiSettings} from "react-icons/fi";
 import {Link} from "react-router-dom";
 
 export default function SidebarProfile() {
 	const bgColor = 'linear-gradient(135deg, #868CFF 0%, #4318FF 100%)';
 	const borderColor = useColorModeValue('white', 'navy.800');
-	const query = useUserQuery()
+	const user = useSelfUser()
 
-	if (query.isLoading) return <SidebarProfileSkeleton />
-
-	const user = query.data
 	return (
 		<Flex
 			justify='center'
@@ -50,37 +47,6 @@ export default function SidebarProfile() {
 					{user.username}
 				</Text>
 			</Flex>
-			<SettingsButton />
-		</Flex>
-	);
-}
-
-function SidebarProfileSkeleton() {
-	const bgColor = 'linear-gradient(135deg, #868CFF 0%, #4318FF 100%)';
-
-	return (
-		<Flex
-			justify='center'
-			direction='column'
-			align='center'
-			bg={bgColor}
-			borderRadius='30px'
-			me='20px'
-			position='relative'>
-			<Box
-				rounded='full'
-				w='94px'
-				h='94px'
-				mx='auto'
-				mt='-47px'
-				bg='linear-gradient(135deg, #868CFF 0%, #4318FF 100%)'
-			>
-				<SkeletonCircle w='full' h='full' />
-			</Box>
-			<Flex direction='column' mb='20px' w='full' align='center' justify='center' px='15px' pt='3px'>
-				<SkeletonText w='80%' noOfLines={2} />
-			</Flex>
-
 			<SettingsButton />
 		</Flex>
 	);

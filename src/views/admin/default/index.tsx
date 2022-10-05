@@ -22,24 +22,23 @@ import DailyTraffic from 'views/admin/default/components/DailyTraffic';
 import PieCard from 'views/admin/default/components/PieCard';
 import TotalSpent from 'views/admin/default/components/TotalSpent';
 import WeeklyRevenue from 'views/admin/default/components/WeeklyRevenue';
-import { columnsDataCheck, columnsDataComplex } from 'views/admin/default/variables/columnsData';
+import { columnsDataCheck } from 'views/admin/default/variables/columnsData';
 import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
 import Banner from "./components/Banner";
-import {useGroupEventsQuery, useUserQuery} from "../../../api/UserAPI";
-import {ArrayHolder, Holder, Placeholder} from "../../../utils/Container";
+import {useGroupEventsQuery, useSelfUser} from "../../../api/UserAPI";
+import {ArrayHolder, Placeholder} from "../../../utils/Container";
 import GroupEventItem, {GroupEventSkeleton} from "../../../components/card/GroupEventItem";
 import Friends from "./components/Friends";
 
 export default function UserReports() {
 	// Chakra Color Mode
-	const query = useUserQuery()
+	const user = useSelfUser()
 	const brandColor = useColorModeValue('brand.500', 'white');
 	const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
 
-	if (query.isLoading) return <></>
 	return (
 		<Flex direction='column' gap={5}>
-			<Banner user={query.data} />
+			<Banner user={user} />
 
 			<SimpleGrid columns={{ base: 1, md: 2, lg: 3, '2xl': 6 }} gap='20px' mt='20px'>
 				<MiniStatistics

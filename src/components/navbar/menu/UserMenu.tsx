@@ -5,36 +5,29 @@ import {
     MenuButton,
     MenuItem,
     MenuList,
-    SkeletonCircle,
     Text,
     useColorModeValue
 } from "@chakra-ui/react";
 import React from "react";
-import {UserType, useUserQuery} from "api/UserAPI";
+import {UserType, useSelfUser} from "api/UserAPI";
 import {useLogoutMutation} from "api/AccountAPI";
 
 export function UserMenu(props: {color: string, shadow: string, bg: string}) {
-    const query = useUserQuery()
+    const user = useSelfUser()
 
     return <Menu>
         <MenuButton p='0px'>
-            {query.isLoading ?
-                <SkeletonCircle
-                    w='40px'
-                    h='40px'
-                /> :
-                <Avatar
-                    _hover={{cursor: 'pointer'}}
-                    color='white'
-                    name={query.data.username}
-                    src={query.data.avatarUrl}
-                    bg='#11047A'
-                    w='40px'
-                    h='40px'
-                />
-            }
+            <Avatar
+                _hover={{cursor: 'pointer'}}
+                color='white'
+                name={user.username}
+                src={user.avatarUrl}
+                bg='#11047A'
+                w='40px'
+                h='40px'
+            />
         </MenuButton>
-        {query.isLoading || <List user={query.data} shadow={props.shadow} menuBg={props.bg} textColor={props.color}/>}
+        <List user={user} shadow={props.shadow} menuBg={props.bg} textColor={props.color}/>
     </Menu>
 }
 

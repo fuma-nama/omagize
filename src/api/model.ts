@@ -8,29 +8,28 @@ export function delay(timeout: number) {
     })
 }
 
-export const notifications: GroupNotification[] = [
-    {
-        id: "43434343",
-        type: "mention",
-        author: {
-            id: "4324232344324543",
-            username: "MONEY",
-        },
-        date: new Date(Date.now())
-    }
-]
-
 export const users: UserType[] = [
     {
         id: "432423423432423",
         username: "MONEY",
         description: "Kane is a gay",
         avatarUrl: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
-        bannerUrl: "https://cdn.mos.cms.futurecdn.net/ZoSDiWzgFVGqSAKhtxJtaM.jpg"
+        bannerUrl: "https://cdn.mos.cms.futurecdn.net/ZoSDiWzgFVGqSAKhtxJtaM.jpg",
+        createdAt: new Date(Date.now())
     },
     {
         id: "132423423432453",
         username: "Kane",
+        createdAt: new Date(Date.now())
+    }
+]
+
+export const notifications: GroupNotification[] = [
+    {
+        id: "43434343",
+        type: "mention",
+        author: users[0],
+        date: new Date(Date.now())
     }
 ]
 

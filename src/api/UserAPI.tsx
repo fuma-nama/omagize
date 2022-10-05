@@ -1,6 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import {delay, events, groups, notifications, users} from "./model";
-import {Reset} from "./AccountAPI";
+import {Reset, useLoginQuery} from "./AccountAPI";
 import {GroupEvent, GroupNotification} from "./GroupAPI";
 
 export type UserNotification = GroupNotification & { group: string } | LoginNotification
@@ -17,6 +17,7 @@ export type UserType = {
     bannerUrl?: string
     avatarUrl?: string
     description?: string
+    createdAt: Date
 }
 
 export type Friend = UserType
@@ -30,15 +31,12 @@ export type FriendsData = {
     requests: FriendRequest[]
 }
 
-export type SelfUser = UserType & {
-    createdAt: Date
-    email: string
-}
+export type SelfUser = UserType & {}
 
-export async function updateProfile(name?: string, avatar?: File | Reset, banner?: File | Reset): Promise<SelfUser> {
+export async function updateProfile(current: SelfUser, name?: string, avatar?: File | Reset, banner?: File | Reset): Promise<SelfUser> {
     await delay(2000)
     return {
-        ...fetchUser(),
+        ...current,
         username: name,
     }
 }
@@ -64,14 +62,6 @@ export async function clearUserNotifications() {
 
 export function fetchGroupEvents(): GroupEvent[] {
     return events
-}
-
-export function fetchUser(): SelfUser {
-    return {
-        email: "xred379@gmail.com",
-        createdAt: new Date(Date.now()),
-        ...users[0]
-    }
 }
 
 export function fetchFriends(): FriendsData {
@@ -101,8 +91,13 @@ export async function denyFriendRequest(friendID: string) {
     await delay(2000)
 }
 
-export function useUserQuery() {
-    return useQuery(["user"], () => fetchUser())
+export function useSelfUser() {
+    const query = useLoginQuery()
+
+    if (query.isLoading) {
+        throw "Client must login before accessing self user"
+    }
+    return query.data.user
 }
 
 export function useUserNotificationsQuery() {

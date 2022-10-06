@@ -3,6 +3,7 @@ import {delay, events, groups, notifications, users} from "./model";
 import {Reset, useLoginQuery} from "./AccountAPI";
 import {GroupEvent, GroupNotification} from "./GroupAPI";
 import {DateObject} from "./CustomTypes";
+import {callReturn, withDefault, withDefaultForm} from "./core";
 
 export type UserNotification = GroupNotification & { group: string } | LoginNotification
 export type LoginNotification = {
@@ -34,12 +35,23 @@ export type FriendsData = {
 
 export type SelfUser = UserType & {}
 
-export async function updateProfile(current: SelfUser, name?: string, avatar?: File | Reset, banner?: File | Reset): Promise<SelfUser> {
-    await delay(2000)
-    return {
-        ...current,
-        username: name,
+export async function updateProfile(current: SelfUser, name?: string, avatar?: Blob | Reset, banner?: Blob | Reset): Promise<SelfUser> {
+    const data = new FormData()
+    if (!!name) {
+        data.append('name', name)
     }
+    if (!!avatar) {
+        console.log(avatar)
+        data.append('avatar', avatar)
+    }
+    if (!!banner) {
+        data.append('banner', banner)
+    }
+
+    return callReturn<SelfUser>("/user/profile", withDefaultForm({
+        method: "POST",
+        body: data,
+    }))
 }
 
 export function fetchUserNotifications(): UserNotification[] {

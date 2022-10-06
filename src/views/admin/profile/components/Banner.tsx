@@ -23,7 +23,7 @@ export default function Banner(props: any) {
 	const {isOpen, onOpen, onClose} = useDisclosure()
 
 	// Chakra Color Mode
-	const {textColorPrimary, textColorSecondary, borderColor} = useColors()
+	const {textColorPrimary, textColorSecondary, borderColor, brand} = useColors()
 	const avatarSize = '120px'
 
 	const groups = groupsQuery.data
@@ -31,8 +31,8 @@ export default function Banner(props: any) {
 
 	return (
 		<Card mb={{ base: '0px', lg: '20px' }} alignItems='center' {...props}>
-			<Box bgImg={user.bannerUrl} bgSize='cover' borderRadius='16px' h='200px' w='100%' />
-			<Avatar mx='auto' src={user.avatarUrl} h={avatarSize} w={avatarSize} mt='-43px' border='4px solid' borderColor={borderColor} />
+			<Box bg={brand} bgImg={user.bannerUrl} bgSize='cover' borderRadius='16px' h='200px' w='100%' />
+			<Avatar mx='auto' src={user.avatarUrl} h={avatarSize} w={avatarSize} mt='-60px' border='4px solid' borderColor={borderColor} />
 			<Flex direction='row' pos='relative' mt='10px'>
 				<Text color={textColorPrimary} fontWeight='bold' fontSize='xl'>
 					{user.username}

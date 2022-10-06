@@ -1,5 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {call, callReturn, ReturnOptions, withDefault} from "./core";
+import {callReturn, ReturnOptions, withDefault} from "./core";
 import {SelfUser, UserType} from "./UserAPI";
 export type Reset = 'reset'
 

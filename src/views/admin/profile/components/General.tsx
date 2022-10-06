@@ -4,7 +4,7 @@ import { SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import Information from 'views/admin/profile/components/Information';
 import {useColors} from "variables/colors";
-import {useLoginQuery} from "../../../../api/AccountAPI";
+import {useLoginQuery} from "api/AccountAPI";
 
 // Assets
 export default function GeneralInformation(props: { [x: string]: any }) {
@@ -23,7 +23,7 @@ export default function GeneralInformation(props: { [x: string]: any }) {
 			</Text>
 			<SimpleGrid columns={{base: 1, xl: 2}} gap='20px'>
 				<Information boxShadow={cardShadow} title='Email Address' value={account.email} />
-				<Information boxShadow={cardShadow} title='Created At' value={user.createdAt.toLocaleTimeString()} />
+				<Information boxShadow={cardShadow} title='Created At' value={new Date(user.createdAt).toLocaleString()} />
 			</SimpleGrid>
 		</Card>
 	);

@@ -2,6 +2,7 @@ import {useQuery} from "@tanstack/react-query";
 import {delay, events, groups, notifications, users} from "./model";
 import {Reset, useLoginQuery} from "./AccountAPI";
 import {GroupEvent, GroupNotification} from "./GroupAPI";
+import {DateObject} from "./CustomTypes";
 
 export type UserNotification = GroupNotification & { group: string } | LoginNotification
 export type LoginNotification = {
@@ -17,7 +18,7 @@ export type UserType = {
     bannerUrl?: string
     avatarUrl?: string
     description?: string
-    createdAt: Date
+    createdAt: DateObject
 }
 
 export type Friend = UserType

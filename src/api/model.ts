@@ -15,12 +15,12 @@ export const users: UserType[] = [
         description: "Kane is a gay",
         avatarUrl: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
         bannerUrl: "https://cdn.mos.cms.futurecdn.net/ZoSDiWzgFVGqSAKhtxJtaM.jpg",
-        createdAt: new Date(Date.now())
+        createdAt: Date.now()
     },
     {
         id: "132423423432453",
         username: "Kane",
-        createdAt: new Date(Date.now())
+        createdAt: Date.now()
     }
 ]
 

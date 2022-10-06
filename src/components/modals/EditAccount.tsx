@@ -8,7 +8,7 @@ import {
     ModalOverlay, useColorModeValue
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
-import {url, useImagePicker, useImagePickerCrop} from "utils/ImageUtils";
+import {UploadImage, url, useImagePicker, useImagePickerCrop} from "utils/ImageUtils";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {SelfUser, updateProfile, useSelfUser} from "api/UserAPI";
 import {LoginKey, LoginPayload, Reset} from "api/AccountAPI";
@@ -16,8 +16,8 @@ import {ProfileCropPicker, useModalState} from "./Modal";
 
 type ProfileOptions = {
     name?: string
-    avatar?: File | Reset
-    banner?: File | Reset
+    avatar?: UploadImage | Reset
+    banner?: UploadImage | Reset
 }
 
 export default function EditAccountModal(props: {isOpen: boolean, onClose: () => void}) {
@@ -59,7 +59,7 @@ export default function EditAccountModal(props: {isOpen: boolean, onClose: () =>
                 </Button>
                 <Button
                     onClick={() => mutation.mutate()} isLoading={mutation.isLoading}
-                    disabled={!canSave}
+                    disabled={!canSave || mutation.isLoading}
                     variant='brand' rightIcon={<BiRightArrow />}>Save</Button>
             </ModalFooter>
         </ModalContent>
@@ -68,7 +68,7 @@ export default function EditAccountModal(props: {isOpen: boolean, onClose: () =>
 
 function Form(props: {user: SelfUser, value: ProfileOptions, onChange: (options: Partial<ProfileOptions>) => void}) {
     const {user, value, onChange} = props
-    const acceptedFileTypes = ".png, .jpg, .gif"
+    const acceptedFileTypes = ".png, .jpg, .gif, .webp"
 
     const [name, setName] = [value.name, (v: string) => onChange({name: v})]
     const icon = useImagePickerCrop(

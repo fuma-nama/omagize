@@ -5,7 +5,7 @@ import {Reset} from "../api/AccountAPI";
 import {CropImage, CropOptions} from "../components/modals/Modal";
 
 //File, base64
-export type UploadImage = File | string
+export type UploadImage = Blob
 export function url(initial: string, image?: string | Reset): string {
     if (image == null || image === 'reset') return initial
 
@@ -24,7 +24,7 @@ function toBase64(blob: Blob): Promise<string> {
     })
 }
 
-export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement): Promise<string> {
+export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement): Promise<Blob> {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext('2d');
 
@@ -58,7 +58,7 @@ export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement):
         imageObj.naturalHeight,
     );
 
-    return new Promise(r => r(canvas.toDataURL("image/webp")))
+    return new Promise(r => canvas.toBlob(b => r(b)))
 }
 
 export function Pick({children, ...rest}: {children: any} & BoxProps) {
@@ -87,9 +87,9 @@ export function Pick({children, ...rest}: {children: any} & BoxProps) {
     </Box>
 }
 
-export function useImagePickerCrop<T extends UploadImage>(value: T, onChange: (file: T) => void, props?: InputHTMLAttributes<HTMLInputElement>) {
+export function useImagePickerCrop<T extends UploadImage | Reset>(value: T, onChange: (file: T) => void, props?: InputHTMLAttributes<HTMLInputElement>) {
     const [crop, setCrop] = useState<CropImage>()
-    const base = useImagePicker(value, onChange, props)
+    const base = useImagePicker<T>(value, onChange, props)
 
     return {
         ...base,
@@ -100,15 +100,15 @@ export function useImagePickerCrop<T extends UploadImage>(value: T, onChange: (f
         }} inputRef={base.ref} />,
         crop: crop && {
             value: crop, setCrop,
-            onCrop: (base64: string) => {
+            onCrop: (blob: Blob) => {
                 setCrop(null)
-                onChange(base64 as T)
+                onChange(blob as T)
             }
         } as CropOptions
     }
 }
 
-export function useImagePicker<T extends UploadImage>(value: T, onChange: (file: T) => void, props?: InputHTMLAttributes<HTMLInputElement>) {
+export function useImagePicker<T extends UploadImage | Reset>(value: T, onChange: (file: T) => void, props?: InputHTMLAttributes<HTMLInputElement>) {
     const ref = useRef<HTMLInputElement>()
     const url = useImageUrl(value)
 
@@ -146,7 +146,6 @@ export function useImageUrl(file: UploadImage | Reset) {
     return useMemo(
         () => {
             if (!file || file === 'reset') return null
-            if (typeof file === 'string') return file
             return URL.createObjectURL(file)
         },
         [file]

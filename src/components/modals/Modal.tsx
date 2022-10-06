@@ -12,9 +12,10 @@ export type CropImage = {
 export type CropOptions = {
     value: CropImage,
     setCrop: (crop: CropImage) => void,
-    onCrop: (base64: string) => void
+    onCrop: (blob: Blob) => void
 }
 
+/* TODO: Fix Image cropping issues (wrong position) */
 export function ImageCropPicker(props: {
     select: () => void, url: string | null,
 } & CropProps) {

@@ -2,7 +2,6 @@ import {GroupEvent, useGroupQuery} from "api/GroupAPI";
 import Card from "./Card";
 import {
     Avatar,
-    Box,
     Flex,
     HStack,
     Image,
@@ -13,6 +12,7 @@ import {
     Text
 } from "@chakra-ui/react";
 import {useColors} from "variables/colors";
+import {withUrls} from "../../api/Media";
 
 function Info({name, value, ...rest}: {name: string, value: any} & StackProps) {
     const {textColorPrimary, textColorSecondary} = useColors()
@@ -25,6 +25,7 @@ function Info({name, value, ...rest}: {name: string, value: any} & StackProps) {
 
 export default function GroupEventItem({fetchGroup, ...event}: GroupEvent & { fetchGroup?: boolean }) {
     const {textColorPrimary, textColorSecondary} = useColors()
+    const author = withUrls(event.author)
 
     function GroupInfo() {
         const query = useGroupQuery(event.group)
@@ -65,9 +66,9 @@ export default function GroupEventItem({fetchGroup, ...event}: GroupEvent & { fe
                     {event.name}
                 </Text>
                 <Text color={textColorSecondary}>{event.description}</Text>
-                <Text color={textColorSecondary}>By {event.author.username}</Text>
+                <Text color={textColorSecondary}>By {author.username}</Text>
             </Flex>
-            <Avatar src={event.author.avatarUrl} name={event.author.username} />
+            <Avatar src={author.avatarUrl} name={author.username} />
         </HStack>
 
         <Flex direction='row' flexWrap='wrap' gap={4} mt={2}>

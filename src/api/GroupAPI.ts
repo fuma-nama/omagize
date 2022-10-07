@@ -89,7 +89,7 @@ export function fetchGroups(): Group[] {
     return groups
 }
 
-export async function createGroup(name: string, icon?: File, banner?: File) {
+export async function createGroup(name: string, icon?: UploadImage, banner?: UploadImage) {
     await delay(3000)
 }
 

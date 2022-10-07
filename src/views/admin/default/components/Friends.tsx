@@ -1,6 +1,6 @@
 import {Button, Flex, HStack, SimpleGrid, Text, useDisclosure} from "@chakra-ui/react";
 import {FriendsData, useFriendsQuery} from "api/UserAPI";
-import UserItem, {FriendRequestItem, UserItemSkeleton} from "components/card/UserItem";
+import {FriendItem, FriendRequestItem, UserItemSkeleton} from "components/card/UserItem";
 import {Holder, Placeholder} from "utils/Container";
 import AddFriendModal from "components/modals/AddFriendModal";
 
@@ -37,7 +37,7 @@ function Content({data}: { data: FriendsData }) {
                 <FriendRequestItem key={request.user.id} request={request} />
             )}
             {data?.friends?.map(friend =>
-                <UserItem key={friend.id} user={friend} />
+                <FriendItem key={friend.id} friend={friend} />
             )}
         </Holder>
     </SimpleGrid>

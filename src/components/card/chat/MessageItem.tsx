@@ -1,9 +1,10 @@
 import {Message} from "api/MessageAPI";
 import {Flex, HStack, SkeletonCircle, SkeletonText, Text, useColorModeValue} from "@chakra-ui/react";
 import Avatar from "components/icons/Avatar"
+import {withUrls} from "../../../api/Media";
 
 export default function MessageItem(props: Message) {
-    const {author} = props
+    const author = withUrls(props.author)
     const secondaryText = useColorModeValue('gray.400', 'white');
     const hoverBg = useColorModeValue("white", "navy.800")
 

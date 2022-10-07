@@ -4,13 +4,15 @@ import Card from "./Card";
 import FadeImage from "./FadeImage";
 import Avatar from "../icons/Avatar";
 import React from "react";
-import {acceptFriendRequest, denyFriendRequest, FriendRequest, UserType} from "api/UserAPI";
+import {acceptFriendRequest, denyFriendRequest, Friend, FriendRequest, UserType} from "api/UserAPI";
 import {CustomCardProps} from "theme/theme";
 import {AiOutlineClose} from "react-icons/ai";
 import {useMutation} from "@tanstack/react-query";
-import {WarningIcon} from "@chakra-ui/icons";
+import {ChatIcon, WarningIcon} from "@chakra-ui/icons";
+import {withUrls, toAvatarUrl, toBannerUrl} from "../../api/Media";
 
-export default function UserItem({user}: {user: UserType}) {
+export default function UserItem(props: {user: UserType}) {
+    const user = withUrls(props.user)
     const [brand] = useToken("color", ["brand.400"])
     const {textColorPrimary} = useColors()
     const image = user.bannerUrl ?? user.avatarUrl
@@ -35,9 +37,41 @@ export default function UserItem({user}: {user: UserType}) {
     </Card>
 }
 
+export function FriendItem(props: {friend: Friend}) {
+    const friend = withUrls(props.friend)
+    const [brand] = useToken("color", ["brand.400"])
+    const {textColorPrimary} = useColors()
+    const image = friend.bannerUrl ?? friend.avatarUrl
+
+    return <Card
+        overflow='hidden'
+        pos='relative'>
+        <FadeImage
+            direction='to left' src={image}
+            placeholder={brand}
+            percent={60}
+            opacity={50}
+        />
+
+        <HStack gap='10px' pos='relative' align='start'>
+            <Avatar name={friend.username} src={friend.avatarUrl} variant='normal' />
+            <Flex direction='column'>
+                <Text color={textColorPrimary} fontSize='xl' fontWeight='bold'>{friend.username}</Text>
+                <Text color={textColorPrimary}>{friend.description}</Text>
+            </Flex>
+        </HStack>
+        <HStack ml='auto' align='end'>
+            <Button leftIcon={<ChatIcon />} variant='action'>Chat</Button>
+        </HStack>
+    </Card>
+}
+
 export function FriendRequestItem(
     {request, ...card}: {request: FriendRequest} & CustomCardProps
 ) {
+    const user = withUrls(request.user)
+    const image = user.bannerUrl ?? user.avatarUrl
+
     const accept = useMutation(
         ["accept_friend_request", request.user.id],
         () => acceptFriendRequest(request.user.id)
@@ -49,9 +83,6 @@ export function FriendRequestItem(
 
     const {textColorPrimary, textColorSecondary, cardBg, brand} = useColors()
     const breakpoint = '3sm'
-
-    const {user} = request
-    const image = user.bannerUrl ?? user.avatarUrl
 
     return <Flex
         rounded='2xl'

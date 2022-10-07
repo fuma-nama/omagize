@@ -4,6 +4,7 @@ import {Reset, useLoginQuery} from "./AccountAPI";
 import {GroupEvent, GroupNotification} from "./GroupAPI";
 import {DateObject} from "./CustomTypes";
 import {callReturn, withDefault, withDefaultForm} from "./core";
+import {withUrls} from "./Media";
 
 export type UserNotification = GroupNotification & { group: string } | LoginNotification
 export type LoginNotification = {
@@ -16,8 +17,8 @@ export type LoginNotification = {
 export type UserType = {
     id: string
     username: string
-    bannerUrl?: string
-    avatarUrl?: string
+    bannerHash?: number
+    avatarHash?: number
     description?: string
     createdAt: DateObject
 }
@@ -35,7 +36,7 @@ export type FriendsData = {
 
 export type SelfUser = UserType & {}
 
-export async function updateProfile(current: SelfUser, name?: string, avatar?: Blob | Reset, banner?: Blob | Reset): Promise<SelfUser> {
+export async function updateProfile(name?: string, avatar?: Blob | Reset, banner?: Blob | Reset): Promise<SelfUser> {
     const data = new FormData()
     if (!!name) {
         data.append('name', name)
@@ -110,7 +111,7 @@ export function useSelfUser() {
     if (query.isLoading) {
         throw "Client must login before accessing self user"
     }
-    return query.data.user
+    return withUrls(query.data.user)
 }
 
 export function useUserNotificationsQuery() {

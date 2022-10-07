@@ -3,37 +3,47 @@ import {Box, BoxProps, Circle, useColorModeValue} from "@chakra-ui/react";
 import {VscNewFile} from "react-icons/vsc";
 import {Reset} from "../api/AccountAPI";
 import {CropImage, CropOptions} from "../components/modals/Modal";
+import {Crop} from "react-image-crop";
+import Compressor from "compressorjs";
+
+export const AvatarFormat: Format = {maxWidth: 500, maxHeight: 500}
+export const BannerFormat: Format = {maxWidth: 1000, maxHeight: 1000}
 
 //File, base64
 export type UploadImage = Blob
+export type Format = {
+    maxWidth: number,
+    maxHeight: number
+}
+
 export function url(initial: string, image?: string | Reset): string {
     if (image == null || image === 'reset') return initial
 
     return image
 }
 
-function toBase64(blob: Blob): Promise<string> {
-    return new Promise(resolve => {
-        const reader = new FileReader()
-        reader.addEventListener('load', () => {
-            if (typeof reader.result === 'string') {
-                resolve(reader.result)
+export function resizeImage(image: File | Blob, format: Format): Promise<Blob> {
+    return new Promise((r, reject) => {
+        new Compressor(image, {
+            maxWidth: format.maxWidth,
+            maxHeight: format.maxHeight,
+
+            success(file: Blob) {
+                r(file)
+            },
+            error(error: Error) {
+                reject(error)
             }
         })
-        reader.readAsDataURL(blob)
     })
 }
 
-export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement): Promise<Blob> {
+export function cropImage(crop: Crop | null, imageObj: HTMLImageElement, format: Format): Promise<Blob> {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext('2d');
 
     const scaleX = imageObj.naturalWidth / imageObj.width
     const scaleY = imageObj.naturalHeight / imageObj.height
-    // devicePixelRatio slightly increases sharpness on retina devices
-    // at the expense of slightly slower render times and needing to
-    // size the image back down if you want to download/upload and be
-    // true to the images natural size.
     const pixelRatio = window.devicePixelRatio
 
     if (crop == null) {
@@ -54,8 +64,8 @@ export function cropImage({crop, image}: CropImage, imageObj: HTMLImageElement):
     context.drawImage(
         imageObj,
         0, 0,
-        imageObj.naturalWidth,
-        imageObj.naturalHeight,
+        format.maxWidth,
+        format.maxHeight,
     );
 
     return new Promise(r => canvas.toBlob(b => r(b)))
@@ -87,28 +97,63 @@ export function Pick({children, ...rest}: {children: any} & BoxProps) {
     </Box>
 }
 
-export function useImagePickerCrop<T extends UploadImage | Reset>(value: T, onChange: (file: T) => void, props?: InputHTMLAttributes<HTMLInputElement>) {
-    const [crop, setCrop] = useState<CropImage>()
-    const base = useImagePicker<T>(value, onChange, props)
+export function useImagePickerCrop<T extends UploadImage | Reset>(
+    value: T,
+    onChange: (file: T) => void,
+    format: Format,
+    props?: InputHTMLAttributes<HTMLInputElement>
+) {
+    const [edit, setEdit] = useState<{ crop: CropImage, preview: string } | null>()
+    const base = useImagePicker<T>(value, f => onChange(f as unknown as T), props)
 
     return {
         ...base,
         picker: <FilePicker {...props} onChange={(v: File) => {
-            toBase64(v).then(result => {
-                setCrop({image: result, crop: null})
-            })
+            const url = URL.createObjectURL(v)
+            setEdit({preview: url, crop: null})
         }} inputRef={base.ref} />,
-        crop: crop && {
-            value: crop, setCrop,
-            onCrop: (blob: Blob) => {
-                setCrop(null)
-                onChange(blob as T)
+        crop: edit && {
+            preview: edit.preview,
+            crop: edit.crop,
+            setCrop: (v: CropImage) => setEdit(prev => ({...prev, crop: v})),
+            onCrop: (img) => {
+                cropImage(edit.crop, img, format).then(result => {
+                    setEdit(null)
+                    onChange(result as T)
+                })
             }
         } as CropOptions
     }
 }
 
+export function useImagePickerResize<T extends UploadImage | Reset>(
+    value: T,
+    onChange: (file: T) => void,
+    format: Format,
+    props?: InputHTMLAttributes<HTMLInputElement>
+) {
+    const base = useImagePickerBase(value, onChange)
+
+    return {
+        ...base,
+        picker: <FilePicker {...props} onChange={(file: File) => {
+            resizeImage(file, format).then(result =>
+                onChange(result as T)
+            )
+        }} inputRef={base.ref} />,
+    }
+}
+
 export function useImagePicker<T extends UploadImage | Reset>(value: T, onChange: (file: T) => void, props?: InputHTMLAttributes<HTMLInputElement>) {
+    const base = useImagePickerBase(value, onChange)
+
+    return {
+        ...base,
+        picker: <FilePicker {...props} onChange={onChange} inputRef={base.ref} />,
+    }
+}
+
+export function useImagePickerBase<T extends UploadImage | Reset>(value: T, onChange: (file: T) => void) {
     const ref = useRef<HTMLInputElement>()
     const url = useImageUrl(value)
 
@@ -119,7 +164,6 @@ export function useImagePicker<T extends UploadImage | Reset>(value: T, onChange
             ref.current.click()
         },
         ref,
-        picker: <FilePicker {...props} onChange={onChange} inputRef={ref} />,
         url
     }
 }

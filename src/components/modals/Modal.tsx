@@ -5,14 +5,12 @@ import {Center, useColorModeValue, Image, HStack, Button, ButtonProps, Icon} fro
 import ReactCrop, {Crop} from "react-image-crop";
 import {FaImage} from "react-icons/fa";
 
-export type CropImage = {
-    image: string
-    crop: Crop | null
-}
+export type CropImage = Crop | null
 export type CropOptions = {
-    value: CropImage,
+    preview: string,
+    crop: CropImage,
     setCrop: (crop: CropImage) => void,
-    onCrop: (blob: Blob) => void
+    onCrop: (img: HTMLImageElement) => void
 }
 
 /* TODO: Fix Image cropping issues (wrong position) */
@@ -55,18 +53,14 @@ function ImageCropper(props: CropProps) {
     const ref = useRef<HTMLImageElement>()
 
     if (props.crop) {
-        const {value, setCrop, onCrop} = props.crop
+        const {preview, crop, setCrop, onCrop} = props.crop
 
         return <>
-            <ReactCrop aspect={props.aspect} crop={value.crop} onChange={(v) => setCrop({image: value.image, crop: v})}>
-                <Image src={value.image} ref={ref} />
+            <ReactCrop aspect={props.aspect} crop={crop} onChange={(v) => setCrop(v)}>
+                <Image src={preview} ref={ref} />
             </ReactCrop>
             <HStack justify='center' mt={3}>
-                <Button {...props.buttonStyle} variant='action' onClick={() => {
-                    if (ref.current.complete) {
-                        cropImage(value, ref.current).then(onCrop)
-                    }
-                }}>Done</Button>
+                <Button {...props.buttonStyle} variant='action' onClick={() => onCrop(ref.current)}>Done</Button>
             </HStack>
         </>
     }

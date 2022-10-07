@@ -12,6 +12,7 @@ import GroupOverview from "./views/admin/group";
 import GroupChat from "./views/admin/chat/group/GroupChat";
 import GroupNavbar from "./views/admin/chat/navbar/GroupNavbar";
 import SignUp from "./views/auth/signup";
+import {BsSearch} from "react-icons/bs";
 
 const routes: RoutesType[] = [
 	{
@@ -22,10 +23,10 @@ const routes: RoutesType[] = [
 		component: <MainDashboard />
 	},
 	{
-		name: 'NFT Marketplace',
+		name: 'Explore',
 		layout: '/user',
-		path: '/nft-marketplace',
-		icon: <Icon as={MdOutlineShoppingCart} width='20px' height='20px' color='inherit' />,
+		path: '/explore',
+		icon: <Icon as={BsSearch} width='20px' height='20px' color='inherit' />,
 		component: <NFTMarketplace />,
 	},
 	{

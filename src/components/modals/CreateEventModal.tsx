@@ -12,7 +12,7 @@ import {
     ModalOverlay, SimpleGrid, Textarea
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
-import {UploadImage, useImagePickerCrop} from "utils/ImageUtils";
+import {AvatarFormat, BannerFormat, UploadImage, useImagePickerCrop} from "utils/ImageUtils";
 
 export default function CreateEventModal(props: {group: string, isOpen: boolean, onClose: () => void}) {
     const {group, isOpen} = props
@@ -85,6 +85,7 @@ function Form(
     const image = useImagePickerCrop(
         value.image,
         v => onChange({image: v}),
+        BannerFormat,
         {accept: acceptedFileTypes}
     )
 

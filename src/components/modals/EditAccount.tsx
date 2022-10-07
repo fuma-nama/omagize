@@ -8,11 +8,20 @@ import {
     ModalOverlay, useColorModeValue
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
-import {UploadImage, url, useImagePicker, useImagePickerCrop} from "utils/ImageUtils";
+import {
+    AvatarFormat,
+    BannerFormat,
+    UploadImage,
+    url,
+    useImagePicker,
+    useImagePickerCrop,
+    useImagePickerResize
+} from "utils/ImageUtils";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {SelfUser, updateProfile, useSelfUser} from "api/UserAPI";
 import {LoginKey, LoginPayload, Reset} from "api/AccountAPI";
 import {ProfileCropPicker, useModalState} from "./Modal";
+import {withUrls} from "../../api/Media";
 
 type ProfileOptions = {
     name?: string
@@ -23,12 +32,11 @@ type ProfileOptions = {
 export default function EditAccountModal(props: {isOpen: boolean, onClose: () => void}) {
     const {isOpen} = props
 
-    const user = useSelfUser()
     const [onClose, value, setValue] = useModalState<ProfileOptions>(props.onClose, {})
     const client = useQueryClient()
     const mutation = useMutation(
         ['edit_profile'],
-        () => updateProfile(user, value.name, value.avatar, value.banner), {
+        () => updateProfile(value.name, value.avatar, value.banner), {
             onSuccess(updated: SelfUser) {
                 client.setQueryData<LoginPayload>(LoginKey, prev => ({
                     ...prev,
@@ -46,7 +54,7 @@ export default function EditAccountModal(props: {isOpen: boolean, onClose: () =>
             <ModalHeader>Edit Profile</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-                <Form user={user} value={value} onChange={v => {
+                <Form value={value} onChange={v => {
                     if (!mutation.isLoading) {
                         setValue(prev => ({...prev, ...v}))
                     }
@@ -66,19 +74,22 @@ export default function EditAccountModal(props: {isOpen: boolean, onClose: () =>
     </Modal>
 }
 
-function Form(props: {user: SelfUser, value: ProfileOptions, onChange: (options: Partial<ProfileOptions>) => void}) {
-    const {user, value, onChange} = props
-    const acceptedFileTypes = ".png, .jpg, .gif, .webp"
+function Form(props: {value: ProfileOptions, onChange: (options: Partial<ProfileOptions>) => void}) {
+    const user = useSelfUser()
+    const {value, onChange} = props
+    const acceptedFileTypes = ".png, .jpg, .gif"
 
     const [name, setName] = [value.name, (v: string) => onChange({name: v})]
     const icon = useImagePickerCrop(
         value.avatar,
         v => onChange({avatar: v}),
+        AvatarFormat,
         {accept: acceptedFileTypes}
     )
-    const banner = useImagePicker(
+    const banner = useImagePickerResize(
         value.banner,
         v => onChange({banner: v}),
+        BannerFormat,
         {accept: acceptedFileTypes}
     )
 

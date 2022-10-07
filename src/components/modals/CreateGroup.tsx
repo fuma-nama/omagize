@@ -10,7 +10,14 @@ import {
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
 import Avatar from "../icons/Avatar";
-import {useImagePicker, Pick, useImagePickerCrop} from "utils/ImageUtils";
+import {
+    useImagePicker,
+    Pick,
+    useImagePickerCrop,
+    UploadImage,
+    AvatarFormat,
+    useImagePickerResize, BannerFormat
+} from "utils/ImageUtils";
 import {useMutation} from "@tanstack/react-query";
 import {createGroup} from "api/GroupAPI";
 import {ProfileCropPicker, ProfilePicker, useModalState} from "./Modal";
@@ -55,8 +62,8 @@ export default function CreateGroupModal(props: {isOpen: boolean, onClose: () =>
 
 type GroupOptions = {
     name: string,
-    icon?: File,
-    banner?: File
+    icon?: UploadImage,
+    banner?: UploadImage
 }
 
 function Form(
@@ -69,11 +76,13 @@ function Form(
     const icon = useImagePickerCrop(
         value.icon,
         v => onChange({icon: v}),
+        AvatarFormat,
         {accept: acceptedFileTypes}
     )
-    const banner = useImagePicker(
+    const banner = useImagePickerResize(
         value.banner,
         v => onChange({banner: v}),
+        BannerFormat,
         {accept: acceptedFileTypes}
     )
 

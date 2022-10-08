@@ -38,7 +38,7 @@ export default function GroupEventItem({fetchGroup, ...event}: GroupEvent & { fe
                     <SkeletonText noOfLines={2} w='100px' h='23px'/>
                 </> :
                 <>
-                    <Avatar src={group.icon} name={group.name} w={iconSize} h={iconSize}/>
+                    <Avatar src={group.iconHash} name={group.name} w={iconSize} h={iconSize}/>
                     <Text fontWeight='bold'>{group.name}</Text>
                 </>
             }

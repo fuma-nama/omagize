@@ -1,14 +1,14 @@
 import {useQuery} from "@tanstack/react-query";
-import {delay, events, groups, members, notifications, users} from "./model";
+import {delay, events, groups, members, notifications} from "./model";
 import {UserType} from "./UserAPI";
 import {UploadImage} from "../utils/ImageUtils";
-import {Reset} from "./AccountAPI";
+import {callReturn, withDefault, withDefaultForm} from "./core";
 
 export type Group = {
     id: string
     name: string
-    icon?: string
-    banner?: string
+    iconHash?: string
+    bannerHash?: string
     /**
      * true if the user is the owner of group
      */
@@ -85,12 +85,22 @@ export function fetchGroupNotifications(id: string): GroupNotification[] {
     return notifications
 }
 
-export function fetchGroups(): Group[] {
-    return groups
+export function fetchGroups() {
+    return callReturn<Group[]>("/groups", withDefault({
+        method: "GET"
+    }))
 }
 
 export async function createGroup(name: string, icon?: UploadImage, banner?: UploadImage) {
-    await delay(3000)
+    const data = new FormData()
+    data.append("name", name)
+    if (!!icon) data.append("icon", icon)
+    if (!!banner) data.append("banner", banner)
+
+    return callReturn<Group>("/groups", withDefaultForm({
+        method: "POST",
+        body: data
+    }))
 }
 
 export function useGroupsQuery() {

@@ -55,13 +55,13 @@ async function handle(res: Response, options: Options) {
     return res
 }
 
-export function withDefault<T extends Options>(options: T): T {
+export function withDefault<T extends Options>(options: T, contentType: string | undefined = "application/json"): T {
     return {
         credentials: "include",
         ...options,
 
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": contentType,
             ...options.headers
         },
     }

@@ -83,7 +83,7 @@ function Content(props: {group: GroupDetail}) {
 
 function About({group}: {group: GroupDetail}) {
     return <Card p={0} overflow='hidden'>
-        {!!group.banner && <Image src={group.banner} height='100px' objectFit='cover' />}
+        {!!group.bannerHash && <Image src={group.bannerHash} height='100px' objectFit='cover' />}
         <Flex direction='column' p='20px'>
             <HStack mb='10px'>
                 <Text fontSize='2xl' fontWeight='bold'>About</Text>

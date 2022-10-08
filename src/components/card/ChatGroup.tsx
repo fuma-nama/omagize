@@ -18,7 +18,7 @@ export function ChatGroup(props: {group: Group, active: boolean}) {
         _hover={{ cursor: 'pointer' }}>
         <Card pos='relative' overflow='hidden'>
             <FadeImage
-                src={group.banner}
+                src={group.bannerHash}
                 direction='to left'
                 placeholder={activeColor}
                 bg={active? activeColor : 'black'}
@@ -28,7 +28,7 @@ export function ChatGroup(props: {group: Group, active: boolean}) {
             />
 
             <Box pos='relative' maxW='70%' color='white'>
-                <Avatar name={group.name} src={group.icon} />
+                <Avatar name={group.name} src={group.iconHash} />
                 <Text mt={3} fontSize='lg' fontWeight='bold' lineHeight={1}>{group.name}</Text>
             </Box>
         </Card>

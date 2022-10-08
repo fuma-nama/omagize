@@ -45,7 +45,7 @@ function GroupItem(group: Group) {
 		_hover={{cursor: 'pointer'}} onClick={() => setSelectedGroup(group.id)}
 	>
 		<FadeImage
-			src={group.banner}
+			src={group.bannerHash}
 			placeholder={brand}
 			direction='to left'
 			image={{
@@ -54,7 +54,7 @@ function GroupItem(group: Group) {
 		/>
 
 		<Flex direction={{base: 'column', lg: 'row'}} pos='relative' gap={2}>
-			<Avatar name={group.name} src={group.icon} border='4px solid' w='100px' h='100px' borderColor={borderColor} />
+			<Avatar name={group.name} src={group.iconHash} border='4px solid' w='100px' h='100px' borderColor={borderColor} />
 			<Text fontSize='2xl' fontWeight='bold' mt='10px' maxW={{base: '80%', lg: '40%'}}>{group.name}</Text>
 		</Flex>
 	</Card>

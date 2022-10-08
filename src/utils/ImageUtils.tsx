@@ -6,7 +6,7 @@ import {CropImage, CropOptions} from "../components/modals/Modal";
 import {Crop} from "react-image-crop";
 
 export const AvatarFormat: Format = {maxWidth: 500, maxHeight: 500, aspect: 1}
-export const BannerFormat: Format = {maxWidth: 1500, maxHeight: 1000, aspect: 1500/1000}
+export const BannerFormat: Format = {maxWidth: 1500, maxHeight: 800, aspect: 1500/800}
 
 export type UploadImage = Blob
 export type Format = {
@@ -35,14 +35,15 @@ export function resizeImage(image: File | Blob, format: Format): Promise<Blob> {
             canvas.height = Math.min(imageObj.naturalHeight, format.maxHeight)
             const inputRatio = canvas.width / canvas.height;
 
-            // if it's bigger than our target aspect ratio
-            if (inputRatio > ratio) {
-                canvas.width *= ratio;
-            } else if (inputRatio < ratio) {
-                canvas.height /= ratio;
+            if (ratio != null) {
+                if (inputRatio > ratio) {
+                    canvas.width *= ratio;
+                } else if (inputRatio < ratio) {
+                    canvas.height /= ratio;
+                }
             }
 
-            context.drawImage(imageObj, 0, 0);
+            context.drawImage(imageObj, 0, 0, canvas.width, imageObj.naturalHeight * (canvas.width / imageObj.naturalWidth));
             canvas.toBlob(b => r(b))
         }
     })

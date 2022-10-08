@@ -75,8 +75,7 @@ export function ProfilePicker(props: ProfilePickerProps) {
     return <Center
         onClick={props.selectBanner}
         w='full'
-        bg={props.bannerUrl? null : bannerBg} bgImg={props.bannerUrl}
-        bgSize='cover'
+        bg={props.bannerUrl? null : bannerBg} bgImg={props.bannerUrl} bgSize='cover'
         p={5} my={2} rounded='xl' _hover={{cursor: 'pointer'}} >
         <Pick
             onClick={e => {

@@ -34,24 +34,24 @@ function Content(props: {group: GroupDetail}) {
 			direction='row'
 			overflow='hidden'
 			borderRadius='30px'
-			bg={group.banner? null : bg}
+			bg={group.bannerHash? null : bg}
 			align='center'
 			p='20px' gap='20px'>
-			{group.banner && <Image
+			{group.bannerHash && <Image
 				pos='absolute'
-				src={group.banner} objectFit='cover'
+				src={group.bannerHash} objectFit='cover'
 				top='0' left='0'
 				w='full' h='full'
 				filter='auto'
 				blur='sm'
 				brightness={0.5}
 			/>}
-			<Avatar src={group.icon} name={group.name}
-					top={{base: '20px', "3sm": 'unset'}}
-					right={{base: '20px', "3sm": 'unset'}}
-					pos={{base: 'absolute', "3sm": 'relative'}}
-					w={{base: "50px", "3sm": "100px", "2xl": "200px"}}
-					h={{base: "50px", "3sm": "100px", "2xl": "200px"}}
+			<Avatar src={group.iconHash} name={group.name}
+                    top={{base: '20px', "3sm": 'unset'}}
+                    right={{base: '20px', "3sm": 'unset'}}
+                    pos={{base: 'absolute', "3sm": 'relative'}}
+                    w={{base: "50px", "3sm": "100px", "2xl": "200px"}}
+                    h={{base: "50px", "3sm": "100px", "2xl": "200px"}}
 			/>
 
 			<Flex color='white' direction='column' pos='relative' align='start' gap='20px'>

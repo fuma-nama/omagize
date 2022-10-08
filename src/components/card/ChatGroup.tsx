@@ -3,7 +3,7 @@ import {Group} from "../../api/GroupAPI";
 import {Avatar, Box, Image, SkeletonCircle, SkeletonText, Text} from "@chakra-ui/react";
 import {PageContext} from "../../contexts/PageContext";
 import {useContext} from "react";
-import FadeImage from "./FadeImage";
+import FadeImage from "./utils/FadeImage";
 
 export function ChatGroup(props: {group: Group, active: boolean}) {
     const {group, active} = props

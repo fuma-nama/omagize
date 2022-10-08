@@ -4,7 +4,7 @@ import {Avatar, Flex, Text, useColorModeValue} from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import {useColors} from "variables/colors";
 import {Group, useGroupsQuery} from "api/GroupAPI";
-import FadeImage from "components/card/FadeImage";
+import FadeImage from "components/card/utils/FadeImage";
 import {useContext} from "react";
 import {PageContext} from "contexts/PageContext";
 

@@ -1,7 +1,7 @@
 import {Box, Button, Flex, HStack, IconButton, Text, useToken} from "@chakra-ui/react";
 import {useColors} from "../../variables/colors";
 import Card from "./Card";
-import FadeImage from "./FadeImage";
+import FadeImage from "./utils/FadeImage";
 import Avatar from "../icons/Avatar";
 import React from "react";
 import {acceptFriendRequest, denyFriendRequest, Friend, FriendRequest, UserType} from "api/UserAPI";

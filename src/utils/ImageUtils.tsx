@@ -46,23 +46,14 @@ export function cropImage(crop: Crop | null, imageObj: HTMLImageElement, format:
     canvas.height = Math.min(crop?.height ?? imageObj.naturalHeight, format.maxHeight)
 
     if (crop != null) {
+        const scaleX = imageObj.naturalWidth/imageObj.width
+        const scaleY = imageObj.naturalHeight/imageObj.height
 
-        return new Promise(r => {
-            const a = new Image()
-            a.src = imageObj.src
-            a.addEventListener('load', () => {
-                console.log(crop)
-                const scaleX = imageObj.naturalWidth/imageObj.width
-                const scaleY = imageObj.naturalHeight/imageObj.height
-
-                context.drawImage(a,
-                    crop.x * scaleX, crop.y * scaleY,
-                    crop.width * scaleX, crop.height * scaleY,
-                    0, 0, canvas.width, canvas.height
-                )
-                canvas.toBlob(b => r(b))
-            })
-        })
+        context.drawImage(imageObj,
+            crop.x * scaleX, crop.y * scaleY,
+            crop.width * scaleX, crop.height * scaleY,
+            0, 0, canvas.width, canvas.height
+        )
     } else {
         context.drawImage(
             imageObj,
@@ -70,8 +61,9 @@ export function cropImage(crop: Crop | null, imageObj: HTMLImageElement, format:
             canvas.width,
             canvas.height,
         );
-        return new Promise(r => canvas.toBlob(b => r(b)))
     }
+
+    return new Promise(r => canvas.toBlob(b => r(b)))
 }
 
 export function Pick({children, ...rest}: {children: any} & BoxProps) {

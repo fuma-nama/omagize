@@ -4,13 +4,13 @@ import {VscNewFile} from "react-icons/vsc";
 import {Reset} from "../api/AccountAPI";
 import {CropImage, CropOptions} from "../components/modals/Modal";
 import {Crop} from "react-image-crop";
-import Compressor from "compressorjs";
 
-export const AvatarFormat: Format = {maxWidth: 500, maxHeight: 500}
-export const BannerFormat: Format = {maxWidth: 1000, maxHeight: 1000}
+export const AvatarFormat: Format = {maxWidth: 500, maxHeight: 500, aspect: 1}
+export const BannerFormat: Format = {maxWidth: 1500, maxHeight: 1000, aspect: 1500/1000}
 
 export type UploadImage = Blob
 export type Format = {
+    aspect?: number,
     maxWidth: number,
     maxHeight: number
 }
@@ -22,18 +22,29 @@ export function url(initial: string, image?: string | Reset): string {
 }
 
 export function resizeImage(image: File | Blob, format: Format): Promise<Blob> {
-    return new Promise((r, reject) => {
-        new Compressor(image, {
-            maxWidth: format.maxWidth,
-            maxHeight: format.maxHeight,
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext('2d');
+    const imageObj = new Image()
+    imageObj.src =  URL.createObjectURL(image)
 
-            success(file: Blob) {
-                r(file)
-            },
-            error(error: Error) {
-                reject(error)
+    return new Promise(r => {
+
+        imageObj.onload = () => {
+            const ratio = format.aspect
+            canvas.width = Math.min(imageObj.naturalWidth, format.maxWidth)
+            canvas.height = Math.min(imageObj.naturalHeight, format.maxHeight)
+            const inputRatio = canvas.width / canvas.height;
+
+            // if it's bigger than our target aspect ratio
+            if (inputRatio > ratio) {
+                canvas.width *= ratio;
+            } else if (inputRatio < ratio) {
+                canvas.height /= ratio;
             }
-        })
+
+            context.drawImage(imageObj, 0, 0);
+            canvas.toBlob(b => r(b))
+        }
     })
 }
 

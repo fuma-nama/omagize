@@ -10,6 +10,7 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {layouts, NestedLayout, RootLayout} from "./layouts";
 import {useLoginQuery} from "./api/AccountAPI";
 import {getRoutesByLayout} from "./utils/RouteUtil";
+import LoadingScreen from "./components/screens/LoadingScreen";
 
 const client = new QueryClient({
 	defaultOptions: {
@@ -24,7 +25,7 @@ const client = new QueryClient({
 function Pages() {
 	const query = useLoginQuery();
 
-	if (query.isLoading || query.error) return <></>
+	if (query.isLoading || query.error) return <LoadingScreen />
 	const loggedIn = query.data != null
 
 	function mapNestedLayout(layout: NestedLayout, key: number) {

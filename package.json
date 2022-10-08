@@ -20,7 +20,6 @@
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6",
 		"apexcharts": "^3.35.2",
-		"compressorjs": "^1.1.1",
 		"framer-motion": "^4.1.17",
 		"react": "^17.0.2",
 		"react-apexcharts": "^1.4.0",

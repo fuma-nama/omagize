@@ -13,7 +13,6 @@ export type CropOptions = {
     onCrop: (img: HTMLImageElement) => void
 }
 
-/* TODO: Fix Image cropping issues (wrong position) */
 export function ImageCropPicker(props: {
     select: () => void, url: string | null,
 } & CropProps) {

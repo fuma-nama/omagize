@@ -9,7 +9,6 @@ import Compressor from "compressorjs";
 export const AvatarFormat: Format = {maxWidth: 500, maxHeight: 500}
 export const BannerFormat: Format = {maxWidth: 1000, maxHeight: 1000}
 
-//File, base64
 export type UploadImage = Blob
 export type Format = {
     maxWidth: number,

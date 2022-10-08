@@ -42,33 +42,36 @@ export function cropImage(crop: Crop | null, imageObj: HTMLImageElement, format:
     const canvas = document.createElement("canvas");
     const context = canvas.getContext('2d');
 
-    const scaleX = imageObj.naturalWidth / imageObj.width
-    const scaleY = imageObj.naturalHeight / imageObj.height
-    const pixelRatio = window.devicePixelRatio
+    canvas.width = Math.min(crop?.width ?? imageObj.naturalWidth, format.maxWidth)
+    canvas.height = Math.min(crop?.height ?? imageObj.naturalHeight, format.maxHeight)
 
-    if (crop == null) {
-        canvas.width = Math.floor(imageObj.naturalWidth * pixelRatio)
-        canvas.height = Math.floor(imageObj.naturalHeight * pixelRatio)
+    if (crop != null) {
+
+        return new Promise(r => {
+            const a = new Image()
+            a.src = imageObj.src
+            a.addEventListener('load', () => {
+                console.log(crop)
+                const scaleX = imageObj.naturalWidth/imageObj.width
+                const scaleY = imageObj.naturalHeight/imageObj.height
+
+                context.drawImage(a,
+                    crop.x * scaleX, crop.y * scaleY,
+                    crop.width * scaleX, crop.height * scaleY,
+                    0, 0, canvas.width, canvas.height
+                )
+                canvas.toBlob(b => r(b))
+            })
+        })
     } else {
-        canvas.width = Math.floor(crop.width * scaleX * pixelRatio)
-        canvas.height = Math.floor(crop.height * scaleY * pixelRatio)
-        context.imageSmoothingQuality = 'high'
-        const cropX = crop.x * scaleX
-        const cropY = crop.y * scaleY
-
-        // 5) Move the crop origin to the canvas origin (0,0)
-        context.translate(-cropX, -cropY)
+        context.drawImage(
+            imageObj,
+            0, 0,
+            canvas.width,
+            canvas.height,
+        );
+        return new Promise(r => canvas.toBlob(b => r(b)))
     }
-    context.scale(pixelRatio, pixelRatio)
-
-    context.drawImage(
-        imageObj,
-        0, 0,
-        format.maxWidth,
-        format.maxHeight,
-    );
-
-    return new Promise(r => canvas.toBlob(b => r(b)))
 }
 
 export function Pick({children, ...rest}: {children: any} & BoxProps) {
@@ -104,7 +107,7 @@ export function useImagePickerCrop<T extends UploadImage | Reset>(
     props?: InputHTMLAttributes<HTMLInputElement>
 ) {
     const [edit, setEdit] = useState<{ crop: CropImage, preview: string } | null>()
-    const base = useImagePicker<T>(value, f => onChange(f as unknown as T), props)
+    const base = useImagePickerBase<T>(value, f => onChange(f))
 
     return {
         ...base,

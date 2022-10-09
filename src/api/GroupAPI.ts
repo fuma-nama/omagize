@@ -53,18 +53,14 @@ export function fetchGroupDetail(id: Snowflake): Promise<GroupDetail> {
 
 /**
  * Fetch group members starting from specified user
- *
- * @param group
- * @param start
- * @param limit
  */
 export function fetchGroupMembers(group: Snowflake, start: Snowflake | null, limit: number = 10): Promise<Member[]> {
-    return callReturn<RawMember[]>(`/groups/${group}/members`, withDefault({
+    const param = new URLSearchParams()
+    if (!!start) param.append("start", start)
+    if (!!limit) param.append("limit", limit.toString())
+
+    return callReturn<RawMember[]>(`/groups/${group}/members?${param}`, withDefault({
         method: "GET",
-        body: JSON.stringify({
-            startFrom: start,
-            limit
-        })
     })).then(res =>
         res.map(user => new Member(user))
     )
@@ -107,10 +103,9 @@ export function useGroupsQuery() {
 
 export function useGroupMembersQuery(group: Snowflake) {
     return useInfiniteQuery(
-        ["groups", group],
+        ["members", group],
         ({ pageParam }) => fetchGroupMembers(group, pageParam), {
-            getPreviousPageParam: (first) => first[0]?.id,
-            getNextPageParam: (lastPage) => lastPage[0]?.id
+            getNextPageParam: (lastPage) => lastPage[lastPage.length - 1]?.id
     })
 }
 

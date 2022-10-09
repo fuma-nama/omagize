@@ -8,9 +8,7 @@ import React from "react";
 import UserItem from "components/card/UserItem";
 import {GroupDetail} from "api/types/Group";
 
-export default function AdminsCard(props: { group: GroupDetail}) {
-  const { group } = props;
-
+export default function AdminsCard({group}: { group: GroupDetail }) {
   const textColor = useColorModeValue("navy.700", "white");
 
   return (

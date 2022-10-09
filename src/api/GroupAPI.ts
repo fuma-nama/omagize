@@ -1,9 +1,10 @@
-import {useQuery} from "@tanstack/react-query";
+import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 import {delay, events, groups, members, notifications} from "./model";
 import {UserType} from "./UserAPI";
 import {UploadImage} from "../utils/ImageUtils";
 import {callReturn, withDefault, withDefaultForm} from "./utils/core";
 import {Snowflake} from "./utils/types";
+import {fetchMessagesBefore, fetchMessagesLatest} from "./MessageAPI";
 
 export type Group = {
     id: Snowflake
@@ -46,11 +47,11 @@ export type GroupEvent = {
     author: UserType
 }
 
-export function fetchGroup(id: string): Group {
+export function fetchGroup(id: Snowflake): Group {
     return groups.find(g => g.id === id)
 }
 
-export function fetchGroupDetail(id: string): GroupDetail {
+export function fetchGroupDetail(id: Snowflake): GroupDetail {
     return {
         memberCount: members.length,
         admins: [members[0]],
@@ -59,6 +60,16 @@ export function fetchGroupDetail(id: string): GroupDetail {
         introduction: "A friend Community about Games and Anime\nCreated by MONEY",
         ...groups.find(g => g.id === id)
     }
+}
+
+/**
+ * Fetch group members starting from specified user
+ *
+ * @param start
+ * @param limit
+ */
+export function fetchGroupMembers(start: Snowflake | null, limit: number = 10): Member[] {
+    return members
 }
 
 export async function createGroupEvent(
@@ -92,6 +103,15 @@ export async function createGroup(name: string, icon?: UploadImage, banner?: Upl
 
 export function useGroupsQuery() {
     return useQuery(["groups"], () => fetchGroups())
+}
+
+export function useGroupMembersQuery(group: Snowflake) {
+    return useInfiniteQuery(
+        ["groups", group],
+        ({ pageParam }) => fetchGroupMembers(pageParam), {
+            getPreviousPageParam: (first) => first[0]?.id,
+            getNextPageParam: (lastPage) => lastPage[0]?.id
+    })
 }
 
 export function useGroupQuery(id: string) {

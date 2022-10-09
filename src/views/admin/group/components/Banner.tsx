@@ -11,7 +11,7 @@ import {
 import Avatar from "components/icons/Avatar"
 
 // Assets
-import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
+import {GroupDetail, useGroupDetailQuery, useGroupMembersQuery} from "api/GroupAPI";
 import React, {useContext} from "react";
 import {PageContext, useGroupChat} from "contexts/PageContext";
 import {toAvatarUrl, toIconUrl} from "../../../../api/utils/Media";
@@ -27,6 +27,7 @@ export default function Banner() {
 function Content(props: {group: GroupDetail}) {
 	const {group} = props
 	const bg = useColorModeValue("brand.300", "brand.400")
+	const membersQuery = useGroupMembersQuery(group.id)
 
 	return (
 		<Flex
@@ -62,7 +63,10 @@ function Content(props: {group: GroupDetail}) {
 				<HStack mt='20px'>
 					<AvatarGroup max={5}>
 						{
-							group.membersPreview.map(a => <Avatar key={a.id} src={toIconUrl(a.id, a.avatarHash)} name={a.username} />)
+							membersQuery.isSuccess &&
+							membersQuery.data.pages[0].map(member =>
+								<Avatar key={member.id} src={toAvatarUrl(member.id, member.avatarHash)} name={member.username} />
+							)
 						}
 					</AvatarGroup>
 					<Text>{group.memberCount} Members</Text>

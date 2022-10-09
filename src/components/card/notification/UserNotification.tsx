@@ -1,4 +1,4 @@
-import {UserNotification, LoginNotification} from "api/UserAPI";
+import {UserNotification, LoginNotification} from "api/NotificationsAPI";
 import {GenericItem, GroupNotificationItem} from "./Notification";
 import {AiFillWarning} from "react-icons/ai";
 

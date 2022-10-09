@@ -1,21 +1,13 @@
 import {useQuery} from "@tanstack/react-query";
 import {delay, events, groups, notifications, users} from "./model";
 import {Reset, useLoginQuery} from "./AccountAPI";
-import {GroupEvent, GroupNotification} from "./GroupAPI";
-import {DateObject} from "./CustomTypes";
-import {callReturn, withDefault, withDefaultForm} from "./core";
-import {withUrls} from "./Media";
-
-export type UserNotification = GroupNotification & { group: string } | LoginNotification
-export type LoginNotification = {
-    id: string
-    type: 'login'
-    time: Date
-    from: string //from ip address
-}
+import {GroupEvent} from "./GroupAPI";
+import {DateObject, Snowflake} from "./utils/types";
+import {callReturn, withDefaultForm} from "./utils/core";
+import {withUrls} from "./utils/Media";
 
 export type UserType = {
-    id: string
+    id: Snowflake
     username: string
     bannerHash?: number
     avatarHash?: number
@@ -53,25 +45,6 @@ export async function updateProfile(name?: string, avatar?: Blob | Reset, banner
         method: "POST",
         body: data,
     }))
-}
-
-export function fetchUserNotifications(): UserNotification[] {
-    return [
-        ...notifications.map(n => ({
-            ...n,
-            group: groups[0].id
-        })),
-        {
-            id: "32423432",
-            type: "login",
-            time: new Date(Date.now()),
-            from: "Hong Kong"
-        }
-    ]
-}
-
-export async function clearUserNotifications() {
-    await delay(2000)
 }
 
 export function fetchGroupEvents(): GroupEvent[] {
@@ -112,13 +85,6 @@ export function useSelfUser() {
         throw "Client must login before accessing self user"
     }
     return withUrls(query.data.user)
-}
-
-export function useUserNotificationsQuery() {
-    return useQuery(
-        ["user_notifications"],
-        () => fetchUserNotifications()
-    )
 }
 
 export function useGroupEventsQuery() {

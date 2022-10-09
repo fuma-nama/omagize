@@ -9,7 +9,7 @@ import {CustomCardProps} from "theme/theme";
 import {AiOutlineClose} from "react-icons/ai";
 import {useMutation} from "@tanstack/react-query";
 import {ChatIcon, WarningIcon} from "@chakra-ui/icons";
-import {withUrls, toAvatarUrl, toBannerUrl} from "../../api/Media";
+import {withUrls, toAvatarUrl, toBannerUrl} from "../../api/utils/Media";
 
 export default function UserItem(props: {user: UserType}) {
     const user = withUrls(props.user)

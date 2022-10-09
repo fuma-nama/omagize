@@ -1,6 +1,7 @@
 import {Message} from "./MessageAPI";
 import {UserType} from "./UserAPI";
-import {Group, GroupEvent, GroupNotification, Member} from "./GroupAPI";
+import {Group, GroupEvent, Member} from "./GroupAPI";
+import {GroupNotification} from "./NotificationsAPI";
 
 export function delay(timeout: number) {
     return new Promise(re => {

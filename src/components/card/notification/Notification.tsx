@@ -1,4 +1,4 @@
-import {GroupNotification, MentionNotification} from "api/GroupAPI";
+import {GroupNotification, MentionNotification} from "api/NotificationsAPI";
 import {Center, Flex, Icon, Skeleton, SkeletonText, Text} from "@chakra-ui/react";
 import {useColors, useItemHoverBg} from "variables/colors";
 import Card from "../Card";

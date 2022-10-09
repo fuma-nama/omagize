@@ -1,12 +1,10 @@
 import {
     clearGroupNotifications,
-    GroupNotification,
-    MentionNotification,
     useGroupNotificationsQuery
-} from "api/GroupAPI";
+} from "api/NotificationsAPI";
 import React, {useContext} from "react";
 import {PageContext} from "contexts/PageContext";
-import {Button, Flex, Icon, Image, Text, useColorModeValue} from "@chakra-ui/react";
+import {Button, Flex, Text, useColorModeValue} from "@chakra-ui/react";
 
 import Card from "components/card/Card";
 import {GroupNotificationItem, NotificationSkeleton} from "components/card/notification/Notification";

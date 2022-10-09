@@ -2,10 +2,11 @@ import {useQuery} from "@tanstack/react-query";
 import {delay, events, groups, members, notifications} from "./model";
 import {UserType} from "./UserAPI";
 import {UploadImage} from "../utils/ImageUtils";
-import {callReturn, withDefault, withDefaultForm} from "./core";
+import {callReturn, withDefault, withDefaultForm} from "./utils/core";
+import {Snowflake} from "./utils/types";
 
 export type Group = {
-    id: string
+    id: Snowflake
     name: string
     iconHash?: string
     bannerHash?: string
@@ -29,16 +30,6 @@ export type GroupDetail = Group & {
 export type Member = UserType & {
     role?: number
 }
-
-export type MentionNotification = {
-    id: string
-    type: "mention"
-    author: Member
-    url?: string
-    date: Date
-}
-
-export type GroupNotification = MentionNotification
 
 /**
  * Let group members join your Birthdays, parties, and more!
@@ -81,10 +72,6 @@ export async function createGroupEvent(
     await delay(3000)
 }
 
-export function fetchGroupNotifications(id: string): GroupNotification[] {
-    return notifications
-}
-
 export function fetchGroups() {
     return callReturn<Group[]>("/groups", withDefault({
         method: "GET"
@@ -109,14 +96,6 @@ export function useGroupsQuery() {
 
 export function useGroupQuery(id: string) {
     return useQuery(["group", id], () => fetchGroup(id))
-}
-
-export function useGroupNotificationsQuery(id: string) {
-    return useQuery(["group_notifications", id], () => fetchGroupNotifications(id))
-}
-
-export async function clearGroupNotifications() {
-    await delay(3000)
 }
 
 export function useGroupDetailQuery(id: string) {

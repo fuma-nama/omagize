@@ -2,7 +2,7 @@
 import {Button, Flex, Text} from '@chakra-ui/react';
 import Card from 'components/card/Card';
 // Custom components
-import {clearUserNotifications, useUserNotificationsQuery} from "api/UserAPI";
+import {clearUserNotifications, useUserNotificationsQuery} from "api/NotificationsAPI";
 import {useColors} from "variables/colors";
 import UserNotificationItem from "components/card/notification/UserNotification";
 import {NotificationSkeleton} from "components/card/notification/Notification";

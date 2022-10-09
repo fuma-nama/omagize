@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {callReturn, ReturnOptions, withDefault} from "./core";
-import {SelfUser, UserType} from "./UserAPI";
+import {callReturn, ReturnOptions, withDefault} from "./utils/core";
+import {SelfUser} from "./UserAPI";
 export type Reset = 'reset'
 
 export const LoginKey = ["login"]

@@ -19,7 +19,7 @@ import Banner from './components/Banner';
 import AdminsCard from './components/AdminsCard';
 import Card, {CardButton} from 'components/card/Card';
 import {PageContext, useGroupChat} from "contexts/PageContext";
-import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
+import {RawGroupDetail, useGroupDetailQuery} from "api/GroupAPI";
 import { Notifications } from "./components/Notifications";
 import {useInfiniteMessageQuery} from "api/MessageAPI";
 import MessageItem, {MessageItemSkeleton} from "components/card/chat/MessageItem";
@@ -32,6 +32,7 @@ import CreateEventModal from "../../../components/modals/CreateEventModal";
 import {BsPeopleFill} from "react-icons/bs";
 import {AiFillSetting} from "react-icons/ai";
 import {CustomCardProps} from "../../../theme/theme";
+import {GroupDetail} from "../../../api/types/Group";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -45,8 +46,7 @@ export default function GroupOverview() {
     return <Content group={query.data} />
 }
 
-function Content(props: {group: GroupDetail}) {
-    const {group} = props
+function Content({group}: {group: GroupDetail}) {
 
     return (
         <Grid
@@ -83,7 +83,7 @@ function Content(props: {group: GroupDetail}) {
 
 function About({group}: {group: GroupDetail}) {
     return <Card p={0} overflow='hidden'>
-        {!!group.bannerHash && <Image src={group.bannerHash} height='100px' objectFit='cover' />}
+        {!!group.bannerUrl && <Image src={group.bannerUrl} height='100px' objectFit='cover' />}
         <Flex direction='column' p='20px'>
             <HStack mb='10px'>
                 <Text fontSize='2xl' fontWeight='bold'>About</Text>
@@ -125,7 +125,7 @@ function GroupEvents({detail}: {detail: GroupDetail}) {
         }} gap={3}>
             {detail.events.map(e =>
                 <Box>
-                    <GroupEventItem key={e.id} {...e} />
+                    <GroupEventItem key={e.id} event={e} />
                 </Box>
             )}
             {!atBottom && <CardButton onClick={() => onOpen()}>

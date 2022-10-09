@@ -1,38 +1,43 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {callReturn, ReturnOptions, withDefault} from "./utils/core";
-import {SelfUser} from "./UserAPI";
+import {RawSelfUser} from "./UserAPI";
+import {LoginPayload} from "./types/Auth";
 export type Reset = 'reset'
 
 export const LoginKey = ["login"]
 
-export type LoginPayload = {
-    account: Account,
-    user: SelfUser
+export type RawLoginPayload = {
+    account: RawAccount,
+    user: RawSelfUser
     token: string
 }
 
-export type Account = {
+export type RawAccount = {
     email: string
 }
 
 export async function auth(): Promise<LoginPayload | null> {
-    return await callReturn<LoginPayload | null>("/auth", withDefault<ReturnOptions<LoginPayload>>({
+    return await callReturn<RawLoginPayload | null>("/auth", withDefault<ReturnOptions<RawLoginPayload>>({
         method: "POST",
         allowed: {
             401: () => null
         }
-    }))
+    })).then(res =>
+        LoginPayload(res)
+    )
 }
 
 export async function login(options: {
     email: string,
     password: string
-}) {
-    return await callReturn<LoginPayload>("/login", withDefault({
+}): Promise<LoginPayload | null> {
+    return await callReturn<RawLoginPayload>("/login", withDefault({
         method: "POST",
         body: JSON.stringify(options),
         errorOnFail: true
-    }))
+    })).then(res =>
+        LoginPayload(res)
+    )
 }
 
 export function logout() {
@@ -56,11 +61,13 @@ export async function signup(
         password: string
     }
 ): Promise<LoginPayload> {
-    return await callReturn<LoginPayload>("/signup", withDefault({
+    return await callReturn<RawLoginPayload>("/signup", withDefault({
         method: "POST",
         body: JSON.stringify(options),
         errorOnFail: true
-    }))
+    })).then(res =>
+        LoginPayload(res)
+    )
 }
 
 export function useLoginQuery() {

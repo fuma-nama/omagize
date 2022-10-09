@@ -9,8 +9,9 @@ import {
     useColorModeValue
 } from "@chakra-ui/react";
 import React from "react";
-import {UserType, useSelfUser} from "api/UserAPI";
+import {RawUser, useSelfUser} from "api/UserAPI";
 import {useLogoutMutation} from "api/AccountAPI";
+import {User} from "../../../api/types/User";
 
 export function UserMenu(props: {color: string, shadow: string, bg: string}) {
     const user = useSelfUser()
@@ -31,7 +32,7 @@ export function UserMenu(props: {color: string, shadow: string, bg: string}) {
     </Menu>
 }
 
-function List(props: {textColor: string, shadow: string, menuBg: string, user: UserType}) {
+function List(props: {textColor: string, shadow: string, menuBg: string, user: User}) {
     const {menuBg, shadow, textColor, user} = props
     const borderColor = useColorModeValue('#E6ECFA', 'rgba(135, 140, 189, 0.3)');
     const logout = useLogoutMutation()

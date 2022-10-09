@@ -1,23 +1,12 @@
 import {delay, groups, notifications} from "./model";
-import {Member} from "./GroupAPI";
 import {useQuery} from "@tanstack/react-query";
+import {DateObject} from "./utils/types";
+import {GroupNotification, UserNotification} from "./types/Notifications";
 
-export type MentionNotification = {
+export type RawNotification = {
     id: string
     type: "mention"
-    author: Member
-    url?: string
-    date: Date
-}
-
-export type GroupNotification = MentionNotification
-
-export type UserNotification = GroupNotification & { group: string } | LoginNotification
-export type LoginNotification = {
-    id: string
-    type: 'login'
-    time: Date
-    from: string //from ip address
+    date: DateObject
 }
 
 export function fetchGroupNotifications(id: string): GroupNotification[] {

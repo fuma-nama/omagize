@@ -5,8 +5,8 @@ import {
     useColorModeValue, VStack,
 } from "@chakra-ui/react";
 import React from "react";
-import {GroupDetail} from "api/GroupAPI";
 import UserItem from "components/card/UserItem";
+import {GroupDetail} from "api/types/Group";
 
 export default function AdminsCard(props: { group: GroupDetail}) {
   const { group } = props;

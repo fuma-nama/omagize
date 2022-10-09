@@ -1,12 +1,13 @@
 import {useQuery} from "@tanstack/react-query";
-import {delay, events, groups, notifications, users} from "./model";
+import {delay, events, users} from "./model";
 import {Reset, useLoginQuery} from "./AccountAPI";
-import {GroupEvent} from "./GroupAPI";
 import {DateObject, Snowflake} from "./utils/types";
 import {callReturn, withDefaultForm} from "./utils/core";
-import {withUrls} from "./utils/Media";
+import {SelfUser} from "./types/Auth";
+import {FriendsData} from "./types/Friend";
+import {GroupEvent} from "./types/GroupEvents";
 
-export type UserType = {
+export type RawUser = {
     id: Snowflake
     username: string
     bannerHash?: number
@@ -15,18 +16,18 @@ export type UserType = {
     createdAt: DateObject
 }
 
-export type Friend = UserType
-export type FriendRequest = {
-    user: UserType
+export type RawFriend = RawUser
+export type RawFriendRequest = {
+    user: RawUser
     message?: string
 }
 
-export type FriendsData = {
-    friends: Friend[],
-    requests: FriendRequest[]
+export type RawFriendsData = {
+    friends: RawFriend[],
+    requests: RawFriendRequest[]
 }
 
-export type SelfUser = UserType & {}
+export type RawSelfUser = RawUser & {}
 
 export async function updateProfile(name?: string, avatar?: Blob | Reset, banner?: Blob | Reset): Promise<SelfUser> {
     const data = new FormData()
@@ -34,25 +35,26 @@ export async function updateProfile(name?: string, avatar?: Blob | Reset, banner
         data.append('name', name)
     }
     if (!!avatar) {
-        console.log(avatar)
         data.append('avatar', avatar)
     }
     if (!!banner) {
         data.append('banner', banner)
     }
 
-    return callReturn<SelfUser>("/user/profile", withDefaultForm({
+    return callReturn<RawSelfUser>("/user/profile", withDefaultForm({
         method: "POST",
         body: data,
-    }))
+    })).then(res =>
+        new SelfUser(res)
+    )
 }
 
 export function fetchGroupEvents(): GroupEvent[] {
-    return events
+    return events.map( e => GroupEvent(e))
 }
 
 export function fetchFriends(): FriendsData {
-    return {
+    return new FriendsData({
         friends: [
             ...users
         ],
@@ -62,7 +64,7 @@ export function fetchFriends(): FriendsData {
                 message: "I seen you in Gay Party"
             }
         ]
-    }
+    })
 }
 
 export async function sendFriendRequest(friendID: string) {
@@ -84,7 +86,7 @@ export function useSelfUser() {
     if (query.isLoading) {
         throw "Client must login before accessing self user"
     }
-    return withUrls(query.data.user)
+    return query.data.user
 }
 
 export function useGroupEventsQuery() {

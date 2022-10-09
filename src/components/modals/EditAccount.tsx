@@ -13,15 +13,14 @@ import {
     BannerFormat,
     UploadImage,
     url,
-    useImagePicker,
     useImagePickerCrop,
     useImagePickerResize
 } from "utils/ImageUtils";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {SelfUser, updateProfile, useSelfUser} from "api/UserAPI";
-import {LoginKey, LoginPayload, Reset} from "api/AccountAPI";
+import {updateProfile, useSelfUser} from "api/UserAPI";
+import {LoginKey, Reset} from "api/AccountAPI";
 import {ProfileCropPicker, useModalState} from "./Modal";
-import {withUrls} from "../../api/utils/Media";
+import {LoginPayload, SelfUser} from "../../api/types/Auth";
 
 type ProfileOptions = {
     name?: string

@@ -1,8 +1,9 @@
 import {Button, Flex, HStack, SimpleGrid, Text, useDisclosure} from "@chakra-ui/react";
-import {FriendsData, useFriendsQuery} from "api/UserAPI";
+import {RawFriendsData, useFriendsQuery} from "api/UserAPI";
 import {FriendItem, FriendRequestItem, UserItemSkeleton} from "components/card/UserItem";
 import {Holder, Placeholder} from "utils/Container";
 import AddFriendModal from "components/modals/AddFriendModal";
+import {FriendsData} from "../../../../api/types/Friend";
 
 export default function Friends() {
     const query = useFriendsQuery()

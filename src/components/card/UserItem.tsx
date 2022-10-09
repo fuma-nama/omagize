@@ -4,15 +4,15 @@ import Card from "./Card";
 import FadeImage from "./utils/FadeImage";
 import Avatar from "../icons/Avatar";
 import React from "react";
-import {acceptFriendRequest, denyFriendRequest, Friend, FriendRequest, UserType} from "api/UserAPI";
+import {acceptFriendRequest, denyFriendRequest} from "api/UserAPI";
 import {CustomCardProps} from "theme/theme";
 import {AiOutlineClose} from "react-icons/ai";
 import {useMutation} from "@tanstack/react-query";
 import {ChatIcon, WarningIcon} from "@chakra-ui/icons";
-import {withUrls, toAvatarUrl, toBannerUrl} from "../../api/utils/Media";
+import {User} from "../../api/types/User";
+import {Friend, FriendRequest} from "../../api/types/Friend";
 
-export default function UserItem(props: {user: UserType}) {
-    const user = withUrls(props.user)
+export default function UserItem({user}: {user: User}) {
     const [brand] = useToken("color", ["brand.400"])
     const {textColorPrimary} = useColors()
     const image = user.bannerUrl ?? user.avatarUrl
@@ -37,8 +37,7 @@ export default function UserItem(props: {user: UserType}) {
     </Card>
 }
 
-export function FriendItem(props: {friend: Friend}) {
-    const friend = withUrls(props.friend)
+export function FriendItem({friend}: {friend: Friend}) {
     const [brand] = useToken("color", ["brand.400"])
     const {textColorPrimary} = useColors()
     const image = friend.bannerUrl ?? friend.avatarUrl
@@ -69,7 +68,7 @@ export function FriendItem(props: {friend: Friend}) {
 export function FriendRequestItem(
     {request, ...card}: {request: FriendRequest} & CustomCardProps
 ) {
-    const user = withUrls(request.user)
+    const user = request.user
     const image = user.bannerUrl ?? user.avatarUrl
 
     const accept = useMutation(

@@ -1,4 +1,4 @@
-import {GroupEvent, useGroupQuery} from "api/GroupAPI";
+import {useGroupQuery} from "api/GroupAPI";
 import Card from "./Card";
 import {
     Avatar,
@@ -12,7 +12,7 @@ import {
     Text
 } from "@chakra-ui/react";
 import {useColors} from "variables/colors";
-import {withUrls} from "../../api/utils/Media";
+import {GroupEvent} from "../../api/types/GroupEvents";
 
 function Info({name, value, ...rest}: {name: string, value: any} & StackProps) {
     const {textColorPrimary, textColorSecondary} = useColors()
@@ -23,22 +23,23 @@ function Info({name, value, ...rest}: {name: string, value: any} & StackProps) {
     </HStack>
 }
 
-export default function GroupEventItem({fetchGroup, ...event}: GroupEvent & { fetchGroup?: boolean }) {
+export default function GroupEventItem({fetchGroup, event}: { event: GroupEvent, fetchGroup?: boolean }) {
     const {textColorPrimary, textColorSecondary} = useColors()
-    const author = withUrls(event.author)
+    const author = event.author
 
     function GroupInfo() {
-        const {data: group, query} = useGroupQuery(event.group)
+        const {data: group} = useGroupQuery(event.group)
         const iconSize = '30px'
 
         return <HStack mb={2} align='start'>
-            {query.isLoading? <>
+            {!!group?
+                <>
+                    <Avatar src={group.iconUrl} name={group.name} w={iconSize} h={iconSize}/>
+                    <Text fontWeight='bold'>{group.name}</Text>
+                </>:
+                <>
                     <SkeletonCircle w={iconSize} h={iconSize}/>
                     <SkeletonText noOfLines={2} w='100px' h='23px'/>
-                </> :
-                <>
-                    <Avatar src={group.iconHash} name={group.name} w={iconSize} h={iconSize}/>
-                    <Text fontWeight='bold'>{group.name}</Text>
                 </>
             }
         </HStack>

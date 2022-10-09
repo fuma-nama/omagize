@@ -1,10 +1,10 @@
-import {GroupNotification, MentionNotification} from "api/NotificationsAPI";
 import {Center, Flex, Icon, Skeleton, SkeletonText, Text} from "@chakra-ui/react";
 import {useColors, useItemHoverBg} from "variables/colors";
 import Card from "../Card";
 import {GoMention} from "react-icons/go";
 import React from "react";
 import {IconType} from "react-icons";
+import {GroupNotification, MentionNotification} from "../../../api/types/Notifications";
 
 export function NotificationSkeleton() {
     const bgItem = useItemHoverBg()

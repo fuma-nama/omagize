@@ -145,7 +145,7 @@ function Events() {
 				>
 					{() =>
 						query.data.map(event =>
-							<GroupEventItem key={event.id} fetchGroup {...event} />
+							<GroupEventItem key={event.id} fetchGroup event={event} />
 						)
 					}
 				</ArrayHolder>

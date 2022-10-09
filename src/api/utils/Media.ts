@@ -1,11 +1,5 @@
 import {api} from "./core";
-import {UserType} from "../UserAPI";
 import {Snowflake} from "./types";
-
-export type ParsedUser = {
-    bannerUrl?: string
-    avatarUrl?: string
-}
 
 enum MediaType {
     Banner = "banners", Avatars = "avatars", Icons = "icons"
@@ -28,13 +22,5 @@ export function asUrl(type: MediaType, id: Snowflake, hash?: string | number): s
         return `${api}/media/${type}/${id}/${hash}.webp`
     } else {
         return null
-    }
-}
-
-export function withUrls<T extends UserType>(raw: T): T & ParsedUser {
-    return {
-        ...raw,
-        avatarUrl: toAvatarUrl(raw.id, raw.avatarHash),
-        bannerUrl: toBannerUrl(raw.id, raw.bannerHash)
     }
 }

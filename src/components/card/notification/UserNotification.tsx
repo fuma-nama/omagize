@@ -1,6 +1,6 @@
-import {UserNotification, LoginNotification} from "api/NotificationsAPI";
 import {GenericItem, GroupNotificationItem} from "./Notification";
 import {AiFillWarning} from "react-icons/ai";
+import {LoginNotification, UserNotification} from "../../../api/types/Notifications";
 
 export default function UserNotificationItem(props: UserNotification) {
     switch (props.type) {

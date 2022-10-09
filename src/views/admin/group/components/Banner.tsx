@@ -1,20 +1,20 @@
 // Chakra imports
 import {
-	AvatarGroup, Button,
+	AvatarGroup,
 	Flex,
 	Heading,
 	HStack,
 	Image,
 	Text,
-	useColorModeValue, VStack,
+	useColorModeValue,
 } from '@chakra-ui/react';
 import Avatar from "components/icons/Avatar"
 
 // Assets
-import {GroupDetail, useGroupDetailQuery, useGroupMembersQuery} from "api/GroupAPI";
+import {useGroupDetailQuery, useGroupMembersQuery} from "api/GroupAPI";
 import React, {useContext} from "react";
-import {PageContext, useGroupChat} from "contexts/PageContext";
-import {toAvatarUrl, toIconUrl} from "../../../../api/utils/Media";
+import {PageContext} from "contexts/PageContext";
+import {GroupDetail} from "api/types/Group";
 
 export default function Banner() {
 	const {selectedGroup} = useContext(PageContext)
@@ -24,8 +24,7 @@ export default function Banner() {
 	return <Content group={query.data} />
 }
 
-function Content(props: {group: GroupDetail}) {
-	const {group} = props
+function Content({group}: {group: GroupDetail}) {
 	const bg = useColorModeValue("brand.300", "brand.400")
 	const membersQuery = useGroupMembersQuery(group.id)
 
@@ -35,19 +34,19 @@ function Content(props: {group: GroupDetail}) {
 			direction='row'
 			overflow='hidden'
 			borderRadius='30px'
-			bg={group.bannerHash? null : bg}
+			bg={group.bannerUrl? null : bg}
 			align='center'
 			p='20px' gap='20px'>
-			{group.bannerHash && <Image
+			{group.bannerUrl && <Image
 				pos='absolute'
-				src={group.bannerHash} objectFit='cover'
+				src={group.bannerUrl} objectFit='cover'
 				top='0' left='0'
 				w='full' h='full'
 				filter='auto'
 				blur='sm'
 				brightness={0.5}
 			/>}
-			<Avatar src={group.iconHash} name={group.name}
+			<Avatar src={group.iconUrl} name={group.name}
                     top={{base: '20px', "3sm": 'unset'}}
                     right={{base: '20px', "3sm": 'unset'}}
                     pos={{base: 'absolute', "3sm": 'relative'}}
@@ -65,7 +64,7 @@ function Content(props: {group: GroupDetail}) {
 						{
 							membersQuery.isSuccess &&
 							membersQuery.data.pages[0].map(member =>
-								<Avatar key={member.id} src={toAvatarUrl(member.id, member.avatarHash)} name={member.username} />
+								<Avatar key={member.id} src={member.avatarUrl} name={member.username} />
 							)
 						}
 					</AvatarGroup>

@@ -1,6 +1,6 @@
-import {Member} from "./GroupAPI";
 import {delay, messages} from "./model";
 import {useInfiniteQuery} from "@tanstack/react-query";
+import {Member} from "./types/Group";
 
 export type Message = {
     id: number

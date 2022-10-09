@@ -1,7 +1,8 @@
 import {Message} from "./MessageAPI";
-import {UserType} from "./UserAPI";
-import {Group, GroupEvent, Member} from "./GroupAPI";
-import {GroupNotification} from "./NotificationsAPI";
+import {RawUser} from "./UserAPI";
+import {RawGroup, RawGroupEvent, RawMember} from "./GroupAPI";
+import {GroupNotification} from "./types/Notifications";
+import {Member} from "./types/Group";
 
 export function delay(timeout: number) {
     return new Promise(re => {
@@ -9,7 +10,7 @@ export function delay(timeout: number) {
     })
 }
 
-export const users: UserType[] = [
+export const users: RawUser[] = [
     {
         id: "432423423432423",
         username: "MONEY",
@@ -27,43 +28,43 @@ export const notifications: GroupNotification[] = [
     {
         id: "43434343",
         type: "mention",
-        author: users[0],
+        author: new Member(users[0]),
         date: new Date(Date.now())
     }
 ]
 
-export const members: Member[] = users.map(user => ({
+export const members: RawMember[] = users.map(user => ({
     ...user
 }))
 
-export const groups: Group[] = [
+export const groups: RawGroup[] = [
     {
         id: "54352234532456325433",
         name: "Study Group",
         iconHash: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
         bannerHash: "https://img.moelong.com/images/LycorisRecoiltwnews/LycorisRecoiltwnews09.webp",
-        owner: true
+        owner: users[0].id
     },
     {
         id: "5435234532456335333",
         name: "My Funny Chat Group",
         iconHash: "https://img.duotegame.com/article/contents/2022/07/15/small_2022071554302800.jpg",
-        owner: false
+        owner: users[0].id
     },
 ]
 const modalMessages = [
     {
-        author: members[0],
+        author: new Member(members[0]),
         content: "It is normal",
         timestamp: new Date(Date.now())
     },
     {
-        author: members[1],
+        author: new Member(members[1]),
         content: "Kane is a gay",
         timestamp: new Date(Date.now())
     },
     {
-        author: members[0],
+        author: new Member(members[0]),
         content: "Oh, nice to meet you.\nI am a gay",
         timestamp: new Date(Date.now())
     }
@@ -85,7 +86,7 @@ const startDate = new Date(Date.now())
 const endDate = new Date(Date.now())
 endDate.setDate(endDate.getDate() + 1)
 
-export const events: GroupEvent[] = [
+export const events: RawGroupEvent[] = [
     {
         id: 432,
         image: "https://img.moelong.com/images/LycorisRecoiltwnews/LycorisRecoiltwnews09.webp",
@@ -93,8 +94,8 @@ export const events: GroupEvent[] = [
         author: users[0],
         place: "Hong Kong",
         group: groups[0].id,
-        startAt: startDate,
-        endAt: endDate
+        startAt: startDate.getTime(),
+        endAt: endDate.getTime()
     },
     {
         id: 433,
@@ -102,7 +103,7 @@ export const events: GroupEvent[] = [
         name: "Cyberpunk: Edgerunners Released",
         author: users[0],
         group: groups[0].id,
-        startAt: startDate,
-        endAt: endDate
+        startAt: startDate.getTime(),
+        endAt: endDate.getTime()
     }
 ]

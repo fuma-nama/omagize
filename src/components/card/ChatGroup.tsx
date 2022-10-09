@@ -1,12 +1,11 @@
 import Card from "./Card";
-import {Group} from "../../api/GroupAPI";
 import {Avatar, Box, Image, SkeletonCircle, SkeletonText, Text} from "@chakra-ui/react";
 import {PageContext} from "../../contexts/PageContext";
 import {useContext} from "react";
 import FadeImage from "./utils/FadeImage";
+import {Group} from "api/types/Group";
 
-export function ChatGroup(props: {group: Group, active: boolean}) {
-    const {group, active} = props
+export function ChatGroup({active, group}: {group: Group, active: boolean}) {
     const activeColor = "brand.400"
     const {setSelectedGroup} = useContext(PageContext)
 
@@ -18,7 +17,7 @@ export function ChatGroup(props: {group: Group, active: boolean}) {
         _hover={{ cursor: 'pointer' }}>
         <Card pos='relative' overflow='hidden'>
             <FadeImage
-                src={group.bannerHash}
+                src={group.bannerUrl}
                 direction='to left'
                 placeholder={activeColor}
                 bg={active? activeColor : 'black'}
@@ -28,7 +27,7 @@ export function ChatGroup(props: {group: Group, active: boolean}) {
             />
 
             <Box pos='relative' maxW='70%' color='white'>
-                <Avatar name={group.name} src={group.iconHash} />
+                <Avatar name={group.name} src={group.iconUrl} />
                 <Text mt={3} fontSize='lg' fontWeight='bold' lineHeight={1}>{group.name}</Text>
             </Box>
         </Card>

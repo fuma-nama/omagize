@@ -9,10 +9,7 @@ import {
     ModalOverlay, Text, useColorModeValue
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
-import Avatar from "../icons/Avatar";
 import {
-    useImagePicker,
-    Pick,
     useImagePickerCrop,
     UploadImage,
     AvatarFormat,
@@ -20,7 +17,7 @@ import {
 } from "utils/ImageUtils";
 import {useMutation} from "@tanstack/react-query";
 import {createGroup} from "api/GroupAPI";
-import {ProfileCropPicker, ProfilePicker, useModalState} from "./Modal";
+import {ProfileCropPicker, useModalState} from "./Modal";
 
 export default function CreateGroupModal(props: {isOpen: boolean, onClose: () => void}) {
     const {isOpen} = props
@@ -40,7 +37,7 @@ export default function CreateGroupModal(props: {isOpen: boolean, onClose: () =>
             <ModalHeader>Create Group</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-                <Form error={mutation.error} value={value} onChange={v => {
+                <Form isError={mutation.isError} value={value} onChange={v => {
                     if (!mutation.isLoading) {
                         setValue(prev => ({...prev, ...v}))
                     }
@@ -53,7 +50,7 @@ export default function CreateGroupModal(props: {isOpen: boolean, onClose: () =>
                 </Button>
                 <Button
                     onClick={() => mutation.mutate()} isLoading={mutation.isLoading}
-                    disabled={value.name.length <= 0}
+                    disabled={value.name.length <= 0 || mutation.isLoading}
                     variant='brand' rightIcon={<BiRightArrow />}>Create</Button>
             </ModalFooter>
         </ModalContent>
@@ -67,8 +64,8 @@ type GroupOptions = {
 }
 
 function Form(
-    {value, onChange, error}: {
-        value: GroupOptions, onChange: (options: Partial<GroupOptions>) => void, error?: any
+    {value, onChange, isError}: {
+        value: GroupOptions, onChange: (options: Partial<GroupOptions>) => void, isError: boolean
     }) {
     const acceptedFileTypes = ".png, .jpg, .gif"
 
@@ -86,7 +83,7 @@ function Form(
         {accept: acceptedFileTypes}
     )
 
-    return <FormControl isRequired isInvalid={!!error}>
+    return <FormControl isRequired isInvalid={isError}>
         <InputGroup flexDirection='column'>
             {icon.picker}
             {banner.picker}
@@ -105,6 +102,6 @@ function Form(
         </InputGroup>
         <FormLabel>Group Name</FormLabel>
         <Input value={name} onChange={e => setName(e.target.value)} variant="main" placeholder="Give your Group a name" />
-        <FormErrorMessage>{error}</FormErrorMessage>
+        <FormErrorMessage>Failed to Create Group</FormErrorMessage>
     </FormControl>
 }

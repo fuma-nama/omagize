@@ -28,8 +28,7 @@ export default function GroupEventItem({fetchGroup, ...event}: GroupEvent & { fe
     const author = withUrls(event.author)
 
     function GroupInfo() {
-        const query = useGroupQuery(event.group)
-        const group = query.data
+        const {data: group, query} = useGroupQuery(event.group)
         const iconSize = '30px'
 
         return <HStack mb={2} align='start'>

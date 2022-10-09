@@ -4,7 +4,6 @@ import {UserType} from "./UserAPI";
 import {UploadImage} from "../utils/ImageUtils";
 import {callReturn, withDefault, withDefaultForm} from "./utils/core";
 import {Snowflake} from "./utils/types";
-import {fetchMessagesBefore, fetchMessagesLatest} from "./MessageAPI";
 
 export type Group = {
     id: Snowflake
@@ -40,34 +39,33 @@ export type GroupEvent = {
     name: string
     description?: string
     startAt: Date
-    endAt: Date
+    endAt?: Date
     place?: string
     group: string
     author: UserType
 }
 
-export function fetchGroup(id: Snowflake): Group {
-    return groups.find(g => g.id === id)
-}
-
-export function fetchGroupDetail(id: Snowflake): GroupDetail {
-    return {
-        memberCount: members.length,
-        admins: [members[0]],
-        events: events,
-        introduction: "A friend Community about Games and Anime\nCreated by MONEY",
-        ...groups.find(g => g.id === id)
-    }
+export function fetchGroupDetail(id: Snowflake): Promise<GroupDetail> {
+    return callReturn<GroupDetail>(`/groups/${id}`, withDefault({
+        method: "GET",
+    }))
 }
 
 /**
  * Fetch group members starting from specified user
  *
+ * @param group
  * @param start
  * @param limit
  */
-export function fetchGroupMembers(start: Snowflake | null, limit: number = 10): Member[] {
-    return members
+export function fetchGroupMembers(group: Snowflake, start: Snowflake | null, limit: number = 10): Promise<Member[]> {
+    return callReturn<Member[]>(`/groups/${group}/members`, withDefault({
+        method: "GET",
+        body: JSON.stringify({
+            startFrom: start,
+            limit
+        })
+    }))
 }
 
 export async function createGroupEvent(
@@ -106,14 +104,19 @@ export function useGroupsQuery() {
 export function useGroupMembersQuery(group: Snowflake) {
     return useInfiniteQuery(
         ["groups", group],
-        ({ pageParam }) => fetchGroupMembers(pageParam), {
+        ({ pageParam }) => fetchGroupMembers(group, pageParam), {
             getPreviousPageParam: (first) => first[0]?.id,
             getNextPageParam: (lastPage) => lastPage[0]?.id
     })
 }
 
 export function useGroupQuery(id: string) {
-    return useQuery(["group", id], () => fetchGroup(id))
+    const groups = useGroupsQuery()
+
+    return {
+        data: groups.data?.find(group => group.id === id),
+        query: groups
+    }
 }
 
 export function useGroupDetailQuery(id: string) {

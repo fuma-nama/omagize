@@ -14,7 +14,7 @@ import Avatar from "components/icons/Avatar"
 import {GroupDetail, useGroupDetailQuery} from "api/GroupAPI";
 import React, {useContext} from "react";
 import {PageContext, useGroupChat} from "contexts/PageContext";
-import {toAvatarUrl} from "../../../../api/Media";
+import {toAvatarUrl, toIconUrl} from "../../../../api/utils/Media";
 
 export default function Banner() {
 	const {selectedGroup} = useContext(PageContext)
@@ -62,7 +62,7 @@ function Content(props: {group: GroupDetail}) {
 				<HStack mt='20px'>
 					<AvatarGroup max={5}>
 						{
-							group.membersPreview.map(a => <Avatar key={a.id} src={toAvatarUrl(a.avatarHash)} name={a.username} />)
+							group.membersPreview.map(a => <Avatar key={a.id} src={toIconUrl(a.id, a.avatarHash)} name={a.username} />)
 						}
 					</AvatarGroup>
 					<Text>{group.memberCount} Members</Text>

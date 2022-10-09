@@ -12,7 +12,7 @@ import {
     Text
 } from "@chakra-ui/react";
 import {useColors} from "variables/colors";
-import {withUrls} from "../../api/Media";
+import {withUrls} from "../../api/utils/Media";
 
 function Info({name, value, ...rest}: {name: string, value: any} & StackProps) {
     const {textColorPrimary, textColorSecondary} = useColors()

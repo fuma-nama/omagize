@@ -21,7 +21,7 @@ import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {SelfUser, updateProfile, useSelfUser} from "api/UserAPI";
 import {LoginKey, LoginPayload, Reset} from "api/AccountAPI";
 import {ProfileCropPicker, useModalState} from "./Modal";
-import {withUrls} from "../../api/Media";
+import {withUrls} from "../../api/utils/Media";
 
 type ProfileOptions = {
     name?: string

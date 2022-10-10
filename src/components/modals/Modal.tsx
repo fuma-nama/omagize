@@ -87,21 +87,18 @@ export function ProfilePicker(props: ProfilePickerProps) {
     </Center>
 }
 
-export function useModalState<T>(close: () => void, initial?: T): [
-    () => void, T, React.Dispatch<React.SetStateAction<T>>
-] {
-    const [value, setValue] = useState<T>(initial)
-
-    return [() => {
-        setValue(initial)
-        close()
-    }, value, setValue]
-}
-
+/**
+ * Detects when modal is re-opened, reset its state before opening it
+ * @param isOpen
+ * @param children
+ * @constructor
+ */
 export function DynamicModal({isOpen, children}: {isOpen: boolean, children: ReactNode}) {
     const [id, setId] = useState(0)
     useEffect(() => {
-        setId(prev => prev + 1)
+        if (isOpen) {
+            setId(prev => prev + 1)
+        }
     }, [isOpen])
 
     return <>

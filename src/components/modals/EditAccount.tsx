@@ -1,11 +1,11 @@
 import {
-    Button, Center, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, Modal,
+    Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, Modal,
     ModalBody,
     ModalCloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
-    ModalOverlay, useColorModeValue
+    ModalOverlay
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
 import {
@@ -19,8 +19,9 @@ import {
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {updateProfile, useSelfUser} from "api/UserAPI";
 import {LoginKey, Reset} from "api/AccountAPI";
-import {ProfileCropPicker, useModalState} from "./Modal";
+import {ProfileCropPicker} from "./Modal";
 import {LoginPayload, SelfUser} from "../../api/types/Auth";
+import {useState} from "react";
 
 type ProfileOptions = {
     name?: string
@@ -29,9 +30,9 @@ type ProfileOptions = {
 }
 
 export default function EditAccountModal(props: {isOpen: boolean, onClose: () => void}) {
-    const {isOpen} = props
+    const {isOpen, onClose} = props
 
-    const [onClose, value, setValue] = useModalState<ProfileOptions>(props.onClose, {})
+    const [value, setValue] = useState<ProfileOptions>({})
     const client = useQueryClient()
     const mutation = useMutation(
         ['edit_profile'],

@@ -1,12 +1,12 @@
 import {
-    Button, Center, FormControl, FormErrorMessage, FormLabel, Input, InputGroup,
+    Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup,
     Modal,
     ModalBody,
     ModalCloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
-    ModalOverlay, Text, useColorModeValue
+    ModalOverlay, Text
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
 import {
@@ -17,11 +17,13 @@ import {
 } from "utils/ImageUtils";
 import {useMutation} from "@tanstack/react-query";
 import {createGroup} from "api/GroupAPI";
-import {ProfileCropPicker, useModalState} from "./Modal";
+import {ProfileCropPicker} from "./Modal";
+import {useState} from "react";
 
 export default function CreateGroupModal(props: {isOpen: boolean, onClose: () => void}) {
-    const {isOpen} = props
-    const [onClose, value, setValue] = useModalState<GroupOptions>(props.onClose, {name: ""})
+    const {isOpen, onClose} = props
+    const [value, setValue] = useState<GroupOptions>({name: ""})
+
     const mutation = useMutation(
         ['create_group'],
         () => createGroup(value.name, value.icon, value.banner), {

@@ -2,11 +2,9 @@ import React, {useContext, useEffect} from "react";
 // Chakra imports
 import {
     Box,
-    Button,
     Center,
     Flex,
     Grid,
-    Heading,
     HStack,
     Icon, Image,
     SimpleGrid,
@@ -19,7 +17,7 @@ import Banner from './components/Banner';
 import AdminsCard from './components/AdminsCard';
 import Card, {CardButton} from 'components/card/Card';
 import {PageContext, useGroupChat} from "contexts/PageContext";
-import {RawGroupDetail, useGroupDetailQuery} from "api/GroupAPI";
+import {useGroupDetailQuery} from "api/GroupAPI";
 import { Notifications } from "./components/Notifications";
 import {useInfiniteMessageQuery} from "api/MessageAPI";
 import MessageItem, {MessageItemSkeleton} from "components/card/chat/MessageItem";
@@ -33,6 +31,7 @@ import {BsPeopleFill} from "react-icons/bs";
 import {AiFillSetting} from "react-icons/ai";
 import {CustomCardProps} from "../../../theme/theme";
 import {GroupDetail} from "../../../api/types/Group";
+import {DynamicModal} from "../../../components/modals/Modal";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -134,7 +133,9 @@ function GroupEvents({detail}: {detail: GroupDetail}) {
                     <Text>Create Event</Text>
                 </Center>
             </CardButton>}
-            <CreateEventModal isOpen={isOpen} onClose={onClose} group={detail.id}/>
+            <DynamicModal isOpen={isOpen}>
+                <CreateEventModal isOpen={isOpen} onClose={onClose} group={detail.id}/>
+            </DynamicModal>
         </SimpleGrid>
         {atBottom && <CardButton p={0} onClick={() => onOpen()}>
             <HStack p='20px' color={textColorSecondary} justify='center'>

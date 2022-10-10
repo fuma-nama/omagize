@@ -1,7 +1,7 @@
 // Chakra imports
 import {Avatar, Flex, Text, useColorModeValue} from '@chakra-ui/react';
 // Custom components
-import Card from 'components/card/Card';
+import Card, {CardButton} from 'components/card/Card';
 import {useColors} from "variables/colors";
 import {useGroupsQuery} from "api/GroupAPI";
 import FadeImage from "components/card/utils/FadeImage";
@@ -37,13 +37,15 @@ export default function OwnedGroups(props: { [x: string]: any }) {
 
 function GroupItem({group}: {group: Group}) {
 	const {brand, borderColor} = useColors()
-	const cardShadow = useColorModeValue('0px 18px 40px rgba(112, 144, 176, 0.12)', 'unset');
-	const bg = useColorModeValue('white', 'navy.700');
 	const {setSelectedGroup} = useContext(PageContext)
 
-	return <Card
-		pos='relative' bg={bg} boxShadow={cardShadow} overflow='hidden'
-		_hover={{cursor: 'pointer'}} onClick={() => setSelectedGroup(group.id)}
+	return <CardButton
+		color='white' bg='black'
+		pos='relative' overflow='hidden'
+		onClick={() => setSelectedGroup(group.id)}
+		_hover={{
+			bg: 'brand.400'
+		}}
 	>
 		<FadeImage
 			src={group.bannerUrl}
@@ -58,5 +60,5 @@ function GroupItem({group}: {group: Group}) {
 			<Avatar name={group.name} src={group.iconUrl} border='4px solid' w='100px' h='100px' borderColor={borderColor} />
 			<Text fontSize='2xl' fontWeight='bold' mt='10px' maxW={{base: '80%', lg: '40%'}}>{group.name}</Text>
 		</Flex>
-	</Card>
+	</CardButton>
 }

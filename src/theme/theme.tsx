@@ -11,6 +11,8 @@ import { linkStyles } from './components/link';
 import { breakpoints } from './foundations/breakpoints';
 import { globalStyles } from './styles';
 import {modalStyles} from "./components/modal";
+import {avatarStyles} from "./components/avatar";
+import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
 
 export default extendTheme(
 	{ breakpoints }, // Breakpoints
@@ -25,24 +27,12 @@ export default extendTheme(
 	switchStyles, // switch styles
 	CardComponent, // card component
 	modalStyles,
-	{ components: {
-			Avatar: {
-				baseStyle: (props: any) => ({
-					container: {
-						bg: 'brand.300',
-						color: 'white'
-					}
-				}),
-				variants: {
-					normal: {
-						container: {
-							border: 0
-						}
-					}
-				}
-			}
+	avatarStyles,
+	{
+		components: {
+			Steps,
 		}
-	}
+	},
 );
 
 export interface CustomCardProps extends HTMLChakraProps<'div'>, ThemingProps {}

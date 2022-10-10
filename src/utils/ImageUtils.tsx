@@ -28,22 +28,8 @@ export function resizeImage(image: File | Blob, format: Format): Promise<Blob> {
     imageObj.src =  URL.createObjectURL(image)
 
     return new Promise(r => {
-
         imageObj.onload = () => {
-            const ratio = format.aspect
-            canvas.width = Math.min(imageObj.naturalWidth, format.maxWidth)
-            canvas.height = Math.min(imageObj.naturalHeight, format.maxHeight)
-            const inputRatio = canvas.width / canvas.height;
-
-            if (ratio != null) {
-                if (inputRatio > ratio) {
-                    canvas.width *= ratio;
-                } else if (inputRatio < ratio) {
-                    canvas.height /= ratio;
-                }
-            }
-
-            context.drawImage(imageObj, 0, 0, canvas.width, imageObj.naturalHeight * (canvas.width / imageObj.naturalWidth));
+            resizeImageBase(canvas, context, imageObj, format)
             canvas.toBlob(b => r(b))
         }
     })
@@ -53,12 +39,18 @@ export function cropImage(crop: Crop | null, imageObj: HTMLImageElement, format:
     const canvas = document.createElement("canvas");
     const context = canvas.getContext('2d');
 
-    canvas.width = Math.min(crop?.width ?? imageObj.naturalWidth, format.maxWidth)
-    canvas.height = Math.min(crop?.height ?? imageObj.naturalHeight, format.maxHeight)
-
     if (crop != null) {
+        canvas.width = Math.min(crop?.width ?? imageObj.naturalWidth, format.maxWidth)
+        canvas.height = Math.min(crop?.height ?? imageObj.naturalHeight, format.maxHeight)
         const scaleX = imageObj.naturalWidth/imageObj.width
         const scaleY = imageObj.naturalHeight/imageObj.height
+        /*
+        const ratio = format.aspect
+        const inputRatio = canvas.width / canvas.height;
+        console.log(ratio === inputRatio)
+
+        You can check if ratio doesn't match, we will skip this part
+         */
 
         context.drawImage(imageObj,
             crop.x * scaleX, crop.y * scaleY,
@@ -66,13 +58,29 @@ export function cropImage(crop: Crop | null, imageObj: HTMLImageElement, format:
             0, 0, canvas.width, canvas.height
         )
     } else {
-        context.drawImage(imageObj,
-            0, 0, canvas.width, canvas.height,
-            0, 0, canvas.width, canvas.height
-        )
+        resizeImageBase(canvas, context, imageObj, format)
     }
 
     return new Promise(r => canvas.toBlob(b => r(b)))
+}
+
+function resizeImageBase(
+    canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, imageObj: HTMLImageElement, format: Format
+) {
+    const ratio = format.aspect
+    canvas.width = Math.min(imageObj.naturalWidth, format.maxWidth)
+    canvas.height = Math.min(imageObj.naturalHeight, format.maxHeight)
+    const inputRatio = canvas.width / canvas.height;
+
+    if (ratio != null) {
+        if (inputRatio > ratio) {
+            canvas.width *= ratio;
+        } else if (inputRatio < ratio) {
+            canvas.height /= ratio;
+        }
+    }
+
+    context.drawImage(imageObj, 0, 0, canvas.width, imageObj.naturalHeight * (canvas.width / imageObj.naturalWidth));
 }
 
 export function Pick({children, ...rest}: {children: any} & BoxProps) {

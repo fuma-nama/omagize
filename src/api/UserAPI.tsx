@@ -2,10 +2,11 @@ import {useQuery} from "@tanstack/react-query";
 import {delay, events, users} from "./model";
 import {Reset, useLoginQuery} from "./AccountAPI";
 import {DateObject, Snowflake} from "./utils/types";
-import {callReturn, withDefaultForm} from "./utils/core";
+import {callReturn, withDefault, withDefaultForm} from "./utils/core";
 import {SelfUser} from "./types/Auth";
 import {FriendsData} from "./types/Friend";
 import {GroupEvent} from "./types/GroupEvents";
+import {RawGroupEvent} from "./GroupAPI";
 
 export type RawUser = {
     id: Snowflake
@@ -49,8 +50,12 @@ export async function updateProfile(name?: string, avatar?: Blob | Reset, banner
     )
 }
 
-export function fetchGroupEvents(): GroupEvent[] {
-    return events.map( e => GroupEvent(e))
+export function fetchGroupEvents(): Promise<GroupEvent[]> {
+    return callReturn<RawGroupEvent[]>("/user/events", withDefault({
+        method: "GET"
+    })).then(res =>
+        res.map(event => GroupEvent(event))
+    )
 }
 
 export function fetchFriends(): FriendsData {

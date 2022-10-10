@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {Fragment, ReactNode, useEffect, useRef, useState} from "react";
 import {Pick} from "utils/ImageUtils";
 import {Center, useColorModeValue, Image, HStack, Button, ButtonProps, Icon, Avatar} from "@chakra-ui/react";
 import ReactCrop, {Crop} from "react-image-crop";
@@ -96,4 +96,17 @@ export function useModalState<T>(close: () => void, initial?: T): [
         setValue(initial)
         close()
     }, value, setValue]
+}
+
+export function DynamicModal({isOpen, children}: {isOpen: boolean, children: ReactNode}) {
+    const [id, setId] = useState(0)
+    useEffect(() => {
+        setId(prev => prev + 1)
+    }, [isOpen])
+
+    return <>
+        <Fragment key={id}>
+            {children}
+        </Fragment>
+    </>
 }

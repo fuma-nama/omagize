@@ -123,9 +123,7 @@ function GroupEvents({detail}: {detail: GroupDetail}) {
             md: 2,
         }} gap={3}>
             {detail.events.map(e =>
-                <Box>
-                    <GroupEventItem key={e.id} event={e} />
-                </Box>
+                <GroupEventItem key={e.id} event={e} />
             )}
             {!atBottom && <CardButton onClick={() => onOpen()}>
                 <Center p='50px' color={textColorSecondary} h='full' flexDirection='column' gap={3}>

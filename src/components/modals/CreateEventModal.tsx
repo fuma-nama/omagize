@@ -21,8 +21,11 @@ import {
 } from "@chakra-ui/react";
 import {BiRightArrow} from "react-icons/bi";
 import {BannerFormat, supportedFileTypes, UploadImage, useImagePickerCrop} from "utils/ImageUtils";
-import {TimePicker, TimeValue} from "../picker/TimePicker";
+import {TimePicker} from "../picker/TimePicker";
 import {DatePicker} from "../picker/DatePicker";
+import {Step, Steps} from "chakra-ui-steps";
+import {useState} from "react";
+import {applyDate, onlyDate} from "../../utils/DateUtils";
 
 function getInitialStart(): Date {
     const date = new Date(Date.now())
@@ -49,6 +52,7 @@ export default function CreateEventModal(props: {group: string, isOpen: boolean,
         }
     )
     const canSubmit = value.name.length > 0
+    const [step, setStep] = useState(0)
 
     return <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl">
         <ModalOverlay />
@@ -56,21 +60,40 @@ export default function CreateEventModal(props: {group: string, isOpen: boolean,
             <ModalHeader>Create Group Event</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-                <Form error={mutation.error} value={value} onChange={v => {
-                    if (!mutation.isLoading) {
-                        setValue(prev => ({...prev, ...v}))
-                    }
-                }} />
+                <Steps activeStep={step} width='100%'>
+                    <Step label='Basic Info'>
+                        <Form value={value} onChange={v => setValue(prev => ({...prev, ...v}))} />
+                    </Step>
+                    <Step label='Advanced Settings'>
+                        <AdvancedForm value={value} onChange={v => {
+                            if (!mutation.isLoading) {
+                                setValue(prev => ({...prev, ...v}))
+                            }
+                        }} />
+                    </Step>
+                </Steps>
+
             </ModalBody>
 
             <ModalFooter>
                 <Button mr={3} onClick={onClose}>
                     Close
                 </Button>
-                <Button
-                    onClick={() => mutation.mutate()} isLoading={mutation.isLoading}
-                    disabled={!canSubmit || mutation.isLoading}
-                    variant='brand' rightIcon={<BiRightArrow />}>Create</Button>
+                {
+                    step === 0 && <Button
+                        onClick={() => setStep(1)}
+                        disabled={!canSubmit} rightIcon={<BiRightArrow />}>
+                        Next
+                    </Button>
+                }
+                {
+                    step === 1 && <Button
+                        onClick={() => mutation.mutate()} isLoading={mutation.isLoading}
+                        disabled={!canSubmit || mutation.isLoading}
+                        variant='brand'>
+                        Create
+                    </Button>
+                }
             </ModalFooter>
         </ModalContent>
     </Modal>
@@ -84,41 +107,13 @@ type EventOptions = {
     endAt?: Date,
     place?: string,
 }
-
-function Form(
-    {value, onChange, error}: {
-        value: EventOptions, onChange: (options: Partial<EventOptions>) => void, error?: any
-    }) {
+type FormProps = {
+    value: EventOptions, onChange: (options: Partial<EventOptions>) => void
+}
+function AdvancedForm({value, onChange}: FormProps) {
     const {minStart, maxStart, minEnd, maxEnd} = useLimits(value.startAt)
 
-    const image = useImagePickerCrop(
-        value.image,
-        v => onChange({image: v}),
-        BannerFormat,
-        {accept: supportedFileTypes}
-    )
-
-    return <Flex flexDirection='column' gap={3}>
-        <Flex flexDirection='column' gap={3} w='300px' mx='auto'>
-            {image.picker}
-            <ImageCropPicker
-                select={image.select}
-                url={image.url}
-                crop={image.crop}
-            />
-            {
-                !image.crop && <Button mx='auto' onClick={() => {
-                    image.setValue(null)
-                }}>Reset</Button>
-            }
-        </Flex>
-        <FormControl isRequired>
-            <FormLabel htmlFor='name'>Event Name</FormLabel>
-            <Input id='name'
-                   value={value.name} onChange={e => onChange({name: e.target.value})}
-                   variant="main" placeholder="Give your Event a name"
-            />
-        </FormControl>
+    return <Flex flexDirection='column' gap={3} pt={5}>
         <FormControl>
             <FormLabel htmlFor='place'>Take Place At</FormLabel>
             <Input id='place'
@@ -147,7 +142,42 @@ function Form(
                 onChange={(date: Date) => onChange({endAt: date})}
             />
         </FormControl>
-        <FormControl isInvalid={error}>
+    </Flex>
+}
+
+function Form(
+    {value, onChange}: {
+        value: EventOptions, onChange: (options: Partial<EventOptions>) => void, error?: any
+    }) {
+    const image = useImagePickerCrop(
+        value.image,
+        v => onChange({image: v}),
+        BannerFormat,
+        {accept: supportedFileTypes}
+    )
+
+    return <Flex flexDirection='column' gap={3} pt={5}>
+        <Flex flexDirection='column' gap={3} w='300px' mx='auto'>
+            {image.picker}
+            <ImageCropPicker
+                select={image.select}
+                url={image.url}
+                crop={image.crop}
+            />
+            {
+                !image.crop && <Button mx='auto' onClick={() => {
+                    image.setValue(null)
+                }}>Reset</Button>
+            }
+        </Flex>
+        <FormControl isRequired>
+            <FormLabel htmlFor='name'>Event Name</FormLabel>
+            <Input id='name'
+                   value={value.name} onChange={e => onChange({name: e.target.value})}
+                   variant="main" placeholder="Give your Event a name"
+            />
+        </FormControl>
+        <FormControl>
             <FormLabel>Event Description</FormLabel>
             <Textarea
                 resize='none'
@@ -155,7 +185,6 @@ function Form(
                 value={value.description} onChange={e => onChange({description: e.target.value})}
                 variant="main" placeholder="Give more details about your event"
             />
-            <FormErrorMessage>{error}</FormErrorMessage>
         </FormControl>
     </Flex>
 }
@@ -170,7 +199,9 @@ function DateTimeForm(props: {
             value={props.value}
             onChange={(date: Date) => {
                 const combined = new Date(date)
-                combined.setHours(props.value.getHours(), props.value.getMinutes())
+                if (!!props.value) {
+                    combined.setHours(props.value.getHours(), props.value.getMinutes())
+                }
                 props.onChange(combined)
             }}
         />
@@ -181,12 +212,6 @@ function DateTimeForm(props: {
             props.onChange(applyDate(props.value, v))
         } />
     </SimpleGrid>
-}
-
-function applyDate(original: Date | null, value: TimeValue): Date {
-    const next = new Date(original ?? Date.now())
-    next.setHours(value.hours, value.minutes)
-    return next
 }
 
 export function useLimits(startAt: Date) {
@@ -207,28 +232,4 @@ export function useLimits(startAt: Date) {
         minEnd: onlyDate(minEnd),
         maxEnd: onlyDate(maxEnd)
     }
-}
-
-/**
- * exclude time data
- */
-function onlyDate(date: Date): Date {
-    return new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate()
-    );
-}
-
-/**
- * only keep hours and minutes
- */
-function onlyTime(date: Date): Date {
-    return new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        date.getHours(),
-        date.getMinutes()
-    );
 }

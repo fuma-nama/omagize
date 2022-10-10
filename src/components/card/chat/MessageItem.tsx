@@ -1,6 +1,5 @@
 import {Message} from "api/MessageAPI";
-import {Flex, HStack, SkeletonCircle, SkeletonText, Text, useColorModeValue} from "@chakra-ui/react";
-import Avatar from "components/icons/Avatar"
+import {Avatar, Flex, HStack, SkeletonCircle, SkeletonText, Text, useColorModeValue} from "@chakra-ui/react";
 
 export default function MessageItem(props: Message) {
     const author = props.author

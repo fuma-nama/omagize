@@ -1,7 +1,6 @@
 import React, {useRef, useState} from "react";
-import {cropImage, Pick} from "utils/ImageUtils";
-import Avatar from "../icons/Avatar";
-import {Center, useColorModeValue, Image, HStack, Button, ButtonProps, Icon} from "@chakra-ui/react";
+import {Pick} from "utils/ImageUtils";
+import {Center, useColorModeValue, Image, HStack, Button, ButtonProps, Icon, Avatar} from "@chakra-ui/react";
 import ReactCrop, {Crop} from "react-image-crop";
 import {FaImage} from "react-icons/fa";
 

@@ -25,7 +25,24 @@ export default extendTheme(
 	switchStyles, // switch styles
 	CardComponent, // card component
 	modalStyles,
-
+	{ components: {
+			Avatar: {
+				baseStyle: (props: any) => ({
+					container: {
+						bg: 'brand.300',
+						color: 'white'
+					}
+				}),
+				variants: {
+					normal: {
+						container: {
+							border: 0
+						}
+					}
+				}
+			}
+		}
+	}
 );
 
 export interface CustomCardProps extends HTMLChakraProps<'div'>, ThemingProps {}

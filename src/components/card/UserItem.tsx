@@ -1,8 +1,7 @@
-import {Box, Button, Flex, HStack, IconButton, Text, useToken} from "@chakra-ui/react";
+import {Avatar, Box, Button, Flex, HStack, IconButton, Text, useToken} from "@chakra-ui/react";
 import {useColors} from "../../variables/colors";
 import Card from "./Card";
 import FadeImage from "./utils/FadeImage";
-import Avatar from "../icons/Avatar";
 import React from "react";
 import {acceptFriendRequest, denyFriendRequest} from "api/UserAPI";
 import {CustomCardProps} from "theme/theme";
@@ -28,7 +27,7 @@ export default function UserItem({user}: {user: User}) {
         />
 
         <HStack gap='5px' pos='relative' align='start'>
-            <Avatar size='md' name={user.username} src={user.avatarUrl} border={0} />
+            <Avatar name={user.username} src={user.avatarUrl} variant='normal' />
             <Flex direction='column'>
                 <Text color={textColorPrimary} fontSize='xl' fontWeight='bold'>{user.username}</Text>
                 <Text color={textColorPrimary}>{user.description}</Text>

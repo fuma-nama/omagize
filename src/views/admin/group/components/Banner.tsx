@@ -1,5 +1,6 @@
 // Chakra imports
 import {
+	Avatar,
 	AvatarGroup,
 	Flex,
 	Heading,
@@ -8,7 +9,6 @@ import {
 	Text,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import Avatar from "components/icons/Avatar"
 
 // Assets
 import {useGroupDetailQuery, useGroupMembersQuery} from "api/GroupAPI";

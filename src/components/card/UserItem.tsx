@@ -27,8 +27,8 @@ export default function UserItem({user}: {user: User}) {
             opacity={50}
         />
 
-        <HStack gap='10px' pos='relative' align='start'>
-            <Avatar name={user.username} src={user.avatarUrl} variant='normal' />
+        <HStack gap='5px' pos='relative' align='start'>
+            <Avatar size='md' name={user.username} src={user.avatarUrl} border={0} />
             <Flex direction='column'>
                 <Text color={textColorPrimary} fontSize='xl' fontWeight='bold'>{user.username}</Text>
                 <Text color={textColorPrimary}>{user.description}</Text>

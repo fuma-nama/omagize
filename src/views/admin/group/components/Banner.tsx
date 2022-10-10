@@ -64,7 +64,7 @@ function Content({group}: {group: GroupDetail}) {
 						{
 							membersQuery.isSuccess &&
 							membersQuery.data.pages[0].map(member =>
-								<Avatar key={member.id} src={member.avatarUrl} name={member.username} />
+								<Avatar border={0} key={member.id} src={member.avatarUrl} name={member.username} />
 							)
 						}
 					</AvatarGroup>

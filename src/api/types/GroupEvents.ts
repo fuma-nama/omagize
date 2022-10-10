@@ -1,9 +1,11 @@
 import {User} from "./User";
 import {RawGroupEvent} from "../GroupAPI";
+import {toBannerUrl} from "../utils/Media";
+import {Snowflake} from "../utils/types";
 
 export type GroupEvent = {
-    id: number
-    image?: string
+    id: Snowflake
+    imageUrl?: string
     name: string
     description?: string
     startAt: Date
@@ -16,6 +18,7 @@ export type GroupEvent = {
 export function GroupEvent(raw: RawGroupEvent): GroupEvent {
     return {
         ...raw,
+        imageUrl: toBannerUrl(raw.id, raw.imageHash),
         startAt: new Date(raw.startAt),
         endAt: new Date(raw.endAt),
         author: new User(raw.author)

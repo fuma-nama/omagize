@@ -1,5 +1,5 @@
 import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
-import {delay, events, groups, members, notifications} from "./model";
+import {groups, members} from "./model";
 import {RawUser} from "./UserAPI";
 import {UploadImage} from "../utils/ImageUtils";
 import {callReturn, stringifyDate, withDefault, withDefaultForm} from "./utils/core";
@@ -33,8 +33,8 @@ export type RawMember = RawUser & {
  * Let group members join your Birthdays, parties, and more!
  */
 export type RawGroupEvent = {
-    id: number
-    image?: string
+    id: Snowflake
+    imageHash?: number
     name: string
     description?: string
     startAt: DateObject

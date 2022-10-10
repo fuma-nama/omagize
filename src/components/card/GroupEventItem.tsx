@@ -44,17 +44,17 @@ export default function GroupEventItem({fetchGroup, event}: { event: GroupEvent,
             }
         </HStack>
     }
-    const happening = event.startAt >= new Date(Date.now())
+    const happening = event.startAt <= new Date(Date.now())
 
     return <Card overflow='hidden' gap={3}>
         {fetchGroup && <GroupInfo />}
         {happening &&
             <HStack>
                 <Text p={2} bg='green.500' rounded='full' fontWeight='bold' fontSize='md'>Event Started</Text>
-                <Info name='End At' value={event.endAt.toLocaleTimeString()} />
+                <Info name='End At' value={event.endAt.toLocaleString()} />
             </HStack>
         }
-        <Image w='full' objectFit='cover' src={event.image} maxH='200px' rounded='lg' />
+        <Image w='full' objectFit='cover' src={event.imageUrl} maxH='200px' rounded='lg' />
 
         <HStack justify='space-between'>
             <Flex direction='column'>
@@ -74,7 +74,7 @@ export default function GroupEventItem({fetchGroup, event}: { event: GroupEvent,
         <Flex direction='row' flexWrap='wrap' gap={4} mt={2}>
             {!!event.place && <Info name='Take Place At' value={event.place}/>}
 
-            {!happening && <Info name='Starting At' value={event.startAt.toLocaleTimeString()} />}
+            {!happening && <Info name='Starting At' value={event.startAt.toLocaleString()} />}
         </Flex>
     </Card>
 }

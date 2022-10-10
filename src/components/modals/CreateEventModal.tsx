@@ -159,6 +159,7 @@ function Form(
                 select={image.select}
                 url={image.url}
                 crop={image.crop}
+                aspect={BannerFormat.aspect}
             />
             {
                 !image.crop && <Button mx='auto' onClick={() => {

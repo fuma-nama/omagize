@@ -66,12 +66,10 @@ export function cropImage(crop: Crop | null, imageObj: HTMLImageElement, format:
             0, 0, canvas.width, canvas.height
         )
     } else {
-        context.drawImage(
-            imageObj,
-            0, 0,
-            canvas.width,
-            canvas.height,
-        );
+        context.drawImage(imageObj,
+            0, 0, canvas.width, canvas.height,
+            0, 0, canvas.width, canvas.height
+        )
     }
 
     return new Promise(r => canvas.toBlob(b => r(b)))

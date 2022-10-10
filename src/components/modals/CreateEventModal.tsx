@@ -25,12 +25,12 @@ import {TimePicker} from "../picker/TimePicker";
 import {DatePicker} from "../picker/DatePicker";
 import {Step, Steps} from "chakra-ui-steps";
 import {useState} from "react";
-import {applyDate, onlyDate} from "../../utils/DateUtils";
+import {applyDate, onlyDate, onlyTime} from "../../utils/DateUtils";
 
 function getInitialStart(): Date {
     const date = new Date(Date.now())
     date.setHours(date.getHours() + 1)
-    return date
+    return onlyTime(date)
 }
 
 export default function CreateEventModal(props: {group: string, isOpen: boolean, onClose: () => void}) {

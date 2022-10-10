@@ -1,5 +1,5 @@
 import {ImageCropPicker} from "./Modal";
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {createGroupEvent} from "../../api/GroupAPI";
 import {
     Button,
@@ -24,6 +24,7 @@ import {DatePicker} from "../picker/DatePicker";
 import {Step, Steps} from "chakra-ui-steps";
 import {applyDate, onlyDate, onlyTime} from "../../utils/DateUtils";
 import {useState} from "react";
+import {GroupDetail} from "../../api/types/Group";
 
 function getInitialStart(): Date {
     const date = new Date(Date.now())
@@ -35,15 +36,20 @@ export default function CreateEventModal(props: {group: string, isOpen: boolean,
     const {group, isOpen, onClose} = props
     const [value, setValue] = useState<EventOptions>({
         name: "",
+        description: "",
         startAt: getInitialStart(),
     })
-
+    const client = useQueryClient()
     const mutation = useMutation(
         ['create_group'],
         () => createGroupEvent(
             value.image, value.name, value.description, value.startAt, value.endAt, value.place, group
         ), {
-            onSuccess() {
+            onSuccess(created) {
+                client.setQueryData(["group_detail", group], (prev: GroupDetail) => ({
+                    ...prev,
+                    events: [created, ...prev.events]
+                }))
                 onClose()
             }
         }
@@ -96,7 +102,7 @@ export default function CreateEventModal(props: {group: string, isOpen: boolean,
 type EventOptions = {
     image?: UploadImage,
     name: string,
-    description?: string,
+    description: string,
     startAt: Date,
     endAt?: Date,
     place?: string,

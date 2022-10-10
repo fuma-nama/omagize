@@ -2,9 +2,10 @@ import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 import {delay, events, groups, members, notifications} from "./model";
 import {RawUser} from "./UserAPI";
 import {UploadImage} from "../utils/ImageUtils";
-import {callReturn, withDefault, withDefaultForm} from "./utils/core";
+import {callReturn, stringifyDate, withDefault, withDefaultForm} from "./utils/core";
 import {DateObject, Snowflake} from "./utils/types";
 import {Group, GroupDetail, Member} from "./types/Group";
+import {GroupEvent} from "./types/GroupEvents";
 
 export type RawGroup = {
     id: Snowflake
@@ -69,12 +70,23 @@ export function fetchGroupMembers(group: Snowflake, start: Snowflake | null, lim
 export async function createGroupEvent(
     image: UploadImage | null,
     name: string,
-    description: string | null,
+    description: string,
     startAt: Date, endAt: Date,
     place: string | null,
     group: string,
-) {
-    await delay(3000)
+): Promise<GroupEvent> {
+    const data = new FormData()
+    data.append("name", name)
+    data.append("description", description)
+    data.append("startAt", stringifyDate(startAt))
+    if (!!endAt) data.append("endAt", stringifyDate(endAt))
+    if (!!image) data.append("image", image)
+    if (!!place) data.append("place", place)
+
+    return callReturn<RawGroupEvent>(`/groups/${group}/events`, withDefaultForm({
+        method: "POST",
+        body: data
+    })).then(res => GroupEvent(res))
 }
 
 export function fetchGroups(): Promise<Group[]> {

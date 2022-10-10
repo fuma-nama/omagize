@@ -73,3 +73,7 @@ export function withDefaultForm<T extends Options>(options: T): T {
         ...options,
     }
 }
+
+export function stringifyDate(date: Date): string {
+    return date.getTime().toString()
+}

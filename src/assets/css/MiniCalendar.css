@@ -100,6 +100,10 @@ abbr[title] {
   border-bottom-right-radius: 10px;
   color: white;
 }
+.react-calendar__tile:disabled {
+  color: #b0bbd5;
+  background-color: rgba(0, 0, 0, 0.1)
+}
 
 /* DARK MODE */
 
@@ -154,4 +158,9 @@ body.chakra-ui-dark .react-calendar__tile--rangeEnd:enabled:hover,
 body.chakra-ui-dark .react-calendar__tile--rangeEnd:enabled:focus {
   background: #7551ff;
   color: white;
+}
+
+body.chakra-ui-dark .react-calendar__tile:disabled {
+  color: rgba(176, 187, 213, 0.42);
+  background-color: rgba(0, 0, 0, 0.3)
 }

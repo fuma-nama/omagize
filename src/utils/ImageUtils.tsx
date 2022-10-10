@@ -14,7 +14,7 @@ export type Format = {
     maxWidth: number,
     maxHeight: number
 }
-
+export const supportedFileTypes = ".png, .jpg, .jpeg, .gif"
 export function url(initial: string, image?: string | Reset): string {
     if (image == null || image === 'reset') return initial
 

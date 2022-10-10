@@ -81,29 +81,3 @@ export const messages: Message[] = [...Array(100)]
         content: m.content + i
     })
 )
-
-const startDate = new Date(Date.now())
-const endDate = new Date(Date.now())
-endDate.setDate(endDate.getDate() + 1)
-
-export const events: RawGroupEvent[] = [
-    {
-        id: 432,
-        image: "https://img.moelong.com/images/LycorisRecoiltwnews/LycorisRecoiltwnews09.webp",
-        name: "My Birthday",
-        author: users[0],
-        place: "Hong Kong",
-        group: groups[0].id,
-        startAt: startDate.getTime(),
-        endAt: endDate.getTime()
-    },
-    {
-        id: 433,
-        image: "https://cdn.mos.cms.futurecdn.net/ZoSDiWzgFVGqSAKhtxJtaM.jpg",
-        name: "Cyberpunk: Edgerunners Released",
-        author: users[0],
-        group: groups[0].id,
-        startAt: startDate.getTime(),
-        endAt: endDate.getTime()
-    }
-]

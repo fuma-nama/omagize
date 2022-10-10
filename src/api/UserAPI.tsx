@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {delay, events, users} from "./model";
+import {delay, users} from "./model";
 import {Reset, useLoginQuery} from "./AccountAPI";
 import {DateObject, Snowflake} from "./utils/types";
 import {callReturn, withDefault, withDefaultForm} from "./utils/core";

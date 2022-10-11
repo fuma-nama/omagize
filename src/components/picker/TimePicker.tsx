@@ -1,4 +1,4 @@
-import {Select} from "chakra-react-select";
+import StyledSelect from "../fields/StyledSelect";
 
 export type TimeValue = {
     hours: number, minutes: number
@@ -32,9 +32,8 @@ export function TimePicker({unit = 15, ...props}: { unit?: number, value?: TimeV
         value: o
     }))
 
-    return <Select
+    return <StyledSelect
         placeholder='00:00'
-        colorScheme="purple"
         options={options}
         value={!!props.value && options.find(o => equals(o.value, props.value))}
         onChange={e => {

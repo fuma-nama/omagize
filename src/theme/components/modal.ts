@@ -13,6 +13,10 @@ export const modalStyles: Dict = {
                     backdropFilter: 'auto',
                     backdropBlur: 'lg'
                 },
+                closeButton: {
+                    _hover: {},
+                    _focus: {}
+                }
             }),
         }
     }

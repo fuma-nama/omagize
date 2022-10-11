@@ -56,7 +56,7 @@ export default function CreateEventModal(props: {group: string, isOpen: boolean,
     )
     const [step, setStep] = useState(0)
 
-    return <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl">
+    return <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl" scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
             <ModalHeader>Create Group Event</ModalHeader>

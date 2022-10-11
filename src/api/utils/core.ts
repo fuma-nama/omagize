@@ -1,3 +1,5 @@
+import {DateObject} from "./types";
+
 export const api = "http://localhost:8080"
 
 export type ReturnOptions<T> = Options & {
@@ -76,4 +78,12 @@ export function withDefaultForm<T extends Options>(options: T): T {
 
 export function stringifyDate(date: Date): string {
     return date.getTime().toString()
+}
+
+export function parseDate(date?: DateObject): Date | null {
+    if (!!date) {
+        return new Date(date)
+    } else {
+        return null
+    }
 }

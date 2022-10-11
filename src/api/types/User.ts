@@ -1,6 +1,7 @@
 import {Snowflake} from "../utils/types";
 import {RawUser} from "../UserAPI";
 import {toAvatarUrl, toBannerUrl} from "../utils/Media";
+import {parseDate} from "../utils/core";
 
 export class User {
     id: Snowflake
@@ -19,7 +20,7 @@ export class User {
         this.bannerHash = raw.bannerHash
         this.avatarHash = raw.avatarHash
         this.description = raw.description
-        this.createdAt = new Date(raw.createdAt)
+        this.createdAt = parseDate(raw.createdAt)
 
         this.avatarUrl = toAvatarUrl(this.id, this.avatarHash)
         this.bannerUrl = toBannerUrl(this.id, this.bannerHash)

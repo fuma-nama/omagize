@@ -22,7 +22,7 @@
     "downlevelIteration": true,
     "baseUrl": "src",
     "paths": {
-      "@assets/*": ["./src/assetsassets/*"]
+      "@assets/*": ["./src/assets/*"]
     },
   },
   "include": [

@@ -1,0 +1,7 @@
+{
+  "name": "horizon-ui-chakra-typescript",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/horizon-ui-chakra-typescript/src",
+  "projectType": "application",
+  "tags": []
+}

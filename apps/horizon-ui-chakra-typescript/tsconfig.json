@@ -15,7 +15,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": false,
@@ -25,7 +24,6 @@
       "@assets/*": ["./src/assets/*"]
     }
   },
-  "include": [
-    "./src"
-  ]
+  "include": ["./src"],
+  "extends": "../../tsconfig.base.json"
 }

@@ -23,15 +23,12 @@ function Info({name, value, ...rest}: {name: string, value: any} & StackProps) {
     </HStack>
 }
 
-export default function GroupEventItem({fetchGroup, event}: { event: GroupEvent, fetchGroup?: boolean }) {
-    const {textColorPrimary, textColorSecondary} = useColors()
-    const author = event.author
+export function GlobalGroupEventItem({event}: {event: GroupEvent}) {
+    const {data: group} = useGroupQuery(event.group)
+    const iconSize = '30px'
 
-    function GroupInfo() {
-        const {data: group} = useGroupQuery(event.group)
-        const iconSize = '30px'
-
-        return <HStack mb={2} align='start'>
+    return <Card overflow='hidden' gap={3}>
+        <HStack mb={2} align='start'>
             {!!group?
                 <>
                     <Avatar src={group.iconUrl} name={group.name} w={iconSize} h={iconSize}/>
@@ -43,15 +40,28 @@ export default function GroupEventItem({fetchGroup, event}: { event: GroupEvent,
                 </>
             }
         </HStack>
-    }
-    const happening = event.startAt <= new Date(Date.now())
+        <GroupEventContent event={event} />
+    </Card>
+}
+
+export default function GroupEventItem({event}: { event: GroupEvent }) {
 
     return <Card overflow='hidden' gap={3}>
-        {fetchGroup && <GroupInfo />}
+        <GroupEventContent event={event} />
+    </Card>
+}
+
+function GroupEventContent({event}: {event: GroupEvent}) {
+    const {textColorPrimary, textColorSecondary} = useColors()
+    const author = event.author
+
+    const happening = event.startAt <= new Date(Date.now())
+
+    return <>
         {happening &&
             <HStack>
                 <Text p={2} bg='green.500' rounded='full' fontWeight='bold' fontSize='md'>Event Started</Text>
-                <Info name='End At' value={event.endAt.toLocaleString()} />
+                {!!event.endAt && <Info name='End At' value={event.endAt.toLocaleString()}/>}
             </HStack>
         }
         <Image w='full' objectFit='cover' src={event.imageUrl} maxH='200px' rounded='lg' />
@@ -76,7 +86,7 @@ export default function GroupEventItem({fetchGroup, event}: { event: GroupEvent,
 
             {!happening && <Info name='Starting At' value={event.startAt.toLocaleString()} />}
         </Flex>
-    </Card>
+    </>
 }
 
 export function GroupEventSkeleton() {

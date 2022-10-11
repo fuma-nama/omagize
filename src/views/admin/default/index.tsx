@@ -27,7 +27,7 @@ import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
 import Banner from "./components/Banner";
 import {useGroupEventsQuery, useSelfUser} from "../../../api/UserAPI";
 import {ArrayHolder, Placeholder} from "../../../utils/Container";
-import GroupEventItem, {GroupEventSkeleton} from "../../../components/card/GroupEventItem";
+import {GlobalGroupEventItem, GroupEventSkeleton} from "../../../components/card/GroupEventItem";
 import Friends from "./components/Friends";
 
 export default function UserReports() {
@@ -145,7 +145,7 @@ function Events() {
 				>
 					{() =>
 						query.data.map(event =>
-							<GroupEventItem key={event.id} fetchGroup event={event} />
+							<GlobalGroupEventItem key={event.id} event={event} />
 						)
 					}
 				</ArrayHolder>

@@ -23,7 +23,7 @@
     "baseUrl": "src",
     "paths": {
       "@assets/*": ["./src/assets/*"]
-    },
+    }
   },
   "include": [
     "./src"

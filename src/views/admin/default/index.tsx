@@ -132,7 +132,7 @@ function Events() {
 		<Text fontSize='2xl' fontWeight='700'>Group Events</Text>
 		{empty?
 			<Placeholder>No Group Events</Placeholder> :
-			<SimpleGrid columns={{base: 1, "3sm": 2, lg: 3}} gap={3}>
+			<SimpleGrid columns={{base: 1, "md": 2, "2xl": 3}} gap={3}>
 				<ArrayHolder
 					array={query.data}
 					skeleton={

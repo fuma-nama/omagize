@@ -25,45 +25,66 @@ function Info({name, value, ...rest}: {name: string, value: any} & StackProps) {
 
 export function GlobalGroupEventItem({event}: {event: GroupEvent}) {
     const {data: group} = useGroupQuery(event.group)
-    const iconSize = '30px'
+    const {globalBg} = useColors()
+
+    const happening = event.startAt <= new Date(Date.now())
+    const iconSize = '35px'
 
     return <Card overflow='hidden' gap={3}>
-        <HStack mb={2} align='start'>
-            {!!group?
-                <>
-                    <Avatar src={group.iconUrl} name={group.name} w={iconSize} h={iconSize}/>
-                    <Text fontWeight='bold'>{group.name}</Text>
-                </>:
-                <>
-                    <SkeletonCircle w={iconSize} h={iconSize}/>
-                    <SkeletonText noOfLines={2} w='100px' h='23px'/>
-                </>
-            }
+        <HStack spacing={0} flexWrap='wrap' gap={2}>
+            {happening && <EventStarted/>}
+            <HStack bg={globalBg} rounded='full' p={2}>
+                {!!group?
+                    <>
+                        <Avatar src={group.iconUrl} name={group.name} w={iconSize} h={iconSize}/>
+                        <Text fontWeight='bold'>{group.name}</Text>
+                    </>:
+                    <>
+                        <SkeletonCircle w={iconSize} h={iconSize}/>
+                        <SkeletonText noOfLines={2} w='100px' h='23px'/>
+                    </>
+                }
+            </HStack>
         </HStack>
         <GroupEventContent event={event} />
+        <Flex direction='row' flexWrap='wrap' gap={4} mt='auto' pt={2}>
+            {!!event.place && <Info name='Take Place At' value={event.place}/>}
+
+            {happening?
+                !!event.endAt && <Info name='End At' value={event.endAt.toLocaleString()} />
+                :
+                <Info name='Starting At' value={event.startAt.toLocaleString()} />
+            }
+        </Flex>
     </Card>
 }
 
 export default function GroupEventItem({event}: { event: GroupEvent }) {
+    const happening = event.startAt <= new Date(Date.now())
 
     return <Card overflow='hidden' gap={3}>
+        {happening && <HStack>
+            <EventStarted />
+            {!!event.endAt && <Info name='End At' value={event.endAt.toLocaleString()}/>}
+        </HStack>}
         <GroupEventContent event={event} />
+        <Flex direction='row' flexWrap='wrap' gap={4} mt='auto' pt={2}>
+            {!!event.place && <Info name='Take Place At' value={event.place}/>}
+
+            {!happening && <Info name='Starting At' value={event.startAt.toLocaleString()} />}
+        </Flex>
     </Card>
+}
+
+function EventStarted() {
+    return <Text p={2} bg='green.500' rounded='full' color='white' fontWeight='bold' fontSize='md'>Event Started</Text>
 }
 
 function GroupEventContent({event}: {event: GroupEvent}) {
     const {textColorPrimary, textColorSecondary} = useColors()
     const author = event.author
 
-    const happening = event.startAt <= new Date(Date.now())
-
     return <>
-        {happening &&
-            <HStack>
-                <Text p={2} bg='green.500' rounded='full' fontWeight='bold' fontSize='md'>Event Started</Text>
-                {!!event.endAt && <Info name='End At' value={event.endAt.toLocaleString()}/>}
-            </HStack>
-        }
         <Image w='full' objectFit='cover' src={event.imageUrl} maxH='200px' rounded='lg' />
 
         <HStack justify='space-between'>
@@ -80,12 +101,6 @@ function GroupEventContent({event}: {event: GroupEvent}) {
             </Flex>
             <Avatar src={author.avatarUrl} name={author.username} />
         </HStack>
-
-        <Flex direction='row' flexWrap='wrap' gap={4} mt='auto' pt={2}>
-            {!!event.place && <Info name='Take Place At' value={event.place}/>}
-
-            {!happening && <Info name='Starting At' value={event.startAt.toLocaleString()} />}
-        </Flex>
     </>
 }
 

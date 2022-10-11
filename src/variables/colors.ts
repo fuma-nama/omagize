@@ -26,6 +26,7 @@ export function useAuthColors() {
 export function useColors() {
 
     return {
+        globalBg: useColorModeValue('secondaryGray.300', 'navy.900'),
         brand: useColorModeValue('brand.500', 'brand.400'),
         textColorPrimary: useColorModeValue('secondaryGray.900', 'white'),
         textColorSecondary: 'gray.400',

@@ -32,6 +32,7 @@ import {AiFillSetting} from "react-icons/ai";
 import {CustomCardProps} from "../../../theme/theme";
 import {GroupDetail} from "../../../api/types/Group";
 import {DynamicModal} from "../../../components/modals/Modal";
+import MemberModal from "../../../components/modals/MemberModal";
 
 export default function GroupOverview() {
     const {selectedGroup, setInfo} = useContext(PageContext)
@@ -94,6 +95,7 @@ function About({group}: {group: GroupDetail}) {
 
 function ActionBar(props: {group: GroupDetail}) {
     const {group} = props
+    const {isOpen, onClose, onToggle} = useDisclosure()
     const {open} = useGroupChat(group.id)
 
     function Item({text, icon, ...props}: {text: string, icon: any} & CustomCardProps) {
@@ -104,9 +106,12 @@ function ActionBar(props: {group: GroupDetail}) {
     }
 
     return <>
+        <DynamicModal isOpen={isOpen}>
+            <MemberModal isOpen={isOpen} onClose={onClose} group={group.id} />
+        </DynamicModal>
         <SimpleGrid columns={3} gap={5}>
             <Item text='Chat' icon={<ChatIcon width='30px' height='30px' />} onClick={open} />
-            <Item text='Members' icon={<Icon as={BsPeopleFill} width='30px' height='30px' />} />
+            <Item text='Members' icon={<Icon as={BsPeopleFill} width='30px' height='30px' />} onClick={onToggle} />
             <Item text='Settings' icon={<Icon as={AiFillSetting} width='30px' height='30px' />} />
         </SimpleGrid>
     </>

@@ -1,0 +1,33 @@
+{
+  "homepage": "https://horizon-ui.com/horizon-ui-chakra-ts",
+  "name": "@temp-workspace/web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "craco start",
+    "build": "BUILD_PATH=../../dist/apps/horizon-ui-chakra-typescript craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "predeploy": "pnpm run build",
+    "deploy": "gh-pages -d build",
+    "serve": "pnpm start"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

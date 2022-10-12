@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "typeRoots": ["node_modules/@types", "src/types"],
-    "target": "es2016",
-    "lib": ["dom", "dom.iterable", "esnext", "es2015.iterable"],
+    "baseUrl": "src",
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["vite/client", "vite-plugin-svgr/client"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -11,16 +11,12 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strictNullChecks": false,
-    "downlevelIteration": true,
-    "baseUrl": "src",
+    "jsx": "react-jsx",
     "paths": {
       "@assets/*": ["./src/assets/*"]
     }

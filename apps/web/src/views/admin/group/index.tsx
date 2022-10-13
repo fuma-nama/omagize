@@ -38,6 +38,7 @@ import { AiFillSetting } from 'react-icons/ai';
 import { CustomCardProps } from 'theme/theme';
 import { DynamicModal } from 'components/modals/Modal';
 import MemberModal from 'components/modals/MemberModal';
+import LoadingScreen from 'components/screens/LoadingScreen';
 
 export default function GroupOverview() {
   const { selectedGroup, setInfo } = useContext(PageContext);
@@ -48,7 +49,7 @@ export default function GroupOverview() {
   );
 
   if (query.isLoading) {
-    return <></>;
+    return <LoadingScreen />;
   }
 
   return <Content group={query.data} />;

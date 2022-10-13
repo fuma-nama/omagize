@@ -7,7 +7,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { layouts, NestedLayout, RootLayout } from './layouts';
+import { layouts, NestedLayout, NormalLayout, RootLayout } from './layouts';
 import { useLoginQuery } from '@omagize/api';
 import { getRoutesByLayout } from './utils/RouteUtil';
 import LoadingScreen from './components/screens/LoadingScreen';
@@ -28,19 +28,19 @@ function Pages() {
   if (query.isLoading || query.error) return <LoadingScreen />;
   const loggedIn = query.data != null;
 
-  function mapNestedLayout(layout: NestedLayout, key: number) {
-    return (
-      //@ts-ignore
-      <Route
-        key={key}
-        index={layout.index}
-        path={layout.path}
-        element={layout.component}
-      >
-        {layout.routes && getRoutesByLayout(layout.routes)}
-        {layout.subLayouts && layout.subLayouts.map(mapNestedLayout)}
-      </Route>
-    );
+  function mapNestedLayout(layout: NormalLayout, key: number) {
+    if (layout.index === true) {
+      return (
+        <Route index key={key} path={layout.path} element={layout.component} />
+      );
+    } else {
+      return (
+        <Route key={key} path={layout.path} element={layout.component}>
+          {layout.routes && getRoutesByLayout(layout.routes)}
+          {layout.subLayouts && layout.subLayouts.map(mapNestedLayout)}
+        </Route>
+      );
+    }
   }
 
   function mapLayout(layout: RootLayout, key: number) {

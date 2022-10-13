@@ -4,7 +4,6 @@ import { ReactNode } from 'react';
 import SidebarLayout from './layouts/SidebarLayout';
 import ChatLayout from './layouts/chat';
 import { Navigate } from 'react-router-dom';
-import React from 'react';
 
 export const layouts: RootLayout[] = [
   {
@@ -38,12 +37,20 @@ export const layouts: RootLayout[] = [
   },
 ];
 
+export type NormalLayout =
+  | (IndexRoute & { index: true })
+  | (NestedLayout & { index?: false });
+
 export type NestedLayout = {
-  index?: boolean;
   path?: string;
   component: ReactNode;
-  subLayouts?: NestedLayout[];
+  subLayouts?: NormalLayout[];
   routes?: string;
+};
+
+export type IndexRoute = {
+  path?: string;
+  component: ReactNode;
 };
 
 export type AutoLayout = {
@@ -60,4 +67,4 @@ export type RootLayout = LayoutType & {
 
 export type LayoutType =
   | (AutoLayout & { type: 'auto' })
-  | (NestedLayout & { type: 'normal' });
+  | (NormalLayout & { type: 'normal' });

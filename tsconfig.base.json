@@ -17,8 +17,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@omagize/api": ["libs/api/src/index.ts"],
-      "@omagize/assets": ["libs/assets/src/index.ts"]
+      "@omagize/api": ["libs/api/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

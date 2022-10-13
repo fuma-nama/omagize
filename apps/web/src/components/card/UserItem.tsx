@@ -12,13 +12,12 @@ import { useColors } from '../../variables/colors';
 import Card from './Card';
 import FadeImage from './utils/FadeImage';
 import React from 'react';
-import { acceptFriendRequest, denyFriendRequest } from 'api/UserAPI';
+import { acceptFriendRequest, denyFriendRequest } from '@omagize/api';
 import { CustomCardProps } from 'theme/theme';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useMutation } from '@tanstack/react-query';
 import { ChatIcon, WarningIcon } from '@chakra-ui/icons';
-import { User } from '../../api/types/User';
-import { Friend, FriendRequest } from '../../api/types/Friend';
+import { User, Friend, FriendRequest } from '@omagize/api';
 
 export default function UserItem({ user }: { user: User }) {
   const [brand] = useToken('color', ['brand.400']);

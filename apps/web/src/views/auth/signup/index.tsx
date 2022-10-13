@@ -19,7 +19,7 @@ import { HSeparator } from 'components/separator/Separator';
 import { NavLink } from 'react-router-dom';
 import { useAuthColors } from 'variables/colors';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LoginKey, signup } from 'api/AccountAPI';
+import { LoginKey, signup } from '@omagize/api';
 import PasswordInput from 'components/fields/PasswordInput';
 import { SignUpOptions, useVerifySignUp } from 'utils/APIUtils';
 import Group from '../components/VerifyGroup';

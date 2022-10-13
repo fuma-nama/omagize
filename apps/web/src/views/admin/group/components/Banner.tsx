@@ -11,10 +11,10 @@ import {
 } from '@chakra-ui/react';
 
 // Assets
-import { useGroupDetailQuery, useGroupMembersQuery } from 'api/GroupAPI';
+import { useGroupDetailQuery, useGroupMembersQuery } from '@omagize/api';
 import React, { useContext } from 'react';
 import { PageContext } from 'contexts/PageContext';
-import { GroupDetail } from 'api/types/Group';
+import { GroupDetail } from '@omagize/api';
 
 export default function Banner() {
   const { selectedGroup } = useContext(PageContext);

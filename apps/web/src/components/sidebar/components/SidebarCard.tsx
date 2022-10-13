@@ -8,7 +8,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useSelfUser } from 'api/UserAPI';
+import { useSelfUser } from '@omagize/api';
 import { FiSettings } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 

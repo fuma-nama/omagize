@@ -11,10 +11,7 @@ import Card from '../Card';
 import { GoMention } from 'react-icons/go';
 import React from 'react';
 import { IconType } from 'react-icons';
-import {
-  GroupNotification,
-  MentionNotification,
-} from '../../../api/types/Notifications';
+import { GroupNotification, MentionNotification } from '@omagize/api';
 
 export function NotificationSkeleton() {
   const bgItem = useItemHoverBg();

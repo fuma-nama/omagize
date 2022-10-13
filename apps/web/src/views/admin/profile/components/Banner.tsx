@@ -10,8 +10,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import { useFriendsQuery, useSelfUser } from 'api/UserAPI';
-import { useGroupsQuery } from 'api/GroupAPI';
+import { useGroupsQuery, useFriendsQuery, useSelfUser } from '@omagize/api';
 import { useColors } from 'variables/colors';
 import { EditIcon } from '@chakra-ui/icons';
 import EditAccountModal from 'components/modals/EditAccount';

@@ -9,8 +9,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { useGroupMembersQuery } from '../../api/GroupAPI';
-import { Snowflake } from '../../api/utils/types';
+import { useGroupMembersQuery, Snowflake } from '@omagize/api';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import UserItem from '../card/UserItem';
 

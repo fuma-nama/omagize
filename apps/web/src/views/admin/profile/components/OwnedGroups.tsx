@@ -1,13 +1,12 @@
 // Chakra imports
-import { Avatar, Flex, Text, useColorModeValue } from '@chakra-ui/react';
+import { Avatar, Flex, Text } from '@chakra-ui/react';
 // Custom components
 import Card, { CardButton } from 'components/card/Card';
 import { useColors } from 'variables/colors';
-import { useGroupsQuery } from 'api/GroupAPI';
+import { useGroupsQuery, Group } from '@omagize/api';
 import FadeImage from 'components/card/utils/FadeImage';
 import { useContext } from 'react';
 import { PageContext } from 'contexts/PageContext';
-import { Group } from '../../../../api/types/Group';
 
 export default function OwnedGroups(props: { [x: string]: any }) {
   const { ...rest } = props;

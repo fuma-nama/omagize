@@ -1,9 +1,6 @@
 import { GenericItem, GroupNotificationItem } from './Notification';
 import { AiFillWarning } from 'react-icons/ai';
-import {
-  LoginNotification,
-  UserNotification,
-} from '../../../api/types/Notifications';
+import { LoginNotification, UserNotification } from '@omagize/api';
 
 export default function UserNotificationItem(props: UserNotification) {
   switch (props.type) {

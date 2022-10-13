@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 // Chakra imports
 import {
   Box,
@@ -18,24 +18,26 @@ import Banner from './components/Banner';
 import AdminsCard from './components/AdminsCard';
 import Card, { CardButton } from 'components/card/Card';
 import { PageContext, useGroupChat } from 'contexts/PageContext';
-import { useGroupDetailQuery } from 'api/GroupAPI';
 import { Notifications } from './components/Notifications';
-import { useInfiniteMessageQuery } from 'api/MessageAPI';
+import {
+  useInfiniteMessageQuery,
+  useGroupDetailQuery,
+  GroupDetail,
+} from '@omagize/api';
 import MessageItem, {
   MessageItemSkeleton,
 } from 'components/card/chat/MessageItem';
 import { QueryErrorPanel } from 'components/card/ErrorPanel';
 import GroupEventItem from 'components/card/GroupEventItem';
-import { Holder } from '../../../utils/Container';
+import { Holder } from 'utils/Container';
 import { AddIcon, ChatIcon } from '@chakra-ui/icons';
-import { useColors } from '../../../variables/colors';
-import CreateEventModal from '../../../components/modals/CreateEventModal';
+import { useColors } from 'variables/colors';
+import CreateEventModal from 'components/modals/CreateEventModal';
 import { BsPeopleFill } from 'react-icons/bs';
 import { AiFillSetting } from 'react-icons/ai';
-import { CustomCardProps } from '../../../theme/theme';
-import { GroupDetail } from '../../../api/types/Group';
-import { DynamicModal } from '../../../components/modals/Modal';
-import MemberModal from '../../../components/modals/MemberModal';
+import { CustomCardProps } from 'theme/theme';
+import { DynamicModal } from 'components/modals/Modal';
+import MemberModal from 'components/modals/MemberModal';
 
 export default function GroupOverview() {
   const { selectedGroup, setInfo } = useContext(PageContext);

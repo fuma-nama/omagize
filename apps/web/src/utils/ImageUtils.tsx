@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { Box, BoxProps, Circle, useColorModeValue } from '@chakra-ui/react';
 import { VscNewFile } from 'react-icons/vsc';
-import { Reset } from '../api/AccountAPI';
+import { Reset } from '@omagize/api';
 import { CropImage, CropOptions } from '../components/modals/Modal';
 import { Crop } from 'react-image-crop';
 

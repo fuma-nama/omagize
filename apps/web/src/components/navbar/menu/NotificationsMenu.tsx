@@ -1,7 +1,7 @@
 import { Flex, Icon, Menu, MenuButton, MenuList, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useNavbarColors } from 'variables/colors';
-import { useUserNotificationsQuery } from 'api/NotificationsAPI';
+import { useUserNotificationsQuery } from '@omagize/api';
 import { ArrayHolder } from 'utils/Container';
 import { NotificationSkeleton } from '../../card/notification/Notification';
 import UserNotificationItem from '../../card/notification/UserNotification';

@@ -1,5 +1,5 @@
 import { Box, Flex, IconButton, Input } from '@chakra-ui/react';
-import { Message, useInfiniteMessageQuery } from '../../api/MessageAPI';
+import { Message, useInfiniteMessageQuery } from '@omagize/api';
 import { MutableRefObject, useContext, useMemo, useRef, useState } from 'react';
 import { PageContext } from '../../contexts/PageContext';
 import { useInView } from 'react-intersection-observer';

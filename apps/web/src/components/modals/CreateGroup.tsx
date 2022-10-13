@@ -23,7 +23,7 @@ import {
   BannerFormat,
 } from 'utils/ImageUtils';
 import { useMutation } from '@tanstack/react-query';
-import { createGroup } from 'api/GroupAPI';
+import { createGroup } from '@omagize/api';
 import { ProfileCropPicker } from './Modal';
 import { useState } from 'react';
 

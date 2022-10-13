@@ -1,7 +1,7 @@
 import {
   clearGroupNotifications,
   useGroupNotificationsQuery,
-} from 'api/NotificationsAPI';
+} from '@omagize/api';
 import React, { useContext } from 'react';
 import { PageContext } from 'contexts/PageContext';
 import { Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';

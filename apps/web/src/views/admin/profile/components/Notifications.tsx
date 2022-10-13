@@ -5,7 +5,7 @@ import Card from 'components/card/Card';
 import {
   clearUserNotifications,
   useUserNotificationsQuery,
-} from 'api/NotificationsAPI';
+} from '@omagize/api';
 import { useColors } from 'variables/colors';
 import UserNotificationItem from 'components/card/notification/UserNotification';
 import { NotificationSkeleton } from 'components/card/notification/Notification';

@@ -6,7 +6,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { RawFriendsData, useFriendsQuery } from 'api/UserAPI';
+import { FriendsData, useFriendsQuery } from '@omagize/api';
 import {
   FriendItem,
   FriendRequestItem,
@@ -14,7 +14,6 @@ import {
 } from 'components/card/UserItem';
 import { Holder, Placeholder } from 'utils/Container';
 import AddFriendModal from 'components/modals/AddFriendModal';
-import { FriendsData } from '../../../../api/types/Friend';
 
 export default function Friends() {
   const query = useFriendsQuery();

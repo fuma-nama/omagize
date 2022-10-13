@@ -4,7 +4,7 @@ import { SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import Information from 'views/admin/profile/components/Information';
 import { useColors } from 'variables/colors';
-import { useLoginQuery } from 'api/AccountAPI';
+import { useLoginQuery } from '@omagize/api';
 
 // Assets
 export default function GeneralInformation(props: { [x: string]: any }) {

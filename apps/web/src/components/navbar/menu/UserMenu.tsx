@@ -9,9 +9,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import React from 'react';
-import { RawUser, useSelfUser } from 'api/UserAPI';
-import { useLogoutMutation } from 'api/AccountAPI';
-import { User } from '../../../api/types/User';
+import { User, useLogoutMutation, useSelfUser } from '@omagize/api';
 
 export function UserMenu(props: { color: string; shadow: string; bg: string }) {
   const user = useSelfUser();

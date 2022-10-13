@@ -28,7 +28,7 @@ export type RawFriendsData = {
   requests: RawFriendRequest[];
 };
 
-export type RawSelfUser = RawUser & {};
+export type RawSelfUser = RawUser;
 
 export async function updateProfile(
   name?: string,
@@ -36,13 +36,13 @@ export async function updateProfile(
   banner?: Blob | Reset
 ): Promise<SelfUser> {
   const data = new FormData();
-  if (!!name) {
+  if (name != null) {
     data.append('name', name);
   }
-  if (!!avatar) {
+  if (avatar != null) {
     data.append('avatar', avatar);
   }
-  if (!!banner) {
+  if (banner != null) {
     data.append('banner', banner);
   }
 

@@ -11,11 +11,15 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
+    "strictNullChecks": false,
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@omagize/api": ["libs/api/src/index.ts"],
+      "@omagize/assets": ["libs/assets/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

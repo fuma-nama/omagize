@@ -8,7 +8,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { layouts, NestedLayout, RootLayout } from './layouts';
-import { useLoginQuery } from './api/AccountAPI';
+import { useLoginQuery } from '@omagize/api';
 import { getRoutesByLayout } from './utils/RouteUtil';
 import LoadingScreen from './components/screens/LoadingScreen';
 

@@ -10,7 +10,7 @@ import {
 import { PageContext } from '../../contexts/PageContext';
 import { useContext } from 'react';
 import FadeImage from './utils/FadeImage';
-import { Group } from 'api/types/Group';
+import { Group } from '@omagize/api';
 
 export function ChatGroup({
   active,

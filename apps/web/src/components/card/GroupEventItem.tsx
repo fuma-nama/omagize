@@ -1,4 +1,4 @@
-import { useGroupQuery } from 'api/GroupAPI';
+import { useGroupQuery, GroupEvent } from '@omagize/api';
 import Card from './Card';
 import {
   Avatar,
@@ -12,7 +12,6 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useColors } from 'variables/colors';
-import { GroupEvent } from '../../api/types/GroupEvents';
 
 function Info({
   name,

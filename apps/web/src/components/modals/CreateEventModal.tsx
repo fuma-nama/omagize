@@ -1,6 +1,6 @@
 import { ImageCropPicker } from './Modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createGroupEvent } from '../../api/GroupAPI';
+import { createGroupEvent, GroupDetail } from '@omagize/api';
 import {
   Button,
   Flex,
@@ -30,7 +30,6 @@ import { DatePicker } from '../picker/DatePicker';
 import { Step, Steps } from 'chakra-ui-steps';
 import { applyDate, onlyDate, onlyTime } from '../../utils/DateUtils';
 import { useState } from 'react';
-import { GroupDetail } from '../../api/types/Group';
 
 function getInitialStart(): Date {
   const date = new Date(Date.now());

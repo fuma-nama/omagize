@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import UserItem from 'components/card/UserItem';
-import { GroupDetail } from 'api/types/Group';
+import { GroupDetail } from '@omagize/api';
 
 export default function AdminsCard({ group }: { group: GroupDetail }) {
   const textColor = useColorModeValue('navy.700', 'white');

@@ -1,4 +1,4 @@
-import { Message } from 'api/MessageAPI';
+import { Message } from '@omagize/api';
 import {
   Avatar,
   Flex,

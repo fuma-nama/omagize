@@ -1,12 +1,8 @@
 // Chakra imports
 import {
   Avatar,
-  Box,
-  Center,
   Flex,
   FormLabel,
-  Heading,
-  HStack,
   Icon,
   Select,
   SimpleGrid,
@@ -32,7 +28,7 @@ import WeeklyRevenue from 'views/admin/default/components/WeeklyRevenue';
 import { columnsDataCheck } from 'views/admin/default/variables/columnsData';
 import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
 import Banner from './components/Banner';
-import { useGroupEventsQuery, useSelfUser } from '../../../api/UserAPI';
+import { useGroupEventsQuery, useSelfUser } from '@omagize/api';
 import { ArrayHolder, Placeholder } from '../../../utils/Container';
 import {
   GlobalGroupEventItem,

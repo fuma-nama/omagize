@@ -1,22 +1,13 @@
 // chakra imports
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Slide,
-  Stack,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Flex, Stack } from '@chakra-ui/react';
 //   Custom components
 import Brand from 'components/sidebar/components/Brand';
 import Links from 'components/sidebar/components/Links';
 import SidebarCard from 'components/sidebar/components/SidebarCard';
-import { useGroupsQuery } from '../../../api/GroupAPI';
+import { useGroupsQuery } from '@omagize/api';
 import { ChatGroup, ChatGroupSkeleton } from '../../card/ChatGroup';
 import { useContext } from 'react';
-import { PageContext } from '../../../contexts/PageContext';
+import { PageContext } from 'contexts/PageContext';
 import ActionBar from './ActionBar';
 import { SlideError } from '../../card/utils/SlideError';
 

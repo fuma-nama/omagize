@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 // Chakra imports
 import {
@@ -7,15 +7,11 @@ import {
   Checkbox,
   Flex,
   FormControl,
-  FormErrorMessage,
   FormLabel,
   Heading,
   Icon,
   Input,
-  InputGroup,
-  InputRightElement,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react';
 // Custom components
 import { HSeparator } from 'components/separator/Separator';
@@ -26,7 +22,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { useAuthColors } from 'variables/colors';
 import PasswordInput from 'components/fields/PasswordInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { login, LoginKey } from '../../../api/AccountAPI';
+import { login, LoginKey } from '@omagize/api';
 import VerifyGroup from '../components/VerifyGroup';
 
 type Options = {

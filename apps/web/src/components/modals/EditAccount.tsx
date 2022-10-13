@@ -23,10 +23,9 @@ import {
   useImagePickerResize,
 } from 'utils/ImageUtils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateProfile, useSelfUser } from 'api/UserAPI';
-import { LoginKey, Reset } from 'api/AccountAPI';
+import { updateProfile, useSelfUser } from '@omagize/api';
 import { ProfileCropPicker } from './Modal';
-import { LoginPayload, SelfUser } from '../../api/types/Auth';
+import { LoginKey, Reset, LoginPayload, SelfUser } from '@omagize/api';
 import { useState } from 'react';
 
 type ProfileOptions = {

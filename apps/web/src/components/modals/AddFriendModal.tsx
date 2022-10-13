@@ -17,7 +17,7 @@ import {
 import { useState } from 'react';
 import { BiRightArrow } from 'react-icons/bi';
 import { useMutation } from '@tanstack/react-query';
-import { sendFriendRequest } from 'api/UserAPI';
+import { sendFriendRequest } from '@omagize/api';
 
 export default function AddFriendModal({
   isOpen,

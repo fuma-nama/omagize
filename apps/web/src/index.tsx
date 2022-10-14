@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './assets/css/App.css';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -7,8 +7,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { layouts, NestedLayout, NormalLayout, RootLayout } from './layouts';
-import { useLoginQuery } from '@omagize/api';
+import { layouts, NormalLayout, RootLayout } from './layouts';
+import { connectGateway, useLoginQuery } from '@omagize/api';
 import { getRoutesByLayout } from './utils/RouteUtil';
 import LoadingScreen from './components/screens/LoadingScreen';
 
@@ -22,11 +22,10 @@ const client = new QueryClient({
   },
 });
 
-function Pages() {
-  const query = useLoginQuery();
-
-  if (query.isLoading || query.error) return <LoadingScreen />;
-  const loggedIn = query.data != null;
+function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
+  useEffect(() => {
+    if (loggedIn) connectGateway();
+  }, [loggedIn]);
 
   function mapNestedLayout(layout: NormalLayout, key: number) {
     if (layout.index === true) {
@@ -76,6 +75,13 @@ function Pages() {
       />
     </Routes>
   );
+}
+
+function Pages() {
+  const query = useLoginQuery();
+
+  if (query.isLoading || query.error) return <LoadingScreen />;
+  return <RootRoutes loggedIn={query.data != null} />;
 }
 
 ReactDOM.render(

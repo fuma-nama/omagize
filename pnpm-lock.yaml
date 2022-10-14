@@ -69,6 +69,7 @@ importers:
       react-router-dom: ^6.3.0
       react-table: ^7.8.0
       react-test-renderer: 18.2.0
+      reconnecting-websocket: ^4.4.0
       regenerator-runtime: 0.13.7
       stylis: ^4.1.1
       stylis-plugin-rtl: 2.0.2
@@ -107,6 +108,7 @@ importers:
       react-is: 18.2.0
       react-router-dom: 6.4.2_sfoxds7t5ydpegc3knd667wn6m
       react-table: 7.8.0_react@17.0.2
+      reconnecting-websocket: 4.4.0
       regenerator-runtime: 0.13.7
       stylis: 4.1.2
       stylis-plugin-rtl: 2.0.2_stylis@4.1.2
@@ -11217,6 +11219,10 @@ packages:
     dependencies:
       picomatch: 2.3.1
     dev: true
+
+  /reconnecting-websocket/4.4.0:
+    resolution: {integrity: sha512-D2E33ceRPga0NvTDhJmphEgJ7FUYF0v4lr1ki0csq06OdlxKfugGzN0dSkxM/NfqCxYELK4KcaTOUOjTV6Dcng==}
+    dev: false
 
   /recrawl-sync/2.2.2:
     resolution: {integrity: sha512-E2sI4F25Fu2nrfV+KsnC7/qfk/spQIYXlonfQoS4rwxeNK5BjxnLPbWiRXHVXPwYBOTWtPX5765kTm/zJiL+LQ==}

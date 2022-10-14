@@ -5,3 +5,4 @@ export * from './NotificationsAPI';
 export * from './UserAPI';
 export * from './types';
 export * from './utils';
+export * from './gateway';

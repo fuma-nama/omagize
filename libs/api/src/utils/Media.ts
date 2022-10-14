@@ -33,7 +33,7 @@ export function asUrl(
   id: Snowflake,
   hash?: string | number
 ): string | null {
-  if (!!hash) {
+  if (hash != null) {
     return `${api}/media/${type}/${id}/${hash}.webp`;
   } else {
     return null;

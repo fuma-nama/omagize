@@ -1,7 +1,5 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { groups, members } from './model';
 import { RawUser } from './UserAPI';
-import { UploadImage } from '../utils/ImageUtils';
 import {
   callReturn,
   stringifyDate,
@@ -67,8 +65,8 @@ export function fetchGroupMembers(
   limit: number = 10
 ): Promise<Member[]> {
   const param = new URLSearchParams();
-  if (!!start) param.append('start', start);
-  if (!!limit) param.append('limit', limit.toString());
+  if (start != null) param.append('start', start);
+  if (limit != null) param.append('limit', limit.toString());
 
   return callReturn<RawMember[]>(
     `/groups/${group}/members?${param}`,
@@ -79,7 +77,7 @@ export function fetchGroupMembers(
 }
 
 export async function createGroupEvent(
-  image: UploadImage | null,
+  image: Blob | null,
   name: string,
   description: string,
   startAt: Date,
@@ -91,9 +89,9 @@ export async function createGroupEvent(
   data.append('name', name);
   data.append('description', description);
   data.append('startAt', stringifyDate(startAt));
-  if (!!endAt) data.append('endAt', stringifyDate(endAt));
-  if (!!image) data.append('image', image);
-  if (!!place) data.append('place', place);
+  if (endAt != null) data.append('endAt', stringifyDate(endAt));
+  if (image != null) data.append('image', image);
+  if (place != null) data.append('place', place);
 
   return callReturn<RawGroupEvent>(
     `/groups/${group}/events`,
@@ -115,13 +113,13 @@ export function fetchGroups(): Promise<Group[]> {
 
 export async function createGroup(
   name: string,
-  icon?: UploadImage,
-  banner?: UploadImage
+  icon?: Blob,
+  banner?: Blob
 ): Promise<Group> {
   const data = new FormData();
   data.append('name', name);
-  if (!!icon) data.append('icon', icon);
-  if (!!banner) data.append('banner', banner);
+  if (icon != null) data.append('icon', icon);
+  if (banner != null) data.append('banner', banner);
 
   return callReturn<RawGroup>(
     '/groups',

@@ -1,6 +1,7 @@
 import { DateObject } from './types';
 
 export const api = 'http://localhost:8080';
+export const ws = 'ws://localhost:8080/echo';
 
 export type ReturnOptions<T> = Options & {
   /**
@@ -98,7 +99,7 @@ export function stringifyDate(date: Date): string {
 }
 
 export function parseDate(date?: DateObject): Date | null {
-  if (!!date) {
+  if (date != null) {
     return new Date(date);
   } else {
     return null;

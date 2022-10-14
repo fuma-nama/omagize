@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { callReturn, ReturnOptions, withDefault } from './utils/core';
+import {
+  callDefault,
+  callReturn,
+  ReturnOptions,
+  withDefault,
+} from './utils/core';
 import { RawSelfUser } from './UserAPI';
 import { LoginPayload } from './types/Auth';
 export type Reset = 'reset';
@@ -42,12 +47,18 @@ export async function login(options: {
   ).then((res) => LoginPayload(res));
 }
 
-export function logout() {}
+export async function logout() {
+  return callDefault(
+    '/logout',
+    withDefault({
+      method: 'POST',
+    })
+  );
+}
 
 export function useLogoutMutation() {
   const client = useQueryClient();
 
-  // @ts-ignore
   return useMutation(() => logout(), {
     onSuccess() {
       client.setQueryData(LoginKey, () => null);

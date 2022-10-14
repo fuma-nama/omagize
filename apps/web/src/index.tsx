@@ -29,9 +29,7 @@ function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
 
   function mapNestedLayout(layout: NormalLayout, key: number) {
     if (layout.index === true) {
-      return (
-        <Route index key={key} path={layout.path} element={layout.component} />
-      );
+      return <Route index key={key} element={layout.component} />;
     } else {
       return (
         <Route key={key} path={layout.path} element={layout.component}>
@@ -47,22 +45,7 @@ function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
       return null;
     }
 
-    switch (layout.type) {
-      case 'normal':
-        return mapNestedLayout(layout, key);
-      case 'auto':
-        return (
-          <Route key={key} path={layout.path} element={layout.component}>
-            {getRoutesByLayout(layout.path)}
-            {layout.index && (
-              <Route index element={<Navigate to={layout.index} />} />
-            )}
-            {layout.default && (
-              <Route path="*" element={<Navigate to={layout.default} />} />
-            )}
-          </Route>
-        );
-    }
+    return mapNestedLayout(layout, key);
   }
 
   return (

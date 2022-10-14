@@ -5,7 +5,6 @@ import { ReactNode, useState } from 'react';
 import Sidebar from '../components/sidebar/Sidebar';
 import routes from '../routes';
 import { Outlet } from 'react-router-dom';
-import React from 'react';
 
 export default function SidebarLayout(props: { sidebar?: ReactNode }) {
   const [toggleSidebar, setToggleSidebar] = useState(false);

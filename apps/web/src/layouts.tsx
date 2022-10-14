@@ -4,17 +4,34 @@ import { ReactNode } from 'react';
 import SidebarLayout from './layouts/SidebarLayout';
 import ChatLayout from './layouts/chat';
 import { Navigate } from 'react-router-dom';
+import GroupOverview from 'views/admin/group';
+import GroupSettings from 'views/admin/group/settings';
+import GroupChat from 'views/admin/chat/group/GroupChat';
+import GroupNavbar from 'views/admin/chat/navbar/GroupNavbar';
+import SignInCentered from 'views/auth/signIn';
+import SignUp from './views/auth/signup';
 
 export const layouts: RootLayout[] = [
   {
-    type: 'auto',
     path: '/auth',
     component: <AuthLayout />,
-    index: '/auth/signin',
+    subLayouts: [
+      {
+        index: true,
+        component: <Navigate to="/auth/signin" />,
+      },
+      {
+        path: 'signin',
+        component: <SignInCentered />,
+      },
+      {
+        path: 'signup',
+        component: <SignUp />,
+      },
+    ],
     requireLogin: false,
   },
   {
-    type: 'normal',
     path: '/user',
     component: <SidebarLayout />,
     subLayouts: [
@@ -26,6 +43,26 @@ export const layouts: RootLayout[] = [
         path: 'chat',
         component: <ChatLayout />,
         routes: '/user/chat',
+        subLayouts: [
+          {
+            path: ':group',
+            component: <GroupChat />,
+            navbar: <GroupNavbar />,
+          },
+        ],
+      },
+      {
+        path: ':group',
+        subLayouts: [
+          {
+            index: true,
+            component: <GroupOverview />,
+          },
+          {
+            path: 'settings',
+            component: <GroupSettings />,
+          },
+        ],
       },
       {
         path: '*',
@@ -37,34 +74,24 @@ export const layouts: RootLayout[] = [
   },
 ];
 
-export type NormalLayout =
-  | (IndexRoute & { index: true })
-  | (NestedLayout & { index?: false });
+export type NormalLayout = IndexRoute | NestedLayout;
 
-export type NestedLayout = {
+export type NestedLayout = Layout & {
   path?: string;
-  component: ReactNode;
   subLayouts?: NormalLayout[];
   routes?: string;
+  index?: false;
 };
 
-export type IndexRoute = {
-  path?: string;
-  component: ReactNode;
+export type IndexRoute = Layout & {
+  index: true;
 };
 
-export type AutoLayout = {
-  path: string;
-  component: ReactNode;
-  index?: string;
-  default?: string;
+export type Layout = {
+  component?: ReactNode;
+  navbar?: ReactNode;
+};
+
+export type RootLayout = NormalLayout & {
   requireLogin: boolean;
 };
-
-export type RootLayout = LayoutType & {
-  requireLogin: boolean;
-};
-
-export type LayoutType =
-  | (AutoLayout & { type: 'auto' })
-  | (NormalLayout & { type: 'normal' });

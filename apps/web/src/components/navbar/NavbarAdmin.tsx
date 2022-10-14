@@ -12,9 +12,10 @@ import {
 } from '@chakra-ui/react';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
 import { ChakraProps } from '@chakra-ui/system/src/system.types';
-import { getActiveRoute } from '../../utils/RouteUtil';
+import { getActiveLayout } from '../../utils/RouteUtil';
 import { useLocation } from 'react-router-dom';
-import routes, { dynamicRoutes } from 'routes';
+import routes from 'routes';
+import { layouts } from 'layouts';
 
 export default function AdminNavbar(
   props: {
@@ -31,7 +32,7 @@ export default function AdminNavbar(
     'rgba(244, 247, 254, 0.2)',
     'rgba(11,20,55,0.5)'
   );
-  const route = getActiveRoute(useLocation(), [...dynamicRoutes, ...routes]);
+  const active = getActiveLayout(useLocation(), layouts);
 
   return (
     <Box
@@ -106,7 +107,7 @@ export default function AdminNavbar(
           </Link>
         </Box>
         <Box ms="auto" w={{ sm: '100%', md: 'unset' }}>
-          {route?.navbar || <AdminNavbarLinks />}
+          {active?.navbar || <AdminNavbarLinks />}
         </Box>
       </Flex>
     </Box>

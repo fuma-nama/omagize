@@ -25,3 +25,17 @@ export function onlyTime(date: Date): Date {
     date.getMinutes()
   );
 }
+
+export function stringOf(date: Date, time: boolean = false): string {
+  const sameYear = date.getFullYear() === new Date(Date.now()).getFullYear();
+  let string = `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}`;
+
+  if (time) {
+    string += ` ${date.getHours().toString().padStart(2, '0')}:${date
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')}`;
+    string += ' ' + (date.getHours() <= 12 ? 'AM' : 'PM');
+  }
+  return string;
+}

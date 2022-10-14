@@ -14,7 +14,6 @@ import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
 import { ChakraProps } from '@chakra-ui/system/src/system.types';
 import { getActiveLayout } from '../../utils/RouteUtil';
 import { useLocation } from 'react-router-dom';
-import routes from 'routes';
 import { layouts } from 'layouts';
 
 export default function AdminNavbar(

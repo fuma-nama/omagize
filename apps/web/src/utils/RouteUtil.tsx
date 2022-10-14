@@ -1,11 +1,10 @@
 import { Location, matchRoutes, Route, useLocation } from 'react-router-dom';
-import routes from '../routes';
-import React from 'react';
+import items from '../sidebar';
 import { NormalLayout, RootLayout } from 'layouts';
 
-export function useActiveRoute<T extends IRoute>(routes: T[]): T | null {
+export function useActiveSidebarItem(): SidebarItem | null {
   const location = useLocation();
-  return getActiveRoute(location, routes);
+  return getActiveSidebarItem(location);
 }
 
 type MatchRoute = (
@@ -49,37 +48,15 @@ export function getActiveLayout(
   return matches[matches.length - 1].route.layout;
 }
 
-export function getActiveRoute<T extends IRoute>(
-  location: Location,
-  routes: T[]
-): T | null {
+export function getActiveSidebarItem(location: Location): SidebarItem | null {
   const matches = matchRoutes(
-    routes.map((route) => ({
-      path: route.layout + route.path,
+    items.map((item) => ({
+      item,
+      path: item.path,
     })),
     location.pathname
   );
-  if (matches == null) return null;
+  if (matches == null || matches.length === 0) return null;
 
-  return routes.find((route) =>
-    matches.some((match) => match.route.path === route.layout + route.path)
-  );
-}
-
-export function getRoutesByLayout(layout: string): any {
-  const mapper = (route: IRoute, key: number) => {
-    if (route.layout === layout) {
-      return (
-        <Route
-          path={route.path.substring(1)}
-          element={route.component}
-          key={key}
-        />
-      );
-    } else {
-      return null;
-    }
-  };
-
-  return routes.map(mapper);
+  return matches[matches.length - 1].route.item;
 }

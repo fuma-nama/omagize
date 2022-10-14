@@ -1,7 +1,7 @@
 import { Button, Flex, HStack, useColorModeValue } from '@chakra-ui/react';
 import { SearchBar } from 'components/navbar/searchBar/SearchBar';
 import { SidebarResponsive } from 'components/sidebar/Sidebar';
-import routes from 'routes';
+import items from 'sidebar';
 import ThemeSwitch from 'components/navbar/components/ThemeSwitch';
 import { UserMenu } from 'components/navbar/menu/UserMenu';
 import React, { useContext } from 'react';
@@ -43,7 +43,7 @@ export default function GroupNavbar() {
       </HStack>
       <HStack align="center">
         <SearchBar mb="unset" me="10px" borderRadius="30px" />
-        <SidebarResponsive routes={routes} />
+        <SidebarResponsive items={items} />
 
         <ThemeSwitch color={navbarIcon} />
         <UserMenu color={textColor} shadow={shadow} bg={menuBg} />

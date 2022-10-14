@@ -1,25 +1,19 @@
 // Chakra imports
-import {
-  Portal,
-  Box,
-  useDisclosure,
-  Flex,
-  useCallbackRef,
-} from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin';
 import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
-import routes from 'routes';
 import { PageContext } from 'contexts/PageContext';
-import { useActiveRoute } from 'utils/RouteUtil';
+import { useActiveSidebarItem } from 'utils/RouteUtil';
 
 export default function Dashboard() {
   document.documentElement.dir = 'ltr';
 
   const { info } = useContext(PageContext);
-  const activeRoute = useActiveRoute(routes);
+  const activeItem = useActiveSidebarItem();
+
   return (
     <Flex
       direction="column"
@@ -36,7 +30,7 @@ export default function Dashboard() {
       transitionProperty="top, bottom, width"
       transitionTimingFunction="linear, linear, ease"
     >
-      <Navbar brandText={activeRoute?.name || info?.title} />
+      <Navbar brandText={activeItem?.name || info?.title} />
       <Box mx="auto" w="full" pe="20px" padding={0} flex="1 1" mt="50px">
         <Outlet />
       </Box>

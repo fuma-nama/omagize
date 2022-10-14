@@ -51,6 +51,10 @@ export default function GroupOverview() {
   if (query.isLoading) {
     return <LoadingScreen />;
   }
+  if (query.isError) {
+    console.log(query.error);
+    return <></>;
+  }
 
   return <Content group={query.data} />;
 }

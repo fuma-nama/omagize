@@ -3,7 +3,7 @@ import { SidebarContext } from '../contexts/SidebarContext';
 import { Flex } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
 import Sidebar from '../components/sidebar/Sidebar';
-import routes from '../routes';
+import items from '../sidebar';
 import { Outlet } from 'react-router-dom';
 
 export default function SidebarLayout(props: { sidebar?: ReactNode }) {
@@ -18,7 +18,7 @@ export default function SidebarLayout(props: { sidebar?: ReactNode }) {
             setToggleSidebar,
           }}
         >
-          {props.sidebar || <Sidebar routes={routes} display="none" />}
+          {props.sidebar || <Sidebar items={items} display="none" />}
           <Outlet />
         </SidebarContext.Provider>
       </PageContextProvider>

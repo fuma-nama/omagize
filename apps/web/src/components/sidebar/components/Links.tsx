@@ -3,49 +3,44 @@
 import { NavLink, useLocation } from 'react-router-dom';
 // chakra imports
 import { Box, Flex, HStack, Text, useColorModeValue } from '@chakra-ui/react';
-import { layouts } from 'layouts';
-import { getActiveRoute } from '../../../utils/RouteUtil';
+import { getActiveSidebarItem } from '../../../utils/RouteUtil';
 
-export function SidebarLinks(props: { routes: RoutesType[] }) {
-  //   Chakra color mode
-  const { routes } = props;
+export function SidebarLinks({ items }: { items: SidebarItem[] }) {
   const location = useLocation();
 
   // this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
-  const createLinks = (routes: RoutesType[]) => {
-    const active = getActiveRoute(location, routes);
+  const createLinks = (routes: SidebarItem[]) => {
+    const active = getActiveSidebarItem(location);
 
-    return routes
-      .filter((route) => !route.hidden)
-      .map((route: RoutesType, index: number) => (
-        <Link key={index} route={route} active={active === route} />
-      ));
+    return routes.map((route: SidebarItem, index: number) => (
+      <Link key={index} item={route} active={active === route} />
+    ));
   };
   //  BRAND
-  return <>{createLinks(routes)}</>;
+  return <>{createLinks(items)}</>;
 }
 
-function Link(props: { route: RoutesType; active: boolean }) {
-  const { route, active } = props;
+function Link(props: { item: SidebarItem; active: boolean }) {
+  const { item, active } = props;
   let activeColor = useColorModeValue('gray.700', 'white');
   let activeIcon = useColorModeValue('brand.500', 'white');
   let textColor = useColorModeValue('secondaryGray.500', 'white');
   let brandColor = useColorModeValue('brand.500', 'brand.400');
 
   return (
-    <NavLink to={route.layout + route.path}>
+    <NavLink to={item.path}>
       <Box>
         <HStack spacing={active ? '22px' : '26px'} py="5px" ps="10px">
           <Flex w="100%" alignItems="center" justifyContent="center">
             <Box color={active ? activeIcon : textColor} me="18px">
-              {route.icon}
+              {item.icon}
             </Box>
             <Text
               me="auto"
               color={active ? activeColor : textColor}
               fontWeight={active ? 'bold' : 'normal'}
             >
-              {route.name}
+              {item.name}
             </Text>
           </Flex>
           <Box

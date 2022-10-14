@@ -13,8 +13,7 @@ import { SlideError } from '../../card/utils/SlideError';
 
 // FUNCTIONS
 
-function SidebarContent(props: { routes: RoutesType[] }) {
-  const { routes } = props;
+function SidebarContent({ items }: { items: SidebarItem[] }) {
   const query = useGroupsQuery();
   const { selectedGroup } = useContext(PageContext);
 
@@ -36,7 +35,7 @@ function SidebarContent(props: { routes: RoutesType[] }) {
         <Brand />
         <Stack direction="column" mt="18px" mb="auto">
           <Box ps="10px">
-            <Links routes={routes} />
+            <Links items={items} />
           </Box>
           <Box px="10px">
             <ActionBar />

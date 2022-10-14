@@ -5,7 +5,7 @@ import { SearchBar } from 'components/navbar/searchBar/SearchBar';
 import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import React from 'react';
 
-import routes from 'routes';
+import items from 'sidebar';
 import { UserMenu } from './menu/UserMenu';
 import ThemeSwitch from './components/ThemeSwitch';
 import NotificationsMenu from './menu/NotificationsMenu';
@@ -26,7 +26,7 @@ export default function HeaderLinks() {
       boxShadow={shadow}
     >
       <SearchBar mb="unset" me="10px" borderRadius="30px" />
-      <SidebarResponsive routes={routes} />
+      <SidebarResponsive items={items} />
       <NotificationsMenu />
       <ThemeSwitch color={iconColor} />
       <UserMenu color={textColorPrimary} shadow={shadow} bg={menuBg} />

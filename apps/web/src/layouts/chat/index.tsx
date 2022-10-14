@@ -1,25 +1,17 @@
 // Chakra imports
-import {
-  Portal,
-  Box,
-  useDisclosure,
-  Flex,
-  useCallbackRef,
-} from '@chakra-ui/react';
-import Footer from 'components/footer/FooterAdmin';
+import { Box, Flex } from '@chakra-ui/react';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin';
 import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
-import routes from 'routes';
 import { PageContext } from 'contexts/PageContext';
-import { useActiveRoute } from 'utils/RouteUtil';
+import { useActiveSidebarItem } from 'utils/RouteUtil';
 
 export default function ChatLayout() {
   document.documentElement.dir = 'ltr';
 
   const { info } = useContext(PageContext);
-  const activeRoute = useActiveRoute(routes);
+  const active = useActiveSidebarItem();
 
   return (
     <Flex
@@ -35,7 +27,7 @@ export default function ChatLayout() {
       transitionTimingFunction="linear, linear, ease"
     >
       <Box pos="sticky" top={0} px="20px" py="10px" w="full">
-        <Navbar brandText={activeRoute?.name || info?.title} />
+        <Navbar brandText={active?.name || info?.title} />
       </Box>
       <Outlet />
     </Flex>

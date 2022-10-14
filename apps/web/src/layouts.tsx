@@ -10,6 +10,9 @@ import GroupChat from 'views/admin/chat/group/GroupChat';
 import GroupNavbar from 'views/admin/chat/navbar/GroupNavbar';
 import SignInCentered from 'views/auth/signIn';
 import SignUp from './views/auth/signup';
+import MainDashboard from 'views/admin/default';
+import NFTMarketplace from 'views/admin/marketplace';
+import Profile from 'views/admin/profile';
 
 export const layouts: RootLayout[] = [
   {
@@ -37,7 +40,7 @@ export const layouts: RootLayout[] = [
     subLayouts: [
       {
         index: true,
-        component: <Navigate to="/user/default" />,
+        component: <Navigate to="/user/home" />,
       },
       {
         path: 'chat',
@@ -52,22 +55,35 @@ export const layouts: RootLayout[] = [
         ],
       },
       {
-        path: ':group',
-        subLayouts: [
-          {
-            index: true,
-            component: <GroupOverview />,
-          },
-          {
-            path: 'settings',
-            component: <GroupSettings />,
-          },
-        ],
-      },
-      {
         path: '*',
         component: <AdminLayout />,
-        routes: '/user',
+        subLayouts: [
+          {
+            path: 'home',
+            component: <MainDashboard />,
+          },
+          {
+            path: 'explore',
+            component: <NFTMarketplace />,
+          },
+          {
+            path: 'profile',
+            component: <Profile />,
+          },
+          {
+            path: ':group',
+            subLayouts: [
+              {
+                index: true,
+                component: <GroupOverview />,
+              },
+              {
+                path: 'settings',
+                component: <GroupSettings />,
+              },
+            ],
+          },
+        ],
       },
     ],
     requireLogin: true,

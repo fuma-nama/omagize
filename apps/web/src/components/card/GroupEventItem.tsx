@@ -1,5 +1,5 @@
 import { useGroupQuery, GroupEvent } from '@omagize/api';
-import Card from './Card';
+import Card, { TagCard } from './Card';
 import {
   Avatar,
   Flex,
@@ -12,21 +12,22 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useColors } from 'variables/colors';
+import { stringOf } from 'utils/DateUtils';
 
 function Info({
   name,
   value,
   ...rest
 }: { name: string; value: any } & StackProps) {
-  const { textColorPrimary, textColorSecondary } = useColors();
+  const { textColorPrimary, textColorSecondary, globalBg } = useColors();
 
   return (
-    <HStack {...rest}>
+    <TagCard bg={globalBg} {...rest}>
       <Text color={textColorSecondary} fontWeight="bold">
         {name}
       </Text>
       <Text color={textColorPrimary}>{value}</Text>
-    </HStack>
+    </TagCard>
   );
 }
 
@@ -39,9 +40,9 @@ export function GlobalGroupEventItem({ event }: { event: GroupEvent }) {
 
   return (
     <Card overflow="hidden" gap={3}>
-      <HStack spacing={0} flexWrap="wrap" gap={2}>
+      <Flex direction="row" flexWrap="wrap" gap={2}>
         {happening && <EventStarted />}
-        <HStack bg={globalBg} rounded="full" p={2}>
+        <TagCard bg={globalBg}>
           {!!group ? (
             <>
               <Avatar
@@ -58,18 +59,18 @@ export function GlobalGroupEventItem({ event }: { event: GroupEvent }) {
               <SkeletonText noOfLines={2} w="100px" h="23px" />
             </>
           )}
-        </HStack>
-      </HStack>
+        </TagCard>
+      </Flex>
       <GroupEventContent event={event} />
       <Flex direction="row" flexWrap="wrap" gap={4} mt="auto" pt={2}>
         {!!event.place && <Info name="Take Place At" value={event.place} />}
 
         {happening ? (
           !!event.endAt && (
-            <Info name="End At" value={event.endAt.toLocaleString()} />
+            <Info name="End At" value={stringOf(event.endAt, true)} />
           )
         ) : (
-          <Info name="Starting At" value={event.startAt.toLocaleString()} />
+          <Info name="Starting At" value={stringOf(event.startAt, true)} />
         )}
       </Flex>
     </Card>
@@ -82,19 +83,19 @@ export default function GroupEventItem({ event }: { event: GroupEvent }) {
   return (
     <Card overflow="hidden" gap={3}>
       {happening && (
-        <HStack>
+        <Flex direction="row" gap={2} wrap="wrap">
           <EventStarted />
           {!!event.endAt && (
-            <Info name="End At" value={event.endAt.toLocaleString()} />
+            <Info name="End At" value={stringOf(event.endAt, true)} />
           )}
-        </HStack>
+        </Flex>
       )}
       <GroupEventContent event={event} />
       <Flex direction="row" flexWrap="wrap" gap={4} mt="auto" pt={2}>
         {!!event.place && <Info name="Take Place At" value={event.place} />}
 
         {!happening && (
-          <Info name="Starting At" value={event.startAt.toLocaleString()} />
+          <Info name="Starting At" value={stringOf(event.startAt, true)} />
         )}
       </Flex>
     </Card>
@@ -103,16 +104,11 @@ export default function GroupEventItem({ event }: { event: GroupEvent }) {
 
 function EventStarted() {
   return (
-    <Text
-      p={2}
-      bg="green.500"
-      rounded="full"
-      color="white"
-      fontWeight="bold"
-      fontSize="md"
-    >
-      Event Started
-    </Text>
+    <TagCard bg="green.500">
+      <Text color="white" fontWeight="bold" fontSize="md">
+        Event Started
+      </Text>
+    </TagCard>
   );
 }
 

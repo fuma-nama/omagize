@@ -1,4 +1,4 @@
-import { Location, matchRoutes, Route, useLocation } from 'react-router-dom';
+import { Location, matchRoutes, useLocation } from 'react-router-dom';
 import items from '../sidebar';
 import { NormalLayout, RootLayout } from 'layouts';
 

@@ -1,6 +1,12 @@
 // import { Box, useStyleConfig} from '@chakra-ui/react';
 
-import { useStyleConfig, chakra, forwardRef } from '@chakra-ui/react';
+import {
+  useStyleConfig,
+  chakra,
+  forwardRef,
+  HStack,
+  StackProps,
+} from '@chakra-ui/react';
 import { CustomCardProps } from 'theme/theme';
 import { useItemHoverBg } from '../../variables/colors';
 const CustomCard = forwardRef<CustomCardProps, 'div'>((props, ref) => {
@@ -19,5 +25,13 @@ export function CardButton(props: CustomCardProps) {
       transition="0.2s all"
       _hover={{ cursor: 'pointer', ...hoverBg, ...props._hover }}
     />
+  );
+}
+
+export function TagCard(props: StackProps) {
+  return (
+    <HStack rounded="full" p={2} {...props}>
+      {props.children}
+    </HStack>
   );
 }

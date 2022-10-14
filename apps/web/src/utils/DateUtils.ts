@@ -27,7 +27,6 @@ export function onlyTime(date: Date): Date {
 }
 
 export function stringOf(date: Date, time: boolean = false): string {
-  const sameYear = date.getFullYear() === new Date(Date.now()).getFullYear();
   let string = `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}`;
 
   if (time) {

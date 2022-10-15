@@ -34,13 +34,3 @@ export function PageContextProvider(props: { children: ReactNode }) {
     </PageContext.Provider>
   );
 }
-
-export function useGroupChat(group: string) {
-  const navigate = useNavigate();
-
-  return {
-    open() {
-      navigate(`/user/chat/${group}`);
-    },
-  };
-}

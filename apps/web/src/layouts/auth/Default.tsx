@@ -1,8 +1,7 @@
 // Chakra imports
-import { Box, Center, Flex, Grid, Icon, Image, Text } from '@chakra-ui/react';
-import PropTypes from 'prop-types';
+import { Box, Center, Flex, Grid, Icon, Text } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAuth';
-import FixedPlugin from 'components/fixedPlugin/FixedPlugin';
+import ThemeToggle from 'components/fields/ThemeToggle';
 // Custom components
 import { NavLink } from 'react-router-dom';
 // Assets
@@ -69,7 +68,7 @@ function AuthIllustration(props: {
           <Footer />
         </Box>
       </Center>
-      <FixedPlugin />
+      <ThemeToggle />
     </Grid>
   );
 }

@@ -52,7 +52,7 @@ function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
 
       <Route
         path="*"
-        element={<Navigate to={loggedIn ? '/user/default' : '/auth'} />}
+        element={<Navigate to={loggedIn ? '/user' : '/auth'} />}
       />
     </Routes>
   );

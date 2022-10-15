@@ -65,7 +65,7 @@ export async function updateGroup(
 ) {
   await callDefault(
     `/groups/${group}`,
-    withDefault({
+    withDefaultForm({
       method: 'PATCH',
       body: toFormData(options),
     })

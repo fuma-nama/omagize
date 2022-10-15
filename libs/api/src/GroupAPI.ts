@@ -1,14 +1,17 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { RawUser } from './UserAPI';
 import {
+  callDefault,
   callReturn,
   stringifyDate,
+  toFormData,
   withDefault,
   withDefaultForm,
 } from './utils/core';
 import { DateObject, Snowflake } from './utils/types';
 import { Group, GroupDetail, Member } from './types/Group';
 import { GroupEvent } from './types/GroupEvents';
+import { Reset } from './AccountAPI';
 
 export type RawGroup = {
   id: Snowflake;
@@ -46,6 +49,40 @@ export type RawGroupEvent = {
   group: string;
   author: RawUser;
 };
+
+export type UpdateGroupOptions = {
+  name?: string;
+  banner?: Blob | Reset;
+  icon?: Blob | Reset;
+  about?: string;
+
+  //options
+  mentionEveryone?: boolean;
+};
+export async function updateGroup(
+  group: Snowflake,
+  options: UpdateGroupOptions
+) {
+  await callDefault(
+    `/groups/${group}`,
+    withDefault({
+      method: 'PATCH',
+      body: toFormData(options),
+    })
+  );
+}
+
+export function fetchMemberInfo(
+  group: Snowflake,
+  id: Snowflake
+): Promise<Member> {
+  return callReturn<RawMember>(
+    `/groups/${group}/members/${id}`,
+    withDefault({
+      method: 'GET',
+    })
+  ).then((res) => new Member(res));
+}
 
 export function fetchGroupDetail(id: Snowflake): Promise<GroupDetail> {
   return callReturn<RawGroupDetail>(
@@ -142,6 +179,10 @@ export function useGroupMembersQuery(group: Snowflake) {
       getNextPageParam: (lastPage) => lastPage[lastPage.length - 1]?.id,
     }
   );
+}
+
+export function useMemberQuery(group: Snowflake, id: Snowflake) {
+  return useQuery(['member', group, id], () => fetchMemberInfo(group, id));
 }
 
 export function useGroupQuery(id: string) {

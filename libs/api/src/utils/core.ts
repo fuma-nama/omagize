@@ -105,3 +105,27 @@ export function parseDate(date?: DateObject): Date | null {
     return null;
   }
 }
+
+function toFormField(input: Blob | string | boolean | number): Blob | string {
+  switch (typeof input) {
+    case 'number':
+      return input.toString();
+    case 'boolean':
+      return input ? 'true' : 'false';
+    default:
+      return input;
+  }
+}
+
+export function toFormData(from: {
+  [key: string]: Blob | string | boolean | number | null | undefined;
+}): FormData {
+  const data = new FormData();
+
+  for (const [key, value] of Object.entries(from)) {
+    if (value != null) {
+      data.append(key, toFormField(value));
+    }
+  }
+  return data;
+}

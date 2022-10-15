@@ -106,7 +106,13 @@ export function parseDate(date?: DateObject): Date | null {
   }
 }
 
-function toFormField(input: Blob | string | boolean | number): Blob | string {
+function toFormField(
+  input: Date | Blob | string | boolean | number
+): Blob | string {
+  if (input instanceof Date) {
+    return stringifyDate(input);
+  }
+
   switch (typeof input) {
     case 'number':
       return input.toString();

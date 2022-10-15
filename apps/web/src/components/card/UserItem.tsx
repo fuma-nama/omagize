@@ -5,13 +5,13 @@ import {
   Flex,
   HStack,
   IconButton,
+  StackProps,
   Text,
   useToken,
 } from '@chakra-ui/react';
 import { useColors } from '../../variables/colors';
-import Card from './Card';
+import Card, { TagCard } from './Card';
 import FadeImage from './utils/FadeImage';
-import React from 'react';
 import { acceptFriendRequest, denyFriendRequest } from '@omagize/api';
 import { CustomCardProps } from 'theme/theme';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -44,6 +44,21 @@ export default function UserItem({ user }: { user: User }) {
         </Flex>
       </HStack>
     </Card>
+  );
+}
+
+export function SmallUserItem({ user, ...props }: { user: User } & StackProps) {
+  const { textColorPrimary, textColorSecondary, globalBg } = useColors();
+  return (
+    <TagCard overflow="hidden" pos="relative" bg={globalBg} {...props}>
+      <Avatar name={user.username} src={user.avatarUrl} variant="normal" />
+      <Flex direction="column">
+        <Text color={textColorPrimary} fontSize="xl" fontWeight="bold">
+          {user.username}
+        </Text>
+        <Text color={textColorSecondary}>{user.description}</Text>
+      </Flex>
+    </TagCard>
   );
 }
 

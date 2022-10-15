@@ -107,8 +107,7 @@ function Form(props: {
   const icon = useImagePickerCrop(
     value.avatar,
     (v) => onChange({ avatar: v }),
-    AvatarFormat,
-    { accept: acceptedFileTypes }
+    AvatarFormat
   );
   const banner = useImagePickerResize(
     value.banner,

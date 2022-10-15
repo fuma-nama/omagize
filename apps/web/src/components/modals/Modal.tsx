@@ -12,13 +12,17 @@ import {
 } from '@chakra-ui/react';
 import ReactCrop, { Crop } from 'react-image-crop';
 import { FaImage } from 'react-icons/fa';
+import { MutableRefObject } from 'react';
 
 export type CropImage = Crop | null;
 export type CropOptions = {
   preview: string;
   crop: CropImage;
   setCrop: (crop: CropImage) => void;
-  onCrop: (img: HTMLImageElement) => void;
+  /**
+   * Crop image, or ignore if null
+   */
+  onCrop: (img: HTMLImageElement | null) => void;
 };
 
 export function ImageCropPicker(
@@ -66,31 +70,41 @@ export function ProfileCropPicker(props: ProfilePickerProps & CropProps) {
   return <ProfilePicker {...props} />;
 }
 
-type CropProps = {
+export type CropProps = {
   crop: CropOptions;
   buttonStyle?: ButtonProps;
   aspect?: number;
 };
+
+export function CustomImageCropper(props: {
+  img: MutableRefObject<HTMLImageElement>;
+  crop: CropOptions;
+  aspect?: number;
+}) {
+  if (props.crop) {
+    const { preview, crop, setCrop } = props.crop;
+
+    return (
+      <ReactCrop aspect={props.aspect} crop={crop} onChange={(v) => setCrop(v)}>
+        <Image src={preview} ref={props.img} />
+      </ReactCrop>
+    );
+  }
+}
+
 function ImageCropper(props: CropProps) {
   const ref = useRef<HTMLImageElement>();
 
   if (props.crop) {
-    const { preview, crop, setCrop, onCrop } = props.crop;
-
     return (
       <>
-        <ReactCrop
-          aspect={props.aspect}
-          crop={crop}
-          onChange={(v) => setCrop(v)}
-        >
-          <Image src={preview} ref={ref} />
-        </ReactCrop>
+        <CustomImageCropper crop={props.crop} aspect={props.aspect} img={ref} />
         <HStack justify="center" mt={3}>
+          <Button onClick={() => props.crop.onCrop(null)}>Close</Button>
           <Button
             {...props.buttonStyle}
             variant="action"
-            onClick={() => onCrop(ref.current)}
+            onClick={() => props.crop.onCrop(ref.current)}
           >
             Done
           </Button>

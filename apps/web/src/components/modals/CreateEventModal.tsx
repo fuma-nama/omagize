@@ -21,7 +21,7 @@ import {
 import { BiRightArrow } from 'react-icons/bi';
 import {
   BannerFormat,
-  supportedFileTypes,
+  supportedImageTypes,
   UploadImage,
   useImagePickerCrop,
 } from 'utils/ImageUtils';
@@ -201,8 +201,7 @@ function Form({
   const image = useImagePickerCrop(
     value.image,
     (v) => onChange({ image: v }),
-    BannerFormat,
-    { accept: supportedFileTypes }
+    BannerFormat
   );
 
   return (

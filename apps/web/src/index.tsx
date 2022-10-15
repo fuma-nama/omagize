@@ -14,8 +14,10 @@ import LoadingScreen from './components/screens/LoadingScreen';
 const client = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
+      /**
+       * We will only update data with Gateway
+       */
+      staleTime: Infinity,
       retry: 1,
     },
   },

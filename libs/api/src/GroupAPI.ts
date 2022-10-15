@@ -13,6 +13,10 @@ import { Group, GroupDetail, Member } from './types/Group';
 import { GroupEvent } from './types/GroupEvents';
 import { Reset } from './AccountAPI';
 
+export function GroupDetailKey(group: Snowflake) {
+  return ['group_detail', group];
+}
+
 export type RawGroup = {
   id: Snowflake;
   name: string;
@@ -195,5 +199,5 @@ export function useGroupQuery(id: string) {
 }
 
 export function useGroupDetailQuery(id: string) {
-  return useQuery(['group_detail', id], () => fetchGroupDetail(id));
+  return useQuery(GroupDetailKey(id), () => fetchGroupDetail(id));
 }

@@ -1,7 +1,16 @@
+import { QueryClient } from '@tanstack/react-query';
 import { ws } from '../utils/core';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import { handleGateway } from './GatewayHandler';
 
 let socket: ReconnectingWebSocket;
+
+export type GatewayOptions = {
+  /**
+   * Used for updating query data
+   */
+  client: QueryClient;
+};
 
 export const Gateway = {
   isConnected(): boolean {
@@ -10,12 +19,18 @@ export const Gateway = {
   getSocket(): ReconnectingWebSocket {
     return socket;
   },
-  connect(init: (socket: ReconnectingWebSocket) => void) {
-    connectGateway(init);
+  connect(
+    options: GatewayOptions,
+    init: (socket: ReconnectingWebSocket) => void
+  ) {
+    connectGateway(options, init);
   },
 };
 
-function connectGateway(init: (socket: ReconnectingWebSocket) => void) {
+function connectGateway(
+  options: GatewayOptions,
+  init: (socket: ReconnectingWebSocket) => void
+) {
   if (socket != null) return;
   socket = new ReconnectingWebSocket(ws);
 
@@ -23,8 +38,11 @@ function connectGateway(init: (socket: ReconnectingWebSocket) => void) {
     console.log('Connected to Omagize Gateway');
   };
 
-  socket.onmessage = (event: MessageEvent<GatewayEvent<unknown>>) => {
-    console.log(`[message] Data received from server: ${event.data}`);
+  socket.onmessage = (event: MessageEvent<string>) => {
+    console.log(event);
+    if (event.data.length !== 0) {
+      handleGateway(options.client, event.data);
+    }
   };
 
   socket.onclose = (event) => {

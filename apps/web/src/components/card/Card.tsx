@@ -6,6 +6,8 @@ import {
   forwardRef,
   HStack,
   StackProps,
+  FlexProps,
+  Flex,
 } from '@chakra-ui/react';
 import { CustomCardProps } from 'theme/theme';
 import { useItemHoverBg } from '../../variables/colors';
@@ -33,5 +35,20 @@ export function TagCard(props: StackProps) {
     <HStack rounded="full" p={2} {...props}>
       {props.children}
     </HStack>
+  );
+}
+
+export function TagFlex(props: FlexProps) {
+  return (
+    <Flex
+      rounded="full"
+      p={2}
+      gap={2}
+      direction="row"
+      align="center"
+      {...props}
+    >
+      {props.children}
+    </Flex>
   );
 }

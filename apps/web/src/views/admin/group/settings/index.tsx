@@ -1,5 +1,12 @@
 import { WarningIcon } from '@chakra-ui/icons';
-import { Button, Center, Flex, Slide, Spacer, Text } from '@chakra-ui/react';
+import {
+  Button,
+  ButtonGroup,
+  Center,
+  Flex,
+  Slide,
+  Text,
+} from '@chakra-ui/react';
 import {
   GroupDetail,
   updateGroup,
@@ -7,7 +14,7 @@ import {
   useGroupDetailQuery,
 } from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
-import CustomCard, { TagCard } from 'components/card/Card';
+import CustomCard, { TagFlex } from 'components/card/Card';
 import SwitchField from 'components/fields/SwitchField';
 import LoadingScreen from 'components/screens/LoadingScreen';
 import { PageContext } from 'contexts/PageContext';
@@ -73,22 +80,27 @@ function SaveBar({
 
   return (
     <Slide in={Object.entries(value).length !== 0} direction="bottom">
-      <Center mb="20px" zIndex="popover">
-        <TagCard bg={cardBg} w="fit-content" shadow={shadow}>
+      <Center mb="20px" zIndex="popover" px={5}>
+        <TagFlex bg={cardBg} minW="fit-content" w="500px" shadow={shadow}>
           <WarningIcon w="40px" h="40px" color="orange.300" />
           <Text fontWeight="600" color={textColorPrimary}>
             Save Changes
           </Text>
-          <Spacer w="20px" />
-          <Button
-            colorScheme="green"
-            isLoading={mutation.isLoading}
-            onClick={() => mutation.mutate()}
-          >
-            Save
-          </Button>
-          <Button onClick={reset}>Discard</Button>
-        </TagCard>
+
+          <ButtonGroup isDisabled={mutation.isLoading} ml="auto">
+            <Button
+              rounded="full"
+              colorScheme="green"
+              isLoading={mutation.isLoading}
+              onClick={() => mutation.mutate()}
+            >
+              Save
+            </Button>
+            <Button rounded="full" onClick={reset}>
+              Discard
+            </Button>
+          </ButtonGroup>
+        </TagFlex>
       </Center>
     </Slide>
   );
@@ -104,7 +116,7 @@ function Info({ value, onChange, group }: SettingsProps) {
 
 function EditOptions({ value, onChange }: SettingsProps) {
   return (
-    <Flex direction="column" gap={5} minW="400px" p={5}>
+    <Flex direction="column" gap={5} w={{ base: '100%', lg: '400px' }} p={5}>
       <Text fontSize="2xl" fontWeight="600" mb="10px">
         Options
       </Text>

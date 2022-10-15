@@ -209,7 +209,9 @@ export function useImagePickerResize<T extends UploadImage | Reset>(
   value: T,
   onChange: (file: T) => void,
   format: Format,
-  props?: InputHTMLAttributes<HTMLInputElement>
+  props: InputHTMLAttributes<HTMLInputElement> | null = {
+    accept: supportedImageTypes,
+  }
 ) {
   const base = useImagePickerBase(value, onChange);
 
@@ -230,7 +232,9 @@ export function useImagePickerResize<T extends UploadImage | Reset>(
 export function useImagePicker<T extends UploadImage | Reset>(
   value: T,
   onChange: (file: T) => void,
-  props?: InputHTMLAttributes<HTMLInputElement>
+  props: InputHTMLAttributes<HTMLInputElement> | null = {
+    accept: supportedImageTypes,
+  }
 ) {
   const base = useImagePickerBase(value, onChange);
 

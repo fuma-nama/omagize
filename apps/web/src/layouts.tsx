@@ -1,7 +1,7 @@
 import AuthLayout from './layouts/auth';
 import AdminLayout from './layouts/admin';
 import { ReactNode } from 'react';
-import SidebarLayout from './layouts/SidebarLayout';
+import PageLayout from './layouts/PageLayout';
 import ChatLayout from './layouts/chat';
 import { Navigate } from 'react-router-dom';
 import GroupOverview from 'views/admin/group';
@@ -36,7 +36,7 @@ export const layouts: RootLayout[] = [
   },
   {
     path: '/user',
-    component: <SidebarLayout />,
+    component: <PageLayout />,
     subLayouts: [
       {
         index: true,

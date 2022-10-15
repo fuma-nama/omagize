@@ -17,7 +17,7 @@ import {
 import Banner from './components/Banner';
 import AdminsCard from './components/AdminsCard';
 import Card, { CardButton } from 'components/card/Card';
-import { PageContext, useGroupChat } from 'contexts/PageContext';
+import { PageContext } from 'contexts/PageContext';
 import { Notifications } from './components/Notifications';
 import {
   useInfiniteMessageQuery,
@@ -39,6 +39,7 @@ import { CustomCardProps } from 'theme/theme';
 import { DynamicModal } from 'components/modals/Modal';
 import MemberModal from 'components/modals/MemberModal';
 import LoadingScreen from 'components/screens/LoadingScreen';
+import { useNavigate } from 'react-router-dom';
 
 export default function GroupOverview() {
   const { selectedGroup, setInfo } = useContext(PageContext);
@@ -118,7 +119,7 @@ function About({ group }: { group: GroupDetail }) {
 function ActionBar(props: { group: GroupDetail }) {
   const { group } = props;
   const { isOpen, onClose, onToggle } = useDisclosure();
-  const { open } = useGroupChat(group.id);
+  const navigate = useNavigate();
 
   function Item({
     text,
@@ -142,7 +143,7 @@ function ActionBar(props: { group: GroupDetail }) {
         <Item
           text="Chat"
           icon={<ChatIcon width="30px" height="30px" />}
-          onClick={open}
+          onClick={() => navigate(`/user/chat/${group.id}`)}
         />
         <Item
           text="Members"
@@ -152,6 +153,7 @@ function ActionBar(props: { group: GroupDetail }) {
         <Item
           text="Settings"
           icon={<Icon as={AiFillSetting} width="30px" height="30px" />}
+          onClick={() => navigate(`/user/${group.id}/settings`)}
         />
       </SimpleGrid>
     </>
@@ -161,7 +163,7 @@ function ActionBar(props: { group: GroupDetail }) {
 function GroupEvents({ detail }: { detail: GroupDetail }) {
   const { textColorSecondary } = useColors();
   const { onOpen, isOpen, onClose } = useDisclosure();
-  const atBottom = detail.events.length == 0 || detail.events.length % 2 == 0;
+  const atBottom = detail.events.length === 0 || detail.events.length % 2 === 0;
 
   return (
     <>

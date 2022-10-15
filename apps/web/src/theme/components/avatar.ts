@@ -1,3 +1,5 @@
+import { mode } from '@chakra-ui/theme-tools';
+
 export const avatarStyles = {
   components: {
     Avatar: {
@@ -8,6 +10,13 @@ export const avatarStyles = {
         },
       }),
       variants: {
+        border: (props: any) => ({
+          container: {
+            border: 'auto',
+            borderWidth: 10,
+            borderColor: mode('#ffffff', 'navy.800')(props),
+          },
+        }),
         normal: {
           container: {
             border: 0,

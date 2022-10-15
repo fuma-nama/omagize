@@ -1,7 +1,6 @@
 import {
   InputHTMLAttributes,
   LegacyRef,
-  MouseEventHandler,
   useMemo,
   useRef,
   useState,
@@ -29,7 +28,7 @@ export type Format = {
   maxWidth: number;
   maxHeight: number;
 };
-export const supportedFileTypes = '.png, .jpg, .jpeg, .gif';
+export const supportedImageTypes = '.png, .jpg, .jpeg, .gif';
 export function url(initial: string, image?: string | Reset): string {
   if (image == null || image === 'reset') return initial;
 
@@ -164,7 +163,9 @@ export function useImagePickerCrop<T extends UploadImage | Reset>(
   value: T,
   onChange: (file: T) => void,
   format: Format,
-  props?: InputHTMLAttributes<HTMLInputElement>
+  props: InputHTMLAttributes<HTMLInputElement> | null = {
+    accept: supportedImageTypes,
+  }
 ) {
   const [edit, setEdit] = useState<{
     crop: CropImage;
@@ -191,10 +192,14 @@ export function useImagePickerCrop<T extends UploadImage | Reset>(
         crop: edit.crop,
         setCrop: (v: CropImage) => setEdit((prev) => ({ ...prev, crop: v })),
         onCrop: (img) => {
-          cropImage(edit.crop, img, format).then((result) => {
+          if (img == null) {
             setEdit(null);
-            onChange(result as T);
-          });
+          } else {
+            cropImage(edit.crop, img, format).then((result) => {
+              setEdit(null);
+              onChange(result as T);
+            });
+          }
         },
       } as CropOptions),
   };

@@ -42,7 +42,6 @@ export function getActiveLayout(
   const routes = layoutes.map((layout) => map(layout));
   const matches = matchRoutes(routes, location.pathname);
 
-  console.log(matches);
   if (matches == null || matches.length === 0) return null;
 
   return matches[matches.length - 1].route.layout;

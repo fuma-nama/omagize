@@ -32,7 +32,7 @@ export const layouts: RootLayout[] = [
         component: <SignUp />,
       },
     ],
-    requireLogin: false,
+    loggedIn: false,
   },
   {
     path: '/user',
@@ -86,7 +86,7 @@ export const layouts: RootLayout[] = [
         ],
       },
     ],
-    requireLogin: true,
+    loggedIn: true,
   },
 ];
 
@@ -109,5 +109,5 @@ export type Layout = {
 };
 
 export type RootLayout = NormalLayout & {
-  requireLogin: boolean;
+  loggedIn: boolean;
 };

@@ -7,7 +7,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { layouts, NormalLayout, RootLayout } from './layouts';
+import { layouts, NormalLayout } from './layouts';
 import { useLoginQuery } from '@omagize/api';
 import LoadingScreen from './components/screens/LoadingScreen';
 
@@ -24,7 +24,7 @@ const client = new QueryClient({
 });
 
 function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
-  function mapNestedLayout(layout: NormalLayout, key: number) {
+  function mapNestedLayout(layout: NormalLayout, key: string | number) {
     if (layout.index === true) {
       return <Route index key={key} element={layout.component} />;
     } else {
@@ -36,17 +36,11 @@ function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
     }
   }
 
-  function mapLayout(layout: RootLayout, key: number) {
-    if (layout.requireLogin !== loggedIn) {
-      return null;
-    }
-
-    return mapNestedLayout(layout, key);
-  }
-
   return (
     <Routes>
-      {layouts.map(mapLayout)}
+      {layouts.map((layout, key) =>
+        layout.loggedIn === loggedIn ? mapNestedLayout(layout, key) : null
+      )}
 
       <Route
         path="*"

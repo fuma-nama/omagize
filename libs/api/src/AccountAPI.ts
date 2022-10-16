@@ -88,5 +88,7 @@ export function useLoginQuery() {
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: false,
     refetchInterval: false,
+    retry: true,
+    retryDelay: 5000,
   });
 }

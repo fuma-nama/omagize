@@ -1,4 +1,3 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { RawUser } from './UserAPI';
 import {
   callDefault,
@@ -9,8 +8,8 @@ import {
   withDefaultForm,
 } from './utils/core';
 import { DateObject, Snowflake } from './utils/types';
-import { Group, GroupDetail, Member } from './types/Group';
-import { GroupEvent } from './types/GroupEvents';
+import { Group, GroupDetail, Member } from './mappers/Group';
+import { GroupEvent } from './mappers/GroupEvents';
 import { Reset } from './AccountAPI';
 
 export function GroupDetailKey(group: Snowflake) {
@@ -169,35 +168,4 @@ export async function createGroup(
       body: data,
     })
   ).then((res) => Group(res));
-}
-
-export function useGroupsQuery() {
-  return useQuery(['groups'], () => fetchGroups());
-}
-
-export function useGroupMembersQuery(group: Snowflake) {
-  return useInfiniteQuery(
-    ['members', group],
-    ({ pageParam }) => fetchGroupMembers(group, pageParam),
-    {
-      getNextPageParam: (lastPage) => lastPage[lastPage.length - 1]?.id,
-    }
-  );
-}
-
-export function useMemberQuery(group: Snowflake, id: Snowflake) {
-  return useQuery(['member', group, id], () => fetchMemberInfo(group, id));
-}
-
-export function useGroupQuery(id: string) {
-  const groups = useGroupsQuery();
-
-  return {
-    data: groups.data?.find((group) => group.id === id),
-    query: groups,
-  };
-}
-
-export function useGroupDetailQuery(id: string) {
-  return useQuery(GroupDetailKey(id), () => fetchGroupDetail(id));
 }

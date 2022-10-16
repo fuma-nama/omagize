@@ -1,6 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
-import { GroupDetail } from '../types';
-import { GroupDetailKey, RawGroupDetail } from './../GroupAPI';
+import { GroupDetail } from '../mappers';
+import { RawGroupDetail } from './../GroupAPI';
+import { GroupDetailKey } from './../GroupDetailKey';
 import { GatewayEvent } from './Gateway';
 
 export const GatewayCode = {
@@ -28,6 +29,5 @@ function onGroupUpdate(
   event: GatewayEvent<RawGroupDetail>
 ) {
   const group = event.d;
-  console.log(`Group Updated`, group);
   return client.setQueryData(GroupDetailKey(group.id), GroupDetail(group));
 }

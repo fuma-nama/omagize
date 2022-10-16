@@ -1,6 +1,6 @@
 import { Snowflake } from '../utils/types';
 import { RawUser } from '../UserAPI';
-import { toAvatarUrl, toBannerUrl } from '../utils/Media';
+import { toAvatarUrl, toBannerUrl } from '../utils/mediaUtils';
 import { parseDate } from '../utils/core';
 
 export class User {

@@ -1,6 +1,6 @@
 import { User } from './User';
 import { RawGroupEvent } from '../GroupAPI';
-import { toBannerUrl } from '../utils/Media';
+import { toBannerUrl } from '../utils/mediaUtils';
 import { Snowflake } from '../utils/types';
 import { parseDate } from '../utils/core';
 

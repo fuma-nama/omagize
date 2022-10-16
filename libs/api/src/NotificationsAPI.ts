@@ -1,7 +1,6 @@
 import { delay, groups, notifications } from './model';
-import { useQuery } from '@tanstack/react-query';
 import { DateObject } from './utils/types';
-import { GroupNotification, UserNotification } from './types/Notifications';
+import { GroupNotification, UserNotification } from './mappers/Notifications';
 
 export type RawNotification = {
   id: string;
@@ -11,12 +10,6 @@ export type RawNotification = {
 
 export function fetchGroupNotifications(id: string): GroupNotification[] {
   return notifications;
-}
-
-export function useGroupNotificationsQuery(id: string) {
-  return useQuery(['group_notifications', id], () =>
-    fetchGroupNotifications(id)
-  );
 }
 
 export async function clearGroupNotifications() {
@@ -36,10 +29,6 @@ export function fetchUserNotifications(): UserNotification[] {
       from: 'Hong Kong',
     },
   ];
-}
-
-export function useUserNotificationsQuery() {
-  return useQuery(['user_notifications'], () => fetchUserNotifications());
 }
 
 export async function clearUserNotifications() {

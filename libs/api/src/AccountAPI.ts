@@ -1,4 +1,3 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   callDefault,
   callReturn,
@@ -6,10 +5,8 @@ import {
   withDefault,
 } from './utils/core';
 import { RawSelfUser } from './UserAPI';
-import { LoginPayload } from './types/Auth';
+import { LoginPayload } from './mappers/Auth';
 export type Reset = 'reset';
-
-export const LoginKey = ['login'];
 
 export type RawLoginPayload = {
   account: RawAccount;
@@ -56,16 +53,6 @@ export async function logout() {
   );
 }
 
-export function useLogoutMutation() {
-  const client = useQueryClient();
-
-  return useMutation(() => logout(), {
-    onSuccess() {
-      client.setQueryData(LoginKey, () => null);
-    },
-  });
-}
-
 export async function signup(options: {
   username: string;
   email: string;
@@ -79,16 +66,4 @@ export async function signup(options: {
       errorOnFail: true,
     })
   ).then((res) => LoginPayload(res));
-}
-
-export function useLoginQuery() {
-  return useQuery(LoginKey, () => auth(), {
-    refetchOnReconnect: false,
-    refetchOnMount: false,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
-    refetchInterval: false,
-    retry: true,
-    retryDelay: 5000,
-  });
 }

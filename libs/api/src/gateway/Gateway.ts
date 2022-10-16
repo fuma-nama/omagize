@@ -39,7 +39,6 @@ function connectGateway(
   };
 
   socket.onmessage = (event: MessageEvent<string>) => {
-    console.log(event);
     if (event.data.length !== 0) {
       handleGateway(options.client, event.data);
     }

@@ -1,8 +1,8 @@
 import { Message } from './MessageAPI';
 import { RawUser } from './UserAPI';
 import { RawGroup, RawGroupEvent, RawMember } from './GroupAPI';
-import { GroupNotification } from './types/Notifications';
-import { Member } from './types/Group';
+import { GroupNotification } from './mappers/Notifications';
+import { Member } from './mappers/Group';
 
 export function delay(timeout: number) {
   return new Promise((re) => {

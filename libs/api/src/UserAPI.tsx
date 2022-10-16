@@ -1,11 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
 import { delay, users } from './model';
-import { Reset, useLoginQuery } from './AccountAPI';
+import { Reset } from './AccountAPI';
 import { DateObject, Snowflake } from './utils/types';
 import { callReturn, withDefault, withDefaultForm } from './utils/core';
-import { SelfUser } from './types/Auth';
-import { FriendsData } from './types/Friend';
-import { GroupEvent } from './types/GroupEvents';
+import { SelfUser } from './mappers/Auth';
+import { FriendsData } from './mappers/Friend';
+import { GroupEvent } from './mappers/GroupEvents';
 import { RawGroupEvent } from './GroupAPI';
 
 export type RawUser = {
@@ -87,21 +86,4 @@ export async function acceptFriendRequest(friendID: string) {
 
 export async function denyFriendRequest(friendID: string) {
   await delay(2000);
-}
-
-export function useSelfUser() {
-  const query = useLoginQuery();
-
-  if (query.isLoading) {
-    throw 'Client must login before accessing self user';
-  }
-  return query.data.user;
-}
-
-export function useGroupEventsQuery() {
-  return useQuery(['all_group_event'], () => fetchGroupEvents());
-}
-
-export function useFriendsQuery() {
-  return useQuery(['friends'], () => fetchFriends());
 }

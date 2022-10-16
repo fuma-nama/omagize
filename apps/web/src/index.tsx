@@ -6,22 +6,12 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { layouts, NormalLayout } from './layouts';
-import { useLoginQuery } from '@omagize/api';
+import { client, initClient, useLoginQuery } from '@omagize/api';
 import LoadingScreen from './components/screens/LoadingScreen';
 
-const client = new QueryClient({
-  defaultOptions: {
-    queries: {
-      /**
-       * We will only update data with Gateway
-       */
-      staleTime: Infinity,
-      retry: 1,
-    },
-  },
-});
+initClient();
 
 function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
   function mapNestedLayout(layout: NormalLayout, key: string | number) {

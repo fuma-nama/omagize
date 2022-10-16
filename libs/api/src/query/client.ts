@@ -3,7 +3,7 @@ import { QueryClient } from '@tanstack/react-query';
 export let client: QueryClient;
 
 export function initClient(): QueryClient {
-  if (client != null) {
+  if (client == null) {
     client = new QueryClient({
       defaultOptions: {
         queries: {

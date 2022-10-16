@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './assets/css/App.css';
 import 'react-image-crop/dist/ReactCrop.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -12,7 +11,6 @@ import { client, initClient, useLoginQuery } from '@omagize/api';
 import LoadingScreen from './components/screens/LoadingScreen';
 
 initClient();
-
 function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
   function mapNestedLayout(layout: NormalLayout, key: string | number) {
     if (layout.index === true) {
@@ -41,6 +39,7 @@ function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
 }
 
 function Pages() {
+  console.log(client);
   const query = useLoginQuery();
 
   if (query.isLoading || query.error) return <LoadingScreen />;

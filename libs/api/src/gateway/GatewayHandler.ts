@@ -1,7 +1,6 @@
-import { QueryClient } from '@tanstack/react-query';
 import { GroupDetail } from '../mappers';
+import { dispatchGroupDetail } from '../query';
 import { RawGroupDetail } from './../GroupAPI';
-import { GroupDetailKey } from './../GroupDetailKey';
 import { GatewayEvent } from './Gateway';
 
 export const GatewayCode = {
@@ -9,14 +8,14 @@ export const GatewayCode = {
   GroupUpdated: 20,
 };
 
-export function handleGateway(client: QueryClient, eventJson: string) {
+export function handleGateway(eventJson: string) {
   const event: GatewayEvent<unknown> = JSON.parse(eventJson);
 
   switch (event.op) {
     case GatewayCode.Connected:
       break;
     case GatewayCode.GroupUpdated: {
-      onGroupUpdate(client, event as GatewayEvent<RawGroupDetail>);
+      onGroupUpdate(event as GatewayEvent<RawGroupDetail>);
       break;
     }
     default:
@@ -24,10 +23,8 @@ export function handleGateway(client: QueryClient, eventJson: string) {
   }
 }
 
-function onGroupUpdate(
-  client: QueryClient,
-  event: GatewayEvent<RawGroupDetail>
-) {
-  const group = event.d;
-  return client.setQueryData(GroupDetailKey(group.id), GroupDetail(group));
+function onGroupUpdate(event: GatewayEvent<RawGroupDetail>) {
+  const updated = GroupDetail(event.d);
+
+  return dispatchGroupDetail(updated);
 }

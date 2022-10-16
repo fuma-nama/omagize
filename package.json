@@ -6,7 +6,8 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "scan": "pnpm tsc -p ./apps/web"
   },
   "private": true,
   "dependencies": {

@@ -1,14 +1,12 @@
+import { replaceMatch } from '@omagize/utils';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
   fetchGroupDetail,
   fetchGroupMembers,
   fetchGroups,
   fetchMemberInfo,
-  Group,
-  GroupDetail,
-  Snowflake,
-} from '@omagize/api';
-import { replaceMatch } from '@omagize/utils';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+} from '../GroupAPI';
+import { Group, GroupDetail, Snowflake } from '../mappers';
 import { client } from './client';
 import { Keys } from './keys';
 

@@ -1,4 +1,4 @@
-import { DateObject } from './types';
+import { DateObject } from '../mappers/types';
 
 export const api = 'http://localhost:8080';
 export const ws = 'ws://localhost:8080/echo';

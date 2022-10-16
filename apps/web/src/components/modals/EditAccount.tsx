@@ -23,9 +23,9 @@ import {
   useImagePickerResize,
 } from 'utils/ImageUtils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateProfile, useSelfUser } from '@omagize/api';
+import { dispatchSelfUser, updateProfile, useSelfUser } from '@omagize/api';
 import { ProfileCropPicker } from './Modal';
-import { LoginKey, Reset, LoginPayload, SelfUser } from '@omagize/api';
+import { Reset, SelfUser } from '@omagize/api';
 import { useState } from 'react';
 
 type ProfileOptions = {
@@ -41,17 +41,13 @@ export default function EditAccountModal(props: {
   const { isOpen, onClose } = props;
 
   const [value, setValue] = useState<ProfileOptions>({});
-  const client = useQueryClient();
   const mutation = useMutation(
     ['edit_profile'],
     () => updateProfile(value.name, value.avatar, value.banner),
     {
-      onSuccess(updated: SelfUser) {
-        client.setQueryData<LoginPayload>(LoginKey, (prev) => ({
-          ...prev,
-          user: updated,
-        }));
+      async onSuccess(updated: SelfUser) {
         setValue({});
+        return dispatchSelfUser(updated);
       },
     }
   );

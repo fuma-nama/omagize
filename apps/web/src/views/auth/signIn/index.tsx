@@ -22,7 +22,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { useAuthColors } from 'variables/colors';
 import PasswordInput from 'components/fields/PasswordInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { login, LoginKey } from '@omagize/api';
+import { login, Keys } from '@omagize/api';
 import VerifyGroup from '../components/VerifyGroup';
 
 type Options = {
@@ -51,7 +51,7 @@ function SignIn() {
   const client = useQueryClient();
   const mutation = useMutation((options: Options) => login(options), {
     onSuccess(data) {
-      return client.setQueryData(LoginKey, data);
+      return client.setQueryData(Keys.login, data);
     },
   });
 

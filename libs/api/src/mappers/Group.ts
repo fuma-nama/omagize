@@ -1,5 +1,5 @@
 import { RawGroup, RawGroupDetail, RawMember } from '../GroupAPI';
-import { Snowflake } from '../utils/types';
+import { Snowflake } from './types';
 import { toBannerUrl, toIconUrl } from '../utils/mediaUtils';
 import { User } from './User';
 import { GroupEvent } from './GroupEvents';

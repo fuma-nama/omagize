@@ -1,9 +1,9 @@
 // Chakra imports
 import { Button, Flex, Link, Text } from '@chakra-ui/react';
+import { User } from '@omagize/api';
 
 // Assets
 import banner from 'assets/img/nfts/NftBanner1.png';
-import { User } from 'api/types/User';
 
 export default function Banner({ user }: { user: User }) {
   // Chakra Color Mode

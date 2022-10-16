@@ -1,7 +1,7 @@
 import { User } from './User';
 import { RawGroupEvent } from '../GroupAPI';
 import { toBannerUrl } from '../utils/mediaUtils';
-import { Snowflake } from '../utils/types';
+import { Snowflake } from './types';
 import { parseDate } from '../utils/core';
 
 export type GroupEvent = {

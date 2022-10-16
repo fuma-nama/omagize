@@ -11,7 +11,7 @@ import {
   Input,
   Text,
 } from '@chakra-ui/react';
-import React, { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import DefaultAuth from 'layouts/auth/Default';
 import illustration from 'assets/img/auth/auth.png';
 import { FcGoogle } from 'react-icons/fc';
@@ -19,7 +19,7 @@ import { HSeparator } from 'components/separator/Separator';
 import { NavLink } from 'react-router-dom';
 import { useAuthColors } from 'variables/colors';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LoginKey, signup } from '@omagize/api';
+import { Keys, signup } from '@omagize/api';
 import PasswordInput from 'components/fields/PasswordInput';
 import { SignUpOptions, useVerifySignUp } from 'utils/APIUtils';
 import Group from '../components/VerifyGroup';
@@ -52,7 +52,7 @@ export default function SignUp() {
   const client = useQueryClient();
   const mutation = useMutation((options: SignUpOptions) => signup(options), {
     onSuccess(data) {
-      return client.setQueryData(LoginKey, data);
+      return client.setQueryData(Keys.login, data);
     },
   });
   const signUp = useVerifySignUp(mutation.mutate);

@@ -1,4 +1,3 @@
-import { QueryClient } from '@tanstack/react-query';
 import { ws } from '../utils/core';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { handleGateway } from './GatewayHandler';
@@ -7,9 +6,9 @@ let socket: ReconnectingWebSocket;
 
 export type GatewayOptions = {
   /**
-   * Used for updating query data
+   * Enable debugs logs
    */
-  client: QueryClient;
+  debug?: boolean;
 };
 
 export const Gateway = {
@@ -40,7 +39,7 @@ function connectGateway(
 
   socket.onmessage = (event: MessageEvent<string>) => {
     if (event.data.length !== 0) {
-      handleGateway(options.client, event.data);
+      handleGateway(event.data);
     }
   };
 

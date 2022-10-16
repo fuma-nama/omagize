@@ -1,2 +1,2 @@
 export * from './mediaUtils';
-export * from './types';
+export * from '../mappers/types';

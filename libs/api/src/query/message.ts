@@ -1,9 +1,11 @@
+import { Snowflake } from '../mappers';
+import { Keys } from './keys';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMessagesBefore, fetchMessagesLatest } from '../MessageAPI';
 
-export function useInfiniteMessageQuery(group: string) {
+export function useInfiniteMessageQuery(group: Snowflake) {
   return useInfiniteQuery(
-    ['messages', group],
+    Keys.messages(group),
     ({ pageParam }) =>
       pageParam == null
         ? fetchMessagesLatest(group)

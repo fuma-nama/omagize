@@ -1,6 +1,6 @@
 import { delay, users } from './model';
 import { Reset } from './AccountAPI';
-import { DateObject, Snowflake } from './utils/types';
+import { DateObject, Snowflake } from './mappers/types';
 import { callReturn, withDefault, withDefaultForm } from './utils/core';
 import { SelfUser } from './mappers/Auth';
 import { FriendsData } from './mappers/Friend';

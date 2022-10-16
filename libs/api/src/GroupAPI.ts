@@ -7,7 +7,7 @@ import {
   withDefault,
   withDefaultForm,
 } from './utils/core';
-import { DateObject, Snowflake } from './utils/types';
+import { DateObject, Snowflake } from './mappers/types';
 import { Group, GroupDetail, Member } from './mappers/Group';
 import { GroupEvent } from './mappers/GroupEvents';
 import { Reset } from './AccountAPI';

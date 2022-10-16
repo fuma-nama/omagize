@@ -1,3 +1,4 @@
+import { Keys } from './keys';
 import { useQuery } from '@tanstack/react-query';
 import {
   fetchGroupNotifications,
@@ -5,11 +6,11 @@ import {
 } from '../NotificationsAPI';
 
 export function useUserNotificationsQuery() {
-  return useQuery(['user_notifications'], () => fetchUserNotifications());
+  return useQuery(Keys.notifications.user, () => fetchUserNotifications());
 }
 
 export function useGroupNotificationsQuery(id: string) {
-  return useQuery(['group_notifications', id], () =>
+  return useQuery(Keys.notifications.group(id), () =>
     fetchGroupNotifications(id)
   );
 }

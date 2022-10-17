@@ -19,6 +19,14 @@ export async function dispatchGroupDetail(detail: GroupDetail) {
   client.setQueryData<GroupDetail>(Keys.groupDetail(detail.id), detail);
 }
 
+export async function addGroup(group: Group) {
+  client.setQueriesData<Group[]>(Keys.groups, (prev) => {
+    const contains = prev.some((g) => g.id === group.id);
+
+    return contains ? prev : [...prev, group];
+  });
+}
+
 export function useGroupsQuery() {
   return useQuery(Keys.groups, () => fetchGroups());
 }

@@ -1,11 +1,18 @@
-import { GroupDetail } from '../mappers';
-import { dispatchGroupDetail } from '../query';
-import { RawGroupDetail } from './../GroupAPI';
+import { Group, GroupDetail } from '../mappers';
+import { addGroup, dispatchGroupDetail } from '../query';
+import { RawGroup, RawGroupDetail } from './../GroupAPI';
 import { GatewayEvent } from './Gateway';
 
 export const GatewayCode = {
   Connected: 10,
   GroupUpdated: 20,
+  UserUpdated: 12,
+  GroupEvent: 21,
+
+  /**
+   * When user join a group
+   */
+  GroupAdded: 19,
 };
 
 export function handleGateway(eventJson: string) {
@@ -18,6 +25,10 @@ export function handleGateway(eventJson: string) {
       onGroupUpdate(event as GatewayEvent<RawGroupDetail>);
       break;
     }
+    case GatewayCode.GroupAdded: {
+      onGroupAdded(event as GatewayEvent<RawGroupDetail>);
+      break;
+    }
     default:
       console.log(`[Gateway] unknown op code ${event.op}`);
   }
@@ -27,4 +38,10 @@ function onGroupUpdate(event: GatewayEvent<RawGroupDetail>) {
   const updated = GroupDetail(event.d);
 
   return dispatchGroupDetail(updated);
+}
+
+function onGroupAdded(event: GatewayEvent<RawGroup>) {
+  const updated = Group(event.d);
+
+  return addGroup(updated);
 }

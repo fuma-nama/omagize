@@ -169,3 +169,12 @@ export async function createGroup(
     })
   ).then((res) => Group(res));
 }
+
+export function joinGroup(code: string) {
+  return callReturn<RawGroupDetail>(
+    `/groups/join?code=${code}`,
+    withDefault({
+      method: 'POST',
+    })
+  );
+}

@@ -27,7 +27,7 @@ export async function auth(): Promise<LoginPayload | null> {
         401: () => null,
       },
     })
-  ).then((res) => LoginPayload(res));
+  ).then((res) => (res == null ? null : LoginPayload(res)));
 }
 
 export async function login(options: {

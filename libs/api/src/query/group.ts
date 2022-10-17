@@ -1,4 +1,4 @@
-import { replaceMatch } from '@omagize/utils';
+import { replaceMatch } from '../utils/utils';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
   fetchGroupDetail,

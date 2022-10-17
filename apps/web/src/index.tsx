@@ -39,7 +39,6 @@ function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
 }
 
 function Pages() {
-  console.log(client);
   const query = useLoginQuery();
 
   if (query.isLoading || query.error) return <LoadingScreen />;

@@ -12,7 +12,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
 } from '@chakra-ui/react';
 import { BiRightArrow } from 'react-icons/bi';
 import {
@@ -51,7 +50,7 @@ export default function CreateGroupModal(props: {
         <ModalHeader>Create Group</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Form
+          <CreateGroupForm
             isError={mutation.isError}
             value={value}
             onChange={(v) => {
@@ -81,13 +80,13 @@ export default function CreateGroupModal(props: {
   );
 }
 
-type GroupOptions = {
+export type GroupOptions = {
   name: string;
   icon?: UploadImage;
   banner?: UploadImage;
 };
 
-function Form({
+export function CreateGroupForm({
   value,
   onChange,
   isError,
@@ -116,7 +115,6 @@ function Form({
       <InputGroup flexDirection="column">
         {icon.picker}
         {banner.picker}
-        <Text mx="auto">Style your Group</Text>
         <ProfileCropPicker
           selectBanner={banner.select}
           selectIcon={icon.select}

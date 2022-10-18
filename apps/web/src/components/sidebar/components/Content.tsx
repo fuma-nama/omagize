@@ -60,6 +60,8 @@ function SidebarContent({ items }: { items: SidebarItem[] }) {
         </Stack>
 
         <Box
+          pos="sticky"
+          bottom={0}
           ps="20px"
           pe={{ lg: '16px', '2xl': '20px' }}
           mt="60px"

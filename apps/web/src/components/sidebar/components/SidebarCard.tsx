@@ -3,8 +3,6 @@ import {
   Box,
   Button,
   Flex,
-  SkeletonCircle,
-  SkeletonText,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -18,15 +16,7 @@ export default function SidebarProfile() {
   const user = useSelfUser();
 
   return (
-    <Flex
-      justify="center"
-      direction="column"
-      align="center"
-      bg={bgColor}
-      borderRadius="30px"
-      me="20px"
-      position="relative"
-    >
+    <Flex align="center" direction="column" bg={bgColor} rounded="3xl">
       <Box
         border="5px solid"
         borderColor={borderColor}
@@ -36,13 +26,7 @@ export default function SidebarProfile() {
         mx="auto"
         mt="-47px"
       >
-        <Avatar
-          name={user.username}
-          src={user.avatarUrl}
-          w="full"
-          h="full"
-          bg="linear-gradient(135deg, #868CFF 0%, #4318FF 100%)"
-        />
+        <Avatar name={user.username} src={user.avatarUrl} w="full" h="full" />
       </Box>
       <Flex
         direction="column"

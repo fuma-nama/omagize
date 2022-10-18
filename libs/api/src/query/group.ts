@@ -6,7 +6,7 @@ import {
   fetchGroups,
   fetchMemberInfo,
 } from '../GroupAPI';
-import { Group, GroupDetail, Snowflake } from '../mappers';
+import { Group, GroupDetail, GroupEvent, Snowflake } from '../mappers';
 import { client } from './client';
 import { Keys } from './keys';
 
@@ -24,6 +24,18 @@ export async function addGroup(group: Group) {
     const contains = prev.some((g) => g.id === group.id);
 
     return contains ? prev : [...prev, group];
+  });
+}
+
+export async function addGroupEvent(event: GroupEvent) {
+  client.setQueriesData<GroupDetail>(Keys.groupDetail(event.group), (prev) => {
+    const events = prev.events;
+    const contains = events.some((e) => e.id === event.id);
+
+    return {
+      ...prev,
+      events: contains ? events : [...events, event],
+    };
   });
 }
 

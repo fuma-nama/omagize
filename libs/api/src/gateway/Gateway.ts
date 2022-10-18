@@ -1,6 +1,6 @@
 import { ws } from '../utils/core';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { handleGateway } from './GatewayHandler';
+import { EventType, handleGateway } from './GatewayHandler';
 
 let socket: ReconnectingWebSocket;
 
@@ -63,5 +63,5 @@ function connectGateway(
 export type GatewayEvent<T> = {
   op: number;
   d: T;
-  type?: string;
+  type?: EventType;
 };

@@ -21,8 +21,11 @@ export const buttonStyles = {
           _hover: { bg: 'red.400' },
           _active: { bg: 'red.300' },
         }),
-        outline: () => ({
+        outline: (props: any) => ({
           borderRadius: '16px',
+          color: mode('brand.500', 'gray.200')(props),
+          border: '2px',
+          borderColor: mode('brand.500', 'gray.200')(props),
         }),
         brand: (props: any) => ({
           bg: mode('brand.500', 'brand.400')(props),

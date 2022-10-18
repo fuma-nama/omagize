@@ -1,14 +1,7 @@
-import {
-  Avatar,
-  Box,
-  Flex,
-  Image,
-  Input,
-  Text,
-  Textarea,
-} from '@chakra-ui/react';
+import { Avatar, Box, Flex, Input, Text, Textarea } from '@chakra-ui/react';
 import { GroupDetail, useMemberQuery } from '@omagize/api';
 import { SmallUserItem } from 'components/card/UserItem';
+import AutoImage from 'components/card/utils/AutoImage';
 import { CropImageModal } from 'components/modals/CropImageModal';
 import {
   AvatarFormat,
@@ -40,7 +33,7 @@ export function InfoContent({ value, onChange, group }: SettingsProps) {
 
       {icon.picker}
       {banner.picker}
-      <Image
+      <AutoImage
         cursor="pointer"
         src={banner.url ?? group.bannerUrl}
         onClick={banner.select}

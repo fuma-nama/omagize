@@ -21,7 +21,6 @@ import {
 import { BiRightArrow } from 'react-icons/bi';
 import {
   BannerFormat,
-  supportedImageTypes,
   UploadImage,
   useImagePickerCrop,
 } from 'utils/ImageUtils';

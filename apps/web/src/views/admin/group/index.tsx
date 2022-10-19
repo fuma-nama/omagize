@@ -36,6 +36,7 @@ import { DynamicModal } from 'components/modals/Modal';
 import LoadingScreen from 'components/screens/LoadingScreen';
 import { ErrorScreen } from 'components/screens/ErrorScreen';
 import { ActionBar, Options } from './components/ActionBar';
+import AutoImage from 'components/card/utils/AutoImage';
 
 export default function GroupOverview() {
   const { selectedGroup, setInfo } = useContext(PageContext);
@@ -110,18 +111,21 @@ function Content({ group }: { group: GroupDetail }) {
 }
 
 function About({ group }: { group: GroupDetail }) {
+  const { textColorPrimary, textColorSecondary } = useColors();
+  const empty = group.introduction == null || group.introduction.length === 0;
+
   return (
-    <Card p={0} overflow="hidden">
-      {!!group.bannerUrl && (
-        <Image src={group.bannerUrl} height="100px" objectFit="cover" />
-      )}
+    <Card p={0} overflow="hidden" color={textColorPrimary}>
+      <AutoImage src={group.bannerUrl} height="100px" objectFit="cover" />
       <Flex direction="column" p="20px">
-        <HStack mb="10px">
-          <Text fontSize="2xl" fontWeight="bold">
-            About
-          </Text>
-        </HStack>
-        <Text whiteSpace="pre-line">{group.introduction}</Text>
+        <Text fontSize="2xl" fontWeight="bold" mb="10px">
+          About
+        </Text>
+        {empty ? (
+          <Text color={textColorSecondary}>No Introduction</Text>
+        ) : (
+          <Text whiteSpace="pre-line">{group.introduction}</Text>
+        )}
       </Flex>
     </Card>
   );

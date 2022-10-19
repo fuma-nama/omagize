@@ -22,7 +22,7 @@ import {
   useImagePickerCrop,
   useImagePickerResize,
 } from 'utils/ImageUtils';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { dispatchSelfUser, updateProfile, useSelfUser } from '@omagize/api';
 import { ProfileCropPicker } from './Modal';
 import { Reset, SelfUser } from '@omagize/api';

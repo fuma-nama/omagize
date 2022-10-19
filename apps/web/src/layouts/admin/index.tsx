@@ -21,7 +21,7 @@ export default function Dashboard() {
       height="100%"
       overflow="auto"
       position="relative"
-      p={{ base: '20px', md: '30px' }}
+      p={{ base: '10px', md: '30px' }}
       w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
       maxWidth={{ base: '100%', xl: 'calc( 100% - 290px )' }}
       maxHeight="100%"

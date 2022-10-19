@@ -7,13 +7,13 @@ import {
   Heading,
   Hide,
   HStack,
+  Icon,
   Image,
   Show,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
 
-// Assets
 import {
   Member,
   useGroupDetailQuery,
@@ -23,6 +23,7 @@ import { useContext } from 'react';
 import { PageContext } from 'contexts/PageContext';
 import { GroupDetail } from '@omagize/api';
 import { useColors } from 'variables/colors';
+import { MdArrowDropDown } from 'react-icons/md';
 
 export default function Banner() {
   const { selectedGroup } = useContext(PageContext);
@@ -38,45 +39,58 @@ function Content({ group }: { group: GroupDetail }) {
   const loaded = membersQuery.isSuccess;
 
   return (
-    <Box
-      color="white"
-      pos="relative"
-      overflow="hidden"
-      borderRadius="30px"
-      bg={group.bannerUrl ? null : bg}
-      p={{ base: '10px', '3sm': '20px' }}
-    >
-      {group.bannerUrl && (
-        <Image
+    <>
+      <Box
+        cursor="pointer"
+        color="white"
+        pos="relative"
+        overflow="hidden"
+        borderRadius="30px"
+        bg={group.bannerUrl ? null : bg}
+        p={{ base: '10px', '3sm': '20px' }}
+      >
+        {group.bannerUrl && (
+          <Image
+            pos="absolute"
+            src={group.bannerUrl}
+            objectFit="cover"
+            top="0"
+            left="0"
+            w="full"
+            h="full"
+            filter="auto"
+            blur="sm"
+            brightness={0.5}
+          />
+        )}
+        <Box pos="relative">
+          {loaded && (
+            <>
+              <Show above="3sm">
+                <BannerContent
+                  group={group}
+                  members={membersQuery.data?.pages[0]}
+                />
+              </Show>
+              <Hide above="3sm">
+                <BannerSmallContent
+                  group={group}
+                  members={membersQuery.data?.pages[0]}
+                />
+              </Hide>
+            </>
+          )}
+        </Box>
+        <Icon
+          as={MdArrowDropDown}
+          w="30px"
+          h="30px"
           pos="absolute"
-          src={group.bannerUrl}
-          objectFit="cover"
-          top="0"
-          left="0"
-          w="full"
-          h="full"
-          filter="auto"
-          blur="sm"
-          brightness={0.5}
+          top="20px"
+          right="20px"
         />
-      )}
-      {loaded && (
-        <>
-          <Show above="3sm">
-            <BannerContent
-              group={group}
-              members={membersQuery.data?.pages[0]}
-            />
-          </Show>
-          <Hide above="3sm">
-            <BannerSmallContent
-              group={group}
-              members={membersQuery.data?.pages[0]}
-            />
-          </Hide>
-        </>
-      )}
-    </Box>
+      </Box>
+    </>
   );
 }
 
@@ -86,7 +100,7 @@ type BannerContentProps = {
 };
 function BannerContent({ group, members }: BannerContentProps) {
   return (
-    <Flex direction="row" gap="20px" my="20px" pos="relative">
+    <Flex direction="row" gap="20px" my="20px">
       <Avatar
         variant="border"
         borderWidth={5}
@@ -119,7 +133,7 @@ function BannerSmallContent({ group, members }: BannerContentProps) {
   const { cardBg, textColorPrimary } = useColors();
 
   return (
-    <Flex direction="column" gap="20px" pos="relative">
+    <Flex direction="column" gap="20px">
       <HStack>
         <Avatar
           variant="border"

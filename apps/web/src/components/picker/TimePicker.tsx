@@ -55,5 +55,5 @@ export function TimePicker({
 }
 
 function equals(o: TimeValue, other: TimeValue) {
-  return o.hours == other.hours && o.minutes == other.minutes;
+  return o.hours === other.hours && o.minutes === other.minutes;
 }

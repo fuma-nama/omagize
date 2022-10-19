@@ -1,6 +1,6 @@
 import { ImageCropPicker } from './Modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createGroupEvent, GroupDetail, GroupDetailKey } from '@omagize/api';
+import { createGroupEvent, GroupDetail, Keys } from '@omagize/api';
 import {
   Button,
   Flex,
@@ -62,7 +62,7 @@ export default function CreateEventModal(props: {
       ),
     {
       onSuccess(created) {
-        client.setQueryData(GroupDetailKey(group), (prev: GroupDetail) => ({
+        client.setQueryData(Keys.groupDetail(group), (prev: GroupDetail) => ({
           ...prev,
           events: [created, ...prev.events],
         }));

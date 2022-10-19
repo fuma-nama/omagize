@@ -2,19 +2,27 @@
 import {
   Avatar,
   AvatarGroup,
+  Box,
   Flex,
   Heading,
+  Hide,
   HStack,
   Image,
+  Show,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
 
 // Assets
-import { useGroupDetailQuery, useGroupMembersQuery } from '@omagize/api';
-import React, { useContext } from 'react';
+import {
+  Member,
+  useGroupDetailQuery,
+  useGroupMembersQuery,
+} from '@omagize/api';
+import { useContext } from 'react';
 import { PageContext } from 'contexts/PageContext';
 import { GroupDetail } from '@omagize/api';
+import { useColors } from 'variables/colors';
 
 export default function Banner() {
   const { selectedGroup } = useContext(PageContext);
@@ -27,17 +35,16 @@ export default function Banner() {
 function Content({ group }: { group: GroupDetail }) {
   const bg = useColorModeValue('brand.300', 'brand.400');
   const membersQuery = useGroupMembersQuery(group.id);
+  const loaded = membersQuery.isSuccess;
 
   return (
-    <Flex
+    <Box
+      color="white"
       pos="relative"
-      direction="row"
       overflow="hidden"
       borderRadius="30px"
       bg={group.bannerUrl ? null : bg}
-      align="center"
-      p="20px"
-      gap="20px"
+      p={{ base: '10px', '3sm': '20px' }}
     >
       {group.bannerUrl && (
         <Image
@@ -53,39 +60,98 @@ function Content({ group }: { group: GroupDetail }) {
           brightness={0.5}
         />
       )}
+      {loaded && (
+        <>
+          <Show above="3sm">
+            <BannerContent
+              group={group}
+              members={membersQuery.data?.pages[0]}
+            />
+          </Show>
+          <Hide above="3sm">
+            <BannerSmallContent
+              group={group}
+              members={membersQuery.data?.pages[0]}
+            />
+          </Hide>
+        </>
+      )}
+    </Box>
+  );
+}
+
+type BannerContentProps = {
+  group: GroupDetail;
+  members: Member[];
+};
+function BannerContent({ group, members }: BannerContentProps) {
+  return (
+    <Flex direction="row" gap="20px" my="20px" pos="relative">
       <Avatar
+        variant="border"
+        borderWidth={5}
         src={group.iconUrl}
         name={group.name}
-        top={{ base: '20px', '3sm': 'unset' }}
-        right={{ base: '20px', '3sm': 'unset' }}
-        pos={{ base: 'absolute', '3sm': 'relative' }}
-        w={{ base: '50px', '3sm': '100px', '2xl': '200px' }}
-        h={{ base: '50px', '3sm': '100px', '2xl': '200px' }}
+        w="100px"
+        h="100px"
       />
 
-      <Flex
-        color="white"
-        direction="column"
-        pos="relative"
-        align="start"
-        gap="20px"
-      >
-        <Heading mt="40px">{group.name}</Heading>
-        <HStack mt="20px">
+      <Flex direction="column" align="start" gap="20px">
+        <Heading>{group.name}</Heading>
+        <HStack mt="10px">
           <AvatarGroup max={5}>
-            {membersQuery.isSuccess &&
-              membersQuery.data.pages[0].map((member) => (
-                <Avatar
-                  border={0}
-                  key={member.id}
-                  src={member.avatarUrl}
-                  name={member.username}
-                />
-              ))}
+            {members.map((member) => (
+              <Avatar
+                key={member.id}
+                src={member.avatarUrl}
+                name={member.username}
+              />
+            ))}
           </AvatarGroup>
           <Text>{group.memberCount} Members</Text>
         </HStack>
       </Flex>
+    </Flex>
+  );
+}
+
+function BannerSmallContent({ group, members }: BannerContentProps) {
+  const { cardBg, textColorPrimary } = useColors();
+
+  return (
+    <Flex direction="column" gap="20px" pos="relative">
+      <HStack>
+        <Avatar
+          variant="border"
+          borderWidth={2}
+          src={group.iconUrl}
+          name={group.name}
+          w="70px"
+          h="70px"
+        />
+        <Text fontSize="xl" fontWeight="bold">
+          {group.name}
+        </Text>
+      </HStack>
+
+      <HStack
+        color={textColorPrimary}
+        bg={cardBg}
+        w="full"
+        rounded="2xl"
+        minH="40px"
+      >
+        <AvatarGroup max={5}>
+          {members.map((member) => (
+            <Avatar
+              key={member.id}
+              src={member.avatarUrl}
+              name={member.username}
+            />
+          ))}
+        </AvatarGroup>
+        <Text fontWeight="bold">{group.memberCount} Members</Text>
+      </HStack>
     </Flex>
   );
 }

@@ -1,6 +1,24 @@
 import { Box, Center, Icon, Spinner, Text, VStack } from '@chakra-ui/react';
+import { UseQueryResult } from '@tanstack/react-query';
 import { OmagizeLogo } from 'components/icons/Icons';
+import { ReactNode } from 'react';
 import { useColors } from 'variables/colors';
+import { ErrorScreen } from './ErrorScreen';
+
+export function QueryScreen({
+  query,
+  error,
+  children,
+}: {
+  query: UseQueryResult;
+  error: string;
+  children: ReactNode;
+}) {
+  if (query.isError)
+    return <ErrorScreen retry={() => query.refetch()}>{error}</ErrorScreen>;
+  if (query.isLoading) return <LoadingScreen />;
+  return <>{children}</>;
+}
 
 export default function LoadingScreen() {
   const { brand } = useColors();

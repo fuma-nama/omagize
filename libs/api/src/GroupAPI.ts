@@ -8,13 +8,9 @@ import {
   withDefaultForm,
 } from './utils/core';
 import { DateObject, Snowflake } from './mappers/types';
-import { Group, GroupDetail, Member } from './mappers/Group';
+import { Group, GroupDetail, GroupInvite, Member } from './mappers/Group';
 import { GroupEvent } from './mappers/GroupEvents';
 import { Reset } from './AccountAPI';
-
-export function GroupDetailKey(group: Snowflake) {
-  return ['group_detail', group];
-}
 
 export type RawGroup = {
   id: Snowflake;
@@ -51,6 +47,13 @@ export type RawGroupEvent = {
   place?: string;
   group: string;
   author: RawUser;
+};
+
+export type RawGroupInvite = {
+  group: Snowflake;
+  code: string;
+  once: boolean;
+  expireAt: DateObject;
 };
 
 export type UpdateGroupOptions = {
@@ -177,4 +180,24 @@ export function joinGroup(code: string) {
       method: 'POST',
     })
   );
+}
+
+export function fetchGroupInvite(group: string) {
+  return callReturn<RawGroupInvite>(
+    `/groups/${group}/invite`,
+    withDefault({})
+  ).then((res) => GroupInvite(res));
+}
+
+export function modifyGroupInvite(group: string, once: boolean, expire: Date) {
+  return callReturn<RawGroupInvite>(
+    `/groups/${group}/invite`,
+    withDefault({
+      body: JSON.stringify({
+        once,
+        expire,
+      }),
+      method: 'PATCH',
+    })
+  ).then((res) => GroupInvite(res));
 }

@@ -2,6 +2,7 @@ import { replaceMatch } from '../utils/utils';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
   fetchGroupDetail,
+  fetchGroupInvite,
   fetchGroupMembers,
   fetchGroups,
   fetchMemberInfo,
@@ -69,4 +70,8 @@ export function useGroupQuery(id: string) {
 
 export function useGroupDetailQuery(id: string) {
   return useQuery(Keys.groupDetail(id), () => fetchGroupDetail(id));
+}
+
+export function useGroupInviteQuery(group: Snowflake) {
+  return useQuery(Keys.groupInvite(group), () => fetchGroupInvite(group));
 }

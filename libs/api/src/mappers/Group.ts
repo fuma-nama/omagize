@@ -1,8 +1,14 @@
-import { RawGroup, RawGroupDetail, RawMember } from '../GroupAPI';
+import {
+  RawGroup,
+  RawGroupDetail,
+  RawGroupInvite,
+  RawMember,
+} from '../GroupAPI';
 import { Snowflake } from './types';
 import { toBannerUrl, toIconUrl } from '../utils/mediaUtils';
 import { User } from './User';
 import { GroupEvent } from './GroupEvents';
+import { parseDate } from '../utils/core';
 
 export type Group = {
   id: Snowflake;
@@ -50,4 +56,17 @@ export class Member extends User {
   constructor(raw: RawMember) {
     super(raw);
   }
+}
+
+export type GroupInvite = {
+  group: Snowflake;
+  code: string;
+  once: boolean;
+  expireAt: Date;
+};
+export function GroupInvite(raw: RawGroupInvite): GroupInvite {
+  return {
+    ...raw,
+    expireAt: parseDate(raw.expireAt),
+  };
 }

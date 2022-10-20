@@ -2,6 +2,8 @@ import {
   Button,
   ButtonGroup,
   Flex,
+  FormControl,
+  FormErrorMessage,
   HStack,
   Icon,
   Input,
@@ -20,7 +22,7 @@ import { useState } from 'react';
 import { MdCreate } from 'react-icons/md';
 import { RiTicketFill } from 'react-icons/ri';
 import { useColors } from 'variables/colors';
-import CreateGroupModal, { CreateGroupForm, GroupOptions } from './CreateGroup';
+import { CreateGroupForm, GroupOptions } from './CreateGroup';
 
 export function AddGroupModal({
   isOpen,
@@ -30,28 +32,8 @@ export function AddGroupModal({
   onClose: () => void;
 }) {
   const [tabIndex, setTabIndex] = useState(0);
-  const JoinGroupContent = useJoinGroupContent();
-  const CreateGroupContent = useCreateGroupContent();
-
-  const createMutation = useMutation(
-    ['create_group'],
-    (options: GroupOptions) =>
-      createGroup(options.name, options.icon, options.banner),
-    {
-      onSuccess() {
-        onClose();
-      },
-    }
-  );
-  const joinMutation = useMutation(
-    ['join_group'],
-    (code: string) => joinGroup(code),
-    {
-      onSuccess() {
-        onClose();
-      },
-    }
-  );
+  const JoinGroupContent = useJoinGroupContent(onClose);
+  const CreateGroupContent = useCreateGroupContent(onClose);
 
   const tabs = [
     {
@@ -60,8 +42,8 @@ export function AddGroupModal({
       footer: (
         <Button
           variant="brand"
-          onClick={() => joinMutation.mutate(JoinGroupContent.code)}
-          isLoading={joinMutation.isLoading}
+          onClick={() => JoinGroupContent.mutate()}
+          isLoading={JoinGroupContent.mutation.isLoading}
         >
           Join
         </Button>
@@ -73,8 +55,8 @@ export function AddGroupModal({
       footer: (
         <Button
           variant="brand"
-          onClick={() => createMutation.mutate(CreateGroupContent.options)}
-          isLoading={createMutation.isLoading}
+          onClick={() => CreateGroupContent.mutate()}
+          isLoading={CreateGroupContent.mutation.isLoading}
         >
           Create
         </Button>
@@ -83,44 +65,51 @@ export function AddGroupModal({
   ];
 
   return (
-    <>
-      <CreateGroupModal isOpen={false} onClose={onClose} />
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            <ButtonGroup>
-              {tabs.map((tab, i) => (
-                <Button
-                  key={i}
-                  variant={tabIndex === i && 'brand'}
-                  onClick={() => setTabIndex(i)}
-                >
-                  {tab.text}
-                </Button>
-              ))}
-            </ButtonGroup>
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>{tabs[tabIndex].body}</ModalBody>
-          <ModalFooter gap={2}>
-            <Button mr={3} onClick={onClose}>
-              Close
-            </Button>
-            {tabs[tabIndex].footer}
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>
+          <ButtonGroup>
+            {tabs.map((tab, i) => (
+              <Button
+                key={i}
+                variant={tabIndex === i && 'brand'}
+                onClick={() => setTabIndex(i)}
+              >
+                {tab.text}
+              </Button>
+            ))}
+          </ButtonGroup>
+        </ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>{tabs[tabIndex].body}</ModalBody>
+        <ModalFooter gap={2}>
+          <Button mr={3} onClick={onClose}>
+            Close
+          </Button>
+          {tabs[tabIndex].footer}
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
 
-function useCreateGroupContent() {
+function useCreateGroupContent(onClose: () => void) {
   const [options, setOptions] = useState<GroupOptions>({ name: '' });
   const { brand } = useColors();
-
+  const mutation = useMutation(
+    ['create_group'],
+    (options: GroupOptions) =>
+      createGroup(options.name, options.icon, options.banner),
+    {
+      onSuccess() {
+        onClose();
+      },
+    }
+  );
   return {
-    options,
+    mutate: () => mutation.mutate(options),
+    mutation,
     component: (
       <>
         <HStack>
@@ -140,14 +129,24 @@ function useCreateGroupContent() {
   };
 }
 
-function useJoinGroupContent() {
+function useJoinGroupContent(onClose: () => void) {
   const [code, setCode] = useState('');
   const { brand } = useColors();
+  const mutation = useMutation(
+    ['join_group'],
+    (code: string) => joinGroup(code),
+    {
+      onSuccess() {
+        onClose();
+      },
+    }
+  );
 
   return {
-    code,
+    mutate: () => mutation.mutate(code),
+    mutation,
     component: (
-      <Flex direction="column" gap={3}>
+      <Flex direction="column">
         <HStack>
           <Icon as={RiTicketFill} color={brand} w="30px" h="30px" />
           <Text fontSize="xl" fontWeight="600">
@@ -158,12 +157,16 @@ function useJoinGroupContent() {
           An invite code looks like: <b>3821696</b>
         </Text>
 
-        <Input
-          variant="main"
-          value={code}
-          placeholder="Your invite code..."
-          onChange={(e) => setCode(e.target.value)}
-        />
+        <FormControl isInvalid={mutation.isError}>
+          <Input
+            mt={3}
+            variant="main"
+            value={code}
+            placeholder="Your invite code..."
+            onChange={(e) => setCode(e.target.value)}
+          />
+          <FormErrorMessage>{mutation.error?.toString()}</FormErrorMessage>
+        </FormControl>
       </Flex>
     ),
   };

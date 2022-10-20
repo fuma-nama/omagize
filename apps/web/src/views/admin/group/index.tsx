@@ -5,8 +5,6 @@ import {
   Center,
   Flex,
   Grid,
-  HStack,
-  Image,
   SimpleGrid,
   Text,
   useDisclosure,
@@ -35,8 +33,9 @@ import CreateEventModal from 'components/modals/CreateEventModal';
 import { DynamicModal } from 'components/modals/Modal';
 import LoadingScreen from 'components/screens/LoadingScreen';
 import { ErrorScreen } from 'components/screens/ErrorScreen';
-import { ActionBar, Options } from './components/ActionBar';
+import { GroupHeader, Options } from './components/GroupHeader';
 import AutoImage from 'components/card/utils/AutoImage';
+import GroupInviteModal from 'components/modals/GroupInviteModal';
 
 export default function GroupOverview() {
   const { selectedGroup, setInfo } = useContext(PageContext);
@@ -61,7 +60,45 @@ export default function GroupOverview() {
 }
 
 function Content({ group }: { group: GroupDetail }) {
+  return (
+    <Grid
+      h="full"
+      mb="20px"
+      gridTemplateColumns={{ xl: 'repeat(2, 1fr)', '2xl': '1fr 0.46fr' }}
+      gap={{ base: '20px', xl: '20px' }}
+      display={{ base: 'block', xl: 'grid' }}
+    >
+      <Flex
+        flexDirection="column"
+        gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}
+      >
+        <Banner />
+        <Flex direction="column" flexGrow={1} mt="25px" mb="20px" gap="20px">
+          <Header group={group} />
+          <Text fontSize="2xl" fontWeight="600">
+            Recent Messages
+          </Text>
+          <MessagesPreview />
+        </Flex>
+      </Flex>
+      <Flex
+        direction="column"
+        gap="20px"
+        gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}
+      >
+        <About group={group} />
+        <Card px="0px">
+          <AdminsCard group={group} />
+        </Card>
+        <Notifications />
+      </Flex>
+    </Grid>
+  );
+}
+
+function Header({ group }: { group: GroupDetail }) {
   const CreateEvent = useDisclosure();
+  const Invite = useDisclosure();
 
   return (
     <>
@@ -72,40 +109,16 @@ function Content({ group }: { group: GroupDetail }) {
           group={group.id}
         />
       </DynamicModal>
-      <Grid
-        h="full"
-        mb="20px"
-        gridTemplateColumns={{ xl: 'repeat(2, 1fr)', '2xl': '1fr 0.46fr' }}
-        gap={{ base: '20px', xl: '20px' }}
-        display={{ base: 'block', xl: 'grid' }}
-      >
-        <Flex
-          flexDirection="column"
-          gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}
-        >
-          <Banner />
-          <Flex direction="column" flexGrow={1} mt="25px" mb="20px" gap="20px">
-            <ActionBar group={group} />
-            <Options createEvent={CreateEvent.onOpen} />
-            <GroupEvents onOpen={CreateEvent.onOpen} detail={group} />
-            <Text fontSize="2xl" fontWeight="600">
-              Recent Messages
-            </Text>
-            <MessagesPreview />
-          </Flex>
-        </Flex>
-        <Flex
-          direction="column"
-          gap="20px"
-          gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}
-        >
-          <About group={group} />
-          <Card px="0px">
-            <AdminsCard group={group} />
-          </Card>
-          <Notifications />
-        </Flex>
-      </Grid>
+      <DynamicModal isOpen={Invite.isOpen}>
+        <GroupInviteModal
+          isOpen={Invite.isOpen}
+          onClose={Invite.onClose}
+          group={group}
+        />
+      </DynamicModal>
+      <GroupHeader group={group} />
+      <Options createEvent={CreateEvent.onOpen} invite={Invite.onOpen} />
+      <GroupEvents onOpen={CreateEvent.onOpen} detail={group} />
     </>
   );
 }

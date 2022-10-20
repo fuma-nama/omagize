@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { BiAnalyse } from 'react-icons/bi';
 import { FcLeave } from 'react-icons/fc';
 
-export function ActionBar(props: { group: GroupDetail }) {
+export function GroupHeader(props: { group: GroupDetail }) {
   const { group } = props;
   const { isOpen, onClose, onToggle } = useDisclosure();
   const navigate = useNavigate();
@@ -62,7 +62,10 @@ export function ActionBar(props: { group: GroupDetail }) {
   );
 }
 
-export function Options(props: { createEvent: () => void }) {
+export function Options(props: {
+  createEvent: () => void;
+  invite: () => void;
+}) {
   return (
     <HStack justify="center" wrap="wrap" spacing={0} gap={2}>
       <Button
@@ -76,7 +79,12 @@ export function Options(props: { createEvent: () => void }) {
       <Button rounded="full" variant="outline" leftIcon={<BiAnalyse />}>
         Analytics
       </Button>
-      <Button rounded="full" variant="brand" leftIcon={<BsPeopleFill />}>
+      <Button
+        rounded="full"
+        variant="brand"
+        leftIcon={<BsPeopleFill />}
+        onClick={() => props.invite()}
+      >
         Invite People
       </Button>
       <Button rounded="full" variant="danger" leftIcon={<FcLeave />}>

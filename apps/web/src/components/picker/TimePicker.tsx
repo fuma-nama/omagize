@@ -44,6 +44,7 @@ export function TimePicker({
 
   return (
     <StyledSelect
+      portal
       placeholder="00:00"
       options={options}
       value={!!props.value && options.find((o) => equals(o.value, props.value))}

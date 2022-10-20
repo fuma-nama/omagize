@@ -5,6 +5,7 @@ import {
   Popover,
   PopoverBody,
   PopoverContent,
+  PopoverFooter,
   Portal,
   Text,
   useDisclosure,
@@ -62,6 +63,9 @@ export function DatePicker({
               {...props}
             />
           </PopoverBody>
+          <PopoverFooter>
+            <Button onClick={onClose}>Close</Button>
+          </PopoverFooter>
         </PopoverContent>
       </Portal>
     </Popover>

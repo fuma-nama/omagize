@@ -7,7 +7,12 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { CardButton } from 'components/card/Card';
-import { GroupDetail, leaveGroup, useSelfUser } from '@omagize/api';
+import {
+  GroupDetail,
+  leaveGroup,
+  removeGroup,
+  useSelfUser,
+} from '@omagize/api';
 import { AddIcon, ChatIcon } from '@chakra-ui/icons';
 import { BsPeopleFill } from 'react-icons/bs';
 import { AiFillSetting } from 'react-icons/ai';
@@ -79,7 +84,10 @@ function useLeaveModal(group: GroupDetail) {
       ['leave_group', group.id],
       () => leaveGroup(group.id),
       {
-        onSuccess: onClose,
+        onSuccess() {
+          onClose();
+          return removeGroup(group.id);
+        },
       }
     );
 

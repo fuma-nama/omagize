@@ -31,7 +31,13 @@ export type RawGroupDetail = RawGroup & {
 };
 
 export type RawMember = RawUser & {
-  role?: number;
+  admin?: boolean;
+};
+
+export type RawMemberClip = {
+  group: Snowflake;
+  user: Snowflake;
+  admin: boolean;
 };
 
 /**

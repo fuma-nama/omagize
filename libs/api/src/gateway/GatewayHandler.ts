@@ -4,9 +4,15 @@ import {
   addGroupEvent,
   dispatchGroupDetail,
   dispatchUser,
+  removeGroup,
 } from '../query';
 import { RawSelfUser } from '../UserAPI';
-import { RawGroup, RawGroupDetail, RawGroupEvent } from './../GroupAPI';
+import {
+  RawGroup,
+  RawGroupDetail,
+  RawGroupEvent,
+  RawMemberClip,
+} from './../GroupAPI';
 import { GatewayEvent } from './Gateway';
 
 export const GatewayCode = {
@@ -14,6 +20,7 @@ export const GatewayCode = {
   GroupUpdated: 20,
   UserUpdated: 12,
   GroupEvent: 21,
+  GroupRemoved: 22,
 
   /**
    * When user join a group
@@ -49,6 +56,10 @@ export function handleGateway(eventJson: string) {
       onGroupEvent(event as GatewayEvent<RawGroupEvent>);
       break;
     }
+    case GatewayCode.GroupRemoved: {
+      onGroupRemoved(event as GatewayEvent<RawMemberClip>);
+      break;
+    }
     default:
       console.log(`[Gateway] unknown op code ${event.op}`);
   }
@@ -79,4 +90,8 @@ function onGroupAdded(event: GatewayEvent<RawGroup>) {
   const updated = Group(event.d);
 
   return addGroup(updated);
+}
+function onGroupRemoved(event: GatewayEvent<RawMemberClip>) {
+  const clip = event.d;
+  removeGroup(clip.group);
 }

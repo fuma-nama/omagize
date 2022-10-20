@@ -40,6 +40,12 @@ export async function addGroup(group: Group) {
   });
 }
 
+export async function removeGroup(group: Snowflake) {
+  client.setQueryData<Group[]>(Keys.groups, (prev) =>
+    prev.filter((g) => g.id !== group)
+  );
+}
+
 export async function addGroupEvent(event: GroupEvent) {
   client.setQueriesData<GroupDetail>(Keys.groupDetail(event.group), (prev) => {
     const events = prev.events;

@@ -189,13 +189,17 @@ export function fetchGroupInvite(group: string) {
   ).then((res) => GroupInvite(res));
 }
 
-export function modifyGroupInvite(group: string, once: boolean, expire: Date) {
+export function modifyGroupInvite(
+  group: string,
+  once: boolean,
+  expire: Date | null
+) {
   return callReturn<RawGroupInvite>(
     `/groups/${group}/invite`,
     withDefault({
       body: JSON.stringify({
         once,
-        expire,
+        expire: stringifyDate(expire),
       }),
       method: 'PATCH',
     })

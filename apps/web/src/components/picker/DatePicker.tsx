@@ -38,7 +38,7 @@ export function DatePicker({
           onClick={onToggle}
           {...toggler}
         >
-          {show?.toLocaleDateString()}
+          {show == null ? 'Pick a Date' : show.toLocaleDateString()}
         </Button>
       </PopoverAnchor>
       <Portal>

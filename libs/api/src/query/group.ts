@@ -1,5 +1,10 @@
+import { GroupInvite } from './../mappers/Group';
 import { replaceMatch } from '../utils/utils';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useQuery,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import {
   fetchGroupDetail,
   fetchGroupInvite,
@@ -13,15 +18,22 @@ import { Keys } from './keys';
 
 //dispatch
 export async function dispatchGroupDetail(detail: GroupDetail) {
-  client.setQueriesData<Group[]>(Keys.groups, (prev) =>
+  client.setQueryData<Group[]>(Keys.groups, (prev) =>
     replaceMatch(prev, (v) => v.id === detail.id, detail)
   );
 
   client.setQueryData<GroupDetail>(Keys.groupDetail(detail.id), detail);
 }
 
+export function dispatchGroupInvite(invite: GroupInvite) {
+  return client.setQueryData<GroupInvite>(
+    Keys.groupInvite(invite.group),
+    invite
+  );
+}
+
 export async function addGroup(group: Group) {
-  client.setQueriesData<Group[]>(Keys.groups, (prev) => {
+  client.setQueryData<Group[]>(Keys.groups, (prev) => {
     const contains = prev.some((g) => g.id === group.id);
 
     return contains ? prev : [...prev, group];
@@ -72,6 +84,12 @@ export function useGroupDetailQuery(id: string) {
   return useQuery(Keys.groupDetail(id), () => fetchGroupDetail(id));
 }
 
-export function useGroupInviteQuery(group: Snowflake) {
-  return useQuery(Keys.groupInvite(group), () => fetchGroupInvite(group));
+export function useGroupInviteQuery(
+  group: Snowflake,
+  options?: UseQueryOptions<GroupInvite>
+) {
+  return useQuery(Keys.groupInvite(group), () => fetchGroupInvite(group), {
+    refetchOnMount: 'always',
+    ...options,
+  });
 }

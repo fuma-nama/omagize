@@ -17,7 +17,7 @@ export type Options = RequestInit & {
   /**
    * throw an error if status code is not equal to 200
    *
-   * default: false
+   * default: true
    */
   errorOnFail?: boolean;
 };
@@ -56,7 +56,7 @@ async function handleResult<T>(
   if (!res.ok) {
     if (options.allowed && options.allowed[res.status]) {
       return options.allowed[res.status](res);
-    } else if (options.errorOnFail ?? false) {
+    } else if (options.errorOnFail ?? true) {
       throw new Error(await res.text());
     }
   }
@@ -65,7 +65,7 @@ async function handleResult<T>(
 }
 
 async function handle(res: Response, options: Options) {
-  if (!res.ok && (options.errorOnFail ?? false)) {
+  if (!res.ok && (options.errorOnFail ?? true)) {
     throw new Error(await res.text());
   }
 
@@ -95,6 +95,7 @@ export function withDefaultForm<T extends Options>(options: T): T {
 }
 
 export function stringifyDate(date: Date): string {
+  if (date == null) return null;
   return date.getTime().toString();
 }
 

@@ -205,3 +205,12 @@ export function modifyGroupInvite(
     })
   ).then((res) => GroupInvite(res));
 }
+
+export function leaveGroup(group: Snowflake) {
+  return callDefault(
+    `/groups/${group}/leave`,
+    withDefault({
+      method: 'POST',
+    })
+  );
+}

@@ -33,7 +33,7 @@ import CreateEventModal from 'components/modals/CreateEventModal';
 import { DynamicModal } from 'components/modals/Modal';
 import LoadingScreen from 'components/screens/LoadingScreen';
 import { ErrorScreen } from 'components/screens/ErrorScreen';
-import { GroupHeader, Options } from './components/GroupHeader';
+import { GroupHeader } from './components/GroupHeader';
 import AutoImage from 'components/card/utils/AutoImage';
 import GroupInviteModal from 'components/modals/GroupInviteModal';
 
@@ -116,8 +116,11 @@ function Header({ group }: { group: GroupDetail }) {
           group={group}
         />
       </DynamicModal>
-      <GroupHeader group={group} />
-      <Options createEvent={CreateEvent.onOpen} invite={Invite.onOpen} />
+      <GroupHeader
+        createEvent={CreateEvent.onOpen}
+        invite={Invite.onOpen}
+        group={group}
+      />
       <GroupEvents onOpen={CreateEvent.onOpen} detail={group} />
     </>
   );

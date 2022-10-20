@@ -7,7 +7,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { CardButton } from 'components/card/Card';
-import { GroupDetail } from '@omagize/api';
+import { GroupDetail, leaveGroup, useSelfUser } from '@omagize/api';
 import { AddIcon, ChatIcon } from '@chakra-ui/icons';
 import { BsPeopleFill } from 'react-icons/bs';
 import { AiFillSetting } from 'react-icons/ai';
@@ -17,8 +17,16 @@ import MemberModal from 'components/modals/MemberModal';
 import { useNavigate } from 'react-router-dom';
 import { BiAnalyse } from 'react-icons/bi';
 import { FcLeave } from 'react-icons/fc';
+import { useMutation } from '@tanstack/react-query';
+import { useConfirmDialog } from 'components/modals/dialogs/Dialog';
 
-export function GroupHeader(props: { group: GroupDetail }) {
+export type GroupHeaderProps = {
+  createEvent: () => void;
+  invite: () => void;
+  group: GroupDetail;
+};
+
+export function GroupHeader(props: GroupHeaderProps) {
   const { group } = props;
   const { isOpen, onClose, onToggle } = useDisclosure();
   const navigate = useNavigate();
@@ -58,38 +66,79 @@ export function GroupHeader(props: { group: GroupDetail }) {
           onClick={() => navigate(`/user/${group.id}/settings`)}
         />
       </SimpleGrid>
+      <Options {...props} />
     </>
   );
 }
 
-export function Options(props: {
-  createEvent: () => void;
-  invite: () => void;
-}) {
+function useLeaveModal(group: GroupDetail) {
+  const user = useSelfUser();
+  const isOwner = group.owner === user.id;
+  function Content(onClose: () => void) {
+    const leaveMutation = useMutation(
+      ['leave_group', group.id],
+      () => leaveGroup(group.id),
+      {
+        onSuccess: onClose,
+      }
+    );
+
+    return (
+      <Button
+        variant="action"
+        isLoading={leaveMutation.isLoading}
+        onClick={() => leaveMutation.mutate()}
+      >
+        Leave
+      </Button>
+    );
+  }
+
+  return useConfirmDialog(
+    {
+      header: 'Do you sure to Leave this Group?',
+      message: isOwner
+        ? 'The Group will be deleted after you leave'
+        : 'You may join the Group again with an invite code',
+    },
+    Content
+  );
+}
+
+export function Options({ group, createEvent, invite }: GroupHeaderProps) {
+  const LeaveModal = useLeaveModal(group);
   return (
-    <HStack justify="center" wrap="wrap" spacing={0} gap={2}>
-      <Button
-        rounded="full"
-        variant="outline"
-        leftIcon={<AddIcon />}
-        onClick={() => props.createEvent()}
-      >
-        Create Event
-      </Button>
-      <Button rounded="full" variant="outline" leftIcon={<BiAnalyse />}>
-        Analytics
-      </Button>
-      <Button
-        rounded="full"
-        variant="brand"
-        leftIcon={<BsPeopleFill />}
-        onClick={() => props.invite()}
-      >
-        Invite People
-      </Button>
-      <Button rounded="full" variant="danger" leftIcon={<FcLeave />}>
-        Leave Group
-      </Button>
-    </HStack>
+    <>
+      {LeaveModal.modal}
+      <HStack justify="center" wrap="wrap" spacing={0} gap={2}>
+        <Button
+          rounded="full"
+          variant="outline"
+          leftIcon={<AddIcon />}
+          onClick={createEvent}
+        >
+          Create Event
+        </Button>
+        <Button rounded="full" variant="outline" leftIcon={<BiAnalyse />}>
+          Analytics
+        </Button>
+        <Button
+          rounded="full"
+          variant="brand"
+          leftIcon={<BsPeopleFill />}
+          onClick={invite}
+        >
+          Invite People
+        </Button>
+        <Button
+          rounded="full"
+          variant="danger"
+          leftIcon={<FcLeave />}
+          onClick={LeaveModal.onOpen}
+        >
+          Leave Group
+        </Button>
+      </HStack>
+    </>
   );
 }

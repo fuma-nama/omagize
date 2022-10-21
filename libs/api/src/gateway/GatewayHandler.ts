@@ -16,23 +16,20 @@ import {
 import { GatewayEvent } from './Gateway';
 
 export const GatewayCode = {
-  Connected: 10,
-  GroupUpdated: 20,
-  UserUpdated: 12,
-  GroupEvent: 21,
-  GroupRemoved: 22,
+  //10*: Basic
+  Connected: 100,
 
-  /**
-   * When user join a group
-   */
-  GroupAdded: 19,
+  //20x: Account, User
+  UserUpdated: 200,
+
+  //30x: Group
+  GroupAdded: 301,
+  GroupUpdated: 302,
+  GroupRemoved: 303,
+
+  //31x: GroupEvent
+  GroupEventAdded: 311,
 };
-
-export enum EventType {
-  Added = 'add',
-  Updated = 'update',
-  Removed = 'remove',
-}
 
 export function handleGateway(eventJson: string) {
   const event: GatewayEvent<unknown> = JSON.parse(eventJson);
@@ -52,7 +49,7 @@ export function handleGateway(eventJson: string) {
       onUserUpdated(event as GatewayEvent<RawSelfUser>);
       break;
     }
-    case GatewayCode.GroupEvent: {
+    case GatewayCode.GroupEventAdded: {
       onGroupEvent(event as GatewayEvent<RawGroupEvent>);
       break;
     }
@@ -72,12 +69,9 @@ function onUserUpdated(event: GatewayEvent<RawSelfUser>) {
 }
 
 function onGroupEvent(event: GatewayEvent<RawGroupEvent>) {
-  switch (event.type) {
-    case EventType.Added: {
-      addGroupEvent(GroupEvent(event.d));
-      break;
-    }
-  }
+  const e = GroupEvent(event.d);
+
+  return addGroupEvent(e);
 }
 
 function onGroupUpdate(event: GatewayEvent<RawGroupDetail>) {

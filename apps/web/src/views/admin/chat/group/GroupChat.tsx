@@ -7,8 +7,8 @@ export default function GroupChat() {
   const { selectedGroup, setInfo } = useContext(PageContext);
   const query = useGroupDetailQuery(selectedGroup);
   useEffect(
-    () => setInfo(query.isLoading ? null : { title: query.data.name }),
-    [query.data]
+    () => setInfo(query.isSuccess ? { title: query.data.name } : null),
+    [query.data, query.isSuccess]
   );
 
   return <ChatView />;

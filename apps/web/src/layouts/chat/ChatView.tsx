@@ -1,5 +1,10 @@
 import { Box, Flex, IconButton, Input } from '@chakra-ui/react';
-import { Message, useInfiniteMessageQuery } from '@omagize/api';
+import {
+  Message,
+  sendMessage,
+  Snowflake,
+  useInfiniteMessageQuery,
+} from '@omagize/api';
 import { MutableRefObject, useContext, useMemo, useRef, useState } from 'react';
 import { PageContext } from '../../contexts/PageContext';
 import { useInView } from 'react-intersection-observer';
@@ -10,6 +15,7 @@ import ErrorPanel from '../../components/card/ErrorPanel';
 import Card from '../../components/card/Card';
 import { FiFile, FiSend } from 'react-icons/fi';
 import { GrEmoji } from 'react-icons/gr';
+import { useMutation } from '@tanstack/react-query';
 
 export default function ChatView() {
   const { selectedGroup } = useContext(PageContext);
@@ -52,13 +58,16 @@ export default function ChatView() {
           />
         )}
       </Flex>
-      <MessageBar />
+      <MessageBar group={selectedGroup} />
     </>
   );
 }
 
-function MessageBar() {
+function MessageBar({ group }: { group: Snowflake }) {
   const [message, setMessage] = useState('');
+  const sendMutation = useMutation(['send_message', group], () =>
+    sendMessage(group, message)
+  );
 
   return (
     <Box w="full" px="20px" pb={5} mt="auto">
@@ -74,7 +83,9 @@ function MessageBar() {
           placeholder="Input your message here..."
         />
         <IconButton
-          disabled={message.length === 0}
+          onClick={() => sendMutation.mutate()}
+          isLoading={sendMutation.isLoading}
+          disabled={message.length === 0 || sendMutation.isLoading}
           variant="brand"
           aria-label="send"
           icon={<FiSend />}

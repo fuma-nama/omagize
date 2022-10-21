@@ -3,6 +3,7 @@ import { delay, messages } from './model';
 import { Snowflake } from './mappers';
 import { RawMember } from './GroupAPI';
 import { Message } from './mappers/message';
+import { callReturn, toFormData, withDefaultForm } from './utils/core';
 
 export type RawMessage = {
   id: Snowflake;
@@ -18,6 +19,20 @@ export type RawAttachment = {
   group: Snowflake;
   hash: number;
 };
+
+export async function sendMessage(group: Snowflake, content: string) {
+  const body = toFormData({
+    content: content,
+  });
+
+  callReturn(
+    `/groups/${group}/messages`,
+    withDefaultForm({
+      method: 'POST',
+      body,
+    })
+  );
+}
 
 export async function fetchMessagesLatest(
   groupID: string,

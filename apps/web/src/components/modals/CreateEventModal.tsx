@@ -1,4 +1,4 @@
-import { ImageCropPicker } from './Modal';
+import { DateTimeForm, ImageCropPicker } from './Modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createGroupEvent, GroupDetail, Keys } from '@omagize/api';
 import {
@@ -15,7 +15,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  SimpleGrid,
+  Switch,
   Textarea,
 } from '@chakra-ui/react';
 import { BiRightArrow } from 'react-icons/bi';
@@ -24,10 +24,8 @@ import {
   UploadImage,
   useImagePickerCrop,
 } from 'utils/ImageUtils';
-import { TimePicker } from '../picker/TimePicker';
-import { DatePicker } from '../picker/DatePicker';
 import { Step, Steps } from 'chakra-ui-steps';
-import { applyDate, onlyDate, onlyTime } from '../../utils/DateUtils';
+import { onlyDate, onlyTime } from '../../utils/DateUtils';
 import { useState } from 'react';
 
 function getInitialStart(): Date {
@@ -171,13 +169,17 @@ function AdvancedForm({ value, onChange }: FormProps) {
           onChange={(date: Date) => onChange({ startAt: date })}
         />
       </FormControl>
-      <FormControl>
-        <HStack align="center" mb={3}>
-          <FormLabel m={0}>End Date</FormLabel>
-          <Button variant="action" onClick={() => onChange({ endAt: null })}>
-            Reset
-          </Button>
-        </HStack>
+      <HStack align="center">
+        <FormLabel mr={0}>End Date</FormLabel>
+        <Switch
+          colorScheme="brandScheme"
+          isChecked={value.endAt != null}
+          onChange={(e) =>
+            onChange({ endAt: e.target.checked ? minEnd : null })
+          }
+        />
+      </HStack>
+      <FormControl isDisabled={value.endAt == null}>
         <DateTimeForm
           min={minEnd}
           max={maxEnd}
@@ -246,39 +248,6 @@ function Form({
         />
       </FormControl>
     </Flex>
-  );
-}
-
-function DateTimeForm(props: {
-  min?: Date;
-  max?: Date;
-  value?: Date;
-  onChange: (date: Date) => void;
-}) {
-  return (
-    <SimpleGrid columns={{ base: 1, '2sm': 2 }} gap={4}>
-      <DatePicker
-        minDate={props.min}
-        maxDate={props.max}
-        value={props.value}
-        onChange={(date: Date) => {
-          const combined = new Date(date);
-          if (!!props.value) {
-            combined.setHours(props.value.getHours(), props.value.getMinutes());
-          }
-          props.onChange(combined);
-        }}
-      />
-      <TimePicker
-        value={
-          !!props.value && {
-            hours: props.value.getHours(),
-            minutes: props.value.getMinutes(),
-          }
-        }
-        onChange={(v) => props.onChange(applyDate(props.value, v))}
-      />
-    </SimpleGrid>
   );
 }
 

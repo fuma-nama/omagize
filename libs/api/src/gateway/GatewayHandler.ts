@@ -1,7 +1,10 @@
 import { Group, GroupDetail, GroupEvent, SelfUser } from '../mappers';
+import { Message } from '../mappers/message';
+import { RawMessage } from '../MessageAPI';
 import {
   addGroup,
   addGroupEvent,
+  addMessage,
   dispatchGroupDetail,
   dispatchUser,
   removeGroup,
@@ -29,6 +32,8 @@ export const GatewayCode = {
 
   //31x: GroupEvent
   GroupEventAdded: 311,
+
+  MessageReceived: 401,
 };
 
 export function handleGateway(eventJson: string) {
@@ -57,9 +62,19 @@ export function handleGateway(eventJson: string) {
       onGroupRemoved(event as GatewayEvent<RawMemberClip>);
       break;
     }
+    case GatewayCode.MessageReceived: {
+      onReceiveMessage(event as GatewayEvent<RawMessage>);
+      break;
+    }
     default:
       console.log(`[Gateway] unknown op code ${event.op}`);
   }
+}
+
+function onReceiveMessage(event: GatewayEvent<RawMessage>) {
+  const message = Message(event.d);
+
+  return addMessage(message);
 }
 
 function onUserUpdated(event: GatewayEvent<RawSelfUser>) {

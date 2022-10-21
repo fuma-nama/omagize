@@ -1,7 +1,8 @@
-import { Snowflake } from '../mappers';
+import { Message, Snowflake } from '../mappers';
 import { Keys } from './keys';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMessagesBefore, fetchMessagesLatest } from '../MessageAPI';
+import { client } from './client';
 
 export function useInfiniteMessageQuery(group: Snowflake) {
   return useInfiniteQuery(
@@ -16,4 +17,13 @@ export function useInfiniteMessageQuery(group: Snowflake) {
       refetchOnWindowFocus: false,
     }
   );
+}
+
+export function addMessage(message: Message) {
+  /*
+  client.setQueryData<Message[]>(Keys.messages(message.group), (prev) => ({
+    
+  }))
+
+  */
 }

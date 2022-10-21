@@ -5,6 +5,7 @@ enum MediaType {
   Banner = 'banners',
   Avatars = 'avatars',
   Icons = 'icons',
+  Attachments = 'attachments',
 }
 
 export function toAvatarUrl(
@@ -26,6 +27,13 @@ export function toBannerUrl(
   hash?: string | number
 ): string | null {
   return asUrl(MediaType.Banner, userOrGroup, hash);
+}
+
+export function toAttachmentUrl(
+  group: Snowflake,
+  hash?: string | number
+): string | null {
+  return asUrl(MediaType.Attachments, group, hash);
 }
 
 export function asUrl(

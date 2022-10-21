@@ -1,6 +1,7 @@
-import { Message } from './MessageAPI';
+import { Snowflake } from './mappers/types';
+import { Message } from './mappers';
 import { RawUser } from './UserAPI';
-import { RawGroup, RawGroupEvent, RawMember } from './GroupAPI';
+import { RawGroup, RawMember } from './GroupAPI';
 import { GroupNotification } from './mappers/Notifications';
 import { Member } from './mappers/Group';
 
@@ -55,7 +56,7 @@ export const groups: RawGroup[] = [
     owner: users[0].id,
   },
 ];
-const modalMessages = [
+const modelMessages = [
   {
     author: new Member(members[0]),
     content: 'It is normal',
@@ -73,13 +74,17 @@ const modalMessages = [
   },
 ];
 
-export const messages: Message[] = [...Array(100)]
-  .map((_, i) => ({
-    id: i,
-    ...modalMessages[Math.floor(Math.random() * modalMessages.length)],
-  }))
-  .map((m, i) => ({
-    ...m,
-    order_id: i,
-    content: m.content + i,
-  }));
+export function messages(group: Snowflake): Message[] {
+  return [...Array(100)]
+    .map((_, i) => ({
+      id: i.toString(),
+      group: group,
+      orderId: i,
+      attachments: [],
+      ...modelMessages[Math.floor(Math.random() * modelMessages.length)],
+    }))
+    .map((m, i) => ({
+      ...m,
+      content: m.content + i,
+    }));
+}

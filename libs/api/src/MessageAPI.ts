@@ -1,24 +1,30 @@
+import { DateObject } from './mappers/types';
 import { delay, messages } from './model';
-import { Member } from './mappers/Group';
+import { Snowflake } from './mappers';
+import { RawMember } from './GroupAPI';
+import { Message } from './mappers/message';
 
-export type Message = {
-  id: number;
-  author: Member;
+export type RawMessage = {
+  id: Snowflake;
+  group: Snowflake;
+  author: RawMember;
   content: string;
-  timestamp: Date;
-  order_id: number;
+  attachments: RawAttachment[];
+  timestamp: DateObject;
+  orderId: number;
+};
+
+export type RawAttachment = {
+  group: Snowflake;
+  hash: number;
 };
 
 export async function fetchMessagesLatest(
   groupID: string,
   limit: number = 20
 ): Promise<Message[]> {
-  console.log(
-    'latest',
-    messages.slice(messages.length - limit - 1, messages.length)
-  );
   await delay(2000);
-  return messages.slice(messages.length - limit - 1);
+  return messages(groupID).slice(messages.length - limit - 1);
 }
 
 /**
@@ -30,7 +36,7 @@ export async function fetchMessagesBefore(
   limit: number = 20
 ): Promise<Message[]> {
   console.log('before', message);
-  const fetched = messages.filter((m) => m.order_id < message.order_id);
+  const fetched = messages(groupID).filter((m) => m.orderId < message.orderId);
   await delay(2000);
   return fetched.slice(fetched.length - limit - 1);
 }

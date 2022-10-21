@@ -16,6 +16,7 @@ import Card from '../../components/card/Card';
 import { FiFile, FiSend } from 'react-icons/fi';
 import { GrEmoji } from 'react-icons/gr';
 import { useMutation } from '@tanstack/react-query';
+import useFilePicker from 'components/picker/FilePicker';
 
 export default function ChatView() {
   const { selectedGroup } = useContext(PageContext);
@@ -65,14 +66,21 @@ export default function ChatView() {
 
 function MessageBar({ group }: { group: Snowflake }) {
   const [message, setMessage] = useState('');
+  const [attachments, setAttachments] = useState<Blob[]>([]);
+  const picker = useFilePicker((f) => setAttachments((prev) => [...prev, f]));
   const sendMutation = useMutation(['send_message', group], () =>
-    sendMessage(group, message)
+    sendMessage(group, message, attachments)
   );
 
   return (
     <Box w="full" px="20px" pb={5} mt="auto">
       <Card flexDirection="row" alignItems="center" gap={2}>
-        <IconButton aria-label="add-file" icon={<FiFile />} />
+        {picker.component}
+        <IconButton
+          aria-label="add-file"
+          icon={<FiFile />}
+          onClick={picker.pick}
+        />
         <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
         <Input
           mx={3}

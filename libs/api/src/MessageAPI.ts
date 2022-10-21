@@ -25,9 +25,16 @@ export type RawAttachment = {
   hash: number;
 };
 
-export async function sendMessage(group: Snowflake, content: string) {
+export async function sendMessage(
+  group: Snowflake,
+  content: string,
+  attachments: Blob[]
+) {
   const body = toFormData({
     content: content,
+  });
+  attachments.forEach((a, i) => {
+    body.append(`File${i}`, a);
   });
 
   callReturn(

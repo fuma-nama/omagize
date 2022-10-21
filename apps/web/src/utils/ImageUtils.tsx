@@ -240,7 +240,13 @@ export function useImagePicker<T extends UploadImage | Reset>(
 
   return {
     ...base,
-    picker: <FilePicker {...props} onChange={onChange} inputRef={base.ref} />,
+    picker: (
+      <FilePicker
+        {...props}
+        onChange={(f) => onChange(f as unknown as T)}
+        inputRef={base.ref}
+      />
+    ),
   };
 }
 
@@ -262,12 +268,10 @@ export function useImagePickerBase<T extends UploadImage | Reset>(
   };
 }
 
-export function FilePicker(
-  props: {
-    onChange: (file: File) => void;
-    inputRef: LegacyRef<HTMLInputElement>;
-  } & any
-) {
+export function FilePicker(props: {
+  onChange: (file: File) => void;
+  inputRef: LegacyRef<HTMLInputElement>;
+}) {
   const { inputRef, onChange, ...rest } = props;
 
   return (

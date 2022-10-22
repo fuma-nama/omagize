@@ -21,8 +21,11 @@ export type RawMessage = {
 };
 
 export type RawAttachment = {
-  group: Snowflake;
-  hash: number;
+  id: Snowflake;
+  name: string;
+  message: Snowflake;
+  size?: number;
+  type?: string;
 };
 
 export async function sendMessage(

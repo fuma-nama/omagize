@@ -40,7 +40,7 @@ export async function sendMessage(
     body.append(`File${i}`, a);
   });
 
-  callReturn(
+  return callReturn(
     `/groups/${group}/messages`,
     withDefaultForm({
       method: 'POST',

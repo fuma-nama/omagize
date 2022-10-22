@@ -16,8 +16,11 @@ export type Message = {
 };
 
 export type Attachment = {
-  group: Snowflake;
-  hash: number;
+  name: string;
+  id: Snowflake;
+  message: Snowflake;
+  size?: number;
+  type?: string;
   url: string;
 };
 
@@ -33,6 +36,6 @@ export function Message(raw: RawMessage): Message {
 export function Attachment(raw: RawAttachment): Attachment {
   return {
     ...raw,
-    url: toAttachmentUrl(raw.group, raw.hash),
+    url: toAttachmentUrl(raw.message, raw.id, raw.name),
   };
 }

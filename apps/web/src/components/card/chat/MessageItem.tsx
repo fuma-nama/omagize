@@ -37,7 +37,7 @@ export default function MessageItem({ message }: { message: Message }) {
 
         <Text>{message.content}</Text>
 
-        <HStack>
+        <HStack wrap="wrap" spacing={0} gap={2}>
           {message.attachments.map((a) => (
             <AttachmentItem key={a.id} attachment={a} />
           ))}

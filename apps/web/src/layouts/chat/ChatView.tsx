@@ -42,15 +42,8 @@ export default function ChatView() {
   }
 
   return (
-    <>
-      <Flex
-        ref={ref}
-        overflow="auto"
-        direction="column-reverse"
-        h="full"
-        gap={5}
-        p={4}
-      >
+    <Box overflow="auto" ref={ref}>
+      <Flex direction="column-reverse" gap={5} px={4}>
         {data == null ? null : [].concat(...data.pages.map(mapPage)).reverse()}
         {(isLoading || hasPreviousPage) && (
           <LoadingBlock
@@ -59,8 +52,10 @@ export default function ChatView() {
           />
         )}
       </Flex>
-      <MessageBar group={selectedGroup} />
-    </>
+      <Box position="sticky" bottom={0} w="full" p={{ '3sm': 4 }}>
+        <MessageBar group={selectedGroup} />
+      </Box>
+    </Box>
   );
 }
 
@@ -73,33 +68,37 @@ function MessageBar({ group }: { group: Snowflake }) {
   );
 
   return (
-    <Box w="full" px="20px" pb={5} mt="auto">
-      <Card flexDirection="row" alignItems="center" gap={2}>
-        {picker.component}
-        <IconButton
-          aria-label="add-file"
-          icon={<FiFile />}
-          onClick={picker.pick}
-        />
-        <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
-        <Input
-          mx={3}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          rounded="full"
-          variant="message"
-          placeholder="Input your message here..."
-        />
-        <IconButton
-          onClick={() => sendMutation.mutate()}
-          isLoading={sendMutation.isLoading}
-          disabled={message.length === 0 || sendMutation.isLoading}
-          variant="brand"
-          aria-label="send"
-          icon={<FiSend />}
-        />
-      </Card>
-    </Box>
+    <Card
+      w="full"
+      flexDirection="row"
+      alignItems="center"
+      gap={{ base: 1, md: 2 }}
+      px={{ base: 2, md: '20px' }}
+    >
+      {picker.component}
+      <IconButton
+        aria-label="add-file"
+        icon={<FiFile />}
+        onClick={picker.pick}
+      />
+      <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
+      <Input
+        mx={{ md: 3 }}
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        rounded="full"
+        variant="message"
+        placeholder="Input your message here..."
+      />
+      <IconButton
+        onClick={() => sendMutation.mutate()}
+        isLoading={sendMutation.isLoading}
+        disabled={message.length === 0 || sendMutation.isLoading}
+        variant="brand"
+        aria-label="send"
+        icon={<FiSend />}
+      />
+    </Card>
   );
 }
 

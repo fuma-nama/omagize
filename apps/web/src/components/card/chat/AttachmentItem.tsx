@@ -1,15 +1,27 @@
 import { Attachment } from '@omagize/api';
-import { Flex, Icon, Image, Link, Text } from '@chakra-ui/react';
+import { Flex, Icon, Image, Link, Skeleton, Text } from '@chakra-ui/react';
 import { fileSizeString } from 'utils/common';
 import { useMemo } from 'react';
 import { FiFile } from 'react-icons/fi';
 import CustomCard from '../Card';
+import { DownloadIcon } from '@chakra-ui/icons';
 
 export function AttachmentItem({ attachment }: { attachment: Attachment }) {
   if (attachment.type != null && attachment.type.startsWith('image'))
-    return <Image rounded="lg" src={attachment.url} maxW="min(1000px, 100%)" />;
+    return (
+      <Image
+        rounded="lg"
+        src={attachment.url}
+        maxW="min(1000px, 100%)"
+        fallback={<ImageSkeleton />}
+      />
+    );
 
   return <FileItem attachment={attachment} />;
+}
+
+function ImageSkeleton() {
+  return <Skeleton rounded="xl" w={300} h={200} maxW="full" />;
 }
 
 export function FileItem({ attachment }: { attachment: Attachment }) {
@@ -20,14 +32,17 @@ export function FileItem({ attachment }: { attachment: Attachment }) {
   );
 
   return (
-    <CustomCard w="fit-content" flexDirection="row" gap={2} pr={10}>
+    <CustomCard w="fit-content" flexDirection="row" gap={2}>
       <Icon as={FiFile} w={10} h={10} color={color} />
-      <Flex direction="column">
+      <Flex direction="column" mr={20}>
         <Link fontWeight="600" color={color} href={attachment.url}>
           {attachment.name}
         </Link>
         <Text>{size}</Text>
       </Flex>
+      <Link href={attachment.url} download>
+        <DownloadIcon />
+      </Link>
     </CustomCard>
   );
 }

@@ -8,9 +8,10 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { AttachmentItem } from './AttachmentItem';
 
-export default function MessageItem(props: Message) {
-  const author = props.author;
+export default function MessageItem({ message }: { message: Message }) {
+  const author = message.author;
   const secondaryText = useColorModeValue('gray.400', 'white');
   const hoverBg = useColorModeValue('white', 'navy.800');
 
@@ -18,9 +19,10 @@ export default function MessageItem(props: Message) {
     <Flex
       direction="row"
       _hover={{ bg: hoverBg }}
-      p={7}
       transition="all 0.2s"
       rounded="xl"
+      p={3}
+      gap={3}
     >
       <Avatar name={author.username} src={author.avatarUrl} />
       <Flex direction="column" align="start" ml={2}>
@@ -29,11 +31,17 @@ export default function MessageItem(props: Message) {
             {author.username}
           </Text>
           <Text textColor={secondaryText}>
-            - {props.timestamp.toLocaleTimeString()}
+            - {message.timestamp.toLocaleTimeString()}
           </Text>
         </HStack>
 
-        <Text>{props.content}</Text>
+        <Text>{message.content}</Text>
+
+        <HStack>
+          {message.attachments.map((a) => (
+            <AttachmentItem key={a.id} attachment={a} />
+          ))}
+        </HStack>
       </Flex>
     </Flex>
   );

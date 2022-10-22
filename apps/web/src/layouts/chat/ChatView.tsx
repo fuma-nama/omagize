@@ -1,4 +1,4 @@
-import { Box, Flex, IconButton, Input } from '@chakra-ui/react';
+import { Box, Flex, HStack, IconButton, Input } from '@chakra-ui/react';
 import {
   Message,
   sendMessage,
@@ -17,6 +17,7 @@ import { FiFile, FiSend } from 'react-icons/fi';
 import { GrEmoji } from 'react-icons/gr';
 import { useMutation } from '@tanstack/react-query';
 import useFilePicker from 'components/picker/FilePicker';
+import { FileUploadItem } from './FileUploadItem';
 
 export default function ChatView() {
   const { selectedGroup } = useContext(PageContext);
@@ -58,47 +59,82 @@ export default function ChatView() {
     </Box>
   );
 }
+type MessageOptions = {
+  message: string;
+  attachments: File[];
+};
 
 function MessageBar({ group }: { group: Snowflake }) {
-  const [message, setMessage] = useState('');
-  const [attachments, setAttachments] = useState<Blob[]>([]);
-  const picker = useFilePicker((f) => setAttachments((prev) => [...prev, f]));
-  const sendMutation = useMutation(['send_message', group], () =>
-    sendMessage(group, message, attachments)
+  const [content, setContent] = useState<MessageOptions>({
+    message: '',
+    attachments: [],
+  });
+  const picker = useFilePicker((f) =>
+    setContent((prev) => ({
+      ...prev,
+      attachments: [...prev.attachments, f],
+    }))
   );
+  const sendMutation = useMutation(['send_message', group], () =>
+    sendMessage(group, content.message, content.attachments)
+  );
+  const send = () => {
+    setContent({
+      message: '',
+      attachments: [],
+    });
+
+    return sendMutation.mutate();
+  };
 
   return (
-    <Card
-      w="full"
-      flexDirection="row"
-      alignItems="center"
-      gap={{ base: 1, md: 2 }}
-      px={{ base: 2, md: '20px' }}
-    >
-      {picker.component}
-      <IconButton
-        aria-label="add-file"
-        icon={<FiFile />}
-        onClick={picker.pick}
-      />
-      <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
-      <Input
-        mx={{ md: 3 }}
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        rounded="full"
-        variant="message"
-        placeholder="Input your message here..."
-      />
-      <IconButton
-        onClick={() => sendMutation.mutate()}
-        isLoading={sendMutation.isLoading}
-        disabled={message.length === 0 || sendMutation.isLoading}
-        variant="brand"
-        aria-label="send"
-        icon={<FiSend />}
-      />
-    </Card>
+    <Flex direction="column" w="full">
+      <HStack wrap="wrap" mb="10px">
+        {content.attachments.map((a) => (
+          <FileUploadItem
+            file={a}
+            onRemove={() =>
+              setContent((prev) => ({
+                ...prev,
+                attachments: prev.attachments.filter((file) => file !== a),
+              }))
+            }
+          />
+        ))}
+      </HStack>
+      <Card
+        flexDirection="row"
+        alignItems="center"
+        gap={{ base: 1, md: 2 }}
+        px={{ base: 2, md: '20px' }}
+      >
+        {picker.component}
+        <IconButton
+          aria-label="add-file"
+          icon={<FiFile />}
+          onClick={picker.pick}
+        />
+        <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
+        <Input
+          mx={{ md: 3 }}
+          value={content.message}
+          onChange={(e) =>
+            setContent((prev) => ({ ...prev, message: e.target.value }))
+          }
+          rounded="full"
+          variant="message"
+          placeholder="Input your message here..."
+        />
+        <IconButton
+          onClick={send}
+          isLoading={sendMutation.isLoading}
+          disabled={content.message.length === 0 || sendMutation.isLoading}
+          variant="brand"
+          aria-label="send"
+          icon={<FiSend />}
+        />
+      </Card>
+    </Flex>
   );
 }
 

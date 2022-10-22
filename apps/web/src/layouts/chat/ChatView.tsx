@@ -87,6 +87,10 @@ function MessageBar({ group }: { group: Snowflake }) {
     return sendMutation.mutate();
   };
 
+  const canSend =
+    (content.attachments.length !== 0 || content.message.length !== 0) &&
+    !sendMutation.isLoading;
+
   return (
     <Flex direction="column" w="full">
       <HStack wrap="wrap" mb="10px">
@@ -128,7 +132,7 @@ function MessageBar({ group }: { group: Snowflake }) {
         <IconButton
           onClick={send}
           isLoading={sendMutation.isLoading}
-          disabled={content.message.length === 0 || sendMutation.isLoading}
+          disabled={!canSend}
           variant="brand"
           aria-label="send"
           icon={<FiSend />}

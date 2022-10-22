@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Center, CenterProps, Text } from '@chakra-ui/react';
-import { useColors } from '../variables/colors';
+import { useColors } from '../../variables/colors';
 
 export function Placeholder({
   children,

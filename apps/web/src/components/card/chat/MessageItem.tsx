@@ -25,7 +25,7 @@ export default function MessageItem({ message }: { message: Message }) {
       gap={3}
     >
       <Avatar name={author.username} src={author.avatarUrl} />
-      <Flex direction="column" align="start" ml={2}>
+      <Flex direction="column" align="start" ml={2} flex={1} w={0}>
         <HStack>
           <Text fontWeight="bold" fontSize="lg">
             {author.username}
@@ -37,11 +37,11 @@ export default function MessageItem({ message }: { message: Message }) {
 
         <Text>{message.content}</Text>
 
-        <HStack wrap="wrap" spacing={0} gap={2}>
+        <Flex direction="column" gap={2} w="full">
           {message.attachments.map((a) => (
             <AttachmentItem key={a.id} attachment={a} />
           ))}
-        </HStack>
+        </Flex>
       </Flex>
     </Flex>
   );

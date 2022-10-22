@@ -12,31 +12,44 @@ export function toAvatarUrl(
   user: Snowflake,
   hash?: string | number
 ): string | null {
-  return asUrl(MediaType.Avatars, user, hash);
+  return asWebpUrl(MediaType.Avatars, user, hash);
 }
 
 export function toIconUrl(
   group: Snowflake,
   hash?: string | number
 ): string | null {
-  return asUrl(MediaType.Icons, group, hash);
+  return asWebpUrl(MediaType.Icons, group, hash);
 }
 
 export function toBannerUrl(
   userOrGroup: Snowflake,
   hash?: string | number
 ): string | null {
-  return asUrl(MediaType.Banner, userOrGroup, hash);
+  return asWebpUrl(MediaType.Banner, userOrGroup, hash);
 }
 
 export function toAttachmentUrl(
-  group: Snowflake,
-  hash?: string | number
+  message: Snowflake,
+  id: Snowflake,
+  name: string
 ): string | null {
-  return asUrl(MediaType.Attachments, group, hash);
+  return `${api}/media/${MediaType.Attachments}/${message}/${id}/${name}`;
 }
 
 export function asUrl(
+  type: MediaType,
+  id: Snowflake,
+  hash?: string | number
+): string | null {
+  if (hash != null) {
+    return `${api}/media/${type}/${id}/${hash}`;
+  } else {
+    return null;
+  }
+}
+
+export function asWebpUrl(
   type: MediaType,
   id: Snowflake,
   hash?: string | number

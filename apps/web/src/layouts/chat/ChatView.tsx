@@ -34,7 +34,7 @@ export default function ChatView() {
 
   function mapPage(messages: Message[]) {
     return messages.map((message) => (
-      <MessageItem key={message.id} {...message} />
+      <MessageItem key={message.id} message={message} />
     ));
   }
   if (error) {
@@ -49,7 +49,8 @@ export default function ChatView() {
         direction="column-reverse"
         h="full"
         minH="400px"
-        gap={2}
+        gap={5}
+        p={4}
       >
         {data == null ? null : [].concat(...data.pages.map(mapPage)).reverse()}
         {(isLoading || hasPreviousPage) && (

@@ -31,7 +31,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import { useColors } from 'variables/colors';
 import CreateEventModal from 'components/modals/CreateEventModal';
 import { DynamicModal } from 'components/modals/Modal';
-import LoadingScreen from 'components/screens/LoadingScreen';
+import LoadingScreen from 'components/layout/LoadingScreen';
 import { ErrorScreen } from 'components/layout/ErrorScreen';
 import { GroupHeader } from './components/GroupHeader';
 import AutoImage from 'components/card/utils/AutoImage';

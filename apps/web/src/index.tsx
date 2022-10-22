@@ -8,8 +8,7 @@ import theme from './theme/theme';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { layouts, NormalLayout } from './layouts';
 import { client, initClient, useLoginQuery } from '@omagize/api';
-import LoadingScreen from './components/screens/LoadingScreen';
-import { ErrorScreen } from 'components/layout/ErrorScreen';
+import { QueryScreen } from 'components/layout/LoadingScreen';
 
 initClient();
 function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
@@ -42,13 +41,11 @@ function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
 function Pages() {
   const query = useLoginQuery();
 
-  if (query.isLoading) return <LoadingScreen />;
-  if (query.isError)
-    return (
-      <ErrorScreen retry={() => query.refetch()}>Failed to login</ErrorScreen>
-    );
-
-  return <RootRoutes loggedIn={query.data != null} />;
+  return (
+    <QueryScreen query={query} error="Failed to login">
+      <RootRoutes loggedIn={query.data != null} />
+    </QueryScreen>
+  );
 }
 
 ReactDOM.render(

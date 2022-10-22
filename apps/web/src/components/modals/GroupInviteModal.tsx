@@ -21,7 +21,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import SwitchField from 'components/fields/SwitchField';
 import { DatePicker } from 'components/picker/DatePicker';
-import { QueryScreen } from 'components/screens/LoadingScreen';
+import { QueryScreen } from 'components/layout/LoadingScreen';
 import { useState } from 'react';
 import { onlyDate } from 'utils/DateUtils';
 

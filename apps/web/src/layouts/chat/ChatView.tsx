@@ -48,7 +48,6 @@ export default function ChatView() {
         overflow="auto"
         direction="column-reverse"
         h="full"
-        minH="400px"
         gap={5}
         p={4}
       >

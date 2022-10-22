@@ -16,7 +16,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import CustomCard, { TagFlex } from 'components/card/Card';
 import SwitchField from 'components/fields/SwitchField';
-import LoadingScreen from 'components/screens/LoadingScreen';
+import LoadingScreen from 'components/layout/LoadingScreen';
 import { PageContext } from 'contexts/PageContext';
 import { useContext, useEffect, useState } from 'react';
 import { useColors } from 'variables/colors';

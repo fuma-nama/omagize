@@ -29,7 +29,7 @@ import { columnsDataCheck } from 'views/admin/default/variables/columnsData';
 import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
 import Banner from './components/Banner';
 import { useGroupEventsQuery, useSelfUser } from '@omagize/api';
-import { ArrayHolder, Placeholder } from '../../../utils/Container';
+import { ArrayHolder, Placeholder } from '../../../components/layout/Container';
 import {
   GlobalGroupEventItem,
   GroupEventSkeleton,

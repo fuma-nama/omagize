@@ -1,5 +1,5 @@
 import { GroupInvite } from './../mappers/Group';
-import { replaceMatch } from '../utils/utils';
+import { replaceMatch } from '../utils/common';
 import {
   useInfiniteQuery,
   useQuery,

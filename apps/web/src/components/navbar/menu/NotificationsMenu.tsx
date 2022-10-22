@@ -2,7 +2,7 @@ import { Flex, Icon, Menu, MenuButton, MenuList, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useNavbarColors } from 'variables/colors';
 import { useUserNotificationsQuery } from '@omagize/api';
-import { ArrayHolder } from 'utils/Container';
+import { ArrayHolder } from 'components/layout/Container';
 import { NotificationSkeleton } from '../../card/notification/Notification';
 import UserNotificationItem from '../../card/notification/UserNotification';
 import { MdNotificationsNone } from 'react-icons/md';

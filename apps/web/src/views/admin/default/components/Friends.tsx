@@ -12,7 +12,7 @@ import {
   FriendRequestItem,
   UserItemSkeleton,
 } from 'components/card/UserItem';
-import { Holder, Placeholder } from 'utils/Container';
+import { Holder, Placeholder } from 'components/layout/Container';
 import AddFriendModal from 'components/modals/AddFriendModal';
 
 export default function Friends() {

@@ -11,7 +11,7 @@ import {
   GroupNotificationItem,
   NotificationSkeleton,
 } from 'components/card/notification/Notification';
-import { ArrayHolder, Holder } from 'utils/Container';
+import { ArrayHolder } from 'components/layout/Container';
 import { useMutation } from '@tanstack/react-query';
 
 export function Notifications() {

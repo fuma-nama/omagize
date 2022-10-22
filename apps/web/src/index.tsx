@@ -9,7 +9,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { layouts, NormalLayout } from './layouts';
 import { client, initClient, useLoginQuery } from '@omagize/api';
 import LoadingScreen from './components/screens/LoadingScreen';
-import { ErrorScreen } from 'components/screens/ErrorScreen';
+import { ErrorScreen } from 'components/layout/ErrorScreen';
 
 initClient();
 function RootRoutes({ loggedIn }: { loggedIn: boolean }) {

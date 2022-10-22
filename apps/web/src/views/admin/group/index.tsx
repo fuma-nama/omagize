@@ -26,13 +26,13 @@ import MessageItem, {
 } from 'components/card/chat/MessageItem';
 import { QueryErrorPanel } from 'components/card/ErrorPanel';
 import GroupEventItem from 'components/card/GroupEventItem';
-import { Holder } from 'utils/Container';
+import { Holder } from 'components/layout/Container';
 import { AddIcon } from '@chakra-ui/icons';
 import { useColors } from 'variables/colors';
 import CreateEventModal from 'components/modals/CreateEventModal';
 import { DynamicModal } from 'components/modals/Modal';
 import LoadingScreen from 'components/screens/LoadingScreen';
-import { ErrorScreen } from 'components/screens/ErrorScreen';
+import { ErrorScreen } from 'components/layout/ErrorScreen';
 import { GroupHeader } from './components/GroupHeader';
 import AutoImage from 'components/card/utils/AutoImage';
 import GroupInviteModal from 'components/modals/GroupInviteModal';
@@ -217,7 +217,9 @@ function MessagesPreview() {
 
           return lastPage
             .slice(lastPage.length - 8, lastPage.length - 1)
-            .map((message) => <MessageItem key={message.id} {...message} />);
+            .map((message) => (
+              <MessageItem key={message.id} message={message} />
+            ));
         }}
       </Holder>
     </Flex>

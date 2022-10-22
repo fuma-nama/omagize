@@ -297,3 +297,15 @@ export function useImageUrl(file: UploadImage | Reset) {
     return URL.createObjectURL(file);
   }, [file]);
 }
+
+export function readFileToUrl(file: File) {
+  return new Promise<string>((r, reject) => {
+    const reader = new FileReader();
+    // it's onload event and you forgot (parameters)
+
+    reader.onload = () => r(reader.result as string);
+    reader.onerror = () => reject(reader.error);
+    // you have to declare the file loading
+    reader.readAsDataURL(file);
+  });
+}

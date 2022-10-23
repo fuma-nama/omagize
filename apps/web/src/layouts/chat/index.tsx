@@ -29,7 +29,9 @@ export default function ChatLayout() {
       <Box pos="sticky" top={0} px="20px" py="10px" w="full">
         <Navbar brandText={active?.name || info?.title} />
       </Box>
-      <Outlet />
+      <Box flex={1} h={0}>
+        <Outlet />
+      </Box>
     </Flex>
   );
 }

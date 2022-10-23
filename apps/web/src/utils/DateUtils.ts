@@ -26,15 +26,35 @@ export function onlyTime(date: Date): Date {
   );
 }
 
-export function stringOf(date: Date, time: boolean = false): string {
-  let string = `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}`;
+export function stringOfTime(date: Date): string {
+  const now = new Date(Date.now());
+  const isNow =
+    now.getDate() === date.getDate() && now.getMinutes() == date.getMinutes();
 
-  if (time) {
-    string += ` ${date.getHours().toString().padStart(2, '0')}:${date
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')}`;
-    string += ' ' + (date.getHours() <= 12 ? 'AM' : 'PM');
+  if (isNow) {
+    return 'Now';
+  } else {
+    const dateText = stringOfDate(date);
+    return (
+      `${dateText} ` +
+      date.toLocaleTimeString(['en-us'], {
+        timeStyle: 'short',
+      })
+    );
   }
-  return string;
+}
+
+export function stringOfDate(date: Date) {
+  const now = new Date(Date.now());
+  const today = now.getDate() === date.getDate();
+
+  if (today) {
+    return 'Today';
+  } else if (now.getDate() === date.getDate() + 1) {
+    return 'Yesterday';
+  } else {
+    return date.toLocaleDateString(['en-us'], {
+      dateStyle: 'short',
+    });
+  }
 }

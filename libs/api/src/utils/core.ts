@@ -100,6 +100,7 @@ export function stringifyDate(date: Date): string {
 }
 
 export function parseDate(date?: DateObject): Date | null {
+  console.log(date, new Date(date));
   if (date != null) {
     return new Date(date);
   } else {

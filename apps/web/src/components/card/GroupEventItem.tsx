@@ -12,7 +12,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useColors } from 'variables/colors';
-import { stringOf } from 'utils/DateUtils';
+import { stringOfTime } from 'utils/DateUtils';
 
 function Info({
   name,
@@ -67,10 +67,10 @@ export function GlobalGroupEventItem({ event }: { event: GroupEvent }) {
 
         {happening ? (
           !!event.endAt && (
-            <Info name="End At" value={stringOf(event.endAt, true)} />
+            <Info name="End At" value={stringOfTime(event.endAt)} />
           )
         ) : (
-          <Info name="Starting At" value={stringOf(event.startAt, true)} />
+          <Info name="Starting At" value={stringOfTime(event.startAt)} />
         )}
       </Flex>
     </Card>
@@ -86,7 +86,7 @@ export default function GroupEventItem({ event }: { event: GroupEvent }) {
         <Flex direction="row" gap={2} wrap="wrap">
           <EventStarted />
           {!!event.endAt && (
-            <Info name="End At" value={stringOf(event.endAt, true)} />
+            <Info name="End At" value={stringOfTime(event.endAt)} />
           )}
         </Flex>
       )}
@@ -95,7 +95,7 @@ export default function GroupEventItem({ event }: { event: GroupEvent }) {
         {!!event.place && <Info name="Take Place At" value={event.place} />}
 
         {!happening && (
-          <Info name="Starting At" value={stringOf(event.startAt, true)} />
+          <Info name="Starting At" value={stringOfTime(event.startAt)} />
         )}
       </Flex>
     </Card>

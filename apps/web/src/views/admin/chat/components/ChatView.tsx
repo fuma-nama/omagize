@@ -2,7 +2,6 @@ import { Box, Flex } from '@chakra-ui/react';
 import { Message, useInfiniteMessageQuery } from '@omagize/api';
 import { useContext, useRef } from 'react';
 import { PageContext } from '../../../../contexts/PageContext';
-import { useInView } from 'react-intersection-observer';
 import MessageItem, {
   MessageItemSkeleton,
 } from 'components/card/chat/MessageItem';

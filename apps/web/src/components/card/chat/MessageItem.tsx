@@ -9,6 +9,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { AttachmentItem } from './AttachmentItem';
+import { stringOfTime } from 'utils/DateUtils';
 
 export default function MessageItem({ message }: { message: Message }) {
   const author = message.author;
@@ -31,7 +32,7 @@ export default function MessageItem({ message }: { message: Message }) {
             {author.username}
           </Text>
           <Text textColor={secondaryText}>
-            - {message.timestamp.toLocaleTimeString()}
+            - {stringOfTime(message.timestamp)}
           </Text>
         </HStack>
 

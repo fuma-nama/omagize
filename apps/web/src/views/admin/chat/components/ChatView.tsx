@@ -6,13 +6,13 @@ import {
   useInfiniteMessageQuery,
 } from '@omagize/api';
 import { MutableRefObject, useContext, useMemo, useRef, useState } from 'react';
-import { PageContext } from '../../contexts/PageContext';
+import { PageContext } from '../../../../contexts/PageContext';
 import { useInView } from 'react-intersection-observer';
 import MessageItem, {
   MessageItemSkeleton,
 } from 'components/card/chat/MessageItem';
-import ErrorPanel from '../../components/card/ErrorPanel';
-import Card from '../../components/card/Card';
+import ErrorPanel from '../../../../components/card/ErrorPanel';
+import Card from '../../../../components/card/Card';
 import { FiFile, FiSend } from 'react-icons/fi';
 import { GrEmoji } from 'react-icons/gr';
 import { useMutation } from '@tanstack/react-query';

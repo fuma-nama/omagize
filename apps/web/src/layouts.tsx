@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom';
 import GroupOverview from 'views/admin/group';
 import GroupSettings from 'views/admin/group/settings';
 import GroupChat from 'views/admin/chat/group/GroupChat';
-import GroupNavbar from 'views/admin/chat/navbar/GroupNavbar';
+import GroupNavbar from 'views/admin/group/navbar/GroupNavbar';
 import SignInCentered from 'views/auth/signIn';
 import SignUp from './views/auth/signup';
 import MainDashboard from 'views/admin/default';
@@ -80,6 +80,7 @@ export const layouts: RootLayout[] = [
               {
                 path: 'settings',
                 component: <GroupSettings />,
+                navbar: <GroupNavbar />,
               },
             ],
           },

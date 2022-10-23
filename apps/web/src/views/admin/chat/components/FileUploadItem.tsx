@@ -6,7 +6,7 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react';
-import CustomCard from '../../components/card/Card';
+import CustomCard from 'components/card/Card';
 import { useColors } from 'variables/colors';
 import { RiFile2Fill } from 'react-icons/ri';
 import { CloseIcon } from '@chakra-ui/icons';

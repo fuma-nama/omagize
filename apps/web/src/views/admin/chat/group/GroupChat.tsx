@@ -1,4 +1,4 @@
-import ChatView from 'layouts/chat/ChatView';
+import ChatView from 'views/admin/chat/components/ChatView';
 import { useContext, useEffect } from 'react';
 import { PageContext } from 'contexts/PageContext';
 import { useGroupDetailQuery } from '@omagize/api';

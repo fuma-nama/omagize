@@ -157,10 +157,12 @@ importers:
 
   apps/web:
     specifiers:
+      react-infinite-scroll-component: ^6.1.0
       vite: ^3.1.7
       vite-plugin-svgr: ^2.2.1
       vite-tsconfig-paths: ^3.5.1
     dependencies:
+      react-infinite-scroll-component: 6.1.0
       vite: 3.1.7
       vite-plugin-svgr: 2.2.1_vite@3.1.7
       vite-tsconfig-paths: 3.5.1_vite@3.1.7
@@ -10994,6 +10996,14 @@ packages:
     dependencies:
       clsx: 1.2.1
       react: 17.0.2
+    dev: false
+
+  /react-infinite-scroll-component/6.1.0:
+    resolution: {integrity: sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==}
+    peerDependencies:
+      react: '>=16.0.0'
+    dependencies:
+      throttle-debounce: 2.3.0
     dev: false
 
   /react-infinite-scroll-component/6.1.0_react@17.0.2:

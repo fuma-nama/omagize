@@ -1,177 +1,92 @@
-import { Box, Flex, HStack, IconButton, Input } from '@chakra-ui/react';
-import {
-  Message,
-  sendMessage,
-  Snowflake,
-  useInfiniteMessageQuery,
-} from '@omagize/api';
-import { MutableRefObject, useContext, useMemo, useRef, useState } from 'react';
+import { Box, Flex } from '@chakra-ui/react';
+import { Message, useInfiniteMessageQuery } from '@omagize/api';
+import { useContext, useRef } from 'react';
 import { PageContext } from '../../../../contexts/PageContext';
 import { useInView } from 'react-intersection-observer';
 import MessageItem, {
   MessageItemSkeleton,
 } from 'components/card/chat/MessageItem';
 import ErrorPanel from '../../../../components/card/ErrorPanel';
-import Card from '../../../../components/card/Card';
-import { FiFile, FiSend } from 'react-icons/fi';
-import { GrEmoji } from 'react-icons/gr';
-import { useMutation } from '@tanstack/react-query';
-import useFilePicker from 'components/picker/FilePicker';
-import { FileUploadItem } from './FileUploadItem';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useEffect } from 'react';
+import { MessageBar } from './MessageBar';
+
+function mapPage(messages: Message[]) {
+  return messages.map((message) => (
+    <MessageItem key={message.id} message={message} />
+  ));
+}
 
 export default function ChatView() {
   const { selectedGroup } = useContext(PageContext);
-
-  const [ready, ref] = useBottomScroll();
   const {
     data,
     error,
-    isLoading,
     fetchPreviousPage,
     hasPreviousPage,
-    isFetching,
+    isLoading,
     refetch,
   } = useInfiniteMessageQuery(selectedGroup);
 
-  function mapPage(messages: Message[]) {
-    return messages.map((message) => (
-      <MessageItem key={message.id} message={message} />
-    ));
-  }
+  const { endMessage } = useBottomScroll(data?.pages);
+
   if (error) {
     return <ErrorPanel error={error} retry={refetch} />;
   }
 
+  const items = data?.pages.flatMap((a) => mapPage(a)) ?? [];
+
   return (
-    <Box overflow="auto" ref={ref}>
-      <Flex direction="column-reverse" gap={5} px={4}>
-        {data == null ? null : [].concat(...data.pages.map(mapPage)).reverse()}
-        {(isLoading || hasPreviousPage) && (
-          <LoadingBlock
-            isFetching={isFetching || !ready}
-            onFetch={() => fetchPreviousPage()}
-          />
-        )}
-      </Flex>
-      <Box position="sticky" bottom={0} w="full" p={{ '3sm': 4 }}>
+    <Box h="full" overflow="auto" id="chat_view">
+      <InfiniteScroll
+        dataLength={items.length}
+        next={() => !isLoading && fetchPreviousPage()}
+        style={{
+          display: 'flex',
+          flexDirection: 'column-reverse',
+          gap: '20px',
+          padding: '0px 20px',
+        }}
+        inverse={true}
+        hasMore={hasPreviousPage}
+        loader={<LoadingBlock />}
+        scrollableTarget="chat_view"
+      >
+        <Box ref={endMessage} />
+
+        {items.reverse()}
+      </InfiniteScroll>
+      <Box
+        position="sticky"
+        bottom={0}
+        w="full"
+        px={{ '3sm': 4 }}
+        pb={{ '3sm': 4 }}
+      >
         <MessageBar group={selectedGroup} />
       </Box>
     </Box>
   );
 }
-type MessageOptions = {
-  message: string;
-  attachments: File[];
-};
 
-function MessageBar({ group }: { group: Snowflake }) {
-  const [content, setContent] = useState<MessageOptions>({
-    message: '',
-    attachments: [],
-  });
-  const picker = useFilePicker((f) =>
-    setContent((prev) => ({
-      ...prev,
-      attachments: [...prev.attachments, f],
-    }))
-  );
-  const sendMutation = useMutation(['send_message', group], () =>
-    sendMessage(group, content.message, content.attachments)
-  );
-  const send = () => {
-    setContent({
-      message: '',
-      attachments: [],
-    });
+function useBottomScroll(dependencies: React.DependencyList) {
+  const endMessage = useRef<HTMLDivElement>();
 
-    return sendMutation.mutate();
-  };
-
-  const canSend =
-    (content.attachments.length !== 0 || content.message.length !== 0) &&
-    !sendMutation.isLoading;
-
-  return (
-    <Flex direction="column" w="full">
-      <HStack wrap="wrap" mb="10px">
-        {content.attachments.map((a) => (
-          <FileUploadItem
-            file={a}
-            onRemove={() =>
-              setContent((prev) => ({
-                ...prev,
-                attachments: prev.attachments.filter((file) => file !== a),
-              }))
-            }
-          />
-        ))}
-      </HStack>
-      <Card
-        flexDirection="row"
-        alignItems="center"
-        gap={{ base: 1, md: 2 }}
-        px={{ base: 2, md: '20px' }}
-      >
-        {picker.component}
-        <IconButton
-          aria-label="add-file"
-          icon={<FiFile />}
-          onClick={picker.pick}
-        />
-        <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
-        <Input
-          mx={{ md: 3 }}
-          value={content.message}
-          onChange={(e) =>
-            setContent((prev) => ({ ...prev, message: e.target.value }))
-          }
-          rounded="full"
-          variant="message"
-          placeholder="Input your message here..."
-        />
-        <IconButton
-          onClick={send}
-          isLoading={sendMutation.isLoading}
-          disabled={!canSend}
-          variant="brand"
-          aria-label="send"
-          icon={<FiSend />}
-        />
-      </Card>
-    </Flex>
-  );
-}
-
-function useBottomScroll(): [
-  boolean,
-  MutableRefObject<HTMLDivElement>,
-  () => void
-] {
-  const ref = useRef<HTMLDivElement>();
   const scroll = () => {
-    const element = ref.current;
-    if (element) {
-      element.scrollTo(element.scrollLeft, element.scrollHeight);
-    }
+    endMessage.current?.scrollIntoView();
   };
-  const ready = useMemo<boolean>(() => {
-    scroll();
-    return !!ref.current;
-  }, [ref.current]);
 
-  return [ready, ref, scroll];
+  useEffect(() => {
+    console.log('scroll!');
+    scroll();
+  }, [dependencies]);
+
+  return { endMessage, scroll };
 }
 
-function LoadingBlock(props: { isFetching: boolean; onFetch: () => void }) {
-  const { ref } = useInView({
-    onChange(inView, entry) {
-      if (inView && !props.isFetching) {
-        props.onFetch();
-      }
-    },
-  });
+function LoadingBlock(props: {}) {
   return (
-    <Flex gap={2} direction="column" ref={ref}>
+    <Flex gap={2} direction="column">
       <MessageItemSkeleton noOfLines={2} />
       <MessageItemSkeleton noOfLines={1} />
       <MessageItemSkeleton noOfLines={6} />

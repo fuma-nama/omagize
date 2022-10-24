@@ -9,7 +9,6 @@ import {
   FormControl,
   FormLabel,
   Heading,
-  Icon,
   Input,
   Text,
 } from '@chakra-ui/react';
@@ -18,12 +17,12 @@ import { HSeparator } from 'components/separator/Separator';
 import DefaultAuth from 'layouts/auth/Default';
 // Assets
 import illustration from 'assets/img/auth/auth.png';
-import { FcGoogle } from 'react-icons/fc';
 import { useAuthColors } from 'variables/colors';
 import PasswordInput from 'components/fields/PasswordInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { login, Keys } from '@omagize/api';
+import { FirebaseAuth, Keys } from '@omagize/api';
 import VerifyGroup from '../components/VerifyGroup';
+import { GoogleSignInButton } from '../components/GoogleSignInButton';
 
 type Options = {
   email: string;
@@ -49,11 +48,15 @@ function SignIn() {
   }
 
   const client = useQueryClient();
-  const mutation = useMutation((options: Options) => login(options), {
-    onSuccess(data) {
-      return client.setQueryData(Keys.login, data);
-    },
-  });
+  const mutation = useMutation(
+    (options: Options) =>
+      FirebaseAuth.signInWithEmailAndPassword(options.email, options.password),
+    {
+      onSuccess(data) {
+        return client.setQueryData(Keys.login, data);
+      },
+    }
+  );
 
   return (
     <DefaultAuth illustrationBackground={illustration}>
@@ -93,10 +96,7 @@ function SignIn() {
           me="auto"
           mb={{ base: '20px', md: 'auto' }}
         >
-          <Button fontSize="sm" mb="26px" py="25px" fontWeight="500">
-            <Icon as={FcGoogle} w="20px" h="20px" me="10px" />
-            Sign up with Google
-          </Button>
+          <GoogleSignInButton />
           <Flex align="center" mb="25px">
             <HSeparator />
             <Text color="gray.400" mx="14px">

@@ -1,3 +1,4 @@
+import { firebase } from './../firebase/firebase';
 import { DateObject } from '../mappers/types';
 
 export const api = 'http://localhost:8080';
@@ -13,13 +14,18 @@ export type ReturnOptions<T> = Options & {
   };
 };
 
-export type Options = RequestInit & {
+export type Options = {
+  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+  contentType?: 'application/json';
+  body?: string | FormData;
+
   /**
    * throw an error if status code is not equal to 200
    *
    * default: true
    */
   errorOnFail?: boolean;
+  init?: RequestInit;
 };
 
 export async function call(url: string, init?: RequestInit) {
@@ -27,23 +33,18 @@ export async function call(url: string, init?: RequestInit) {
 }
 
 export async function callDefault(url: string, init?: Options) {
-  return fetch(`${api}${url}`, init).then((r) => handle(r, init));
-}
+  const options = await withDefault(init);
 
-export async function callReturnText(
-  url: string,
-  init?: ReturnOptions<string>
-) {
-  return call(url, init).then((res) =>
-    handleResult<string>(res, init, (res) => res.text())
-  );
+  return call(url, options).then((r) => handle(r, init));
 }
 
 export async function callReturn<T>(
   url: string,
   init?: ReturnOptions<T>
 ): Promise<T> {
-  return call(url, init).then((res) =>
+  const options = await withDefault(init);
+
+  return call(url, options).then((res) =>
     handleResult<T>(res, init, (res) => res.json())
   );
 }
@@ -72,17 +73,27 @@ async function handle(res: Response, options: Options) {
   return res;
 }
 
-export function withDefault<T extends Options>(
-  options: T,
-  contentType: string | undefined = 'application/json'
-): T {
-  return {
-    credentials: 'include',
-    ...options,
+export async function withDefault<T extends Options>(
+  options: T
+): Promise<RequestInit> {
+  const currentUser = firebase.auth.currentUser;
+  const brand = options.init;
+  const isForm = options.body instanceof FormData;
 
+  return {
+    method: options.method,
+    credentials: 'include',
+    body: options.body,
+    ...brand,
     headers: {
-      'Content-Type': contentType,
-      ...options.headers,
+      'Content-Type': isForm
+        ? undefined
+        : options.contentType ?? 'application/json',
+      Authorization:
+        currentUser != null
+          ? 'Bearer ' + (await currentUser.getIdToken())
+          : undefined,
+      ...brand?.headers,
     },
   };
 }
@@ -100,7 +111,6 @@ export function stringifyDate(date: Date): string {
 }
 
 export function parseDate(date?: DateObject): Date | null {
-  console.log(date, new Date(date));
   if (date != null) {
     return new Date(date);
   } else {

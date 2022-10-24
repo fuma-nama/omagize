@@ -45,22 +45,16 @@ export async function updateProfile(
     data.append('banner', banner);
   }
 
-  return callReturn<RawSelfUser>(
-    '/user/profile',
-    withDefaultForm({
-      method: 'POST',
-      body: data,
-    })
-  ).then((res) => new SelfUser(res));
+  return callReturn<RawSelfUser>('/user/profile', {
+    method: 'POST',
+    body: data,
+  }).then((res) => new SelfUser(res));
 }
 
 export function fetchGroupEvents(): Promise<GroupEvent[]> {
-  return callReturn<RawGroupEvent[]>(
-    '/user/events',
-    withDefault({
-      method: 'GET',
-    })
-  ).then((res) => res.map((event) => GroupEvent(event)));
+  return callReturn<RawGroupEvent[]>('/user/events', {
+    method: 'GET',
+  }).then((res) => res.map((event) => GroupEvent(event)));
 }
 
 export function fetchFriends(): FriendsData {

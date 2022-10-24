@@ -1,7 +1,7 @@
 import { LoginPayload } from '../mappers/Auth';
 import { Keys } from './keys';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { auth, logout } from '../AccountAPI';
+import { authorize, logout } from '../AccountAPI';
 import { client } from './client';
 import { User } from '../mappers';
 
@@ -10,6 +10,10 @@ export function dispatchSelfUser(updated: User) {
     ...prev,
     user: updated,
   }));
+}
+
+export function onSignin(data: LoginPayload) {
+  return client.setQueryData<LoginPayload>(Keys.login, data);
 }
 
 export function useLogoutMutation() {
@@ -21,7 +25,7 @@ export function useLogoutMutation() {
 }
 
 export function useLoginQuery() {
-  return useQuery(Keys.login, () => auth(), {
+  return useQuery(Keys.login, () => authorize(), {
     refetchOnReconnect: false,
     refetchOnMount: false,
     refetchIntervalInBackground: false,

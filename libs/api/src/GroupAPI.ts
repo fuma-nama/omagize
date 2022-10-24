@@ -75,34 +75,25 @@ export async function updateGroup(
   group: Snowflake,
   options: UpdateGroupOptions
 ) {
-  await callDefault(
-    `/groups/${group}`,
-    withDefaultForm({
-      method: 'PATCH',
-      body: toFormData(options),
-    })
-  );
+  await callDefault(`/groups/${group}`, {
+    method: 'PATCH',
+    body: toFormData(options),
+  });
 }
 
 export function fetchMemberInfo(
   group: Snowflake,
   id: Snowflake
 ): Promise<Member> {
-  return callReturn<RawMember>(
-    `/groups/${group}/members/${id}`,
-    withDefault({
-      method: 'GET',
-    })
-  ).then((res) => new Member(res));
+  return callReturn<RawMember>(`/groups/${group}/members/${id}`, {
+    method: 'GET',
+  }).then((res) => new Member(res));
 }
 
 export function fetchGroupDetail(id: Snowflake): Promise<GroupDetail> {
-  return callReturn<RawGroupDetail>(
-    `/groups/${id}`,
-    withDefault({
-      method: 'GET',
-    })
-  ).then((res) => GroupDetail(res));
+  return callReturn<RawGroupDetail>(`/groups/${id}`, {
+    method: 'GET',
+  }).then((res) => GroupDetail(res));
 }
 
 /**
@@ -117,12 +108,9 @@ export function fetchGroupMembers(
   if (start != null) param.append('start', start);
   if (limit != null) param.append('limit', limit.toString());
 
-  return callReturn<RawMember[]>(
-    `/groups/${group}/members?${param}`,
-    withDefault({
-      method: 'GET',
-    })
-  ).then((res) => res.map((user) => new Member(user)));
+  return callReturn<RawMember[]>(`/groups/${group}/members?${param}`, {
+    method: 'GET',
+  }).then((res) => res.map((user) => new Member(user)));
 }
 
 export async function createGroupEvent(
@@ -142,22 +130,16 @@ export async function createGroupEvent(
   if (image != null) data.append('image', image);
   if (place != null) data.append('place', place);
 
-  return callReturn<RawGroupEvent>(
-    `/groups/${group}/events`,
-    withDefaultForm({
-      method: 'POST',
-      body: data,
-    })
-  ).then((res) => GroupEvent(res));
+  return callReturn<RawGroupEvent>(`/groups/${group}/events`, {
+    method: 'POST',
+    body: data,
+  }).then((res) => GroupEvent(res));
 }
 
 export function fetchGroups(): Promise<Group[]> {
-  return callReturn<RawGroup[]>(
-    '/groups',
-    withDefault({
-      method: 'GET',
-    })
-  ).then((res) => res.map((group) => Group(group)));
+  return callReturn<RawGroup[]>('/groups', {
+    method: 'GET',
+  }).then((res) => res.map((group) => Group(group)));
 }
 
 export async function createGroup(
@@ -170,29 +152,22 @@ export async function createGroup(
   if (icon != null) data.append('icon', icon);
   if (banner != null) data.append('banner', banner);
 
-  return callReturn<RawGroup>(
-    '/groups',
-    withDefaultForm({
-      method: 'POST',
-      body: data,
-    })
-  ).then((res) => Group(res));
+  return callReturn<RawGroup>('/groups', {
+    method: 'POST',
+    body: data,
+  }).then((res) => Group(res));
 }
 
 export function joinGroup(code: string) {
-  return callReturn<RawGroupDetail>(
-    `/groups/join?code=${code}`,
-    withDefault({
-      method: 'POST',
-    })
-  );
+  return callReturn<RawGroupDetail>(`/groups/join?code=${code}`, {
+    method: 'POST',
+  });
 }
 
 export function fetchGroupInvite(group: string) {
-  return callReturn<RawGroupInvite>(
-    `/groups/${group}/invite`,
-    withDefault({})
-  ).then((res) => GroupInvite(res));
+  return callReturn<RawGroupInvite>(`/groups/${group}/invite`, {}).then((res) =>
+    GroupInvite(res)
+  );
 }
 
 export function modifyGroupInvite(
@@ -200,23 +175,18 @@ export function modifyGroupInvite(
   once: boolean,
   expire: Date | null
 ) {
-  return callReturn<RawGroupInvite>(
-    `/groups/${group}/invite`,
-    withDefault({
-      body: JSON.stringify({
-        once,
-        expire: stringifyDate(expire),
-      }),
-      method: 'PATCH',
-    })
-  ).then((res) => GroupInvite(res));
+  return callReturn<RawGroupInvite>(`/groups/${group}/invite`, {
+    contentType: 'application/json',
+    body: JSON.stringify({
+      once,
+      expire: stringifyDate(expire),
+    }),
+    method: 'PATCH',
+  }).then((res) => GroupInvite(res));
 }
 
 export function leaveGroup(group: Snowflake) {
-  return callDefault(
-    `/groups/${group}/leave`,
-    withDefault({
-      method: 'POST',
-    })
-  );
+  return callDefault(`/groups/${group}/leave`, {
+    method: 'POST',
+  });
 }

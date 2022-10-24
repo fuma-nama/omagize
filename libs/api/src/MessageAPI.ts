@@ -3,12 +3,7 @@ import { delay } from './model';
 import { Snowflake } from './mappers';
 import { RawMember } from './GroupAPI';
 import { Message } from './mappers/message';
-import {
-  callReturn,
-  toFormData,
-  withDefault,
-  withDefaultForm,
-} from './utils/core';
+import { callReturn, toFormData } from './utils/core';
 
 export type RawMessage = {
   id: Snowflake;
@@ -40,13 +35,10 @@ export async function sendMessage(
     body.append(`File${i}`, a);
   });
 
-  return callReturn(
-    `/groups/${group}/messages`,
-    withDefaultForm({
-      method: 'POST',
-      body,
-    })
-  );
+  return callReturn(`/groups/${group}/messages`, {
+    method: 'POST',
+    body,
+  });
 }
 
 export async function fetchMessagesLatest(
@@ -58,12 +50,9 @@ export async function fetchMessagesLatest(
     limit: limit.toString(),
   });
 
-  return callReturn<RawMessage[]>(
-    `/groups/${groupID}/messages?${params}`,
-    withDefault({
-      method: 'GET',
-    })
-  ).then((res) => res.map((m) => Message(m)));
+  return callReturn<RawMessage[]>(`/groups/${groupID}/messages?${params}`, {
+    method: 'GET',
+  }).then((res) => res.map((m) => Message(m)));
 }
 
 /**
@@ -80,10 +69,7 @@ export async function fetchMessagesBefore(
     before: message.orderId.toString(),
   });
 
-  return callReturn<RawMessage[]>(
-    `/groups/${groupID}/messages?${params}`,
-    withDefault({
-      method: 'GET',
-    })
-  ).then((res) => res.map((m) => Message(m)));
+  return callReturn<RawMessage[]>(`/groups/${groupID}/messages?${params}`, {
+    method: 'GET',
+  }).then((res) => res.map((m) => Message(m)));
 }

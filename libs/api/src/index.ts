@@ -8,3 +8,4 @@ export * from './NotificationsAPI';
 export * from './query';
 export * from './UserAPI';
 export * from './utils';
+export * from './firebase';

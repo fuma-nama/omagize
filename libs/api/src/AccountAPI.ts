@@ -1,9 +1,5 @@
-import {
-  callDefault,
-  callReturn,
-  ReturnOptions,
-  withDefault,
-} from './utils/core';
+import { firebase } from './firebase/firebase';
+import { callReturn } from './utils/core';
 import { RawSelfUser } from './UserAPI';
 import { LoginPayload } from './mappers/Auth';
 export type Reset = 'reset';
@@ -18,52 +14,29 @@ export type RawAccount = {
   email: string;
 };
 
-export async function auth(): Promise<LoginPayload | null> {
-  return await callReturn<RawLoginPayload | null>(
-    '/auth',
-    withDefault<ReturnOptions<RawLoginPayload>>({
-      method: 'POST',
-      allowed: {
-        401: () => null,
-      },
-    })
-  ).then((res) => (res == null ? null : LoginPayload(res)));
+export function loggedIn(): boolean {
+  return firebase.auth.currentUser != null;
 }
 
-export async function login(options: {
-  email: string;
-  password: string;
-}): Promise<LoginPayload | null> {
-  return await callReturn<RawLoginPayload>(
-    '/login',
-    withDefault({
-      method: 'POST',
-      body: JSON.stringify(options),
-      errorOnFail: true,
-    })
-  ).then((res) => LoginPayload(res));
+export async function authorize(): Promise<LoginPayload | null> {
+  return await callReturn<RawLoginPayload | null>('/auth', {
+    method: 'POST',
+    allowed: {
+      401: () => null,
+    },
+  }).then((res) => (res == null ? null : LoginPayload(res)));
 }
 
 export async function logout() {
-  return callDefault(
-    '/logout',
-    withDefault({
-      method: 'POST',
-    })
-  );
+  await firebase.auth.signOut();
 }
 
-export async function signup(options: {
-  username: string;
-  email: string;
-  password: string;
-}): Promise<LoginPayload> {
-  return await callReturn<RawLoginPayload>(
-    '/signup',
-    withDefault({
-      method: 'POST',
-      body: JSON.stringify(options),
-      errorOnFail: true,
-    })
-  ).then((res) => LoginPayload(res));
+/**
+ * Must be called after login to firebase
+ */
+export async function signup(): Promise<LoginPayload> {
+  return await callReturn<RawLoginPayload>('/signup', {
+    method: 'POST',
+    errorOnFail: true,
+  }).then((res) => LoginPayload(res));
 }

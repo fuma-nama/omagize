@@ -1,3 +1,4 @@
+import { firebase } from './../firebase/firebase';
 import { ws } from '../utils/core';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { handleGateway } from './GatewayHandler';
@@ -18,20 +19,30 @@ export const Gateway = {
   getSocket(): ReconnectingWebSocket {
     return socket;
   },
-  connect(
+  async connect(
     options: GatewayOptions,
     init: (socket: ReconnectingWebSocket) => void
   ) {
-    connectGateway(options, init);
+    const user = firebase.auth.currentUser;
+
+    if (user != null) {
+      const token = await user.getIdToken();
+      connectGateway(token, options, init);
+    }
   },
 };
 
 function connectGateway(
+  token: string,
   options: GatewayOptions,
   init: (socket: ReconnectingWebSocket) => void
 ) {
   if (socket != null) return;
-  socket = new ReconnectingWebSocket(ws);
+
+  const params = new URLSearchParams({
+    token: token,
+  });
+  socket = new ReconnectingWebSocket(`${ws}?${params}`);
 
   socket.onopen = () => {
     console.log('Connected to Omagize Gateway');

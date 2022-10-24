@@ -1,5 +1,3 @@
-import { Snowflake } from './mappers/types';
-import { Message } from './mappers';
 import { RawUser } from './UserAPI';
 import { RawGroup, RawMember } from './GroupAPI';
 import { GroupNotification } from './mappers/Notifications';
@@ -56,35 +54,3 @@ export const groups: RawGroup[] = [
     owner: users[0].id,
   },
 ];
-const modelMessages = [
-  {
-    author: new Member(members[0]),
-    content: 'It is normal',
-    timestamp: new Date(Date.now()),
-  },
-  {
-    author: new Member(members[1]),
-    content: 'Kane is a gay',
-    timestamp: new Date(Date.now()),
-  },
-  {
-    author: new Member(members[0]),
-    content: 'Oh, nice to meet you.\nI am a gay',
-    timestamp: new Date(Date.now()),
-  },
-];
-
-export function messages(group: Snowflake): Message[] {
-  return [...Array(100)]
-    .map((_, i) => ({
-      id: i.toString(),
-      group: group,
-      orderId: i,
-      attachments: [],
-      ...modelMessages[Math.floor(Math.random() * modelMessages.length)],
-    }))
-    .map((m, i) => ({
-      ...m,
-      content: m.content + i,
-    }));
-}

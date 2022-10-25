@@ -51,7 +51,7 @@ export default function SignUp() {
   const client = useQueryClient();
   const mutation = useMutation(
     (options: SignUpOptions) =>
-      FirebaseAuth.signup(options.email, options.password),
+      FirebaseAuth.signup(options.username, options.email, options.password),
     {
       onSuccess(data) {
         return client.setQueryData(Keys.login, data);

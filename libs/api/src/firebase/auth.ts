@@ -6,6 +6,8 @@ import {
   getAdditionalUserInfo,
   createUserWithEmailAndPassword,
   IdTokenResult,
+  setPersistence,
+  browserLocalPersistence,
 } from 'firebase/auth';
 import { firebase } from './firebase';
 import { authorize, signup } from '../AccountAPI';
@@ -14,49 +16,35 @@ import { onSignin } from '../query';
 const googleProvider = new GoogleAuthProvider();
 
 export const FirebaseAuth = {
-  async signup(email: string, password: string) {
-    try {
-      const res = await createUserWithEmailAndPassword(
-        firebase.auth,
-        email,
-        password
-      );
-      await this.handleSignIn(res);
-    } catch (err) {
-      console.error(err);
-    }
+  async init() {
+    await setPersistence(firebase.auth, browserLocalPersistence);
+  },
+  async signup(username: string, email: string, password: string) {
+    const res = await createUserWithEmailAndPassword(
+      firebase.auth,
+      email,
+      password
+    );
+    await this.handleSignUp(res, username);
   },
   async signInWithEmailAndPassword(email: string, password: string) {
-    try {
-      const res = await signInWithEmailAndPassword(
-        firebase.auth,
-        email,
-        password
-      );
-      await this.handleSignIn(res);
-    } catch (err) {
-      console.error(err);
-    }
+    await signInWithEmailAndPassword(firebase.auth, email, password);
+    await this.handleSignIn();
   },
   async signInWithGoogle() {
-    console.log(firebase.auth.currentUser);
-    console.log('sign in with google');
-    try {
-      const res = await signInWithPopup(firebase.auth, googleProvider);
-      await this.handleSignIn(res);
-    } catch (err) {
-      console.error(err);
-    }
+    const res = await signInWithPopup(firebase.auth, googleProvider);
+    await this.handleSignUp(res, res.user.displayName);
   },
-
-  async handleSignIn(res: UserCredential) {
+  async handleSignIn() {
+    onSignin(await authorize());
+  },
+  async handleSignUp(res: UserCredential, username: string) {
     const token = await res.user.getIdTokenResult();
     const isNew = getAdditionalUserInfo(res).isNewUser;
     let payload;
 
     if (isNew || !this.userCreated(token)) {
-      console.log('sign up');
-      payload = await signup();
+      payload = await signup(username);
     } else payload = await authorize();
 
     onSignin(payload);

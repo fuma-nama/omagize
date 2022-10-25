@@ -19,6 +19,10 @@ export function loggedIn(): boolean {
 }
 
 export async function authorize(): Promise<LoginPayload | null> {
+  if (firebase.auth.currentUser == null) {
+    return null;
+  }
+
   return await callReturn<RawLoginPayload | null>('/auth', {
     method: 'POST',
     allowed: {
@@ -34,9 +38,12 @@ export async function logout() {
 /**
  * Must be called after login to firebase
  */
-export async function signup(): Promise<LoginPayload> {
+export async function signup(username: string): Promise<LoginPayload> {
   return await callReturn<RawLoginPayload>('/signup', {
     method: 'POST',
+    body: JSON.stringify({
+      name: username,
+    }),
     errorOnFail: true,
   }).then((res) => LoginPayload(res));
 }

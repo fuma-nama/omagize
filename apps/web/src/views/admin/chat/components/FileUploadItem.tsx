@@ -11,13 +11,16 @@ import { useColors } from 'variables/colors';
 import { RiFile2Fill } from 'react-icons/ri';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useEffect, useMemo } from 'react';
+import { CustomCardProps } from 'theme/theme';
 
 export function FileUploadItem({
   file,
   onRemove,
+  card,
 }: {
   file: File;
   onRemove: () => void;
+  card?: CustomCardProps;
 }) {
   const { brand } = useColors();
   let preview;
@@ -25,11 +28,15 @@ export function FileUploadItem({
   if (file.type.startsWith('image')) {
     preview = <ImagePreview file={file} />;
   } else {
-    preview = <Icon as={RiFile2Fill} color={brand} w="100px" h="100px" />;
+    preview = <Icon as={RiFile2Fill} color={brand} w="50%" h="50%" />;
   }
 
   return (
-    <CustomCard w="300px" h="300px">
+    <CustomCard
+      w={{ base: '200px', md: '300px' }}
+      h={{ base: '200px', md: '300px' }}
+      {...card}
+    >
       <HStack pos="absolute" top={2} right={2}>
         <IconButton
           icon={<CloseIcon />}
@@ -38,7 +45,7 @@ export function FileUploadItem({
           onClick={onRemove}
         />
       </HStack>
-      <Center flex={1} rounded="xl">
+      <Center flex={1} rounded="xl" h="0">
         {preview}
       </Center>
       <Text mt={3}>{file.name}</Text>

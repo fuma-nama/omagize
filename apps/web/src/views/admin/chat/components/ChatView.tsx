@@ -1,14 +1,17 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { Message, useInfiniteMessageQuery } from '@omagize/api';
 import { useContext, useRef } from 'react';
-import { PageContext } from '../../../../contexts/PageContext';
+import { PageContext } from 'contexts/PageContext';
 import MessageItem, {
   MessageItemSkeleton,
 } from 'components/card/chat/MessageItem';
-import ErrorPanel from '../../../../components/card/ErrorPanel';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import ErrorPanel from 'components/card/ErrorPanel';
 import { useEffect } from 'react';
 import { MessageBar } from './MessageBar';
+import useInfiniteScroll from 'react-infinite-scroll-hook';
+import { LegacyRef } from 'react';
+import { useColors } from 'variables/colors';
+import { BiMessageX } from 'react-icons/bi';
 
 function mapPage(messages: Message[]) {
   return messages.map((message) => (
@@ -42,11 +45,19 @@ function MessageView({ group }: { group: string }) {
   const {
     data,
     error,
+    isError,
     fetchPreviousPage,
     hasPreviousPage,
     isLoading,
     refetch,
   } = useInfiniteMessageQuery(group);
+  const [sentryRef, { rootRef }] = useInfiniteScroll({
+    loading: isLoading,
+    hasNextPage: hasPreviousPage,
+    onLoadMore: () => fetchPreviousPage(),
+    disabled: isError,
+    rootMargin: '0px 0px 0px 0px',
+  });
   const { endMessage } = useBottomScroll(data?.pages);
 
   if (error) {
@@ -55,33 +66,31 @@ function MessageView({ group }: { group: string }) {
 
   const items = data?.pages.flatMap((a) => mapPage(a)) ?? [];
   return (
-    <Box w="full" h="full" overflow="auto" id="chat_view">
-      <InfiniteScroll
-        dataLength={items.length}
-        next={() => !isLoading && fetchPreviousPage()}
-        style={{
-          display: 'flex',
-          flexDirection: 'column-reverse',
-          gap: '20px',
-          padding: '0px 20px',
-        }}
-        inverse={true}
-        endMessage={
-          <Box>
-            <Text fontSize="sm" fontWeight="600">
-              This is the Start of the Chat!
-            </Text>
-            <Text>Yayyyyyy</Text>
-          </Box>
-        }
-        hasMore={hasPreviousPage}
-        loader={<LoadingBlock />}
-        scrollableTarget="chat_view"
-      >
+    <Box w="full" h="full" overflow="auto" ref={rootRef}>
+      <Flex direction="column-reverse" px="20px" gap={5}>
         <Box ref={endMessage} />
 
         {items.reverse()}
-      </InfiniteScroll>
+
+        {hasPreviousPage || isLoading ? (
+          <LoadingBlock sentryRef={sentryRef} />
+        ) : (
+          <StartBox />
+        )}
+      </Flex>
+    </Box>
+  );
+}
+
+function StartBox() {
+  const { textColorPrimary, textColorSecondary, brand } = useColors();
+  return (
+    <Box>
+      <Text fontSize={24} fontWeight="600" color={textColorPrimary}>
+        This is the Start of the Chat!
+        <Icon as={BiMessageX} w={10} h={10} ml={1} color={brand} />
+      </Text>
+      <Text color={textColorSecondary}>Yayyyyyy</Text>
     </Box>
   );
 }
@@ -101,9 +110,9 @@ function useBottomScroll(dependencies: React.DependencyList) {
   return { endMessage, scroll };
 }
 
-function LoadingBlock(props: {}) {
+function LoadingBlock({ sentryRef }: { sentryRef: LegacyRef<HTMLDivElement> }) {
   return (
-    <Flex gap={2} direction="column">
+    <Flex gap={2} direction="column" ref={sentryRef}>
       <MessageItemSkeleton noOfLines={2} />
       <MessageItemSkeleton noOfLines={1} />
       <MessageItemSkeleton noOfLines={6} />

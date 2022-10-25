@@ -13,7 +13,7 @@ export function useInfiniteMessageQuery(group: Snowflake) {
         : fetchMessagesBefore(group, pageParam),
     {
       refetchOnMount: false,
-      getPreviousPageParam: (first) => first[0],
+      getPreviousPageParam: (first) => first.length !== 0 && first[0],
       refetchOnWindowFocus: false,
     }
   );

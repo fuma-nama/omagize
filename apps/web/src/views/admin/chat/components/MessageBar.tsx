@@ -7,13 +7,20 @@ import { GrEmoji } from 'react-icons/gr';
 import { useMutation } from '@tanstack/react-query';
 import useFilePicker from 'components/picker/FilePicker';
 import { FileUploadItem } from './FileUploadItem';
+import { CustomCardProps } from 'theme/theme';
 
 export type MessageOptions = {
   message: string;
   attachments: File[];
 };
 
-export function MessageBar({ group }: { group: Snowflake }) {
+export function MessageBar({
+  group,
+  messageBar,
+}: {
+  group: Snowflake;
+  messageBar?: CustomCardProps;
+}) {
   const [content, setContent] = useState<MessageOptions>({
     message: '',
     attachments: [],
@@ -42,7 +49,7 @@ export function MessageBar({ group }: { group: Snowflake }) {
 
   return (
     <Flex direction="column" w="full">
-      <HStack wrap="wrap" mb="10px">
+      <HStack w="full" mb="10px" overflow="auto">
         {content.attachments.map((a, i) => (
           <FileUploadItem
             key={`${i}-${a.webkitRelativePath}`}
@@ -53,14 +60,18 @@ export function MessageBar({ group }: { group: Snowflake }) {
                 attachments: prev.attachments.filter((file) => file !== a),
               }))
             }
+            card={{
+              flexShrink: 0,
+            }}
           />
         ))}
       </HStack>
       <Card
         flexDirection="row"
         alignItems="center"
-        gap={{ base: 1, md: 2 }}
+        gap={2}
         px={{ base: 2, md: '20px' }}
+        {...messageBar}
       >
         {picker.component}
         <IconButton
@@ -70,7 +81,6 @@ export function MessageBar({ group }: { group: Snowflake }) {
         />
         <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
         <Input
-          mx={{ md: 3 }}
           value={content.message}
           onChange={(e) =>
             setContent((prev) => ({ ...prev, message: e.target.value }))

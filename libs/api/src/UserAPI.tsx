@@ -1,7 +1,7 @@
 import { delay, users } from './model';
 import { Reset } from './AccountAPI';
 import { DateObject, Snowflake } from './mappers/types';
-import { callReturn } from './utils/core';
+import { callReturn, toFormData } from './utils/core';
 import { SelfUser } from './mappers/Auth';
 import { FriendsData } from './mappers/Friend';
 import { GroupEvent } from './mappers/GroupEvents';
@@ -34,16 +34,11 @@ export async function updateProfile(
   avatar?: Blob | Reset,
   banner?: Blob | Reset
 ): Promise<SelfUser> {
-  const data = new FormData();
-  if (name != null) {
-    data.append('name', name);
-  }
-  if (avatar != null) {
-    data.append('avatar', avatar);
-  }
-  if (banner != null) {
-    data.append('banner', banner);
-  }
+  const data = toFormData({
+    name: name,
+    avatar: avatar,
+    banner: banner,
+  });
 
   return callReturn<RawSelfUser>('/user/profile', {
     method: 'POST',

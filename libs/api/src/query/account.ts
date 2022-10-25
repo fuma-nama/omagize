@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { authorize, logout } from '../AccountAPI';
 import { client } from './client';
 import { User } from '../mappers';
+import { FirebaseAuth } from '../firebase';
 
 export function dispatchSelfUser(updated: User) {
   return client.setQueryData<LoginPayload>(Keys.login, (prev) => ({
@@ -25,11 +26,19 @@ export function useLogoutMutation() {
 }
 
 export function useLoginQuery() {
-  return useQuery(Keys.login, () => authorize(), {
-    refetchOnReconnect: false,
-    refetchOnMount: false,
-    refetchIntervalInBackground: false,
-    refetchOnWindowFocus: false,
-    refetchInterval: false,
-  });
+  return useQuery(
+    Keys.login,
+    async () => {
+      await FirebaseAuth.init();
+
+      return await authorize();
+    },
+    {
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+      refetchIntervalInBackground: false,
+      refetchOnWindowFocus: false,
+      refetchInterval: false,
+    }
+  );
 }

@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { Message, useInfiniteMessageQuery } from '@omagize/api';
 import { useContext, useRef } from 'react';
 import { PageContext } from '../../../../contexts/PageContext';
@@ -18,6 +18,27 @@ function mapPage(messages: Message[]) {
 
 export default function ChatView() {
   const { selectedGroup } = useContext(PageContext);
+
+  return (
+    <Flex pos="relative" h="full" direction="column">
+      <Box flex={1} h={0}>
+        <MessageView group={selectedGroup} />
+      </Box>
+
+      <Box w="full" p={{ '3sm': 4 }} pt={{ '3sm': 0 }}>
+        <MessageBar
+          group={selectedGroup}
+          messageBar={{
+            gap: { base: 1, '3sm': 2 },
+            rounded: { base: 'none', '3sm': 'xl' },
+          }}
+        />
+      </Box>
+    </Flex>
+  );
+}
+
+function MessageView({ group }: { group: string }) {
   const {
     data,
     error,
@@ -25,8 +46,7 @@ export default function ChatView() {
     hasPreviousPage,
     isLoading,
     refetch,
-  } = useInfiniteMessageQuery(selectedGroup);
-
+  } = useInfiniteMessageQuery(group);
   const { endMessage } = useBottomScroll(data?.pages);
 
   if (error) {
@@ -34,9 +54,8 @@ export default function ChatView() {
   }
 
   const items = data?.pages.flatMap((a) => mapPage(a)) ?? [];
-
   return (
-    <Box h="full" overflow="auto" id="chat_view">
+    <Box w="full" h="full" overflow="auto" id="chat_view">
       <InfiniteScroll
         dataLength={items.length}
         next={() => !isLoading && fetchPreviousPage()}
@@ -47,6 +66,14 @@ export default function ChatView() {
           padding: '0px 20px',
         }}
         inverse={true}
+        endMessage={
+          <Box>
+            <Text fontSize="sm" fontWeight="600">
+              This is the Start of the Chat!
+            </Text>
+            <Text>Yayyyyyy</Text>
+          </Box>
+        }
         hasMore={hasPreviousPage}
         loader={<LoadingBlock />}
         scrollableTarget="chat_view"
@@ -55,15 +82,6 @@ export default function ChatView() {
 
         {items.reverse()}
       </InfiniteScroll>
-      <Box
-        position="sticky"
-        bottom={0}
-        w="full"
-        px={{ '3sm': 4 }}
-        pb={{ '3sm': 4 }}
-      >
-        <MessageBar group={selectedGroup} />
-      </Box>
     </Box>
   );
 }

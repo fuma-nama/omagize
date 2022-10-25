@@ -86,9 +86,9 @@ export async function withDefault<T extends Options>(
     body: options.body,
     ...brand,
     headers: {
-      'Content-Type': isForm
-        ? undefined
-        : options.contentType ?? 'application/json',
+      ...(!isForm && {
+        'Content-Type': options.contentType ?? 'application/json',
+      }),
       Authorization:
         currentUser != null
           ? 'Bearer ' + (await currentUser.getIdToken())

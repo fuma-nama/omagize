@@ -30,7 +30,7 @@ export default function Banner(props: any) {
   const friends = friendsQuery.data?.friends;
 
   return (
-    <Card mb={{ base: '0px', lg: '20px' }} alignItems="center" {...props}>
+    <Card alignItems="center" {...props}>
       <Box
         bg={brand}
         bgImg={user.bannerUrl}

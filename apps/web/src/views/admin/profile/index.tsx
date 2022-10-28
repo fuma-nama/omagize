@@ -1,15 +1,16 @@
 // Chakra imports
-import { Box, Grid } from '@chakra-ui/react';
+import { Flex, Grid } from '@chakra-ui/react';
 
 // Custom components
 import Banner from 'views/admin/profile/components/Banner';
 import General from 'views/admin/profile/components/General';
 import Notifications from 'views/admin/profile/components/Notifications';
 import OwnedGroups from 'views/admin/profile/components/OwnedGroups';
+import { AccountSettings } from './components/Account';
 
 export default function Overview() {
   return (
-    <Box>
+    <Flex direction="column" gap="20px">
       <Grid
         templateColumns={{
           base: '1fr',
@@ -24,6 +25,7 @@ export default function Overview() {
         <Banner />
         <Notifications used={25.6} total={50} />
       </Grid>
+
       <Grid
         mb="20px"
         templateColumns={{
@@ -34,8 +36,9 @@ export default function Overview() {
         gap={{ base: '20px', xl: '20px' }}
       >
         <OwnedGroups />
+        <AccountSettings />
         <General pe="20px" />
       </Grid>
-    </Box>
+    </Flex>
   );
 }

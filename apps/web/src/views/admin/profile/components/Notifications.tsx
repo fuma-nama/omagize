@@ -9,7 +9,7 @@ import {
 import { useColors } from 'variables/colors';
 import UserNotificationItem from 'components/card/notification/UserNotification';
 import { NotificationSkeleton } from 'components/card/notification/Notification';
-import { ArrayHolder, Holder } from 'components/layout/Container';
+import { ArrayHolder } from 'components/layout/Container';
 import { useMutation } from '@tanstack/react-query';
 
 export default function Notifications(props: { [x: string]: any }) {
@@ -23,7 +23,7 @@ export default function Notifications(props: { [x: string]: any }) {
   );
 
   return (
-    <Card p={1} mb="20px" {...rest}>
+    <Card p={1} {...rest}>
       <Flex p={5} align="center" w="100%" justify="space-between">
         <Text
           color={textColorPrimary}

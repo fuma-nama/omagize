@@ -1,11 +1,9 @@
 // Chakra imports
-import { Box, Center, Flex, Grid, Icon, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, Grid, HStack, Text } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAuth';
 import ThemeToggle from 'components/fields/ThemeToggle';
 // Custom components
-import { NavLink } from 'react-router-dom';
-// Assets
-import { FaChevronLeft } from 'react-icons/fa';
+import { OmagizeLogo } from 'components/icons/Icons';
 
 function AuthIllustration(props: {
   children: JSX.Element | string;
@@ -20,39 +18,16 @@ function AuthIllustration(props: {
       templateColumns={{ base: '1fr', lg: '1fr 1fr', xl: '1fr 0.8fr' }}
     >
       <Flex
-        mx="auto"
-        pt={{ sm: '50px', md: '0px' }}
-        px={{ lg: '30px', xl: '0px' }}
-        ps={{ xl: '70px' }}
+        w="full"
+        p={{ base: '30px', xl: '50px' }}
         justifyContent="start"
         direction="column"
       >
-        <NavLink
-          to="/admin"
-          style={() => ({
-            width: 'fit-content',
-            marginTop: '40px',
-          })}
-        >
-          <Flex
-            align="center"
-            ps={{ base: '25px', lg: '0px' }}
-            pt={{ lg: '0px', xl: '0px' }}
-            w="fit-content"
-          >
-            <Icon
-              as={FaChevronLeft}
-              me="12px"
-              h="13px"
-              w="8px"
-              color="secondaryGray.600"
-            />
-            <Text ms="0px" fontSize="sm" color="secondaryGray.600">
-              Back to Simmmple
-            </Text>
-          </Flex>
-        </NavLink>
-        <Box flex={1} mt={{ base: '40px', md: '14vh' }} mb="120px">
+        <HStack>
+          <OmagizeLogo w={8} h={8} />
+          <Text fontWeight="600">Omagize</Text>
+        </HStack>
+        <Box mx="auto" flex={1} mt={{ base: '40px', md: '14vh' }} mb="120px">
           {children}
         </Box>
       </Flex>

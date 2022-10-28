@@ -61,7 +61,6 @@ function SignIn() {
   return (
     <DefaultAuth illustrationBackground={illustration}>
       <Flex
-        maxW={{ base: '100%', md: 'max-content' }}
         w="100%"
         mx={{ base: 'auto', lg: '0px' }}
         me="auto"

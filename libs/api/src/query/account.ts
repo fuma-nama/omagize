@@ -13,7 +13,7 @@ export function dispatchSelfUser(updated: User) {
   }));
 }
 
-export function onSignin(data: LoginPayload) {
+export async function onSignin(data: LoginPayload) {
   return client.setQueryData<LoginPayload>(Keys.login, data);
 }
 
@@ -28,6 +28,9 @@ export function useLogoutMutation() {
 export function useLoginQuery() {
   return useQuery(
     Keys.login,
+    /**
+     * the query should only called once
+     */
     async () => {
       await FirebaseAuth.init();
 

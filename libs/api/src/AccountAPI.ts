@@ -14,12 +14,21 @@ export type RawAccount = {
   email: string;
 };
 
+/**
+ * Notice that it will return false if email is not verified
+ */
 export function loggedIn(): boolean {
-  return firebase.auth.currentUser != null;
+  const user = firebase.auth.currentUser;
+
+  return user != null && user.emailVerified;
 }
 
+/**
+ *
+ * @returns LoginPayload, null if not logged in
+ */
 export async function authorize(): Promise<LoginPayload | null> {
-  if (firebase.auth.currentUser == null) {
+  if (!loggedIn()) {
     return null;
   }
 

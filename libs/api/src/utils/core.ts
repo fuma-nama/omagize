@@ -3,6 +3,7 @@ import { DateObject } from '../mappers/types';
 
 export const api = 'http://localhost:8080';
 export const ws = 'ws://localhost:8080/echo';
+export const orgin = 'http://localhost:3000';
 
 export type ReturnOptions<T> = Options & {
   /**

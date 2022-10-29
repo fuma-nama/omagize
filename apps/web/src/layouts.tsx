@@ -8,11 +8,11 @@ import GroupOverview from 'views/admin/group';
 import GroupSettings from 'views/admin/group/settings';
 import GroupChat from 'views/admin/chat/group/GroupChat';
 import GroupNavbar from 'views/admin/group/navbar/GroupNavbar';
-import SignInCentered from 'views/auth/signIn';
-import SignUp from './views/auth/signup';
+import SignIn from './views/auth';
 import MainDashboard from 'views/admin/default';
 import NFTMarketplace from 'views/admin/marketplace';
 import Profile from 'views/admin/profile';
+import { EmailVerifiedHandle } from 'views/auth/signup/verify';
 
 export const layouts: RootLayout[] = [
   {
@@ -25,11 +25,11 @@ export const layouts: RootLayout[] = [
       },
       {
         path: 'signin',
-        component: <SignInCentered />,
+        component: <SignIn />,
       },
       {
-        path: 'signup',
-        component: <SignUp />,
+        path: 'verified',
+        component: <EmailVerifiedHandle />,
       },
     ],
     loggedIn: false,

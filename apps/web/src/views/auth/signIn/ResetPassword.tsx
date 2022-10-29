@@ -8,6 +8,7 @@ import {
   Input,
   Text,
 } from '@chakra-ui/react';
+import { FirebaseAuth } from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { AuthPage } from '..';
@@ -43,9 +44,7 @@ function ResetPanel({
 }) {
   const [email, setEmail] = useState<string>('');
   const mutation = useMutation(
-    async (email: string) => {
-      return email;
-    },
+    (email: string) => FirebaseAuth.resetPassword(email),
     {
       onSuccess(_, email: string) {
         return setSent(email);

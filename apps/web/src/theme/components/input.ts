@@ -1,6 +1,17 @@
 import { mode } from '@chakra-ui/theme-tools';
 export const inputStyles = {
   components: {
+    PinInput: {
+      baseStyle: (props: any) => ({
+        bg: mode('transparent', 'navy.800')(props),
+        border: '2px solid',
+        color: mode('secondaryGray.900', 'white')(props),
+        borderColor: mode('secondaryGray.400', 'navy.600')(props),
+        _placeholder: {
+          color: mode('secondaryGray.700', 'secondaryGray.600')(props),
+        },
+      }),
+    },
     Input: {
       baseStyle: {
         field: {

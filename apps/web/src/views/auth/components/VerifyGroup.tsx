@@ -1,12 +1,14 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { useAuthColors } from '../../../variables/colors';
 import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 
 export default function VerifyGroup({
+  id,
   title,
   error,
   children,
 }: {
+  id?: string;
   title: string;
   error?: string;
   children: ReactNode;
@@ -16,6 +18,7 @@ export default function VerifyGroup({
   return (
     <FormControl mb="24px" isInvalid={!!error}>
       <FormLabel
+        htmlFor={id}
         ms="4px"
         fontSize="sm"
         fontWeight="500"

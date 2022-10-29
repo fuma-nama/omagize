@@ -9,6 +9,7 @@ import {
   setPersistence,
   browserLocalPersistence,
   sendEmailVerification,
+  sendPasswordResetEmail,
   User,
 } from 'firebase/auth';
 import { firebase } from './firebase';
@@ -26,6 +27,9 @@ export const FirebaseAuth = {
     await sendEmailVerification(user, {
       url: `${orgin}/auth/verified`,
     });
+  },
+  async resetPassword(email: string) {
+    await sendPasswordResetEmail(firebase.auth, email);
   },
   async signup(email: string, password: string) {
     return await createUserWithEmailAndPassword(firebase.auth, email, password);

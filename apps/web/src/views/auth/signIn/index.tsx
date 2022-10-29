@@ -26,7 +26,7 @@ export function SignInForm(props: {
   setPage: (page: AuthPage) => void;
 }) {
   // Chakra color mode
-  const { textColorDetails, textColorBrand } = useAuthColors();
+  const { textColorDetails, textColorBrand, brand } = useAuthColors();
 
   const [options, setOptions] = useState<Options>({
     email: firebase.auth.currentUser?.email ?? '',
@@ -78,6 +78,12 @@ export function SignInForm(props: {
             onChange: (e) => update({ password: e.target.value }),
           }}
         />
+        <Link
+          color={brand}
+          onClick={() => props.setPage(AuthPage.ResetPassword)}
+        >
+          Forgot your password?
+        </Link>
       </VerifyGroup>
       <FormControl display="flex" alignItems="center" mb="24px">
         <CheckboxField id="remember-login" label="Keep me logged in" />

@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { VerifyMailAuto } from './signup/verify';
 import { SignInForm } from './signIn';
 import { User } from 'firebase/auth';
+import ResetPasswordForm from './signIn/ResetPassword';
 
 export type SignInOptions = {
   email: string;
@@ -18,6 +19,7 @@ export enum AuthPage {
   SignUp,
   SignIn,
   VerifyEmail,
+  ResetPassword,
 }
 export default function SignIn() {
   const [page, setPage] = useState<AuthPage>(AuthPage.SignIn);
@@ -91,6 +93,9 @@ export default function SignIn() {
             error={signin.error?.toString()}
             setPage={setPage}
           />
+        </Collapse>
+        <Collapse in={page === AuthPage.ResetPassword}>
+          <ResetPasswordForm setPage={setPage} />
         </Collapse>
       </Box>
     </DefaultAuth>

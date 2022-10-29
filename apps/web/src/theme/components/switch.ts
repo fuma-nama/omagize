@@ -2,6 +2,15 @@ import { mode } from '@chakra-ui/theme-tools';
 
 export const switchStyles = {
   components: {
+    Checkbox: {
+      baseStyle: {
+        control: {
+          _focus: {
+            boxShadow: 'none',
+          },
+        },
+      },
+    },
     Switch: {
       baseStyle: {
         thumb: {

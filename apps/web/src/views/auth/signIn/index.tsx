@@ -1,15 +1,6 @@
 import { useState } from 'react';
 // Chakra imports
-import {
-  Button,
-  Checkbox,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  Link,
-  Text,
-} from '@chakra-ui/react';
+import { Button, Flex, FormControl, Input, Link, Text } from '@chakra-ui/react';
 // Custom components
 import { HSeparator } from 'components/separator/Separator';
 import { useAuthColors } from 'variables/colors';
@@ -19,6 +10,8 @@ import { GoogleSignInButton } from '../components/GoogleSignInButton';
 
 import { AuthForm } from '../components/AuthForm';
 import { AuthPage } from '..';
+import { firebase } from '@omagize/api';
+import CheckboxField from 'components/fields/CheckboxField';
 
 type Options = {
   email: string;
@@ -33,14 +26,10 @@ export function SignInForm(props: {
   setPage: (page: AuthPage) => void;
 }) {
   // Chakra color mode
-  const {
-    textColorPrimary: textColor,
-    textColorDetails,
-    textColorBrand,
-  } = useAuthColors();
+  const { textColorDetails, textColorBrand } = useAuthColors();
 
   const [options, setOptions] = useState<Options>({
-    email: '',
+    email: firebase.auth.currentUser?.email ?? '',
     password: '',
   });
 
@@ -66,7 +55,7 @@ export function SignInForm(props: {
         error={props.isError && 'Wrong Email or Password'}
       >
         <Input
-          id="email"
+          id="email-signin"
           isRequired={true}
           variant="auth"
           fontSize="sm"
@@ -91,16 +80,7 @@ export function SignInForm(props: {
         />
       </VerifyGroup>
       <FormControl display="flex" alignItems="center" mb="24px">
-        <Checkbox id="remember-login" colorScheme="brandScheme" me="10px" />
-        <FormLabel
-          htmlFor="remember-login"
-          mb="0"
-          fontWeight="normal"
-          color={textColor}
-          fontSize="sm"
-        >
-          Keep me logged in
-        </FormLabel>
+        <CheckboxField id="remember-login" label="Keep me logged in" />
       </FormControl>
       <Button
         isLoading={props.isLoading}

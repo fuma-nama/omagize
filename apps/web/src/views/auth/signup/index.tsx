@@ -1,10 +1,8 @@
 import {
   Button,
-  Checkbox,
   Flex,
   FormControl,
   FormErrorMessage,
-  FormLabel,
   Input,
   Link,
   Text,
@@ -27,11 +25,7 @@ export function SignUpForm(props: {
   setPage: (page: AuthPage) => void;
 }) {
   // Chakra color mode
-  const {
-    textColorPrimary: textColor,
-    textColorDetails,
-    textColorBrand,
-  } = useAuthColors();
+  const { textColorDetails, textColorBrand } = useAuthColors();
 
   const [options, setOptions] = useState<SignUpOptions>({
     username: '',
@@ -64,7 +58,6 @@ export function SignUpForm(props: {
             isRequired={true}
             variant="auth"
             fontSize="sm"
-            type="email"
             placeholder="Henry"
             fontWeight="500"
             size="lg"
@@ -74,6 +67,7 @@ export function SignUpForm(props: {
         </Group>
         <Group title="Email" error={signUp.issues.email}>
           <Input
+            id="email"
             isRequired={true}
             variant="auth"
             fontSize="sm"
@@ -94,18 +88,6 @@ export function SignUpForm(props: {
             }}
           />
         </Group>
-        <FormControl display="flex" alignItems="center" mb="24px">
-          <Checkbox id="remember-login" colorScheme="brandScheme" me="10px" />
-          <FormLabel
-            htmlFor="remember-login"
-            mb="0"
-            fontWeight="normal"
-            color={textColor}
-            fontSize="sm"
-          >
-            Keep me logged in
-          </FormLabel>
-        </FormControl>
         <FormErrorMessage>{props.error}</FormErrorMessage>
         <Button
           isLoading={props.isLoading}

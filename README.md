@@ -19,6 +19,8 @@ This will launch the Web App in dev environment
 
 ## Tech Stack
 
+- **Services:** Firebase
+
 ### Frontend
 
 - **Language:** Typescript
@@ -30,3 +32,10 @@ This will launch the Web App in dev environment
 - **Language:** Kotlin
 - **Database:** PostgreSQL, Exposed
 - **Tools & Libraries:** Ktor server, Socket.io
+
+## Index
+
+`apps/web/` - Main web application
+`apps/web/src/index.tsx` - Index page of the app & init services
+`libs/web/api` - API library of Omagize
+`libs/web/api/src/firebase` - Firebase config and files

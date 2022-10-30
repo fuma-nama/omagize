@@ -6,7 +6,7 @@ import Banner from 'views/admin/profile/components/Banner';
 import General from 'views/admin/profile/components/General';
 import Notifications from 'views/admin/profile/components/Notifications';
 import OwnedGroups from 'views/admin/profile/components/OwnedGroups';
-import { AccountSettings } from './components/Account';
+import AccountPanel from './components/AccountPanel';
 
 export default function Overview() {
   return (
@@ -36,7 +36,7 @@ export default function Overview() {
         gap={{ base: '20px', xl: '20px' }}
       >
         <OwnedGroups />
-        <AccountSettings />
+        <AccountPanel />
         <General pe="20px" />
       </Grid>
     </Flex>

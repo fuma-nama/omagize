@@ -4,7 +4,7 @@ import { Box, Flex, Text, Select, useColorModeValue } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import PieChart from 'components/charts/PieChart';
 import { pieChartData, pieChartOptions } from 'variables/charts';
-import { VSeparator } from 'components/separator/Separator';
+import { VSeparator } from 'components/layout/Separator';
 export default function Conversion(props: { [x: string]: any }) {
   const { ...rest } = props;
 

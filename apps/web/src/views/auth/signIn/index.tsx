@@ -2,7 +2,7 @@ import { useState } from 'react';
 // Chakra imports
 import { Button, Flex, FormControl, Input, Link, Text } from '@chakra-ui/react';
 // Custom components
-import { HSeparator } from 'components/separator/Separator';
+import { HSeparator } from 'components/layout/Separator';
 import { useAuthColors } from 'variables/colors';
 import PasswordInput from 'components/fields/PasswordInput';
 import VerifyGroup from '../components/VerifyGroup';

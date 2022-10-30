@@ -18,7 +18,7 @@ import {
   renderThumb,
   renderTrack,
   renderView,
-} from 'components/scrollbar/Scrollbar';
+} from 'components/layout/Scrollbar';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
 // Assets

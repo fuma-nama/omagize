@@ -8,7 +8,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { HSeparator } from 'components/separator/Separator';
+import { HSeparator } from 'components/layout/Separator';
 import { useAuthColors } from 'variables/colors';
 import PasswordInput from 'components/fields/PasswordInput';
 import { SignUpOptions, useVerifySignUp } from 'utils/APIUtils';

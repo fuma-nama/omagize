@@ -45,7 +45,6 @@ export const layouts: RootLayout[] = [
       {
         path: 'chat',
         component: <ChatLayout />,
-        routes: '/user/chat',
         subLayouts: [
           {
             path: ':group',
@@ -96,7 +95,6 @@ export type NormalLayout = IndexRoute | NestedLayout;
 export type NestedLayout = Layout & {
   path?: string;
   subLayouts?: NormalLayout[];
-  routes?: string;
   index?: false;
 };
 

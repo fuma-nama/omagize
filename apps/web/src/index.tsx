@@ -23,7 +23,6 @@ function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
       );
     }
   }
-
   return (
     <Routes>
       {layouts.map((layout, key) =>

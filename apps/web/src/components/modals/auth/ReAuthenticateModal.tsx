@@ -8,7 +8,6 @@ import {
   Button,
   Icon,
   FormControl,
-  Input,
   FormLabel,
   Flex,
   HStack,
@@ -16,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { firebase, FirebaseAuth } from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
+import PasswordInput from 'components/fields/PasswordInput';
 import { FirebaseError } from 'firebase/app';
 import { EmailAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { useState } from 'react';
@@ -24,15 +24,14 @@ import { parseErrorMessage } from 'utils/APIUtils';
 import { useColors } from 'variables/colors';
 
 export type ReauthTarget = {
+  message: string;
   onDone: () => void;
 };
 type ProviderProps = { onSuccess: () => void };
 export default function ReAuthentricateModal({
   target,
   onClose,
-  message,
 }: {
-  message: string;
   onClose: () => void;
   target?: ReauthTarget;
 }) {
@@ -49,8 +48,8 @@ export default function ReAuthentricateModal({
       <ModalContent>
         <ModalHeader>Verify Required</ModalHeader>
         <ModalBody>
-          <Text color={textColorSecondary}>{message}</Text>
-          <Flex direction="column" gap={2} mt={4}>
+          <Text color={textColorSecondary}>{target?.message}</Text>
+          <Flex direction="column" gap={4} mt={4}>
             {target != null &&
               providers.map((provider) => {
                 const id = provider.providerId;
@@ -83,18 +82,16 @@ function Email({ onSuccess }: ProviderProps) {
   );
   return (
     <FormControl isInvalid={mutation.isError}>
-      <FormLabel fontSize="xl" fontWeight="600" htmlFor={id}>
+      <FormLabel fontSize="lg" fontWeight="600" htmlFor={id}>
         Email and Password
       </FormLabel>
       <HStack>
-        <Input
-          flex={1}
-          id={id}
-          type="password"
-          variant="main"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+        <PasswordInput
+          input={{
+            id,
+            value: password,
+            onChange: (e) => setPassword(e.target.value),
+          }}
         />
         <Button
           isLoading={mutation.isLoading}
@@ -119,7 +116,7 @@ function Google({ onSuccess }: ProviderProps) {
 
   return (
     <FormControl isInvalid={mutation.isError}>
-      <FormLabel fontSize="xl" fontWeight="600">
+      <FormLabel fontSize="lg" fontWeight="600">
         Google
       </FormLabel>
       <Button

@@ -23,16 +23,18 @@ import { authorize, signup } from '../AccountAPI';
 import { dispatchAccount, onSignin } from '../query';
 import { orgin } from '../utils/core';
 
-//setup listeners
-firebase.auth.onAuthStateChanged((e) => {
-  if (e != null) {
-    dispatchAccount(() => ({
-      email: e.email,
-    }));
-  } else {
-    onSignin(null);
-  }
-});
+export function initFirebase() {
+  //setup listeners
+  firebase.auth.onAuthStateChanged((e) => {
+    if (e != null) {
+      dispatchAccount(() => ({
+        email: e.email,
+      }));
+    } else {
+      onSignin(null);
+    }
+  });
+}
 
 const googleProvider = new GoogleAuthProvider();
 

@@ -23,21 +23,53 @@ import { useState } from 'react';
 import { parseErrorMessage } from 'utils/APIUtils';
 import { useColors } from 'variables/colors';
 
-export default function AccountPanel(props: {}) {
+export default function AccountPanel() {
   const { account } = useLoginQuery().data;
   const [reauth, setReauth] = useState<ReauthTarget>();
+  const { textColorPrimary } = useColors();
 
   return (
     <CustomCard>
       <ReAuthentricateModal target={reauth} onClose={() => setReauth(null)} />
-      <Text fontSize="2xl" fontWeight="600">
+      <Text color={textColorPrimary} fontSize="2xl" fontWeight="600">
         Account Settings
       </Text>
       <Flex direction="column" gap={2} mt={2}>
-        <Email account={account} setTarget={(t) => setReauth(t)} />
-        <Pasword setTarget={(t) => setReauth(t)} />
+        <Email account={account} setTarget={setReauth} />
+        <Pasword setTarget={setReauth} />
+        <Footer setTarget={setReauth} />
       </Flex>
     </CustomCard>
+  );
+}
+
+function Footer({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
+  const logout = useMutation(() => FirebaseAuth.logout());
+  const deleteAccount = useMutation(() => FirebaseAuth.deleteAccount());
+  const onDelete = () => {
+    setTarget({
+      message: 'You must be verified to Delete your Account',
+      onDone: () => deleteAccount.mutate(),
+    });
+  };
+
+  return (
+    <ButtonGroup mt={8}>
+      <Button
+        color="red.400"
+        isLoading={logout.isLoading}
+        onClick={() => logout.mutate()}
+      >
+        Logout
+      </Button>
+      <Button
+        variant="danger"
+        isLoading={deleteAccount.isLoading}
+        onClick={onDelete}
+      >
+        Delete Account
+      </Button>
+    </ButtonGroup>
   );
 }
 
@@ -59,7 +91,7 @@ function Pasword({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
       <PasswordInput
         input={{
           placeholder: 'New Passowrd',
-          variant: 'main',
+          variant: 'focus',
           value: password,
           onChange: (e) => setPassword(e.target.value),
         }}
@@ -137,12 +169,12 @@ function Email({
 }
 
 function Block({ text, ...props }: { text: string } & FormControlProps) {
-  const { textColorSecondary } = useColors();
-  const bg = useColorModeValue('white', 'navy.700');
+  const { textColorDetails } = useColors();
+  const bg = useColorModeValue('secondaryGray.300', 'navy.700');
 
   return (
-    <CustomCard bg={bg} my={2}>
-      <Text color={textColorSecondary} fontWeight="500" mb={2}>
+    <CustomCard bg={bg}>
+      <Text color={textColorDetails} fontWeight="500" mb={2}>
         {text}
       </Text>
       <FormControl {...props}>{props?.children}</FormControl>

@@ -16,6 +16,7 @@ import {
   reauthenticateWithPopup,
   reauthenticateWithCredential,
   EmailAuthProvider,
+  deleteUser,
 } from 'firebase/auth';
 import { firebase } from './firebase';
 import { authorize, signup } from '../AccountAPI';
@@ -77,6 +78,9 @@ export const FirebaseAuth = {
   },
   async logout() {
     return await firebase.auth.signOut();
+  },
+  async deleteAccount() {
+    await deleteUser(firebase.auth.currentUser);
   },
   async handleSignIn() {
     await onSignin(await authorize());

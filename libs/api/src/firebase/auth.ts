@@ -11,15 +11,49 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
   User,
+  updateEmail,
+  updatePassword,
+  reauthenticateWithPopup,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
 } from 'firebase/auth';
 import { firebase } from './firebase';
 import { authorize, signup } from '../AccountAPI';
-import { onSignin } from '../query';
+import { dispatchAccount, onSignin } from '../query';
 import { orgin } from '../utils/core';
+
+//setup listeners
+firebase.auth.onAuthStateChanged((e) => {
+  if (e != null) {
+    dispatchAccount(() => ({
+      email: e.email,
+    }));
+  } else {
+    onSignin(null);
+  }
+});
 
 const googleProvider = new GoogleAuthProvider();
 
+const Reauthentricate = {
+  async withGoogle() {
+    return await reauthenticateWithPopup(
+      firebase.auth.currentUser,
+      googleProvider
+    );
+  },
+  async withPassword(password: string) {
+    const user = firebase.auth.currentUser;
+
+    return await reauthenticateWithCredential(
+      user,
+      EmailAuthProvider.credential(user.email, password)
+    );
+  },
+};
+
 export const FirebaseAuth = {
+  reauth: Reauthentricate,
   async init() {
     await setPersistence(firebase.auth, browserLocalPersistence);
   },
@@ -41,8 +75,17 @@ export const FirebaseAuth = {
     const res = await signInWithPopup(firebase.auth, googleProvider);
     return await this.handleSignUp(res, res.user.displayName);
   },
+  async logout() {
+    return await firebase.auth.signOut();
+  },
   async handleSignIn() {
     await onSignin(await authorize());
+  },
+  async changeEmail(newEmail: string) {
+    await updateEmail(firebase.auth.currentUser, newEmail);
+  },
+  async changePassword(newPassword: string) {
+    await updatePassword(firebase.auth.currentUser, newPassword);
   },
   async handleSignUp(res: UserCredential, username: string) {
     const token = await res.user.getIdTokenResult();

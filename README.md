@@ -19,7 +19,8 @@ This will launch the Web App in dev environment
 
 ## Tech Stack
 
-**Services:** Firebase
+**Website Images:**: [unDraw](https://undraw.co/)
+**3rd party Services:** Firebase
 
 ### Frontend
 

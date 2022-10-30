@@ -1,7 +1,8 @@
 import { firebase } from './firebase/firebase';
-import { callReturn } from './utils/core';
+import { callDefault, callReturn } from './utils/core';
 import { RawSelfUser } from './UserAPI';
 import { LoginPayload } from './mappers/Auth';
+import { FirebaseAuth } from './firebase';
 export type Reset = 'reset';
 
 export type RawLoginPayload = {
@@ -21,6 +22,14 @@ export function loggedIn(): boolean {
   const user = firebase.auth.currentUser;
 
   return user != null && user.emailVerified;
+}
+
+export async function deleteAccount() {
+  await callDefault('/user', {
+    method: 'DELETE',
+    errorOnFail: true,
+  });
+  await FirebaseAuth.deleteAccount();
 }
 
 /**

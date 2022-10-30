@@ -10,7 +10,12 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { Account, FirebaseAuth, useLoginQuery } from '@omagize/api';
+import {
+  Account,
+  FirebaseAuth,
+  useLoginQuery,
+  deleteAccount,
+} from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
 import CustomCard from 'components/card/Card';
 import PasswordInput from 'components/fields/PasswordInput';
@@ -45,11 +50,11 @@ export default function AccountPanel() {
 
 function Footer({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
   const logout = useMutation(() => FirebaseAuth.logout());
-  const deleteAccount = useMutation(() => FirebaseAuth.deleteAccount());
+  const deleteMutation = useMutation(() => deleteAccount());
   const onDelete = () => {
     setTarget({
       message: 'You must be verified to Delete your Account',
-      onDone: () => deleteAccount.mutate(),
+      onDone: () => deleteMutation.mutate(),
     });
   };
 
@@ -64,7 +69,7 @@ function Footer({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
       </Button>
       <Button
         variant="danger"
-        isLoading={deleteAccount.isLoading}
+        isLoading={deleteMutation.isLoading}
         onClick={onDelete}
       >
         Delete Account

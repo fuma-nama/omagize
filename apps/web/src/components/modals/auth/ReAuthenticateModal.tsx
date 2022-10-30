@@ -10,8 +10,10 @@ import {
   FormControl,
   FormLabel,
   Flex,
+  ModalCloseButton,
   HStack,
   FormErrorMessage,
+  ModalFooter,
 } from '@chakra-ui/react';
 import { firebase, FirebaseAuth } from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
@@ -35,7 +37,10 @@ export default function ReAuthentricateModal({
   onClose: () => void;
   target?: ReauthTarget;
 }) {
-  const providers = firebase.auth.currentUser.providerData;
+  const providers = firebase.auth.currentUser.providerData.sort((a) =>
+    a.providerId === EmailAuthProvider.PROVIDER_ID ? -1 : 1
+  );
+
   const { textColorSecondary } = useColors();
   const onDone = () => {
     target?.onDone();
@@ -46,6 +51,7 @@ export default function ReAuthentricateModal({
     <Modal isOpen={target != null} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
+        <ModalCloseButton />
         <ModalHeader>Verify Required</ModalHeader>
         <ModalBody>
           <Text color={textColorSecondary}>{target?.message}</Text>
@@ -65,6 +71,11 @@ export default function ReAuthentricateModal({
               })}
           </Flex>
         </ModalBody>
+        <ModalFooter>
+          <Button w="full" onClick={onClose}>
+            Close
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
@@ -89,6 +100,7 @@ function Email({ onSuccess }: ProviderProps) {
         <PasswordInput
           input={{
             id,
+            placeholder: 'Password',
             value: password,
             onChange: (e) => setPassword(e.target.value),
           }}
@@ -97,6 +109,7 @@ function Email({ onSuccess }: ProviderProps) {
           isLoading={mutation.isLoading}
           onClick={() => mutation.mutate(password)}
           type="submit"
+          px={6}
         >
           Submit
         </Button>

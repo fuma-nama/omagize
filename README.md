@@ -4,6 +4,9 @@ This project is a Modern Web Chat App
 <br>
 Go to The [App Source](./apps/web/)
 
+in-App Screenshot (old)
+![alt text](./documents/screenshot.svg)
+
 ## Setup the Environment
 
 To run this project, You need to install [Node.js](https://nodejs.org/), [pNpM](https://pnpm.io/)
@@ -19,7 +22,7 @@ This will launch the Web App in dev environment
 
 ## Tech Stack
 
-**Website Images:**: [unDraw](https://undraw.co/)
+**Website Images:** [unDraw](https://undraw.co/)
 <br>
 **3rd party Services:** Firebase
 

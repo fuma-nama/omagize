@@ -1,9 +1,18 @@
 // Chakra imports
-import { Box, Center, Flex, Grid, HStack, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Center,
+  Flex,
+  Grid,
+  Heading,
+  HStack,
+  Text,
+} from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAuth';
 import ThemeToggle from 'components/fields/ThemeToggle';
 // Custom components
 import { OmagizeLogo } from 'components/icons/Icons';
+import { useColors } from 'variables/colors';
 
 function AuthIllustration(props: {
   children: JSX.Element | string;
@@ -31,13 +40,7 @@ function AuthIllustration(props: {
           {children}
         </Box>
       </Flex>
-      <Box
-        display={{ base: 'none', lg: 'block' }}
-        h="full"
-        bgImg={illustrationBackground}
-        bgSize="cover"
-        borderBottomLeftRadius="200px"
-      />
+      <AuthImage image={illustrationBackground} />
       <Center pos="absolute" bottom={{ base: '15px', xl: '30px' }} w="full">
         <Box w="1313px" maxW="full" px="30px">
           <Footer />
@@ -45,6 +48,27 @@ function AuthIllustration(props: {
       </Center>
       <ThemeToggle />
     </Grid>
+  );
+}
+
+function AuthImage({ image }: { image: string }) {
+  const { brand } = useColors();
+
+  return (
+    <Center
+      display={{ base: 'none', lg: 'flex' }}
+      flexDirection="column"
+      h="full"
+      bg={brand}
+      p={30}
+      borderBottomLeftRadius="200px"
+      color="white"
+    >
+      <OmagizeLogo w="80%" h="auto" />
+      <Heading mt="-20" mx="auto">
+        Omagize
+      </Heading>
+    </Center>
   );
 }
 

@@ -19,7 +19,7 @@ This will launch the Web App in dev environment
 
 ## Tech Stack
 
-- **Services:** Firebase
+**Services:** Firebase
 
 ### Frontend
 
@@ -36,6 +36,9 @@ This will launch the Web App in dev environment
 ## Index
 
 `apps/web/` - Main web application
+<br>
 `apps/web/src/index.tsx` - Index page of the app & init services
+<br>
 `libs/web/api` - API library of Omagize
+<br>
 `libs/web/api/src/firebase` - Firebase config and files

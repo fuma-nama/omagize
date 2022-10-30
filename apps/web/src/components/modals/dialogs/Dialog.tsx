@@ -8,6 +8,7 @@ import {
   Button,
   Text,
   useDisclosure,
+  ModalCloseButton,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
@@ -57,6 +58,7 @@ export function useConfirmDialog(
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
+          <ModalCloseButton />
           <ModalHeader>{header}</ModalHeader>
           <ModalBody>
             <Text>{message}</Text>

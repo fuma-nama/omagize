@@ -1,3 +1,5 @@
+import { FirebaseError } from 'firebase/app';
+import { AuthErrorCodes } from 'firebase/auth';
 import { useState } from 'react';
 
 export type SignUpOptions = {
@@ -48,4 +50,23 @@ export function validEmail(email: string): boolean {
   const format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
   return !!email.match(format);
+}
+
+export function parseErrorMessage(error: FirebaseError, def?: string): string {
+  switch (error.code) {
+    case AuthErrorCodes.INVALID_EMAIL:
+      return 'Invalid Email format';
+    case AuthErrorCodes.EMAIL_EXISTS:
+      return 'Email already exists';
+    case AuthErrorCodes.WEAK_PASSWORD:
+      return 'Password is too weak';
+    case AuthErrorCodes.INVALID_PASSWORD:
+      return 'Wrong Password';
+    case AuthErrorCodes.USER_MISMATCH:
+      return "User Email doesn't match";
+    case AuthErrorCodes.INTERNAL_ERROR:
+      return 'Unknown Error';
+    default:
+      return def ?? error.message;
+  }
 }

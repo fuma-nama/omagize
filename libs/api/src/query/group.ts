@@ -14,7 +14,7 @@ import {
 } from '../GroupAPI';
 import { Group, GroupDetail, GroupEvent, Snowflake } from '../mappers';
 import { client } from './client';
-import { Keys } from './keys';
+import { Keys } from './queries';
 
 //dispatch
 export async function dispatchGroupDetail(detail: GroupDetail) {

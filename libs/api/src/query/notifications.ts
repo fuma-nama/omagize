@@ -1,4 +1,4 @@
-import { Keys } from './keys';
+import { Keys } from './queries';
 import { useQuery } from '@tanstack/react-query';
 import {
   fetchGroupNotifications,

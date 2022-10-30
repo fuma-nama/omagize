@@ -40,10 +40,6 @@ export async function authorize(): Promise<LoginPayload | null> {
   }).then((res) => (res == null ? null : LoginPayload(res)));
 }
 
-export async function logout() {
-  await firebase.auth.signOut();
-}
-
 /**
  * Must be called after login to firebase
  */

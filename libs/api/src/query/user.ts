@@ -3,7 +3,7 @@ import { LoginPayload, SelfUser } from '../mappers';
 import { fetchFriends, fetchGroupEvents } from '../UserAPI';
 import { useLoginQuery } from './account';
 import { client } from './client';
-import { Keys } from './keys';
+import { Keys } from './queries';
 
 export function dispatchUser(user: SelfUser) {
   client.setQueryData<LoginPayload>(Keys.login, (prev) => ({

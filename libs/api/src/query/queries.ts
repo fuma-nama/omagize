@@ -1,4 +1,6 @@
+import { QueryKey } from '@tanstack/react-query';
 import { Snowflake } from '../mappers';
+import { client } from './client';
 
 export const Keys = {
   login: ['login'],
@@ -18,3 +20,12 @@ export const Keys = {
   },
   firebase: {},
 };
+
+/**
+ * Update query data if exists
+ */
+export function updateQueryData<T>(key: QueryKey, updater: (prev: T) => T) {
+  return client.setQueryData<T>(key, (prev) =>
+    prev == null ? undefined : updater(prev)
+  );
+}

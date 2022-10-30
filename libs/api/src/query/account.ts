@@ -1,28 +1,35 @@
-import { LoginPayload } from '../mappers/Auth';
-import { Keys } from './keys';
+import { Account, LoginPayload } from '../mappers/Auth';
+import { Keys, updateQueryData } from './queries';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { authorize, logout } from '../AccountAPI';
+import { authorize } from '../AccountAPI';
 import { client } from './client';
 import { User } from '../mappers';
 import { FirebaseAuth } from '../firebase';
 
 export function dispatchSelfUser(updated: User) {
-  return client.setQueryData<LoginPayload>(Keys.login, (prev) => ({
+  return updateQueryData<LoginPayload>(Keys.login, (prev) => ({
     ...prev,
     user: updated,
   }));
 }
 
-export async function onSignin(data: LoginPayload) {
+export function dispatchAccount(updated: (prev: LoginPayload) => Account) {
+  return updateQueryData<LoginPayload>(Keys.login, (prev) => ({
+    ...prev,
+    account: updated(prev),
+  }));
+}
+
+/**
+ *
+ * @param data login payload, null if logged out
+ */
+export async function onSignin(data: LoginPayload | null) {
   return client.setQueryData<LoginPayload>(Keys.login, data);
 }
 
 export function useLogoutMutation() {
-  return useMutation(() => logout(), {
-    onSuccess() {
-      client.setQueryData<LoginPayload | null>(Keys.login, null);
-    },
-  });
+  return useMutation(() => FirebaseAuth.logout());
 }
 
 export function useLoginQuery() {

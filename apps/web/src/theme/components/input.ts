@@ -1,4 +1,17 @@
 import { mode } from '@chakra-ui/theme-tools';
+const defaultStyle = (props: any) => ({
+  bg: mode('transparent', 'navy.800')(props),
+  border: '2px solid',
+  color: mode('secondaryGray.900', 'white')(props),
+  borderColor: mode('secondaryGray.400', 'navy.600')(props),
+  borderRadius: '16px',
+  fontSize: 'sm',
+  p: '20px',
+  _placeholder: {
+    color: mode('secondaryGray.700', 'secondaryGray.600')(props),
+  },
+});
+
 export const inputStyles = {
   components: {
     PinInput: {
@@ -23,15 +36,14 @@ export const inputStyles = {
       variants: {
         main: (props: any) => ({
           field: {
-            bg: mode('transparent', 'navy.800')(props),
-            border: '2px solid',
-            color: mode('secondaryGray.900', 'white')(props),
-            borderColor: mode('secondaryGray.400', 'navy.600')(props),
-            borderRadius: '16px',
-            fontSize: 'sm',
-            p: '20px',
-            _placeholder: {
-              color: mode('secondaryGray.700', 'secondaryGray.600')(props),
+            ...defaultStyle(props),
+          },
+        }),
+        focus: (props: any) => ({
+          field: {
+            ...defaultStyle(props),
+            _focus: {
+              borderColor: mode('brand.300', 'brand.400')(props),
             },
           },
         }),

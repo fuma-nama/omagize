@@ -18,7 +18,9 @@ export const Keys = {
     user: ['user_notifications'],
     group: (group: Snowflake) => ['group_notifications', group],
   },
-  firebase: {},
+  firebase: {
+    signin: ['firebase_signin'],
+  },
 };
 
 /**

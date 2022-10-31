@@ -19,31 +19,23 @@ export const Gateway = {
   getSocket(): ReconnectingWebSocket {
     return socket;
   },
-  async connect(
-    options: GatewayOptions,
-    init: (socket: ReconnectingWebSocket) => void
-  ) {
+  async connect(options: GatewayOptions) {
     const user = firebase.auth.currentUser;
+    if (user == null) throw new Error('User cannot be null');
 
-    if (user != null) {
-      const token = await user.getIdToken();
-      connectGateway(token, options, init);
-    }
+    const token = await user.getIdToken();
+    connectGateway(token, options);
+    return socket;
   },
 };
 
-function connectGateway(
-  token: string,
-  options: GatewayOptions,
-  init: (socket: ReconnectingWebSocket) => void
-) {
+function connectGateway(token: string, options: GatewayOptions) {
   if (socket != null) return;
 
   const params = new URLSearchParams({
     token: token,
   });
   socket = new ReconnectingWebSocket(`${ws}?${params}`);
-
   socket.onopen = () => {
     console.log('Connected to Omagize Gateway');
   };
@@ -67,8 +59,6 @@ function connectGateway(
   socket.onerror = (error) => {
     console.log(`[error] ${error}`, error);
   };
-
-  init(socket);
 }
 
 export type GatewayEvent<T> = {

@@ -7,11 +7,19 @@ import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { layouts, NormalLayout } from './layouts';
-import { client, initClient, initFirebase, useLoginQuery } from '@omagize/api';
+import {
+  client,
+  firebase,
+  initClient,
+  initFirebase,
+  useLoginQuery,
+} from '@omagize/api';
 import { QueryScreen } from 'components/layout/LoadingScreen';
+import { initGateway } from 'utils/gateway';
 
 initClient();
 initFirebase();
+initGateway(firebase.auth);
 function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
   function mapNestedLayout(layout: NormalLayout, key: string | number) {
     if (layout.index === true) {

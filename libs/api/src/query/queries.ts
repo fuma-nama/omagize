@@ -21,6 +21,9 @@ export const Keys = {
   firebase: {
     signin: ['firebase_signin'],
   },
+  ws: {
+    connect: ['ws_connect'],
+  },
 };
 
 /**

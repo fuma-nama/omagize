@@ -1,5 +1,5 @@
 import { firebase } from './../firebase/firebase';
-import { DateObject } from '../mappers/types';
+import { DateObject, OmagizeError, APIErrorCode } from '../types/common';
 
 export const api = 'http://localhost:8080';
 export const ws = 'ws://localhost:8080/echo';
@@ -58,20 +58,27 @@ async function handleResult<T>(
   if (!res.ok) {
     if (options.allowed && options.allowed[res.status]) {
       return options.allowed[res.status](res);
-    } else if (options.errorOnFail ?? true) {
-      throw new Error(await res.text());
-    }
+    } else handleError(res, options);
   }
 
   return await mapper(res);
 }
 
 async function handle(res: Response, options: Options) {
-  if (!res.ok && (options.errorOnFail ?? true)) {
-    throw new Error(await res.text());
-  }
+  await handleError(res, options);
 
   return res;
+}
+/** throw error if condition matches */
+async function handleError(res: Response, options: Options) {
+  if (!res.ok && (options.errorOnFail ?? true)) {
+    const raw = await res.json().catch(() => ({
+      code: APIErrorCode.Client,
+      message: 'client-side error',
+    }));
+
+    throw new OmagizeError(raw);
+  }
 }
 
 export async function withDefault<T extends Options>(

@@ -1,4 +1,4 @@
-import { GroupInvite } from './../mappers/Group';
+import { GroupInvite } from '../types/group';
 import { replaceMatch } from '../utils/common';
 import {
   useInfiniteQuery,
@@ -12,7 +12,7 @@ import {
   fetchGroups,
   fetchMemberInfo,
 } from '../GroupAPI';
-import { Group, GroupDetail, GroupEvent, Snowflake } from '../mappers';
+import { Group, GroupDetail, GroupEvent, Snowflake } from '../types';
 import { client } from './client';
 import { Keys } from './queries';
 

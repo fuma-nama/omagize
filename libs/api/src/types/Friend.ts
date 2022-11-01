@@ -1,5 +1,5 @@
 import { RawFriend, RawFriendRequest, RawFriendsData } from '../UserAPI';
-import { User } from './User';
+import { User } from './user';
 
 export class FriendRequest {
   user: User;

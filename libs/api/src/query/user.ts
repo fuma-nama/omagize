@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { LoginPayload, SelfUser } from '../mappers';
+import { LoginPayload, SelfUser } from '../types';
 import { fetchFriends, fetchGroupEvents } from '../UserAPI';
 import { useLoginQuery } from './account';
 import { client } from './client';

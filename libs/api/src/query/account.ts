@@ -1,9 +1,9 @@
-import { Account, LoginPayload } from '../mappers/Auth';
+import { Account, LoginPayload } from '../types/account';
 import { Keys, updateQueryData } from './queries';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { authorize } from '../AccountAPI';
 import { client } from './client';
-import { User } from '../mappers';
+import { User } from '../types';
 import { FirebaseAuth } from '../firebase';
 
 export function dispatchSelfUser(updated: User) {

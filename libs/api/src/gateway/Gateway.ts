@@ -41,6 +41,7 @@ function connectGateway(token: string, options: GatewayOptions) {
   };
 
   socket.onmessage = (event: MessageEvent<string>) => {
+    console.log(event.data);
     if (event.data.length !== 0) {
       handleGateway(event.data);
     }

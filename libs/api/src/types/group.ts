@@ -1,13 +1,13 @@
+import { RawGroupEvent } from '../GroupAPI';
 import {
   RawGroup,
   RawGroupDetail,
   RawGroupInvite,
   RawMember,
 } from '../GroupAPI';
-import { Snowflake } from './types';
+import { Snowflake } from './common';
 import { toBannerUrl, toIconUrl } from '../utils/mediaUtils';
-import { User } from './User';
-import { GroupEvent } from './GroupEvents';
+import { User } from './user';
 import { parseDate } from '../utils/core';
 
 export type Group = {
@@ -68,5 +68,27 @@ export function GroupInvite(raw: RawGroupInvite): GroupInvite {
   return {
     ...raw,
     expireAt: parseDate(raw.expireAt),
+  };
+}
+
+export type GroupEvent = {
+  id: Snowflake;
+  imageUrl?: string;
+  name: string;
+  description?: string;
+  startAt: Date;
+  endAt?: Date;
+  place?: string;
+  group: string;
+  author: User;
+};
+
+export function GroupEvent(raw: RawGroupEvent): GroupEvent {
+  return {
+    ...raw,
+    imageUrl: toBannerUrl(raw.id, raw.imageHash),
+    startAt: parseDate(raw.startAt),
+    endAt: parseDate(raw.endAt),
+    author: new User(raw.author),
   };
 }

@@ -1,7 +1,7 @@
-import { getToken } from 'firebase/messaging';
+import { getToken, onMessage } from 'firebase/messaging';
 import { firebase } from './firebase';
 
-const token = getToken(firebase.messaging, {
+getToken(firebase.messaging, {
   vapidKey:
     'BCi2YcfIWvkPn67wWyMDok6HW1qEpaKSyjkBsqfhVL-vXgctPeGBlnkTtxQjuP-DUg1sZZoxk8rWHJ_nu3b0RWI',
 });

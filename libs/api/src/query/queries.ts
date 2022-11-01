@@ -1,5 +1,5 @@
 import { QueryKey } from '@tanstack/react-query';
-import { Snowflake } from '../mappers';
+import { Snowflake } from '../types';
 import { client } from './client';
 
 export const Keys = {

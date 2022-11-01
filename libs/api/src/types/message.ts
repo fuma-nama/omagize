@@ -1,5 +1,5 @@
-import { RawAttachment } from './../MessageAPI';
-import { Snowflake } from './types';
+import { RawAttachment } from '../MessageAPI';
+import { Snowflake } from './common';
 import { Member } from '.';
 import { RawMessage } from '../MessageAPI';
 import { toAttachmentUrl } from '../utils';

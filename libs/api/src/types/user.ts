@@ -1,4 +1,4 @@
-import { Snowflake } from './types';
+import { Snowflake } from './common';
 import { RawUser } from '../UserAPI';
 import { toAvatarUrl, toBannerUrl } from '../utils/mediaUtils';
 import { parseDate } from '../utils/core';

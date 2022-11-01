@@ -1,5 +1,5 @@
-import { Group, GroupDetail, GroupEvent, SelfUser } from '../mappers';
-import { Message } from '../mappers/message';
+import { Group, GroupDetail, GroupEvent, SelfUser } from '../types';
+import { Message } from '../types/message';
 import { RawMessage } from '../MessageAPI';
 import {
   addGroup,

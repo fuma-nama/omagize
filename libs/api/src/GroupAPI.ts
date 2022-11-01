@@ -4,12 +4,10 @@ import {
   callReturn,
   stringifyDate,
   toFormData,
-  withDefault,
-  withDefaultForm,
 } from './utils/core';
-import { DateObject, Snowflake } from './mappers/types';
-import { Group, GroupDetail, GroupInvite, Member } from './mappers/Group';
-import { GroupEvent } from './mappers/GroupEvents';
+import { DateObject, Snowflake } from './types/common';
+import { Group, GroupDetail, GroupInvite, Member } from './types/group';
+import { GroupEvent } from './types/group';
 import { Reset } from './AccountAPI';
 
 export type RawGroup = {

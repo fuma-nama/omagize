@@ -1,4 +1,4 @@
-import { User } from './User';
+import { User } from './user';
 import { RawSelfUser } from '../UserAPI';
 import { RawAccount, RawLoginPayload } from '../AccountAPI';
 

@@ -1,8 +1,8 @@
-import { DateObject } from './mappers/types';
+import { DateObject } from './types/common';
 import { delay } from './model';
-import { Snowflake } from './mappers';
+import { Snowflake } from './types';
 import { RawMember } from './GroupAPI';
-import { Message } from './mappers/message';
+import { Message } from './types/message';
 import { callReturn, toFormData } from './utils/core';
 
 export type RawMessage = {

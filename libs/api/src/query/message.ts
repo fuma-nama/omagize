@@ -1,4 +1,4 @@
-import { Message, Snowflake } from '../mappers';
+import { Message, Snowflake } from '../types';
 import { Keys } from './queries';
 import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMessagesBefore, fetchMessagesLatest } from '../MessageAPI';

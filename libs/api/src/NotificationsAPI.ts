@@ -1,6 +1,6 @@
 import { delay, groups, notifications } from './model';
-import { DateObject } from './mappers/types';
-import { GroupNotification, UserNotification } from './mappers/Notifications';
+import { DateObject } from './types/common';
+import { GroupNotification, UserNotification } from './types/notification';
 
 export type RawNotification = {
   id: string;

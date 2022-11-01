@@ -1,5 +1,5 @@
 import { api } from './core';
-import { Snowflake } from '../mappers/types';
+import { Snowflake } from '../types/common';
 
 enum MediaType {
   Banner = 'banners',

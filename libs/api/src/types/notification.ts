@@ -1,4 +1,4 @@
-import { Member } from './Group';
+import { Member } from './group';
 import { RawNotification } from '../NotificationsAPI';
 
 export type MentionNotification = {

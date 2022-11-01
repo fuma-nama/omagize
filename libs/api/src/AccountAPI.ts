@@ -1,7 +1,7 @@
 import { firebase } from './firebase/firebase';
 import { callDefault, callReturn } from './utils/core';
 import { RawSelfUser } from './UserAPI';
-import { LoginPayload } from './mappers/Auth';
+import { LoginPayload } from './types/account';
 import { FirebaseAuth } from './firebase';
 export type Reset = 'reset';
 

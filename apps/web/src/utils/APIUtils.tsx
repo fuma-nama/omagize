@@ -1,6 +1,7 @@
 import { FirebaseError } from 'firebase/app';
 import { AuthErrorCodes } from 'firebase/auth';
 import { useState } from 'react';
+import { OmagizeError, APIErrorCode } from '@omagize/api';
 
 export type SignUpOptions = {
   username: string;
@@ -52,7 +53,36 @@ export function validEmail(email: string): boolean {
   return !!email.match(format);
 }
 
-export function parseErrorMessage(error: FirebaseError, def?: string): string {
+export function parseOmagizeError(error: OmagizeError, def?: string): string {
+  switch (error.code) {
+    case APIErrorCode.EmailAlreadyUsed:
+      return 'Email already Exists';
+    case APIErrorCode.GroupAlreadyJoined:
+      return 'Group already joined';
+    case APIErrorCode.GroupNotExist:
+      return "Group doesn't exist";
+    case (APIErrorCode.Client, APIErrorCode.MissingParam):
+      return 'Unknown client-side error';
+    case APIErrorCode.InternalError:
+      return 'Server Internal Error';
+    case APIErrorCode.InvalidEmail:
+      return 'Invalid Email';
+    case APIErrorCode.InvalidInviteCode:
+      return 'Invalid or expired invite code';
+    case APIErrorCode.MemberNotExist:
+      return "Member doesn't exist";
+    case APIErrorCode.UserNotExist:
+      return "User doesn't exist";
+    case APIErrorCode.WeakPassword:
+      return 'This password is too weak';
+    case APIErrorCode.WrongPassword:
+      return 'Wrong password';
+    default:
+      return def;
+  }
+}
+
+export function parseFirebaseError(error: FirebaseError, def?: string): string {
   switch (error.code) {
     case AuthErrorCodes.INVALID_EMAIL:
       return 'Invalid Email format';

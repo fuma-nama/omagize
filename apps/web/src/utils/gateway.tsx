@@ -8,7 +8,10 @@ export function WebsocketConnect() {
   const query = useGatewayQuery();
 
   return (
-    <Slide in={query.isError || !query.data.connected} direction="top">
+    <Slide
+      in={query.isError || !query.data?.connected === true}
+      direction="top"
+    >
       <HStack bg="red.500" justify="center" color="white">
         <Text fontWeight="500">Failed to Connect Websocket</Text>
       </HStack>

@@ -8,7 +8,7 @@ import {
 import { Snowflake } from './common';
 import { toBannerUrl, toIconUrl } from '../utils/mediaUtils';
 import { User } from './user';
-import { parseDate } from '../utils/core';
+import { parseDate } from '../utils/common';
 
 export type Group = {
   id: Snowflake;

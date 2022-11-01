@@ -1,5 +1,5 @@
 import { firebase } from './../firebase/firebase';
-import { DateObject, OmagizeError, APIErrorCode } from '../types/common';
+import { OmagizeError, APIErrorCode } from '../types/common';
 
 export const api = 'http://localhost:8080';
 export const ws = 'ws://localhost:8080/echo';
@@ -111,47 +111,4 @@ export function withDefaultForm<T extends Options>(options: T): T {
     credentials: 'include',
     ...options,
   };
-}
-
-export function stringifyDate(date: Date): string {
-  if (date == null) return null;
-  return date.getTime().toString();
-}
-
-export function parseDate(date?: DateObject): Date | null {
-  if (date != null) {
-    return new Date(date);
-  } else {
-    return null;
-  }
-}
-
-function toFormField(
-  input: Date | Blob | string | boolean | number
-): Blob | string {
-  if (input instanceof Date) {
-    return stringifyDate(input);
-  }
-
-  switch (typeof input) {
-    case 'number':
-      return input.toString();
-    case 'boolean':
-      return input ? 'true' : 'false';
-    default:
-      return input;
-  }
-}
-
-export function toFormData(from: {
-  [key: string]: Blob | string | boolean | number | null | undefined;
-}): FormData {
-  const data = new FormData();
-
-  for (const [key, value] of Object.entries(from)) {
-    if (value != null) {
-      data.append(key, toFormField(value));
-    }
-  }
-  return data;
 }

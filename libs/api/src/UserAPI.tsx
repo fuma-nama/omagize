@@ -1,7 +1,8 @@
 import { delay, users } from './model';
 import { Reset } from './AccountAPI';
 import { DateObject, Snowflake } from './types/common';
-import { callReturn, toFormData } from './utils/core';
+import { callReturn } from './utils/core';
+import { toFormData } from './utils/common';
 import { SelfUser } from './types/account';
 import { FriendsData } from './types/Friend';
 import { GroupEvent } from './types/group';

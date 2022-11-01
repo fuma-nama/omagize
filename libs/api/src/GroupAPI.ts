@@ -1,10 +1,7 @@
 import { RawUser } from './UserAPI';
-import {
-  callDefault,
-  callReturn,
-  stringifyDate,
-  toFormData,
-} from './utils/core';
+import { callDefault, callReturn } from './utils/core';
+import { stringifyDate } from './utils/common';
+import { toFormData } from './utils/common';
 import { DateObject, Snowflake } from './types/common';
 import { Group, GroupDetail, GroupInvite, Member } from './types/group';
 import { GroupEvent } from './types/group';

@@ -1,2 +1,2 @@
 export * from './mediaUtils';
-export * from '../types/common';
+export * from './common';

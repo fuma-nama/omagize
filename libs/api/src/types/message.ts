@@ -3,7 +3,7 @@ import { Snowflake } from './common';
 import { Member } from '.';
 import { RawMessage } from '../MessageAPI';
 import { toAttachmentUrl } from '../utils';
-import { parseDate } from '../utils/core';
+import { parseDate } from '../utils/common';
 
 export type Message = {
   id: Snowflake;

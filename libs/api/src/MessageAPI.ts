@@ -3,7 +3,8 @@ import { delay } from './model';
 import { Snowflake } from './types';
 import { RawMember } from './GroupAPI';
 import { Message } from './types/message';
-import { callReturn, toFormData } from './utils/core';
+import { callReturn } from './utils/core';
+import { toFormData } from './utils/common';
 
 export type RawMessage = {
   id: Snowflake;

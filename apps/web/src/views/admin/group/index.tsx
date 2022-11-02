@@ -1,7 +1,6 @@
 import { useContext, useEffect } from 'react';
 // Chakra imports
 import {
-  Box,
   Center,
   Flex,
   Grid,
@@ -16,17 +15,8 @@ import AdminsCard from './components/AdminsCard';
 import Card, { CardButton } from 'components/card/Card';
 import { PageContext } from 'contexts/PageContext';
 import { Notifications } from './components/Notifications';
-import {
-  useInfiniteMessageQuery,
-  useGroupDetailQuery,
-  GroupDetail,
-} from '@omagize/api';
-import MessageItem, {
-  MessageItemSkeleton,
-} from 'components/card/chat/MessageItem';
-import { QueryErrorPanel } from 'components/card/ErrorPanel';
+import { useGroupDetailQuery, GroupDetail } from '@omagize/api';
 import GroupEventItem from 'components/card/GroupEventItem';
-import { Holder } from 'components/layout/Container';
 import { AddIcon } from '@chakra-ui/icons';
 import { useColors } from 'variables/colors';
 import CreateEventModal from 'components/modals/CreateEventModal';
@@ -36,6 +26,7 @@ import { ErrorScreen } from 'components/layout/ErrorScreen';
 import { GroupHeader } from './components/GroupHeader';
 import AutoImage from 'components/card/utils/AutoImage';
 import GroupInviteModal from 'components/modals/GroupInviteModal';
+import { MessagesPreview } from './MessagesPreview';
 
 export default function GroupOverview() {
   const { selectedGroup, setInfo } = useContext(PageContext);
@@ -183,45 +174,5 @@ function GroupEvents({
         </CardButton>
       )}
     </SimpleGrid>
-  );
-}
-
-function MessagesPreview() {
-  const { selectedGroup } = useContext(PageContext);
-  const query = useInfiniteMessageQuery(selectedGroup);
-
-  if (query.error) {
-    return (
-      <Box flexGrow={1}>
-        <QueryErrorPanel query={query} />
-      </Box>
-    );
-  }
-
-  return (
-    <Flex direction="column-reverse" maxH="1000px" overflow="auto">
-      <Holder
-        isLoading={query.isLoading}
-        skeleton={
-          <>
-            <MessageItemSkeleton noOfLines={4} />
-            <MessageItemSkeleton noOfLines={2} />
-            <MessageItemSkeleton noOfLines={6} />
-            <MessageItemSkeleton noOfLines={1} />
-          </>
-        }
-      >
-        {() => {
-          const pages = query.data.pages;
-          const lastPage = pages[pages.length - 1];
-
-          return lastPage
-            .slice(lastPage.length - 8, lastPage.length - 1)
-            .map((message) => (
-              <MessageItem key={message.id} message={message} />
-            ));
-        }}
-      </Holder>
-    </Flex>
   );
 }

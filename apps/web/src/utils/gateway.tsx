@@ -1,17 +1,22 @@
 import { HStack, Slide, Text } from '@chakra-ui/react';
-import { client, Gateway, Keys, useLoginQuery } from '@omagize/api';
+import {
+  GatewayStatus,
+  Keys,
+  startGateway,
+  useGatewayStatus,
+  useLoginQuery,
+} from '@omagize/api';
 import { useQuery } from '@tanstack/react-query';
 import { Auth } from 'firebase/auth';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
 export function WebsocketConnect() {
-  const query = useGatewayQuery();
+  useGatewayQuery();
+  const query = useGatewayStatus();
+  const failed = query.isSuccess && query?.data === GatewayStatus.Disconnected;
 
   return (
-    <Slide
-      in={query.isError || !query.data?.connected === true}
-      direction="top"
-    >
+    <Slide in={failed} direction="top">
       <HStack bg="red.500" justify="center" color="white">
         <Text fontWeight="500">Failed to Connect Websocket</Text>
       </HStack>
@@ -25,40 +30,12 @@ export function initGateway(auth: Auth) {
   });
 }
 
-export type GatewayData = {
-  socket: ReconnectingWebSocket;
-  connected: boolean;
-};
-
-function updateGatewayConnected(connected: boolean) {
-  return client.setQueryData<GatewayData>(Keys.ws.connect, (prev) => ({
-    ...prev,
-    connected,
-  }));
-}
+export type GatewayData = ReconnectingWebSocket;
 
 export function useGatewayQuery() {
   const login = useLoginQuery();
 
-  return useQuery<GatewayData>(
-    Keys.ws.connect,
-    async () => ({
-      socket: await Gateway.connect({ debug: true }),
-      connected: false,
-    }),
-    {
-      enabled: login.isSuccess,
-      onSuccess({ socket }) {
-        socket.addEventListener('open', () => {
-          updateGatewayConnected(true);
-        });
-        socket.addEventListener('close', () => {
-          updateGatewayConnected(false);
-        });
-        socket.addEventListener('error', () => {
-          updateGatewayConnected(false);
-        });
-      },
-    }
-  );
+  return useQuery<GatewayData>(Keys.ws.connect, () => startGateway(), {
+    enabled: login.isSuccess,
+  });
 }

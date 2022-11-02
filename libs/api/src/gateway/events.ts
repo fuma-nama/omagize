@@ -2,7 +2,7 @@ import { RawGroup } from '../GroupAPI';
 export type GatewayEvent<T> = {
   op: OpCode;
   d: T;
-  type?: EventType;
+  t?: EventType;
 };
 
 export enum OpCode {

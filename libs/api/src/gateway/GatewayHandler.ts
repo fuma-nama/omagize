@@ -10,64 +10,40 @@ import {
   removeGroup,
 } from '../query';
 import { RawSelfUser } from '../UserAPI';
-import {
-  RawGroup,
-  RawGroupDetail,
-  RawGroupEvent,
-  RawMemberClip,
-} from './../GroupAPI';
-import { GatewayEvent } from './Gateway';
+import { RawGroupDetail, RawGroupEvent, RawMemberClip } from './../GroupAPI';
+import { EventType, GatewayEvent, OpCode, GroupAddedEvent } from './events';
 
-export const GatewayCode = {
-  //10*: Basic
-  Connected: 100,
+export function handleGateway(event: GatewayEvent<unknown>) {
+  if (event.op !== OpCode.Dispatch) return;
 
-  //20x: Account, User
-  UserUpdated: 200,
-
-  //30x: Group
-  GroupAdded: 301,
-  GroupUpdated: 302,
-  GroupRemoved: 303,
-
-  //31x: GroupEvent
-  GroupEventAdded: 311,
-
-  MessageReceived: 401,
-};
-
-export function handleGateway(eventJson: string) {
-  const event: GatewayEvent<unknown> = JSON.parse(eventJson);
-
-  switch (event.op) {
-    case GatewayCode.Connected:
-      break;
-    case GatewayCode.GroupUpdated: {
+  switch (event.t) {
+    case EventType.GroupUpdated: {
       onGroupUpdate(event as GatewayEvent<RawGroupDetail>);
       break;
     }
-    case GatewayCode.GroupAdded: {
-      onGroupAdded(event as GatewayEvent<RawGroupDetail>);
+    case EventType.GroupAdded: {
+      onGroupAdded(event as GatewayEvent<GroupAddedEvent>);
       break;
     }
-    case GatewayCode.UserUpdated: {
+    case EventType.UserUpdated: {
       onUserUpdated(event as GatewayEvent<RawSelfUser>);
       break;
     }
-    case GatewayCode.GroupEventAdded: {
+    case EventType.GroupEventCreated: {
       onGroupEvent(event as GatewayEvent<RawGroupEvent>);
       break;
     }
-    case GatewayCode.GroupRemoved: {
+    case EventType.GroupRemoved: {
       onGroupRemoved(event as GatewayEvent<RawMemberClip>);
       break;
     }
-    case GatewayCode.MessageReceived: {
+    case EventType.MessageCreated: {
       onReceiveMessage(event as GatewayEvent<RawMessage>);
       break;
     }
-    default:
-      console.log(`[Gateway] unknown op code ${event.op}`);
+    default: {
+      console.log(`Unknown event ${event.t}`);
+    }
   }
 }
 
@@ -95,11 +71,12 @@ function onGroupUpdate(event: GatewayEvent<RawGroupDetail>) {
   return dispatchGroupDetail(updated);
 }
 
-function onGroupAdded(event: GatewayEvent<RawGroup>) {
-  const updated = Group(event.d);
+function onGroupAdded(event: GatewayEvent<GroupAddedEvent>) {
+  const updated = Group(event.d.group);
 
   return addGroup(updated);
 }
+
 function onGroupRemoved(event: GatewayEvent<RawMemberClip>) {
   const clip = event.d;
   removeGroup(clip.group);

@@ -2,52 +2,48 @@ import { firebase } from './../firebase/firebase';
 import { ws } from '../utils/core';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { handleGateway } from './GatewayHandler';
+import { GatewayEvent, IdentityEvent, OpCode } from './events';
+import { useQuery } from '@tanstack/react-query';
+import { Keys } from '../query/queries';
+import { client } from '../query';
 
-let socket: ReconnectingWebSocket;
+export function startGateway() {
+  const socket = new ReconnectingWebSocket(ws);
 
-export type GatewayOptions = {
-  /**
-   * Enable debugs logs
-   */
-  debug?: boolean;
-};
-
-export const Gateway = {
-  isConnected(): boolean {
-    return socket?.readyState === ReconnectingWebSocket.OPEN;
-  },
-  getSocket(): ReconnectingWebSocket {
-    return socket;
-  },
-  async connect(options: GatewayOptions) {
-    const user = firebase.auth.currentUser;
-    if (user == null) throw new Error('User cannot be null');
-
-    const token = await user.getIdToken();
-    connectGateway(token, options);
-    return socket;
-  },
-};
-
-function connectGateway(token: string, options: GatewayOptions) {
-  if (socket != null) return;
-
-  const params = new URLSearchParams({
-    token: token,
-  });
-  socket = new ReconnectingWebSocket(`${ws}?${params}`);
   socket.onopen = () => {
-    console.log('Connected to Omagize Gateway');
+    firebase.auth.currentUser
+      .getIdToken()
+      .then((token) => {
+        const message = IdentityEvent(token);
+
+        socket.send(JSON.stringify(message));
+        console.log('a');
+      })
+      .catch((e) => console.log(e));
+    console.log('[Gateway] Identity Started');
   };
 
-  socket.onmessage = (event: MessageEvent<string>) => {
-    console.log(event.data);
-    if (event.data.length !== 0) {
-      handleGateway(event.data);
+  socket.onmessage = (e: MessageEvent<string>) => {
+    if (e.data.length === 0) return;
+    const event: GatewayEvent<unknown> = JSON.parse(e.data);
+
+    switch (event.op) {
+      case OpCode.Dispatch: {
+        handleGateway(event);
+        break;
+      }
+      case OpCode.Ready: {
+        console.log('Connected to Omagize Gateway');
+        dispatchGatewayStatus(GatewayStatus.Ready);
+        break;
+      }
+      default:
+        console.log(`[Gateway] unknown op code ${event.op}`);
     }
   };
 
   socket.onclose = (event) => {
+    dispatchGatewayStatus(GatewayStatus.Disconnected);
     if (event.wasClean) {
       console.log(
         `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
@@ -58,12 +54,26 @@ function connectGateway(token: string, options: GatewayOptions) {
   };
 
   socket.onerror = (error) => {
+    dispatchGatewayStatus(GatewayStatus.Disconnected);
     console.log(`[error] ${error}`, error);
   };
+
+  return socket;
 }
 
-export type GatewayEvent<T> = {
-  op: number;
-  d: T;
-  type?: string;
-};
+export enum GatewayStatus {
+  Connecting,
+  Ready,
+  Disconnected,
+}
+
+async function dispatchGatewayStatus(status: GatewayStatus) {
+  await client.setQueryData(Keys.ws.status, () => status);
+}
+
+export function useGatewayStatus() {
+  return useQuery<GatewayStatus>(
+    Keys.ws.status,
+    () => GatewayStatus.Connecting
+  );
+}

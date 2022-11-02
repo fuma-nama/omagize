@@ -62,8 +62,8 @@ export function useNavbarColors() {
   const dark = colorMode === 'dark';
 
   return {
-    textColorBrand: dark ? 'brand.700' : 'brand.400',
-    iconColor: dark ? 'gray.400' : 'white',
+    textColorBrand: dark ? 'brand.400' : 'brand.700',
+    iconColor: dark ? 'white' : 'gray.400',
     ...useColors(),
   };
 }

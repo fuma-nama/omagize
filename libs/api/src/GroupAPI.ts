@@ -91,6 +91,24 @@ export function fetchGroupDetail(id: Snowflake): Promise<GroupDetail> {
   }).then((res) => GroupDetail(res));
 }
 
+export async function searchMembers(
+  group: Snowflake,
+  query?: string,
+  limit: number = 10
+) {
+  const param = new URLSearchParams({
+    query: query,
+    limit: limit.toString(),
+  });
+
+  return await callReturn<RawMember[]>(
+    `/groups/${group}/members/search?${param}`,
+    {
+      method: 'GET',
+    }
+  ).then((res) => res.map((user) => new Member(user)));
+}
+
 /**
  * Fetch group members starting from specified user
  */

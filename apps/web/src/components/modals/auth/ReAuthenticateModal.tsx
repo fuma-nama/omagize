@@ -22,7 +22,7 @@ import { FirebaseError } from 'firebase/app';
 import { EmailAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import { parseErrorMessage } from 'utils/APIUtils';
+import { parseFirebaseError } from 'utils/APIUtils';
 import { useColors } from 'variables/colors';
 
 export type ReauthTarget = {
@@ -116,7 +116,7 @@ function Email({ onSuccess }: ProviderProps) {
       </HStack>
       <FormErrorMessage>
         {mutation.error instanceof FirebaseError &&
-          parseErrorMessage(mutation.error as FirebaseError)}
+          parseFirebaseError(mutation.error as FirebaseError)}
       </FormErrorMessage>
     </FormControl>
   );
@@ -141,7 +141,7 @@ function Google({ onSuccess }: ProviderProps) {
       </Button>
       <FormErrorMessage>
         {mutation.error instanceof FirebaseError &&
-          parseErrorMessage(mutation.error as FirebaseError)}
+          parseFirebaseError(mutation.error as FirebaseError)}
       </FormErrorMessage>
     </FormControl>
   );

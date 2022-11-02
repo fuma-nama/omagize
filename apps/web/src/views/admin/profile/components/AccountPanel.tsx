@@ -25,7 +25,7 @@ import ReAuthentricateModal, {
 import { useResetPasswordModal } from 'components/modals/auth/ResetPasswordModal';
 import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
-import { parseErrorMessage } from 'utils/APIUtils';
+import { parseFirebaseError } from 'utils/APIUtils';
 import { useColors } from 'variables/colors';
 
 export default function AccountPanel() {
@@ -118,7 +118,7 @@ function Pasword({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
       </ButtonGroup>
       <FormErrorMessage>
         {mutation.error instanceof FirebaseError &&
-          parseErrorMessage(
+          parseFirebaseError(
             mutation.error as FirebaseError,
             'Failed to change password'
           )}
@@ -164,7 +164,7 @@ function Email({
       </HStack>
       <FormErrorMessage>
         {emailMutation.error instanceof FirebaseError &&
-          parseErrorMessage(
+          parseFirebaseError(
             emailMutation.error as FirebaseError,
             'Failed to change email'
           )}

@@ -23,6 +23,7 @@ export const Keys = {
   },
   ws: {
     connect: ['ws_connect'],
+    status: ['ws_status'],
   },
 };
 

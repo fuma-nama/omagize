@@ -12,6 +12,18 @@ const Card = {
     bg: mode('#ffffff', 'navy.800')(props),
     backgroundClip: 'border-box',
   }),
+  variants: {
+    input: (props: any) => ({
+      bg: mode('transparent', 'navy.800')(props),
+      border: '2px solid',
+      _focus: {
+        borderColor: mode('brand.300', 'brand.400')(props),
+      },
+      color: mode('secondaryGray.900', 'white')(props),
+      borderColor: mode('secondaryGray.400', 'navy.600')(props),
+      borderRadius: '16px',
+    }),
+  },
 };
 
 export const CardComponent = {

@@ -1,7 +1,9 @@
 import { Box, BoxProps, useColorMode } from '@chakra-ui/react';
-import { Editor, EditorProps } from 'draft-js';
+import Editor, { PluginEditorProps } from '@draft-js-plugins/editor';
 
-export default function TextEditor(props: { box: BoxProps } & EditorProps) {
+export default function TextEditor(
+  props: { box: BoxProps } & PluginEditorProps
+) {
   const { box, ...editor } = props;
   const { colorMode } = useColorMode();
   const light = colorMode === 'light';
@@ -29,7 +31,7 @@ export default function TextEditor(props: { box: BoxProps } & EditorProps) {
           fontWeight: 400,
           color: light ? 'secondaryGray.900' : 'white',
           borderColor: light ? 'secondaryGray.400' : 'navy.600',
-          fontSize: 'sm',
+          fontSize: 'md',
           transition: 'all 0.3s',
           rounded: '40px',
         },

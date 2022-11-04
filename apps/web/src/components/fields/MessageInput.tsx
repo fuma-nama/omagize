@@ -8,6 +8,22 @@ import CustomCard, { CardButton } from '../card/Card';
 import { SubMentionComponentProps } from '@draft-js-plugins/mention/lib/Mention';
 import { useColors } from '../../variables/colors';
 
+export type SuggestionProps = {
+  portal?: React.RefObject<HTMLElement | null>;
+  onSearch: (value: string) => void;
+  suggestions?: MentionData[];
+};
+
+export type MessageInputProps = ValueProps & {
+  editor?: Partial<EditorProps>;
+  mentionSuggestions: SuggestionProps;
+};
+
+export type ValueProps = {
+  value: EditorState;
+  onChange: (next: EditorState) => void;
+};
+
 function usePlugins() {
   return useMemo(() => {
     const mentionPlugin = createMentionPlugin({
@@ -20,18 +36,6 @@ function usePlugins() {
   }, []);
 }
 
-export type SuggestionProps = {
-  portal?: React.RefObject<HTMLElement | null>;
-  onSearch: (value: string) => void;
-  suggestions?: MentionData[];
-};
-
-export type MessageInputProps = {
-  value: EditorState;
-  onChange: (next: EditorState) => void;
-  editor?: Partial<EditorProps>;
-  mentionSuggestions: SuggestionProps;
-};
 /**
  * Input field that Supports mentions, markdown, suggestions
  */

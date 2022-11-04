@@ -1,4 +1,11 @@
-import { Box, Flex, HStack, IconButton } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  HStack,
+  IconButton,
+  SlideFade,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { searchMembers, sendMessage, Snowflake } from '@omagize/api';
 import { RefObject, useRef, useState } from 'react';
 import Card from '../../../../components/card/Card';
@@ -8,9 +15,11 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import useFilePicker from 'components/picker/FilePicker';
 import { FileUploadItem } from './FileUploadItem';
 import { CustomCardProps } from 'theme/theme';
-import MessageInput from 'components/fields/MessageInput';
+import MessageInput, { ValueProps } from 'components/fields/MessageInput';
 import { convertToRaw, EditorState } from 'draft-js';
 import draftToMarkdown from 'components/fields/editor/draftToMarkdown';
+import { Toolbar } from '../../../../components/fields/editor/Toolbar';
+import { BsThreeDots } from 'react-icons/bs';
 
 export type MessageOptions = {
   message: EditorState;
@@ -44,6 +53,7 @@ export function MessageBar({
 }) {
   const suggestionRef = useRef<HTMLDivElement>();
   const { content, resetContent, dispatch } = useOptionState();
+  const { isOpen: showToolbar, onToggle: toggleToolbar } = useDisclosure();
   const sendMutation = useSendMutation(group);
   const picker = useFilePicker((f) =>
     dispatch((prev) => ({
@@ -61,7 +71,7 @@ export function MessageBar({
     !sendMutation.isLoading;
 
   return (
-    <Flex direction="column" w="full" gap={2}>
+    <Flex pos="relative" direction="column" w="full" gap={2}>
       <Attachments
         value={content.attachments}
         onRemove={(f) =>
@@ -71,6 +81,15 @@ export function MessageBar({
         }
       />
       <Box ref={suggestionRef} />
+      <Box pos="absolute" top="-30%">
+        <SlideFade in={showToolbar}>
+          <Toolbar
+            value={content.message}
+            onChange={(m) => dispatch(() => ({ message: m }))}
+          />
+        </SlideFade>
+      </Box>
+
       <Card
         flexDirection="row"
         alignItems="center"
@@ -85,6 +104,11 @@ export function MessageBar({
           onClick={picker.pick}
         />
         <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
+        <IconButton
+          icon={<BsThreeDots />}
+          onClick={toggleToolbar}
+          aria-label="style"
+        />
         <Input
           group={group}
           suggestionRef={suggestionRef}
@@ -113,9 +137,7 @@ function Input({
   onChange,
   group,
   suggestionRef,
-}: {
-  value: EditorState;
-  onChange: (v: EditorState) => void;
+}: ValueProps & {
   group: Snowflake;
   suggestionRef: RefObject<HTMLDivElement>;
 }) {

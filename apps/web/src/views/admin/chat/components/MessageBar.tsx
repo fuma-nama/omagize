@@ -1,10 +1,10 @@
 import { Box, Flex, HStack, IconButton } from '@chakra-ui/react';
-import { sendMessage, Snowflake } from '@omagize/api';
-import { useRef, useState } from 'react';
+import { searchMembers, sendMessage, Snowflake } from '@omagize/api';
+import { RefObject, useRef, useState } from 'react';
 import Card from '../../../../components/card/Card';
 import { FiFile, FiSend } from 'react-icons/fi';
 import { GrEmoji } from 'react-icons/gr';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import useFilePicker from 'components/picker/FilePicker';
 import { FileUploadItem } from './FileUploadItem';
 import { CustomCardProps } from 'theme/theme';
@@ -75,12 +75,7 @@ export function MessageBar({
           onClick={picker.pick}
         />
         <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
-        <MessageInput
-          editor={{
-            placeholder: 'Input your message here...',
-          }}
-          suggestionPortal={suggestionRef}
-        />
+        <Input group={group} suggestionRef={suggestionRef} />
         <IconButton
           onClick={send}
           isLoading={sendMutation.isLoading}
@@ -91,6 +86,40 @@ export function MessageBar({
         />
       </Card>
     </Flex>
+  );
+}
+
+function Input({
+  group,
+  suggestionRef,
+}: {
+  group: Snowflake;
+  suggestionRef: RefObject<HTMLDivElement>;
+}) {
+  const [search, setSearch] = useState<string | null>(null);
+  const query = useQuery(
+    ['search_member', group, search],
+    () => searchMembers(group, search, 10),
+    {
+      enabled: search != null,
+    }
+  );
+
+  return (
+    <MessageInput
+      editor={{
+        placeholder: 'Input your message here...',
+      }}
+      mentionSuggestions={{
+        portal: suggestionRef,
+        onSearch: setSearch,
+        suggestions: query.data?.map((member) => ({
+          id: member.id,
+          name: member.username,
+          avatar: member.avatarUrl,
+        })),
+      }}
+    />
   );
 }
 

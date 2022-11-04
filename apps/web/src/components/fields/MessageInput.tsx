@@ -1,12 +1,9 @@
 import { EditorState, EditorProps } from 'draft-js';
 import TextEditor from './editor/TextEditor';
-import createMentionPlugin, {
-  defaultSuggestionsFilter,
-} from '@draft-js-plugins/mention';
-import { useState, useCallback, ReactNode } from 'react';
+import createMentionPlugin, { MentionData } from '@draft-js-plugins/mention';
+import React, { useState, ReactNode } from 'react';
 import { EntryComponentProps } from '@draft-js-plugins/mention/lib/MentionSuggestions/Entry/Entry';
 import { Avatar, Box, HStack, Portal, Text } from '@chakra-ui/react';
-import mentions from './editor/mentions';
 import CustomCard, { CardButton } from '../card/Card';
 import { SubMentionComponentProps } from '@draft-js-plugins/mention/lib/Mention';
 import { useColors } from '../../variables/colors';
@@ -19,30 +16,29 @@ const mentionPlugin = createMentionPlugin({
 const { MentionSuggestions } = mentionPlugin;
 const plugins = [mentionPlugin];
 
+export type SuggestionProps = {
+  portal?: React.RefObject<HTMLElement | null>;
+  onSearch: (value: string) => void;
+  suggestions?: MentionData[];
+};
+
 export type MessageInputProps = {
   editor?: Partial<EditorProps>;
-  suggestionPortal?: React.RefObject<HTMLElement | null>;
+  mentionSuggestions: SuggestionProps;
 };
 /**
  * Input field that Supports mentions, markdown, suggestions
  */
 export default function MessageInput({
   editor,
-  suggestionPortal,
+  mentionSuggestions,
 }: MessageInputProps) {
   const [editorState, setEditorState] = useState<EditorState>(() =>
     EditorState.createEmpty()
   );
   const [open, setOpen] = useState(false);
-  const [suggestions, setSuggestions] = useState(mentions);
-
-  const onOpenChange = useCallback((_open: boolean) => {
-    setOpen(_open);
-  }, []);
-  const onSearchChange = useCallback(({ value }: { value: string }) => {
-    setSuggestions(defaultSuggestionsFilter(value, mentions));
-  }, []);
-  console.log(editorState.values);
+  const onSearchChange = ({ value }: { value: string }) =>
+    mentionSuggestions.onSearch(value);
 
   return (
     <>
@@ -57,15 +53,15 @@ export default function MessageInput({
       />
       <MentionSuggestions
         open={open}
-        onOpenChange={onOpenChange}
-        suggestions={suggestions}
+        onOpenChange={setOpen}
+        suggestions={mentionSuggestions.suggestions ?? []}
         onSearchChange={onSearchChange}
         onAddMention={() => {
           // get the mention object selected
         }}
         entryComponent={Entry}
         popoverContainer={({ children }) => (
-          <Portal containerRef={suggestionPortal}>
+          <Portal containerRef={mentionSuggestions.portal}>
             <Suggestions>{children}</Suggestions>
           </Portal>
         )}
@@ -81,6 +77,7 @@ function Mention(props: SubMentionComponentProps) {
 
   return (
     <HStack
+      as="span"
       bg={brand}
       rounded="full"
       color="white"
@@ -90,9 +87,10 @@ function Mention(props: SubMentionComponentProps) {
       display="inline-flex"
       fontSize="sm"
       cursor="pointer"
+      className={props.className}
     >
-      <Avatar src={avatar} name={name} w={5} h={5} />
-      <span>{name}</span>
+      <Avatar src={avatar} w={5} h={5} name={name} />
+      {props.children}
     </HStack>
   );
 }
@@ -115,6 +113,7 @@ function Entry(props: EntryComponentProps) {
     theme,
     searchValue, // eslint-disable-line @typescript-eslint/no-unused-vars
     isFocused, // eslint-disable-line @typescript-eslint/no-unused-vars
+    selectMention,
     ...parentProps
   } = props;
 

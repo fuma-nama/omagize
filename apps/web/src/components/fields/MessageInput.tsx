@@ -27,6 +27,8 @@ export type SuggestionProps = {
 };
 
 export type MessageInputProps = {
+  value: EditorState;
+  onChange: (next: EditorState) => void;
   editor?: Partial<EditorProps>;
   mentionSuggestions: SuggestionProps;
 };
@@ -34,22 +36,22 @@ export type MessageInputProps = {
  * Input field that Supports mentions, markdown, suggestions
  */
 export default function MessageInput({
+  value,
+  onChange,
   editor,
   mentionSuggestions,
 }: MessageInputProps) {
   const { mention } = usePlugins();
-  const [editorState, setEditorState] = useState<EditorState>(() =>
-    EditorState.createEmpty()
-  );
   const [open, setOpen] = useState(false);
-  const onSearchChange = ({ value }: { value: string }) =>
+  const onSearchChange = ({ value }: { value: string }) => {
     mentionSuggestions.onSearch(value);
+  };
 
   return (
     <>
       <TextEditor
-        editorState={editorState}
-        onChange={setEditorState}
+        editorState={value}
+        onChange={onChange}
         plugins={[mention]}
         {...editor}
         box={{

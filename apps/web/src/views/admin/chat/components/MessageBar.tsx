@@ -9,12 +9,32 @@ import useFilePicker from 'components/picker/FilePicker';
 import { FileUploadItem } from './FileUploadItem';
 import { CustomCardProps } from 'theme/theme';
 import MessageInput from 'components/fields/MessageInput';
+import { convertToRaw, EditorState } from 'draft-js';
+import draftToMarkdown from 'components/fields/editor/draftToMarkdown';
 
 export type MessageOptions = {
-  message: string;
+  message: EditorState;
   attachments: File[];
 };
+function useOptionState() {
+  const [content, setContent] = useState<MessageOptions>(() => ({
+    message: EditorState.createEmpty(),
+    attachments: [],
+  }));
 
+  return {
+    content,
+    setContent,
+    resetContent: () =>
+      setContent({
+        attachments: [],
+        message: EditorState.createEmpty(),
+      }),
+    dispatch: (v: (prev: MessageOptions) => Partial<MessageOptions>) => {
+      return setContent((prev) => ({ ...prev, ...v(prev) }));
+    },
+  };
+}
 export function MessageBar({
   group,
   messageBar,
@@ -23,30 +43,21 @@ export function MessageBar({
   messageBar?: CustomCardProps;
 }) {
   const suggestionRef = useRef<HTMLDivElement>();
-  const [content, setContent] = useState<MessageOptions>({
-    message: '',
-    attachments: [],
-  });
-
+  const { content, resetContent, dispatch } = useOptionState();
+  const sendMutation = useSendMutation(group);
   const picker = useFilePicker((f) =>
-    setContent((prev) => ({
-      ...prev,
+    dispatch((prev) => ({
       attachments: [...prev.attachments, f],
     }))
   );
-  const sendMutation = useSendMutation(group);
 
   const send = () => {
     sendMutation.mutate(content);
-
-    setContent({
-      message: '',
-      attachments: [],
-    });
+    resetContent();
   };
 
   const canSend =
-    (content.attachments.length !== 0 || content.message.length !== 0) &&
+    (content.attachments.length !== 0 || !content.message.isEmpty) &&
     !sendMutation.isLoading;
 
   return (
@@ -54,8 +65,7 @@ export function MessageBar({
       <Attachments
         value={content.attachments}
         onRemove={(f) =>
-          setContent((prev) => ({
-            ...prev,
+          dispatch((prev) => ({
             attachments: prev.attachments.filter((file) => file !== f),
           }))
         }
@@ -75,7 +85,16 @@ export function MessageBar({
           onClick={picker.pick}
         />
         <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
-        <Input group={group} suggestionRef={suggestionRef} />
+        <Input
+          group={group}
+          suggestionRef={suggestionRef}
+          value={content.message}
+          onChange={(v) =>
+            dispatch(() => ({
+              message: v,
+            }))
+          }
+        />
         <IconButton
           onClick={send}
           isLoading={sendMutation.isLoading}
@@ -90,9 +109,13 @@ export function MessageBar({
 }
 
 function Input({
+  value,
+  onChange,
   group,
   suggestionRef,
 }: {
+  value: EditorState;
+  onChange: (v: EditorState) => void;
   group: Snowflake;
   suggestionRef: RefObject<HTMLDivElement>;
 }) {
@@ -107,6 +130,8 @@ function Input({
 
   return (
     <MessageInput
+      value={value}
+      onChange={onChange}
       editor={{
         placeholder: 'Input your message here...',
       }}
@@ -146,15 +171,13 @@ function Attachments(props: {
 }
 
 function useSendMutation(group: Snowflake) {
-  return useMutation(['send_message', group], (content: MessageOptions) =>
-    sendMessage(group, content.message, content.attachments)
+  return useMutation(
+    ['send_message', group],
+    async (content: MessageOptions) => {
+      const raw = convertToRaw(content.message.getCurrentContent());
+      const markdown = draftToMarkdown(raw);
+
+      return await sendMessage(group, markdown, content.attachments);
+    }
   );
 }
-
-/*
-value: content.message,
-            onChange: (e) => {
-              setContent((prev) => ({ ...prev, message: e.target.value }));
-            },
-            variant: 'message',
-*/

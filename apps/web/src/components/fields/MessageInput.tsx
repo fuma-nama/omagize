@@ -1,20 +1,24 @@
 import { EditorState, EditorProps } from 'draft-js';
 import TextEditor from './editor/TextEditor';
 import createMentionPlugin, { MentionData } from '@draft-js-plugins/mention';
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useMemo } from 'react';
 import { EntryComponentProps } from '@draft-js-plugins/mention/lib/MentionSuggestions/Entry/Entry';
 import { Avatar, Box, HStack, Portal, Text } from '@chakra-ui/react';
 import CustomCard, { CardButton } from '../card/Card';
 import { SubMentionComponentProps } from '@draft-js-plugins/mention/lib/Mention';
 import { useColors } from '../../variables/colors';
 
-const mentionPlugin = createMentionPlugin({
-  entityMutability: 'IMMUTABLE',
-  supportWhitespace: true,
-  mentionComponent: Mention,
-});
-const { MentionSuggestions } = mentionPlugin;
-const plugins = [mentionPlugin];
+function usePlugins() {
+  return useMemo(() => {
+    const mentionPlugin = createMentionPlugin({
+      entityMutability: 'IMMUTABLE',
+      supportWhitespace: true,
+      mentionComponent: Mention,
+    });
+
+    return { mention: mentionPlugin };
+  }, []);
+}
 
 export type SuggestionProps = {
   portal?: React.RefObject<HTMLElement | null>;
@@ -33,6 +37,7 @@ export default function MessageInput({
   editor,
   mentionSuggestions,
 }: MessageInputProps) {
+  const { mention } = usePlugins();
   const [editorState, setEditorState] = useState<EditorState>(() =>
     EditorState.createEmpty()
   );
@@ -45,13 +50,13 @@ export default function MessageInput({
       <TextEditor
         editorState={editorState}
         onChange={setEditorState}
-        plugins={plugins}
+        plugins={[mention]}
         {...editor}
         box={{
           w: 'full',
         }}
       />
-      <MentionSuggestions
+      <mention.MentionSuggestions
         open={open}
         onOpenChange={setOpen}
         suggestions={mentionSuggestions.suggestions ?? []}

@@ -1,3 +1,4 @@
+import { apply, Modify } from '../../../utils/messaging/StringEditUtils';
 import { MentionData } from '@draft-js-plugins/mention';
 import {
   DraftBlockType,
@@ -8,15 +9,12 @@ import {
   RawDraftInlineStyleRange,
 } from 'draft-js';
 
-function replaceRange(
-  s: string,
-  start: number,
-  end: number,
-  replace: string,
-  offset: number = 0
-): string {
-  return s.substring(0, start + offset) + replace + s.substring(end + offset);
-}
+const entityMap: EntityMapping = {
+  mention(entity) {
+    const mention = entity.data.mention as MentionData;
+    return `<@${mention.id}>`;
+  },
+};
 
 /**
  * export to markdown
@@ -27,64 +25,68 @@ function replaceRange(
  */
 export default function draftToMarkdown(raw: RawDraftContentState): string {
   const result: string[] = [];
-  const entityMap: EntityMapping = {
-    mention(entity) {
-      const mention = entity.data.mention as MentionData;
-      console.log(mention);
-      return `<@${mention.id}>`;
-    },
-  };
 
   for (const block of raw.blocks) {
-    const original = block.text;
-    let content = block.text;
-    console.log(`line ${content}`);
-    let offset = 0;
+    const actions: Modify[] = [];
 
-    function mapEntities(ranges: RawDraftEntityRange[]) {
-      const sortedRanges = ranges.sort((a, b) => a.offset - b.offset);
+    actions.push(...mapStyles(block.inlineStyleRanges));
+    actions.push(...mapBlock(block.type));
+    actions.push(...mapEntities(block.entityRanges, raw.entityMap));
 
-      for (const range of sortedRanges) {
-        const entity = raw.entityMap[range.key];
-        const mapped = entityMap[entity.type](entity);
-
-        content = replaceRange(
-          content,
-          range.offset,
-          range.offset + range.length,
-          mapped,
-          offset
-        );
-        offset += mapped.length - range.length;
-      }
-    }
-
-    function mapStyles(ranges: RawDraftInlineStyleRange[]) {
-      for (const range of ranges) {
-        const text = original.substring(
-          range.offset,
-          range.offset + range.length
-        );
-        const mapped = mapStyle(range.style, text);
-
-        content = replaceRange(
-          content,
-          range.offset,
-          range.offset + range.length,
-          mapped,
-          offset
-        );
-        offset += mapped.length - range.length;
-      }
-    }
-
-    mapEntities(block.entityRanges);
-    mapStyles(block.inlineStyleRanges);
-    content = mapBlock(block.type, content);
-    result.push(content);
+    result.push(apply(block.text, actions));
   }
 
   return result.join('\n');
+}
+
+function mapEntities(
+  ranges: RawDraftEntityRange[],
+  entities: {
+    [key: string]: RawDraftEntity<{
+      [key: string]: any;
+    }>;
+  }
+): Modify[] {
+  const actions: Modify[] = [];
+
+  for (const range of ranges) {
+    const entity = entities[range.key];
+    const mapped = entityMap[entity.type](entity);
+
+    actions.push({
+      type: 'replace',
+      index: range.offset,
+      length: range.length,
+      replacement: mapped,
+    });
+  }
+
+  return actions;
+}
+
+function mapStyles(ranges: RawDraftInlineStyleRange[]): Modify[] {
+  const actions: Modify[] = [];
+
+  for (const range of ranges) {
+    const scope = getStyleScope(range.style);
+
+    if (scope.open != null) {
+      actions.push({
+        type: 'insert',
+        index: range.offset,
+        text: scope.open,
+      });
+    }
+    if (scope.close != null) {
+      actions.push({
+        type: 'insert',
+        index: range.offset + range.length,
+        text: scope.close,
+      });
+    }
+  }
+
+  return actions;
 }
 
 type EntityMapping = {
@@ -95,36 +97,45 @@ type EntityMapping = {
   ) => string;
 };
 
-function mapStyle(type: DraftInlineStyleType, content: string) {
+type Scope = {
+  open?: string;
+  close?: string;
+};
+
+function getStyleScope(type: DraftInlineStyleType): Scope {
+  const syntax = (c: string) => ({ open: c, close: c });
+
   switch (type) {
     case 'BOLD':
-      return `**${content}**`;
+      return syntax('**');
     case 'ITALIC':
-      return `*${content}*`;
+      return syntax('*');
     case 'STRIKETHROUGH':
-      return `~~${content}~~`;
+      return syntax('~~');
     case 'UNDERLINE':
-      return `__${content}__`;
+      return syntax('__');
     case 'CODE':
-      return `\`${content}\``;
+      return syntax('\\');
     default:
-      return content;
+      return {};
   }
 }
 
-function mapBlock(type: DraftBlockType, content: string): string {
+function mapBlock(type: DraftBlockType): Modify[] {
+  const add = (c: string): Modify[] => [{ type: 'insert', text: c, index: 0 }];
+
   switch (type) {
     case 'header-one':
-      return `# ${content}`;
+      return add(`# `);
     case 'header-two':
-      return `## ${content}`;
+      return add(`## `);
     case 'header-three':
-      return `### ${content}`;
+      return add(`### `);
     case 'header-four':
-      return `#### ${content}`;
+      return add(`#### `);
     case 'header-five':
-      return `##### ${content}`;
+      return add(`##### `);
     default:
-      return content;
+      return [];
   }
 }

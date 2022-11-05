@@ -20,6 +20,7 @@
     "@draft-js-plugins/mention": "^5.2.1",
     "draft-js": "^0.11.7",
     "react-infinite-scroll-hook": "^4.0.4",
+    "react-markdown": "^8.0.3",
     "vite": "^3.1.7",
     "vite-plugin-svgr": "^2.2.1",
     "vite-tsconfig-paths": "^3.5.1"

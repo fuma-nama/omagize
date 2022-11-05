@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { AttachmentItem } from './AttachmentItem';
 import { stringOfTime } from 'utils/DateUtils';
-import ReactMarkdown from 'react-markdown';
+import MarkdownContent from './MarkdownContent';
 
 export default function MessageItem({ message }: { message: Message }) {
   const author = message.author;
@@ -36,9 +36,7 @@ export default function MessageItem({ message }: { message: Message }) {
             - {stringOfTime(message.timestamp)}
           </Text>
         </HStack>
-
-        <ReactMarkdown>{message.content}</ReactMarkdown>
-
+        <MarkdownContent content={message.content} />
         <Flex direction="column" gap={2} w="full">
           {message.attachments.map((a) => (
             <AttachmentItem key={a.id} attachment={a} />

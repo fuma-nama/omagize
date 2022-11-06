@@ -24,13 +24,29 @@ export type RawAttachment = {
   type?: string;
 };
 
+export type Mention = UserMention | GroupMention | EveryoneMention;
+
+export type UserMention = {
+  type: 'user';
+  id: Snowflake;
+};
+export type GroupMention = {
+  type: 'group';
+  id: Snowflake;
+};
+export type EveryoneMention = {
+  type: 'everyone';
+};
+
 export async function sendMessage(
   group: Snowflake,
   content: string,
-  attachments: Blob[]
+  attachments: Blob[],
+  mentions: Mention[] = []
 ) {
   const body = toFormData({
     content: content,
+    mentions: JSON.stringify(mentions),
   });
   attachments.forEach((a, i) => {
     body.append(`File${i}`, a);

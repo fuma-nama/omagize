@@ -1,4 +1,4 @@
-/**
+/*
  * The markdown style of Omagize is different
  *
  * It only supports part of markdown syntax and allow mentions

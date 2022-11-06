@@ -1,21 +1,16 @@
 import { MentionData } from '@draft-js-plugins/mention';
+import { Mention } from '@omagize/api';
 import { RawDraftContentState, RawDraftEntity } from 'draft-js';
 import draftToMarkdown from './draftToMarkdown';
-import { MentionType } from './types';
 
 export type Parsed = {
-  mentions: ParsedMention[];
+  mentions: Mention[];
   markdown: string;
-};
-
-export type ParsedMention = {
-  type: MentionType;
-  id?: string;
 };
 
 export function parseDraft(raw: RawDraftContentState): Parsed {
   const markdown = draftToMarkdown(raw);
-  const mentions: ParsedMention[] = [];
+  const mentions: Mention[] = [];
 
   for (const entity of Object.values(raw.entityMap)) {
     mentions.push(parseEntity(entity));
@@ -27,13 +22,13 @@ export function parseDraft(raw: RawDraftContentState): Parsed {
   };
 }
 
-function parseEntity(entity: RawDraftEntity): ParsedMention {
+function parseEntity(entity: RawDraftEntity): Mention {
   switch (entity.type) {
     case 'mention': {
       const data = entity.data.mention as MentionData;
 
       return {
-        type: MentionType.User,
+        type: 'user',
         id: data.id as string,
       };
     }

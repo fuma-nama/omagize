@@ -17,10 +17,10 @@ import { FileUploadItem } from './FileUploadItem';
 import { CustomCardProps } from 'theme/theme';
 import MessageInput, { ValueProps } from 'components/editor/MessageInput';
 import { convertToRaw, EditorState } from 'draft-js';
-import draftToMarkdown from 'utils/markdown/draftToMarkdown';
 import { Toolbar } from '../../../../components/editor/Toolbar';
 import { BsThreeDots } from 'react-icons/bs';
 import { createDefault } from 'components/editor/TextEditor';
+import { parseDraft } from 'utils/markdown/parser';
 
 export type MessageOptions = {
   message: EditorState;
@@ -198,9 +198,14 @@ function useSendMutation(group: Snowflake) {
     ['send_message', group],
     async (content: MessageOptions) => {
       const raw = convertToRaw(content.message.getCurrentContent());
-      const markdown = draftToMarkdown(raw);
+      const parsed = parseDraft(raw);
 
-      return await sendMessage(group, markdown, content.attachments);
+      return await sendMessage(
+        group,
+        parsed.markdown,
+        content.attachments,
+        parsed.mentions
+      );
     }
   );
 }

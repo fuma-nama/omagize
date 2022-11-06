@@ -15,11 +15,12 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import useFilePicker from 'components/picker/FilePicker';
 import { FileUploadItem } from './FileUploadItem';
 import { CustomCardProps } from 'theme/theme';
-import MessageInput, { ValueProps } from 'components/fields/MessageInput';
+import MessageInput, { ValueProps } from 'components/editor/MessageInput';
 import { convertToRaw, EditorState } from 'draft-js';
-import draftToMarkdown from 'components/fields/editor/draftToMarkdown';
-import { Toolbar } from '../../../../components/fields/editor/Toolbar';
+import draftToMarkdown from 'utils/markdown/draftToMarkdown';
+import { Toolbar } from '../../../../components/editor/Toolbar';
 import { BsThreeDots } from 'react-icons/bs';
+import { createDefault } from 'components/editor/TextEditor';
 
 export type MessageOptions = {
   message: EditorState;
@@ -27,7 +28,7 @@ export type MessageOptions = {
 };
 function useOptionState() {
   const [content, setContent] = useState<MessageOptions>(() => ({
-    message: EditorState.createEmpty(),
+    message: createDefault(),
     attachments: [],
   }));
 
@@ -37,7 +38,7 @@ function useOptionState() {
     resetContent: () =>
       setContent({
         attachments: [],
-        message: EditorState.createEmpty(),
+        message: createDefault(),
       }),
     dispatch: (v: (prev: MessageOptions) => Partial<MessageOptions>) => {
       return setContent((prev) => ({ ...prev, ...v(prev) }));

@@ -1,4 +1,4 @@
-import { apply, Modify } from '../../../utils/messaging/StringEditUtils';
+import { apply, Modify } from './StringEditUtils';
 import { MentionData } from '@draft-js-plugins/mention';
 import {
   DraftBlockType,
@@ -109,13 +109,13 @@ function getStyleScope(type: DraftInlineStyleType): Scope {
     case 'BOLD':
       return syntax('**');
     case 'ITALIC':
-      return syntax('*');
+      return syntax('^^');
     case 'STRIKETHROUGH':
       return syntax('~~');
     case 'UNDERLINE':
       return syntax('__');
     case 'CODE':
-      return syntax('\\');
+      return syntax('`');
     default:
       return {};
   }

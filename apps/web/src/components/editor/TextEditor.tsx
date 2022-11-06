@@ -1,5 +1,10 @@
 import { Box, BoxProps, useColorMode } from '@chakra-ui/react';
 import Editor, { PluginEditorProps } from '@draft-js-plugins/editor';
+import { EditorState } from 'draft-js';
+
+export function createDefault() {
+  return EditorState.createEmpty();
+}
 
 export default function TextEditor(
   props: { box: BoxProps } & PluginEditorProps

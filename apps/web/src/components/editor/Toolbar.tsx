@@ -1,6 +1,6 @@
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { ReactElement } from 'react';
-import { ValueProps } from 'components/fields/MessageInput';
+import { ValueProps } from 'components/editor/MessageInput';
 import { DraftInlineStyleType, RichUtils } from 'draft-js';
 import { useColors } from 'variables/colors';
 import { BiCodeBlock, BiItalic } from 'react-icons/bi';

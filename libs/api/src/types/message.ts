@@ -1,6 +1,6 @@
 import { RawAttachment } from '../MessageAPI';
 import { Snowflake } from './common';
-import { Member } from '.';
+import { Member, User } from '.';
 import { RawMessage } from '../MessageAPI';
 import { toAttachmentUrl } from '../utils';
 import { parseDate } from '../utils/common';
@@ -13,6 +13,7 @@ export type Message = {
   attachments: Attachment[];
   timestamp: Date;
   orderId: number;
+  mentions: User[];
 };
 
 export type Attachment = {
@@ -30,6 +31,7 @@ export function Message(raw: RawMessage): Message {
     author: new Member(raw.author),
     attachments: raw.attachments?.map((a) => Attachment(a)),
     timestamp: parseDate(raw.timestamp),
+    mentions: raw.mentions.map((m) => new User(m)),
   };
 }
 

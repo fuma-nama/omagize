@@ -1,3 +1,4 @@
+import { RawUser } from './UserAPI';
 import { DateObject } from './types/common';
 import { delay } from './model';
 import { Snowflake } from './types';
@@ -14,6 +15,10 @@ export type RawMessage = {
   attachments: RawAttachment[];
   timestamp: DateObject;
   orderId: number;
+  /**
+   * Mentioned users in the message
+   */
+  mentions: RawUser[];
 };
 
 export type RawAttachment = {
@@ -24,14 +29,14 @@ export type RawAttachment = {
   type?: string;
 };
 
-export type Mention = UserMention | GroupMention | EveryoneMention;
+export type Mention = UserMention | RoleMention | EveryoneMention;
 
 export type UserMention = {
   type: 'user';
   id: Snowflake;
 };
-export type GroupMention = {
-  type: 'group';
+export type RoleMention = {
+  type: 'role';
   id: Snowflake;
 };
 export type EveryoneMention = {

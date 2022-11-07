@@ -1,6 +1,6 @@
 import { Box, Flex, Heading } from '@chakra-ui/react';
 import { EditorPlugin } from '@draft-js-plugins/editor';
-import { ContentBlock, ContentState } from 'draft-js';
+import { CompositeDecorator, ContentBlock, ContentState } from 'draft-js';
 import { ReactNode } from 'react';
 import { Syntax } from 'utils/markdown/types';
 import { useColors } from 'variables/colors';
@@ -34,40 +34,30 @@ type Element = {
   render: (s: ReactNode) => ReactNode;
 };
 const Elements: Array<Element> = [
-  { regex: Syntax.Bold, render: (s) => <b>{s}</b> },
-  { regex: Syntax.Code, render: (s) => <code>{s}</code> },
-  { regex: Syntax.Delete, render: (s) => <del>{s}</del> },
+  //{ regex: Syntax.CodeBlock, render: (s) => <code>{s}</code> },
   { regex: Syntax.Header, render: (s) => <Heading fontSize="xl">{s}</Heading> },
-  { regex: Syntax.Italic, render: (s) => <i>{s}</i> },
   { regex: Syntax.Quote, render: (s) => <Quote>{s}</Quote> },
-  { regex: Syntax.Underline, render: (s) => <u>{s}</u> },
 ];
 
-export const MarkdownPlugin: EditorPlugin = {
-  decorators: Elements.map((e) => {
+/**
+ * It only takes effects on markdown syntaxes that don't allow nested elements
+ */
+const MarkdownDecorator = new CompositeDecorator(
+  Elements.map((e) => {
     return {
       strategy: strategy(e.regex),
-      component: (props: { decoratedText: string; children: ReactNode }) => {
+      component: (props: { children: any }) => {
         return e.render(props.children);
       },
     };
-  }),
+  })
+);
+
+export const MarkdownPlugin: EditorPlugin = {
+  decorators: [MarkdownDecorator],
 };
 
-/*
-type Match = {
-  start: number;
-  length: number;
-  node: (children: ReactNode) => ReactNode;
-};
-function combineMatches(text: string, matches: Match[]): ReactNode {
-  const nodes: ReactNode[] = []
-  
-
-}
-*/
-
-function Quote(props: any) {
+export function Quote(props: any) {
   const { brand } = useColors();
 
   return (

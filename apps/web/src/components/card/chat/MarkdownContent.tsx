@@ -1,4 +1,5 @@
 import { Heading } from '@chakra-ui/react';
+import { Quote } from 'components/editor/MarkdownPlugin';
 import Markdown, { MarkdownToJSX } from 'markdown-to-jsx';
 import { createContext, ReactElement, useContext } from 'react';
 import { MentionEntity } from './entities';
@@ -23,6 +24,7 @@ const DefaultOptions: MarkdownToJSX.Options = {
     Mention: {
       component: Mention,
     },
+    blockquote: (props) => <Quote>{props.children}</Quote>,
   },
 };
 

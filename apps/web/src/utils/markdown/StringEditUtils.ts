@@ -17,11 +17,21 @@ export type Remove = {
   length: number;
 };
 
-export type Modify = Insert | Replace | Remove;
+export type Modify = (Insert | Replace | Remove) & {
+  /**
+   * If more than one actions will be executed at the same index
+   * the action with less weight will be executed first
+   *
+   * Default: 0
+   */
+  weight?: number;
+};
 
 export function apply(s: string, actions: Modify[]) {
   let offset = 0;
-  const sorted = actions.sort((a, b) => a.index - b.index);
+  const sorted = actions.sort(
+    (a, b) => a.index - b.index || (a.weight ?? 0) - (b.weight ?? 0)
+  );
 
   for (const action of sorted) {
     const start = action.index + offset;

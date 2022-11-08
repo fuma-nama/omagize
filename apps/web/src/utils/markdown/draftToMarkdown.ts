@@ -9,6 +9,7 @@ import {
   RawDraftInlineStyleRange,
 } from 'draft-js';
 
+const blockWeight = -1; //should be the least weight
 const entityMap: EntityMapping = {
   mention(entity) {
     const mention = entity.data.mention as MentionData;
@@ -67,7 +68,7 @@ function mapEntities(
 function mapStyles(ranges: RawDraftInlineStyleRange[]): Modify[] {
   const actions: Modify[] = [];
 
-  for (const range of ranges) {
+  ranges.forEach((range, weight) => {
     const scope = getStyleScope(range.style);
 
     if (scope.open != null) {
@@ -75,6 +76,7 @@ function mapStyles(ranges: RawDraftInlineStyleRange[]): Modify[] {
         type: 'insert',
         index: range.offset,
         text: scope.open,
+        weight,
       });
     }
     if (scope.close != null) {
@@ -82,9 +84,10 @@ function mapStyles(ranges: RawDraftInlineStyleRange[]): Modify[] {
         type: 'insert',
         index: range.offset + range.length,
         text: scope.close,
+        weight: ranges.length - weight,
       });
     }
-  }
+  });
 
   return actions;
 }
@@ -109,11 +112,11 @@ function getStyleScope(type: DraftInlineStyleType): Scope {
     case 'BOLD':
       return syntax('**');
     case 'ITALIC':
-      return syntax('^^');
+      return syntax('*');
     case 'STRIKETHROUGH':
       return syntax('~~');
     case 'UNDERLINE':
-      return syntax('__');
+      return { open: '<u>', close: '</u>' };
     case 'CODE':
       return syntax('`');
     default:
@@ -122,7 +125,9 @@ function getStyleScope(type: DraftInlineStyleType): Scope {
 }
 
 function mapBlock(type: DraftBlockType): Modify[] {
-  const add = (c: string): Modify[] => [{ type: 'insert', text: c, index: 0 }];
+  const add = (c: string): Modify[] => [
+    { type: 'insert', text: c, index: 0, weight: blockWeight },
+  ];
 
   switch (type) {
     case 'header-one':

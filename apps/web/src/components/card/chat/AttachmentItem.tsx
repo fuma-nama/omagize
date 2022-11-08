@@ -12,7 +12,8 @@ export function AttachmentItem({ attachment }: { attachment: Attachment }) {
       <Image
         rounded="lg"
         src={attachment.url}
-        maxW="min(1000px, 100%)"
+        maxW={400}
+        maxH={400}
         fallback={<ImageSkeleton />}
       />
     );

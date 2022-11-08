@@ -59,7 +59,7 @@ function Mention({ id }: { id: string }) {
 
   return (
     <MentionEntity avatar={mention?.avatar}>
-      <p>{mention?.name ?? 'Deleted User'}</p>
+      <span>{mention?.name ?? 'Deleted User'}</span>
     </MentionEntity>
   );
 }

@@ -11,12 +11,6 @@ export enum MentionType {
 }
 
 export const Syntax = {
-  Bold: /\*\*(.+?)\*\*/g, // **Hello**
-  Italic: /\^\^(.+?)\^\^/g, // ^^Hello^^
-  Underline: /__(.+?)__/g, // __Hello__
-  Delete: /~~(.+?)~~/g, // ~~Hello~~
-  Code: /`(.+?)`/g, // `Hello`
-
   Quote: /> (.+)/g, // > Hello
   Header: /^# (.+)$/gm, // # Hello
   CodeBlock: /```((.|\n)*)```/gm, // ```Hello \n World```

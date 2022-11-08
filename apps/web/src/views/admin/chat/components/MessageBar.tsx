@@ -82,7 +82,7 @@ export function MessageBar({
         }
       />
       <Box ref={suggestionRef} />
-      <HStack w="full" justify="end">
+      <HStack pos="absolute" maxW="full" h="50px" top="-50px" right={0}>
         <SlideFade in={showToolbar} unmountOnExit>
           <Toolbar
             value={content.message}

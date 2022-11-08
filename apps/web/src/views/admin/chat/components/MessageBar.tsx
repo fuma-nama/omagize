@@ -18,9 +18,9 @@ import { CustomCardProps } from 'theme/theme';
 import MessageInput, { ValueProps } from 'components/editor/MessageInput';
 import { convertToRaw, EditorState } from 'draft-js';
 import { Toolbar } from '../../../../components/editor/Toolbar';
-import { BsThreeDots } from 'react-icons/bs';
 import { createDefault } from 'components/editor/TextEditor';
 import { parseDraft } from 'utils/markdown/parser';
+import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
 
 export type MessageOptions = {
   message: EditorState;
@@ -82,14 +82,20 @@ export function MessageBar({
         }
       />
       <Box ref={suggestionRef} />
-      <Box pos="absolute" top="-30%">
-        <SlideFade in={showToolbar}>
+      <HStack w="full" justify="end">
+        <SlideFade in={showToolbar} unmountOnExit>
           <Toolbar
             value={content.message}
             onChange={(m) => dispatch(() => ({ message: m }))}
           />
         </SlideFade>
-      </Box>
+        <IconButton
+          icon={showToolbar ? <ArrowDownIcon /> : <ArrowUpIcon />}
+          onClick={toggleToolbar}
+          aria-label="open-toolbar"
+          variant="ghost"
+        />
+      </HStack>
 
       <Card
         flexDirection="row"
@@ -105,11 +111,6 @@ export function MessageBar({
           onClick={picker.pick}
         />
         <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
-        <IconButton
-          icon={<BsThreeDots />}
-          onClick={toggleToolbar}
-          aria-label="style"
-        />
         <Input
           group={group}
           suggestionRef={suggestionRef}

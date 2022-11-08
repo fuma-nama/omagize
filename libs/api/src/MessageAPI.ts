@@ -19,6 +19,7 @@ export type RawMessage = {
    * Mentioned users in the message
    */
   mentions: RawUser[];
+  everyone: boolean;
 };
 
 export type RawAttachment = {

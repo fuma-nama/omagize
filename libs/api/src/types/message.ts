@@ -13,7 +13,9 @@ export type Message = {
   attachments: Attachment[];
   timestamp: Date;
   orderId: number;
+
   mentions: User[];
+  everyone: boolean;
 };
 
 export type Attachment = {

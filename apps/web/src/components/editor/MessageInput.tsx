@@ -61,6 +61,7 @@ export default function MessageInput({
         {...editor}
         box={{
           w: 'full',
+          minWidth: 0,
         }}
       />
       <mention.MentionSuggestions

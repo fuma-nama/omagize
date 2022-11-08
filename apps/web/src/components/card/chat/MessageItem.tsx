@@ -25,9 +25,17 @@ export default function MessageItem({ message }: { message: Message }) {
       rounded="xl"
       p={3}
       gap={3}
+      overflow="hidden"
     >
       <Avatar name={author.username} src={author.avatarUrl} />
-      <Flex direction="column" align="start" ml={2} flex={1} w={0}>
+      <Flex
+        direction="column"
+        align="start"
+        ml={2}
+        flex={1}
+        w={0}
+        wordBreak="break-word"
+      >
         <HStack>
           <Text fontWeight="bold" fontSize="lg">
             {author.username}

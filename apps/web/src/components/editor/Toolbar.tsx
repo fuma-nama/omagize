@@ -3,7 +3,7 @@ import { ReactElement } from 'react';
 import { ValueProps } from 'components/editor/MessageInput';
 import { DraftInlineStyleType, RichUtils } from 'draft-js';
 import { useColors } from 'variables/colors';
-import { BiCodeBlock, BiItalic } from 'react-icons/bi';
+import { BiCode, BiItalic, BiStrikethrough, BiUnderline } from 'react-icons/bi';
 
 export function Toolbar({ value, onChange }: ValueProps) {
   const style = value.getCurrentInlineStyle();
@@ -24,8 +24,18 @@ export function Toolbar({ value, onChange }: ValueProps) {
     { style: 'ITALIC', label: 'Italic', icon: <BiItalic /> },
     {
       style: 'CODE',
-      label: 'Code Block',
-      icon: <BiCodeBlock />,
+      label: 'Code',
+      icon: <BiCode />,
+    },
+    {
+      style: 'STRIKETHROUGH',
+      label: 'Strike Through',
+      icon: <BiStrikethrough />,
+    },
+    {
+      style: 'UNDERLINE',
+      label: 'Underline',
+      icon: <BiUnderline />,
     },
   ];
 

@@ -47,7 +47,7 @@ export function Toolbar({ value, onChange }: ValueProps) {
   };
 
   return (
-    <ButtonGroup w="full" bg={globalBg}>
+    <ButtonGroup w="full" bg={globalBg} rounded="2xl" p={1} spacing={1}>
       {styles.map((s) => {
         const checked = style?.contains(s.style);
         const onMouseDown = (e: any) => {

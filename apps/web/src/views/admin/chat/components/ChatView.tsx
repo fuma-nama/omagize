@@ -67,16 +67,14 @@ function MessageView({ group }: { group: string }) {
   const items = data?.pages.flatMap((a) => mapPage(a)) ?? [];
   return (
     <Box w="full" h="full" overflow="auto" ref={rootRef}>
-      <Flex direction="column-reverse" px="20px" gap={5}>
-        <Box ref={endMessage} />
-
-        {items.reverse()}
-
+      <Flex direction="column" px="20px" gap={5}>
         {hasPreviousPage || isLoading ? (
           <LoadingBlock sentryRef={sentryRef} />
         ) : (
           <StartBox />
         )}
+        {items}
+        <Box ref={endMessage} />
       </Flex>
     </Box>
   );

@@ -1,18 +1,20 @@
 import { Heading } from '@chakra-ui/react';
+import { Message } from '@omagize/api';
 import { Quote } from 'components/editor/MarkdownPlugin';
 import Markdown, { MarkdownToJSX } from 'markdown-to-jsx';
-import { createContext, ReactElement, useContext } from 'react';
+import { createContext, ReactElement, useContext, useMemo } from 'react';
 import { MentionEntity } from './entities';
 
 type Data = {
-  mentions: {
-    [id: string]: {
-      avatar?: string;
-      name: string;
-    };
-  };
+  mentions: Array<MentionData>;
 };
-const DataContext = createContext<Data>({ mentions: {} });
+type MentionData = {
+  id: string;
+  avatar?: string;
+  name: string;
+};
+
+const DataContext = createContext<Data>({ mentions: [] });
 
 const Blocked = (props: { children: ReactElement }) => props.children;
 const DefaultOptions: MarkdownToJSX.Options = {
@@ -28,27 +30,36 @@ const DefaultOptions: MarkdownToJSX.Options = {
   },
 };
 
-export default function MarkdownContent({ content }: { content: string }) {
+export default function MarkdownContent({ message }: { message: Message }) {
+  const mentions = message.mentions.map((m) => ({
+    id: m.id,
+    avatar: m.avatarUrl,
+    name: m.username,
+  }));
+
   return (
-    <Markdown
-      options={{ ...DefaultOptions }}
-      children={content
-        .replaceAll(/^\s$/gm, '<br>')
-        .replaceAll('\n', '\n \n')
-        .replace(/<@([0-9]*)>/gi, '<Mention id="$1" />')}
-    />
+    <DataContext.Provider value={{ mentions }}>
+      <Markdown
+        options={{ ...DefaultOptions }}
+        children={message.content
+          .replaceAll(/^\s$/gm, '<br>')
+          .replaceAll('\n', '\n \n')
+          .replace(/<@([0-9]*)>/gi, '<Mention id="$1" />')}
+      />
+    </DataContext.Provider>
   );
 }
 
 function Mention({ id }: { id: string }) {
-  const context = useContext(DataContext);
-  const mention = context.mentions[id] ?? {
-    name: 'Deleted User',
-  };
+  const { mentions } = useContext(DataContext);
+  const mention = useMemo(
+    () => mentions.find((m) => m.id === id),
+    [id, mentions]
+  );
 
   return (
-    <MentionEntity avatar={mention.avatar}>
-      <p>{mention.name}</p>
+    <MentionEntity avatar={mention?.avatar}>
+      <p>{mention?.name ?? 'Deleted User'}</p>
     </MentionEntity>
   );
 }

@@ -36,7 +36,7 @@ export default function MessageItem({ message }: { message: Message }) {
             - {stringOfTime(message.timestamp)}
           </Text>
         </HStack>
-        <MarkdownContent content={message.content} />
+        <MarkdownContent message={message} />
         <Flex direction="column" gap={2} w="full">
           {message.attachments.map((a) => (
             <AttachmentItem key={a.id} attachment={a} />

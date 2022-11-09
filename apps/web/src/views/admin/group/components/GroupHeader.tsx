@@ -1,18 +1,14 @@
 import {
-  Button,
-  HStack,
+  Box,
   Icon,
+  MenuItem,
+  MenuList,
   SimpleGrid,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import { CardButton } from 'components/card/Card';
-import {
-  GroupDetail,
-  leaveGroup,
-  removeGroup,
-  useSelfUser,
-} from '@omagize/api';
+import { GroupDetail } from '@omagize/api';
 import { AddIcon, ChatIcon } from '@chakra-ui/icons';
 import { BsPeopleFill } from 'react-icons/bs';
 import { AiFillSetting } from 'react-icons/ai';
@@ -20,10 +16,10 @@ import { CustomCardProps } from 'theme/theme';
 import { DynamicModal } from 'components/modals/Modal';
 import MemberModal from 'components/modals/MemberModal';
 import { useNavigate } from 'react-router-dom';
-import { BiAnalyse } from 'react-icons/bi';
 import { FcLeave } from 'react-icons/fc';
-import { useMutation } from '@tanstack/react-query';
-import { useConfirmDialog } from 'components/modals/dialogs/Dialog';
+import { useColors } from 'variables/colors';
+import { useContextMenu } from 'components/menu/ContextMenu';
+import { ReactNode } from 'react';
 
 export type GroupHeaderProps = {
   createEvent: () => void;
@@ -71,82 +67,47 @@ export function GroupHeader(props: GroupHeaderProps) {
           onClick={() => navigate(`/user/${group.id}/settings`)}
         />
       </SimpleGrid>
-      <Options {...props} />
     </>
   );
 }
 
-function useLeaveModal(group: GroupDetail) {
-  const user = useSelfUser();
-  const isOwner = group.owner === user.id;
-  function Content(onClose: () => void) {
-    const leaveMutation = useMutation(
-      ['leave_group', group.id],
-      () => leaveGroup(group.id),
-      {
-        onSuccess() {
-          onClose();
-          return removeGroup(group.id);
-        },
-      }
-    );
-
-    return (
-      <Button
-        variant="action"
-        isLoading={leaveMutation.isLoading}
-        onClick={() => leaveMutation.mutate()}
+export function OptionsMenu({
+  createEvent,
+  invite,
+  leave,
+  children,
+}: GroupHeaderProps & {
+  children: ReactNode;
+  leave: () => void;
+}) {
+  const { brand, globalBg } = useColors();
+  const menu = useContextMenu<HTMLDivElement>(
+    <MenuList bg={globalBg} border={0}>
+      <MenuItem onClick={createEvent} icon={<AddIcon color={brand} />}>
+        Create Event
+      </MenuItem>
+      <MenuItem
+        icon={<Icon as={BsPeopleFill} color={brand} />}
+        onClick={invite}
       >
-        Leave
-      </Button>
-    );
-  }
-
-  return useConfirmDialog(
-    {
-      header: 'Do you sure to Leave this Group?',
-      message: isOwner
-        ? 'The Group will be deleted after you leave'
-        : 'You may join the Group again with an invite code',
-    },
-    Content
+        Invite People
+      </MenuItem>
+      <MenuItem color="red.400" icon={<Icon as={FcLeave} />} onClick={leave}>
+        Leave Group
+      </MenuItem>
+    </MenuList>
   );
-}
 
-export function Options({ group, createEvent, invite }: GroupHeaderProps) {
-  const LeaveModal = useLeaveModal(group);
   return (
     <>
-      {LeaveModal.modal}
-      <HStack justify="center" wrap="wrap" spacing={0} gap={2}>
-        <Button
-          rounded="full"
-          variant="outline"
-          leftIcon={<AddIcon />}
-          onClick={createEvent}
-        >
-          Create Event
-        </Button>
-        <Button rounded="full" variant="outline" leftIcon={<BiAnalyse />}>
-          Analytics
-        </Button>
-        <Button
-          rounded="full"
-          variant="brand"
-          leftIcon={<BsPeopleFill />}
-          onClick={invite}
-        >
-          Invite People
-        </Button>
-        <Button
-          rounded="full"
-          variant="danger"
-          leftIcon={<FcLeave />}
-          onClick={LeaveModal.onOpen}
-        >
-          Leave Group
-        </Button>
-      </HStack>
+      <Box
+        cursor="pointer"
+        ref={menu.targetRef}
+        onClick={(e) => menu.open(e.pageX, e.pageY)}
+      >
+        {children}
+      </Box>
+      {menu.menu}
     </>
   );
 }

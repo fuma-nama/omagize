@@ -104,7 +104,12 @@ export function OptionsMenu({
       <Box
         cursor="pointer"
         ref={menu.targetRef}
-        onClick={(e) => menu.open(e.pageX, e.pageY)}
+        onMouseDown={(e) => {
+          if (e.button === 0) {
+            e.preventDefault();
+            menu.open(e.pageX, e.pageY);
+          }
+        }}
       >
         {children}
       </Box>

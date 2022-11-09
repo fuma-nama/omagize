@@ -1,5 +1,5 @@
-import { MentionData } from '@draft-js-plugins/mention';
 import { Mention } from '@omagize/api';
+import { MentionData } from 'components/editor/MarkdownPlugin';
 import { RawDraftContentState, RawDraftEntity } from 'draft-js';
 import draftToMarkdown from './draftToMarkdown';
 
@@ -27,10 +27,22 @@ function parseEntity(entity: RawDraftEntity): Mention {
     case 'mention': {
       const data = entity.data.mention as MentionData;
 
-      return {
-        type: 'user',
-        id: data.id as string,
-      };
+      switch (data.type) {
+        case 'everyone':
+          return {
+            type: 'everyone',
+          };
+        case 'role':
+          return {
+            type: 'role',
+            id: data.id as string,
+          };
+        default:
+          return {
+            type: 'user',
+            id: data.id as string,
+          };
+      }
     }
   }
 }

@@ -1,5 +1,4 @@
 import { apply, Modify } from './StringEditUtils';
-import { MentionData } from '@draft-js-plugins/mention';
 import {
   DraftBlockType,
   DraftInlineStyleType,
@@ -8,12 +7,18 @@ import {
   RawDraftEntityRange,
   RawDraftInlineStyleRange,
 } from 'draft-js';
+import { MentionData } from 'components/editor/MarkdownPlugin';
 
 const blockWeight = -1; //should be the least weight
 const entityMap: EntityMapping = {
   mention(entity) {
     const mention = entity.data.mention as MentionData;
-    return `<@${mention.id}>`;
+    switch (mention.type) {
+      case 'everyone':
+        return '<@everyone>';
+      default:
+        return `<@${mention.id}>`;
+    }
   },
 };
 

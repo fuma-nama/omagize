@@ -3,7 +3,7 @@ import { Message } from '@omagize/api';
 import { Quote } from 'components/editor/MarkdownPlugin';
 import Markdown, { MarkdownToJSX } from 'markdown-to-jsx';
 import { createContext, ReactElement, useContext, useMemo } from 'react';
-import { MentionEntity } from './entities';
+import { EveryoneMention, MentionEntity } from '../../editor/entities';
 
 type Data = {
   mentions: Array<MentionData>;
@@ -16,16 +16,15 @@ type MentionData = {
 
 const DataContext = createContext<Data>({ mentions: [] });
 
-const Blocked = (props: { children: ReactElement }) => props.children;
+const Blocked = (props: { children: ReactElement }) => <></>;
 const DefaultOptions: MarkdownToJSX.Options = {
   overrides: {
     script: Blocked,
     iframe: Blocked,
     img: Blocked,
     h1: (props: any) => <Heading fontSize="xl">{props.children}</Heading>,
-    Mention: {
-      component: Mention,
-    },
+    Mention: Mention,
+    Everyone: () => <EveryoneMention>everyone</EveryoneMention>,
     blockquote: (props) => <Quote>{props.children}</Quote>,
   },
 };
@@ -44,7 +43,8 @@ export default function MarkdownContent({ message }: { message: Message }) {
         children={message.content
           .replaceAll(/^\s$/gm, '<br>')
           .replaceAll('\n', '\n \n')
-          .replace(/<@([0-9]*)>/gi, '<Mention id="$1" />')}
+          .replace(/<@([0-9]*)>/g, '<Mention id="$1" />')
+          .replace(/<@everyone>/g, '<Everyone />')}
       />
     </DataContext.Provider>
   );
@@ -58,8 +58,9 @@ function Mention({ id }: { id: string }) {
   );
 
   return (
-    <MentionEntity avatar={mention?.avatar}>
-      <span>{mention?.name ?? 'Deleted User'}</span>
-    </MentionEntity>
+    <MentionEntity
+      avatar={mention?.avatar}
+      name={mention?.name ?? 'Deleted User'}
+    />
   );
 }

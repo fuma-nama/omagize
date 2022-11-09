@@ -1,13 +1,15 @@
 import { EditorState, EditorProps } from 'draft-js';
 import TextEditor from './TextEditor';
-import createMentionPlugin, { MentionData } from '@draft-js-plugins/mention';
+import createMentionPlugin from '@draft-js-plugins/mention';
 import React, { useState, ReactNode, useMemo } from 'react';
 import { EntryComponentProps } from '@draft-js-plugins/mention/lib/MentionSuggestions/Entry/Entry';
-import { Avatar, Box, HStack, Portal, Text } from '@chakra-ui/react';
+import { Avatar, Box, HStack, Icon, Portal, Text } from '@chakra-ui/react';
 import CustomCard, { CardButton } from '../card/Card';
 import { SubMentionComponentProps } from '@draft-js-plugins/mention/lib/Mention';
 import { useColors } from '../../variables/colors';
-import { MarkdownPlugin } from './MarkdownPlugin';
+import { Everyone, MarkdownPlugin, MentionData } from './MarkdownPlugin';
+import { EveryoneMention, MentionEntity } from 'components/editor/entities';
+import { BsPeopleFill } from 'react-icons/bs';
 
 export type SuggestionProps = {
   portal?: React.RefObject<HTMLElement | null>;
@@ -29,7 +31,6 @@ function usePlugins() {
   return useMemo(() => {
     const mentionPlugin = createMentionPlugin({
       entityMutability: 'IMMUTABLE',
-      supportWhitespace: true,
       mentionComponent: Mention,
     });
 
@@ -67,7 +68,7 @@ export default function MessageInput({
       <mention.MentionSuggestions
         open={open}
         onOpenChange={setOpen}
-        suggestions={mentionSuggestions.suggestions ?? []}
+        suggestions={[...(mentionSuggestions.suggestions ?? []), Everyone]}
         onSearchChange={onSearchChange}
         onAddMention={() => {
           // get the mention object selected
@@ -84,28 +85,16 @@ export default function MessageInput({
 }
 
 function Mention(props: SubMentionComponentProps) {
-  const { brand } = useColors();
-  const name = props.mention.name;
-  const avatar = props.mention.avatar;
+  const mention = props.mention as MentionData;
 
-  return (
-    <HStack
-      as="span"
-      bg={brand}
-      rounded="full"
-      color="white"
-      px={2}
-      py={1}
-      fontWeight="600"
-      display="inline-flex"
-      fontSize="sm"
-      cursor="pointer"
-      className={props.className}
-    >
-      <Avatar src={avatar} w={5} h={5} name={name} />
-      {props.children}
-    </HStack>
-  );
+  switch (mention.type) {
+    case 'everyone':
+      return <EveryoneMention>{props.children}</EveryoneMention>;
+    default:
+      return (
+        <MentionEntity name={props.children} className={props.className} />
+      );
+  }
 }
 
 function Suggestions({ children }: { children: ReactNode }) {
@@ -129,13 +118,26 @@ function Entry(props: EntryComponentProps) {
     selectMention,
     ...parentProps
   } = props;
+  const type = (props.mention as MentionData).type;
 
-  return (
-    <CardButton {...parentProps} p={2}>
-      <HStack>
-        <Avatar src={mention.avatar} />
-        <Text>{mention.name}</Text>
-      </HStack>
-    </CardButton>
-  );
+  switch (type) {
+    case 'everyone':
+      return (
+        <CardButton {...parentProps} p={2}>
+          <HStack>
+            <Icon as={BsPeopleFill} />
+            <Text>Everyone</Text>
+          </HStack>
+        </CardButton>
+      );
+    default:
+      return (
+        <CardButton {...parentProps} p={2}>
+          <HStack>
+            <Avatar src={mention.avatar} />
+            <Text fontWeight="bold">{mention.name}</Text>
+          </HStack>
+        </CardButton>
+      );
+  }
 }

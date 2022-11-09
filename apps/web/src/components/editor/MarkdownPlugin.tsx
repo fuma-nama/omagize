@@ -5,6 +5,15 @@ import { ReactNode } from 'react';
 import { Syntax } from 'utils/markdown/types';
 import { useColors } from 'variables/colors';
 
+export interface MentionData {
+  link?: string;
+  avatar?: string;
+  name: string;
+  id?: null | string | number;
+
+  type?: 'everyone' | 'user' | 'role';
+}
+
 function findWithRegex(
   regex: RegExp,
   contentBlock: ContentBlock,
@@ -39,19 +48,27 @@ const Elements: Array<Element> = [
   { regex: Syntax.Quote, render: (s) => <Quote>{s}</Quote> },
 ];
 
+export const Everyone: MentionData = {
+  name: 'everyone',
+  type: 'everyone',
+};
 /**
  * It only takes effects on markdown syntaxes that don't allow nested elements
  */
-const MarkdownDecorator = new CompositeDecorator(
-  Elements.map((e) => {
+const MarkdownDecorator = new CompositeDecorator([
+  ...Elements.map((e) => {
     return {
       strategy: strategy(e.regex),
       component: (props: { children: any }) => {
         return e.render(props.children);
       },
     };
-  })
-);
+  }),
+]);
+
+export function createEveryoneMention(contentState: ContentState) {
+  return contentState.createEntity('MENTION_EVERYONE', 'IMMUTABLE', {});
+}
 
 export const MarkdownPlugin: EditorPlugin = {
   decorators: [MarkdownDecorator],

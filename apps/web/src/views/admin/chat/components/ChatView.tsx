@@ -72,11 +72,12 @@ function MessageView({ group }: { group: string }) {
     <Box
       w="full"
       h="full"
+      px={{ base: 0, '3sm': 5 }}
       overflow="auto"
       ref={rootRefSetter}
       onScroll={handleRootScroll}
     >
-      <Flex direction="column" px="20px" gap={5}>
+      <Flex direction="column" gap={5}>
         {hasPreviousPage || isLoading ? (
           <LoadingBlock sentryRef={sentryRef} />
         ) : (

@@ -1,16 +1,8 @@
 import { useContext, useEffect } from 'react';
 // Chakra imports
-import {
-  Center,
-  Flex,
-  Grid,
-  SimpleGrid,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Center, Flex, Grid, SimpleGrid, Text } from '@chakra-ui/react';
 
 // Custom components
-import Banner from './components/Banner';
 import AdminsCard from './components/AdminsCard';
 import Card, { CardButton } from 'components/card/Card';
 import { PageContext } from 'contexts/PageContext';
@@ -19,14 +11,13 @@ import { useGroupDetailQuery, GroupDetail } from '@omagize/api';
 import GroupEventItem from 'components/card/GroupEventItem';
 import { AddIcon } from '@chakra-ui/icons';
 import { useColors } from 'variables/colors';
-import CreateEventModal from 'components/modals/CreateEventModal';
-import { DynamicModal } from 'components/modals/Modal';
 import LoadingScreen from 'components/layout/LoadingScreen';
 import { ErrorScreen } from 'components/layout/ErrorScreen';
-import { GroupHeader } from './components/GroupHeader';
+import { GroupHeader, OptionsMenu } from './components/GroupHeader';
 import AutoImage from 'components/card/utils/AutoImage';
-import GroupInviteModal from 'components/modals/GroupInviteModal';
 import { MessagesPreview } from './MessagesPreview';
+import Banner from './components/Banner';
+import { useGroupModals } from './modals/useGroupModals';
 
 export default function GroupOverview() {
   const { selectedGroup, setInfo } = useContext(PageContext);
@@ -63,14 +54,7 @@ function Content({ group }: { group: GroupDetail }) {
         flexDirection="column"
         gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}
       >
-        <Banner />
-        <Flex direction="column" flexGrow={1} mt="25px" mb="20px" gap="20px">
-          <Header group={group} />
-          <Text fontSize="2xl" fontWeight="600">
-            Recent Messages
-          </Text>
-          <MessagesPreview />
-        </Flex>
+        <Main group={group} />
       </Flex>
       <Flex
         direction="column"
@@ -87,32 +71,32 @@ function Content({ group }: { group: GroupDetail }) {
   );
 }
 
-function Header({ group }: { group: GroupDetail }) {
-  const CreateEvent = useDisclosure();
-  const Invite = useDisclosure();
+function Main({ group }: { group: GroupDetail }) {
+  const { CreateEvent, Invite, Leave, modals } = useGroupModals(group);
 
   return (
     <>
-      <DynamicModal isOpen={CreateEvent.isOpen}>
-        <CreateEventModal
-          isOpen={CreateEvent.isOpen}
-          onClose={CreateEvent.onClose}
-          group={group.id}
-        />
-      </DynamicModal>
-      <DynamicModal isOpen={Invite.isOpen}>
-        <GroupInviteModal
-          isOpen={Invite.isOpen}
-          onClose={Invite.onClose}
-          group={group}
-        />
-      </DynamicModal>
-      <GroupHeader
+      {modals}
+      <OptionsMenu
         createEvent={CreateEvent.onOpen}
         invite={Invite.onOpen}
+        leave={Leave.onOpen}
         group={group}
-      />
-      <GroupEvents onOpen={CreateEvent.onOpen} detail={group} />
+      >
+        <Banner />
+      </OptionsMenu>
+      <Flex direction="column" flexGrow={1} mt="25px" mb="20px" gap="20px">
+        <GroupHeader
+          createEvent={CreateEvent.onOpen}
+          invite={Invite.onOpen}
+          group={group}
+        />
+        <GroupEvents onOpen={CreateEvent.onOpen} detail={group} />
+        <Text fontSize="2xl" fontWeight="600">
+          Recent Messages
+        </Text>
+        <MessagesPreview />
+      </Flex>
     </>
   );
 }

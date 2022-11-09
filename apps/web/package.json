@@ -21,7 +21,6 @@
     "draft-js": "^0.11.7",
     "markdown-to-jsx": "^7.1.7",
     "react-infinite-scroll-hook": "^4.0.4",
-    "sanitize-html": "^2.7.3",
     "vite": "^3.1.7",
     "vite-plugin-svgr": "^2.2.1",
     "vite-tsconfig-paths": "^3.5.1"
@@ -39,7 +38,6 @@
     ]
   },
   "devDependencies": {
-    "@types/draft-js": "^0.11.9",
-    "@types/sanitize-html": "^2.6.2"
+    "@types/draft-js": "^0.11.9"
   }
 }

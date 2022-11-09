@@ -31,3 +31,41 @@ export function fileSizeString(bytes: number, si = false, dp = 1) {
 
   return bytes.toFixed(dp) + ' ' + units[u];
 }
+
+export function escapeHtml(string: string) {
+  const { replace } = '';
+  // escape
+  const ca = /[&<>'"]/g;
+
+  const esca: any = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;',
+  };
+
+  return replace.call(string, ca, (m: string) => esca[m]);
+}
+
+export function unescapeHtml(string: string) {
+  const { replace } = '';
+  // escape
+  const es = /&(?:amp|#38|lt|#60|gt|#62|apos|#39|quot|#34);/g;
+
+  // unescape
+  const unes: any = {
+    '&amp;': '&',
+    '&#38;': '&',
+    '&lt;': '<',
+    '&#60;': '<',
+    '&gt;': '>',
+    '&#62;': '>',
+    '&apos;': "'",
+    '&#39;': "'",
+    '&quot;': '"',
+    '&#34;': '"',
+  };
+
+  return replace.call(string, es, (m: string) => unes[m]);
+}

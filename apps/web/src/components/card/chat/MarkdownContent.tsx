@@ -2,8 +2,8 @@ import { Heading } from '@chakra-ui/react';
 import { Message } from '@omagize/api';
 import { Quote } from 'components/editor/MarkdownPlugin';
 import Markdown, { MarkdownToJSX } from 'markdown-to-jsx';
-import { createContext, ReactElement, useContext, useMemo } from 'react';
-import sanitizeHtml from 'sanitize-html';
+import { createContext, useContext, useMemo } from 'react';
+import { escapeHtml, unescapeHtml } from 'utils/common';
 import { EveryoneMention, MentionEntity } from '../../editor/entities';
 
 type Data = {
@@ -17,7 +17,7 @@ type MentionData = {
 
 const DataContext = createContext<Data>({ mentions: [] });
 
-const Blocked = (props: { children: ReactElement }) => <></>;
+const Blocked = () => <></>;
 const DefaultOptions: MarkdownToJSX.Options = {
   overrides: {
     script: Blocked,
@@ -27,6 +27,13 @@ const DefaultOptions: MarkdownToJSX.Options = {
     Mention: Mention,
     Everyone: () => <EveryoneMention>everyone</EveryoneMention>,
     blockquote: (props) => <Quote>{props.children}</Quote>,
+    code: (props) => (
+      <code>
+        {typeof props.children === 'string'
+          ? unescapeHtml(props.children)
+          : props.children}
+      </code>
+    ),
   },
 };
 
@@ -38,17 +45,13 @@ export default function MarkdownContent({ message }: { message: Message }) {
   }));
   const content = useMemo(
     () =>
-      sanitizeHtml(message.content, {
-        allowedTags: [],
-        disallowedTagsMode: 'escape',
-      })
+      escapeHtml(message.content)
         .replaceAll(/^\s$/gm, '<br>')
         .replaceAll('\n', '\n \n')
         .replace(/&lt;@([0-9]*)&gt;/g, '<Mention id="$1" />')
         .replace(/&lt;@everyone&gt;/g, '<Everyone />'),
     [message.content]
   );
-  console.log(content);
 
   return (
     <DataContext.Provider value={{ mentions }}>

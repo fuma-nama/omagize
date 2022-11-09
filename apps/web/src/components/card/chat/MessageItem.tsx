@@ -1,6 +1,7 @@
-import { Message } from '@omagize/api';
+import { Message, useSelfUser } from '@omagize/api';
 import {
   Avatar,
+  Box,
   Flex,
   HStack,
   SkeletonCircle,
@@ -11,14 +12,20 @@ import {
 import { AttachmentItem } from './AttachmentItem';
 import { stringOfTime } from 'utils/DateUtils';
 import MarkdownContent from './MarkdownContent';
+import { useColors } from 'variables/colors';
 
 export default function MessageItem({ message }: { message: Message }) {
   const author = message.author;
+  const { brand } = useColors();
   const secondaryText = useColorModeValue('gray.400', 'white');
   const hoverBg = useColorModeValue('white', 'navy.800');
+  const user = useSelfUser();
+  const mentioned =
+    message.everyone || message.mentions.some((m) => m.id === user.id);
 
   return (
     <Flex
+      pos="relative"
       direction="row"
       _hover={{ bg: hoverBg }}
       transition="all 0.2s"
@@ -27,6 +34,9 @@ export default function MessageItem({ message }: { message: Message }) {
       gap={3}
       overflow="hidden"
     >
+      {mentioned && (
+        <Box bg={brand} pos="absolute" top={0} left={0} w={1} h="full" />
+      )}
       <Avatar name={author.username} src={author.avatarUrl} />
       <Flex
         direction="column"
@@ -40,7 +50,7 @@ export default function MessageItem({ message }: { message: Message }) {
           <Text fontWeight="bold" fontSize="lg">
             {author.username}
           </Text>
-          <Text textColor={secondaryText}>
+          <Text textColor={secondaryText} fontSize="sm">
             - {stringOfTime(message.timestamp)}
           </Text>
         </HStack>

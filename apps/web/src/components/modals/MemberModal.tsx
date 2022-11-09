@@ -31,7 +31,7 @@ export default function MemberModal(props: {
         <ModalHeader>Group Members</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Members group={props.group} />
+          <Members group={props.group} enabled={props.isOpen} />
         </ModalBody>
 
         <ModalFooter>
@@ -44,8 +44,8 @@ export default function MemberModal(props: {
   );
 }
 
-function Members({ group }: { group: Snowflake }) {
-  const query = useGroupMembersQuery(group);
+function Members({ group, enabled }: { group: Snowflake; enabled: boolean }) {
+  const query = useGroupMembersQuery(group, enabled);
 
   return (
     <Flex id="members-div" direction="column">

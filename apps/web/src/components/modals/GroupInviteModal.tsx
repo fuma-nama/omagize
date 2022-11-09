@@ -47,7 +47,9 @@ export default function GroupInviteModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const query = useGroupInviteQuery(group.id);
+  const query = useGroupInviteQuery(group.id, {
+    enabled: isOpen,
+  });
   const [options, setOptions] = useState<Partial<Options>>({});
 
   const invite = query.data;

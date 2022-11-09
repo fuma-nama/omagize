@@ -6,7 +6,7 @@ import createMentionPlugin, {
 import React, { useState, ReactNode, useMemo, useRef } from 'react';
 import { EntryComponentProps } from '@draft-js-plugins/mention/lib/MentionSuggestions/Entry/Entry';
 import { Avatar, Box, HStack, Icon, Portal, Text } from '@chakra-ui/react';
-import CustomCard, { CardButton } from '../card/Card';
+import CustomCard from '../card/Card';
 import { SubMentionComponentProps } from '@draft-js-plugins/mention/lib/Mention';
 import { useColors, useItemHoverBg } from '../../variables/colors';
 import { Everyone, MarkdownPlugin, MentionData } from './MarkdownPlugin';
@@ -116,7 +116,7 @@ function Suggestions({ children }: { children: ReactNode }) {
   );
 }
 
-const Entry = React.memo((props: EntryComponentProps) => {
+function Entry(props: EntryComponentProps) {
   const {
     mention,
     theme,
@@ -149,8 +149,13 @@ const Entry = React.memo((props: EntryComponentProps) => {
   }
 
   return (
-    <CardButton {...parentProps} p={2} {...(isFocused && hoverBg)}>
+    <CustomCard
+      cursor="pointer"
+      p={2}
+      {...parentProps}
+      {...(isFocused && hoverBg)}
+    >
       <HStack>{content}</HStack>
-    </CardButton>
+    </CustomCard>
   );
-});
+}

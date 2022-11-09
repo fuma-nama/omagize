@@ -62,11 +62,12 @@ export function useGroupsQuery() {
   return useQuery(Keys.groups, () => fetchGroups());
 }
 
-export function useGroupMembersQuery(group: Snowflake) {
+export function useGroupMembersQuery(group: Snowflake, enabled?: boolean) {
   return useInfiniteQuery(
     Keys.members(group),
     ({ pageParam }) => fetchGroupMembers(group, pageParam),
     {
+      enabled,
       getNextPageParam: (lastPage) => lastPage[lastPage.length - 1]?.id,
     }
   );

@@ -66,10 +66,6 @@ const MarkdownDecorator = new CompositeDecorator([
   }),
 ]);
 
-export function createEveryoneMention(contentState: ContentState) {
-  return contentState.createEntity('MENTION_EVERYONE', 'IMMUTABLE', {});
-}
-
 export const MarkdownPlugin: EditorPlugin = {
   decorators: [MarkdownDecorator],
 };

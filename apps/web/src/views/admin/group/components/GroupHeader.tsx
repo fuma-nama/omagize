@@ -29,6 +29,7 @@ export type GroupHeaderProps = {
 
 export function GroupHeader(props: GroupHeaderProps) {
   const { group } = props;
+  const { textColorPrimary } = useColors();
   const { isOpen, onClose, onToggle } = useDisclosure();
   const navigate = useNavigate();
 
@@ -38,7 +39,7 @@ export function GroupHeader(props: GroupHeaderProps) {
     ...props
   }: { text: string; icon: any } & CustomCardProps) {
     return (
-      <CardButton alignItems="center" gap={2} {...props}>
+      <CardButton alignItems="center" gap={2} rounded="lg" {...props}>
         {icon}
         <Text fontSize={{ base: 'md', md: 'lg' }}>{text}</Text>
       </CardButton>
@@ -50,7 +51,7 @@ export function GroupHeader(props: GroupHeaderProps) {
       <DynamicModal isOpen={isOpen}>
         <MemberModal isOpen={isOpen} onClose={onClose} group={group.id} />
       </DynamicModal>
-      <SimpleGrid columns={3} gap={5}>
+      <SimpleGrid columns={3} gap={2} color={textColorPrimary}>
         <Item
           text="Chat"
           icon={<ChatIcon width="30px" height="30px" />}

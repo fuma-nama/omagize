@@ -1,12 +1,14 @@
 import { EditorState, EditorProps } from 'draft-js';
 import TextEditor from './TextEditor';
-import createMentionPlugin from '@draft-js-plugins/mention';
-import React, { useState, ReactNode, useMemo } from 'react';
+import createMentionPlugin, {
+  defaultSuggestionsFilter,
+} from '@draft-js-plugins/mention';
+import React, { useState, ReactNode, useMemo, useRef } from 'react';
 import { EntryComponentProps } from '@draft-js-plugins/mention/lib/MentionSuggestions/Entry/Entry';
 import { Avatar, Box, HStack, Icon, Portal, Text } from '@chakra-ui/react';
 import CustomCard, { CardButton } from '../card/Card';
 import { SubMentionComponentProps } from '@draft-js-plugins/mention/lib/Mention';
-import { useColors } from '../../variables/colors';
+import { useColors, useItemHoverBg } from '../../variables/colors';
 import { Everyone, MarkdownPlugin, MentionData } from './MarkdownPlugin';
 import { EveryoneMention, MentionEntity } from 'components/editor/entities';
 import { BsPeopleFill } from 'react-icons/bs';
@@ -49,8 +51,10 @@ export default function MessageInput({
 }: MessageInputProps) {
   const { mention, markdown } = usePlugins();
   const [open, setOpen] = useState(false);
+  const lastSearch = useRef<string>();
   const onSearchChange = ({ value }: { value: string }) => {
     mentionSuggestions.onSearch(value);
+    lastSearch.current = value;
   };
 
   return (
@@ -68,7 +72,10 @@ export default function MessageInput({
       <mention.MentionSuggestions
         open={open}
         onOpenChange={setOpen}
-        suggestions={[...(mentionSuggestions.suggestions ?? []), Everyone]}
+        suggestions={[
+          ...(mentionSuggestions.suggestions ?? []),
+          ...defaultSuggestionsFilter(lastSearch.current ?? '', [Everyone]),
+        ]}
         onSearchChange={onSearchChange}
         onAddMention={() => {
           // get the mention object selected
@@ -109,35 +116,41 @@ function Suggestions({ children }: { children: ReactNode }) {
   );
 }
 
-function Entry(props: EntryComponentProps) {
+const Entry = React.memo((props: EntryComponentProps) => {
   const {
     mention,
     theme,
-    searchValue, // eslint-disable-line @typescript-eslint/no-unused-vars
-    isFocused, // eslint-disable-line @typescript-eslint/no-unused-vars
+    searchValue,
+    isFocused,
     selectMention,
     ...parentProps
   } = props;
   const type = (props.mention as MentionData).type;
+  const hoverBg = useItemHoverBg();
+  let content;
 
   switch (type) {
     case 'everyone':
-      return (
-        <CardButton {...parentProps} p={2}>
-          <HStack>
-            <Icon as={BsPeopleFill} />
-            <Text>Everyone</Text>
-          </HStack>
-        </CardButton>
+      content = (
+        <>
+          <Icon as={BsPeopleFill} />
+          <Text>Everyone</Text>
+        </>
       );
+      break;
     default:
-      return (
-        <CardButton {...parentProps} p={2}>
-          <HStack>
-            <Avatar src={mention.avatar} />
-            <Text fontWeight="bold">{mention.name}</Text>
-          </HStack>
-        </CardButton>
+      content = (
+        <>
+          <Avatar src={mention.avatar} />
+          <Text fontWeight="bold">{mention.name}</Text>
+        </>
       );
+      break;
   }
-}
+
+  return (
+    <CardButton {...parentProps} p={2} {...(isFocused && hoverBg)}>
+      <HStack>{content}</HStack>
+    </CardButton>
+  );
+});

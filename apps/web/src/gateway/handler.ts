@@ -1,17 +1,25 @@
-import { Group, GroupDetail, GroupEvent, SelfUser } from '../types';
-import { Message } from '../types/message';
-import { RawMessage } from '../MessageAPI';
+import { useUserStore } from 'stores/UserStore';
 import {
-  addGroup,
   addGroupEvent,
   addMessage,
-  dispatchGroupDetail,
+  client,
   dispatchUser,
-  removeGroup,
-} from '../query';
-import { RawSelfUser } from '../UserAPI';
-import { RawGroupDetail, RawGroupEvent, RawMemberClip } from './../GroupAPI';
-import { EventType, GatewayMessage, OpCode, GroupAddedEvent } from './messages';
+  EventType,
+  GatewayMessage,
+  Group,
+  GroupAddedEvent,
+  GroupDetail,
+  GroupEvent,
+  Keys,
+  Message,
+  OpCode,
+  RawGroupDetail,
+  RawGroupEvent,
+  RawMemberClip,
+  RawMessage,
+  RawSelfUser,
+  SelfUser,
+} from '@omagize/api';
 
 export function handleEvent(event: GatewayMessage<unknown>) {
   if (event.op !== OpCode.Dispatch) return;
@@ -68,16 +76,19 @@ function onGroupEvent(event: GatewayMessage<RawGroupEvent>) {
 function onGroupUpdate(event: GatewayMessage<RawGroupDetail>) {
   const updated = GroupDetail(event.d);
 
-  return dispatchGroupDetail(updated);
+  useUserStore.getState().updateGroup(updated);
+
+  client.setQueryData<GroupDetail>(Keys.groupDetail(updated.id), updated);
 }
 
 function onGroupAdded(event: GatewayMessage<GroupAddedEvent>) {
-  const updated = Group(event.d.group);
+  const group = Group(event.d.group);
 
-  return addGroup(updated);
+  return useUserStore.getState().addGroup(group);
 }
 
 function onGroupRemoved(event: GatewayMessage<RawMemberClip>) {
   const clip = event.d;
-  removeGroup(clip.group);
+
+  useUserStore.getState().removeGroup(clip.group);
 }

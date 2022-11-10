@@ -23,7 +23,8 @@
     "react-infinite-scroll-hook": "^4.0.4",
     "vite": "^3.1.7",
     "vite-plugin-svgr": "^2.2.1",
-    "vite-tsconfig-paths": "^3.5.1"
+    "vite-tsconfig-paths": "^3.5.1",
+    "zustand": "^4.1.4"
   },
   "browserslist": {
     "production": [

@@ -93,7 +93,7 @@ function MessageView({ group }: { group: string }) {
 function StartBox() {
   const { textColorPrimary, textColorSecondary, brand } = useColors();
   return (
-    <Box>
+    <Box px={3}>
       <Text fontSize={24} fontWeight="600" color={textColorPrimary}>
         This is the Start of the Chat!
         <Icon as={BiMessageX} w={10} h={10} ml={1} color={brand} />

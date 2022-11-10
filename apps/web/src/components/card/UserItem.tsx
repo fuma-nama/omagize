@@ -65,7 +65,8 @@ export function SmallUserItem({ user, ...props }: { user: User } & StackProps) {
 export function FriendItem({ friend }: { friend: Friend }) {
   const [brand] = useToken('color', ['brand.400']);
   const { textColorPrimary } = useColors();
-  const image = friend.bannerUrl ?? friend.avatarUrl;
+  const user = friend.user;
+  const image = user.bannerUrl ?? user.avatarUrl;
 
   return (
     <Card overflow="hidden" pos="relative">
@@ -78,16 +79,12 @@ export function FriendItem({ friend }: { friend: Friend }) {
       />
 
       <HStack gap="10px" pos="relative" align="start">
-        <Avatar
-          name={friend.username}
-          src={friend.avatarUrl}
-          variant="normal"
-        />
+        <Avatar name={user.username} src={user.avatarUrl} variant="normal" />
         <Flex direction="column">
           <Text color={textColorPrimary} fontSize="xl" fontWeight="bold">
-            {friend.username}
+            {user.username}
           </Text>
-          <Text color={textColorPrimary}>{friend.description}</Text>
+          <Text color={textColorPrimary}>{user.description}</Text>
         </Flex>
       </HStack>
       <HStack ml="auto" align="end">

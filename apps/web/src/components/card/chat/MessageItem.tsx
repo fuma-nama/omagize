@@ -13,6 +13,7 @@ import { AttachmentItem } from './AttachmentItem';
 import { stringOfTime } from 'utils/DateUtils';
 import MarkdownContent from './MarkdownContent';
 import { useColors } from 'variables/colors';
+import { MemberPopup } from 'components/modals/popup/UserPopup';
 
 export default function MessageItem({ message }: { message: Message }) {
   const author = message.author;
@@ -37,7 +38,13 @@ export default function MessageItem({ message }: { message: Message }) {
       {mentioned && (
         <Box bg={brand} pos="absolute" top={0} left={0} w={1} h="full" />
       )}
-      <Avatar name={author.username} src={author.avatarUrl} />
+      <MemberPopup user={author.id} group={message.group}>
+        <Avatar
+          cursor="pointer"
+          name={author.username}
+          src={author.avatarUrl}
+        />
+      </MemberPopup>
       <Flex
         direction="column"
         align="start"

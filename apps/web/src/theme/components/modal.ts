@@ -19,5 +19,16 @@ export const modalStyles: Dict = {
         },
       }),
     },
+    Popover: {
+      baseStyle: (props: any) => ({
+        content: {
+          bg: mode('secondaryGray.300', 'navy.900')(props),
+          rounded: 'xl',
+          _focus: {
+            boxShadow: 'none',
+          },
+        },
+      }),
+    },
   },
 };

@@ -16,7 +16,7 @@ import {
   useLoginQuery,
 } from '@omagize/api';
 import { QueryScreen } from 'components/layout/LoadingScreen';
-import { initGateway } from 'utils/gateway';
+import { initGateway } from 'gateway';
 
 initClient();
 initFirebase();

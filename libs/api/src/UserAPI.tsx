@@ -1,10 +1,9 @@
-import { delay, users } from './model';
+import { delay } from './model';
 import { Reset } from './AccountAPI';
 import { DateObject, Snowflake } from './types/common';
 import { callReturn } from './utils/core';
 import { toFormData } from './utils/common';
 import { SelfUser } from './types/account';
-import { FriendsData } from './types/Friend';
 import { GroupEvent } from './types/group';
 import { RawGroupEvent } from './GroupAPI';
 
@@ -17,15 +16,13 @@ export type RawUser = {
   createdAt: DateObject;
 };
 
-export type RawFriend = RawUser;
+export type RawFriend = {
+  user: RawUser;
+  channel: Snowflake;
+};
 export type RawFriendRequest = {
   user: RawUser;
   message?: string;
-};
-
-export type RawFriendsData = {
-  friends: RawFriend[];
-  requests: RawFriendRequest[];
 };
 
 export type RawSelfUser = RawUser;
@@ -51,18 +48,6 @@ export function fetchGroupEvents(): Promise<GroupEvent[]> {
   return callReturn<RawGroupEvent[]>('/user/events', {
     method: 'GET',
   }).then((res) => res.map((event) => GroupEvent(event)));
-}
-
-export function fetchFriends(): FriendsData {
-  return new FriendsData({
-    friends: [...users],
-    requests: [
-      {
-        user: users[0],
-        message: 'I seen you in Gay Party',
-      },
-    ],
-  });
 }
 
 export async function sendFriendRequest(friendID: string) {

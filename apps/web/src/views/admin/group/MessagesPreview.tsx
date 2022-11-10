@@ -1,6 +1,5 @@
-import { useContext } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-import { PageContext } from 'contexts/PageContext';
+import { useSelected } from 'utils/navigate';
 import { useInfiniteMessageQuery } from '@omagize/api';
 import MessageItem, {
   MessageItemSkeleton,
@@ -9,7 +8,7 @@ import { QueryErrorPanel } from 'components/card/ErrorPanel';
 import { Holder } from 'components/layout/Container';
 
 export function MessagesPreview() {
-  const { selectedGroup } = useContext(PageContext);
+  const { selectedGroup } = useSelected();
   const query = useInfiniteMessageQuery(selectedGroup);
 
   if (query.error) {

@@ -2,8 +2,7 @@ import {
   clearGroupNotifications,
   useGroupNotificationsQuery,
 } from '@omagize/api';
-import React, { useContext } from 'react';
-import { PageContext } from 'contexts/PageContext';
+import { useSelected } from 'utils/navigate';
 import { Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 
 import Card from 'components/card/Card';
@@ -15,7 +14,7 @@ import { ArrayHolder } from 'components/layout/Container';
 import { useMutation } from '@tanstack/react-query';
 
 export function Notifications() {
-  const { selectedGroup } = useContext(PageContext);
+  const { selectedGroup } = useSelected();
   const query = useGroupNotificationsQuery(selectedGroup);
   const mutation = useMutation(['clear_group_notifications'], () =>
     clearGroupNotifications()

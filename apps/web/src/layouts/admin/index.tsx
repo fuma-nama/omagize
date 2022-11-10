@@ -3,15 +3,14 @@ import { Box, Flex } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin';
-import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
-import { PageContext } from 'contexts/PageContext';
 import { useActiveSidebarItem } from 'utils/RouteUtil';
+import { usePageStore } from 'stores/PageStore';
 
 export default function Dashboard() {
   document.documentElement.dir = 'ltr';
 
-  const { info } = useContext(PageContext);
+  const info = usePageStore((s) => s.navbar);
   const activeItem = useActiveSidebarItem();
 
   return (

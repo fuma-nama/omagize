@@ -1,11 +1,11 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 // Chakra imports
 import { Center, Flex, Grid, SimpleGrid, Text } from '@chakra-ui/react';
 
 // Custom components
 import AdminsCard from './components/AdminsCard';
 import Card, { CardButton } from 'components/card/Card';
-import { PageContext } from 'contexts/PageContext';
+import { useSelected } from 'utils/navigate';
 import { Notifications } from './components/Notifications';
 import { useGroupDetailQuery, GroupDetail } from '@omagize/api';
 import GroupEventItem from 'components/card/GroupEventItem';
@@ -18,14 +18,16 @@ import AutoImage from 'components/card/utils/AutoImage';
 import { MessagesPreview } from './MessagesPreview';
 import Banner from './components/Banner';
 import { useGroupModals } from './modals/useGroupModals';
+import { usePageStore } from 'stores/PageStore';
+import { useGroup } from 'stores/hooks';
 
 export default function GroupOverview() {
-  const { selectedGroup, setInfo } = useContext(PageContext);
+  const { selectedGroup } = useSelected();
+
+  const setInfo = usePageStore((s) => s.updateNavbar);
+  const group = useGroup(selectedGroup);
   const query = useGroupDetailQuery(selectedGroup);
-  useEffect(
-    () => setInfo({ title: query.isLoading ? null : query.data.name }),
-    [query.data]
-  );
+  useEffect(() => setInfo(group != null && { title: group.name }), [group]);
 
   if (query.isLoading) {
     return <LoadingScreen />;

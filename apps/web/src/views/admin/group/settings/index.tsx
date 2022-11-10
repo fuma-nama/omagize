@@ -17,8 +17,8 @@ import { useMutation } from '@tanstack/react-query';
 import CustomCard, { TagFlex } from 'components/card/Card';
 import SwitchField from 'components/fields/SwitchField';
 import LoadingScreen from 'components/layout/LoadingScreen';
-import { PageContext } from 'contexts/PageContext';
-import { useContext, useEffect, useState } from 'react';
+import { useSelected } from 'utils/navigate';
+import { useState } from 'react';
 import { useColors } from 'variables/colors';
 import { InfoContent } from './Info';
 
@@ -29,17 +29,12 @@ export type SettingsProps = {
 };
 
 export default function GroupSettings() {
-  const { selectedGroup, setInfo } = useContext(PageContext);
+  const { selectedGroup } = useSelected();
   const query = useGroupDetailQuery(selectedGroup);
 
   const [value, setValue] = useState<UpdateGroupOptions>({});
   const onChange = (d: Partial<UpdateGroupOptions>) =>
     setValue((prev) => ({ ...prev, ...d }));
-
-  useEffect(
-    () => setInfo({ title: query.isLoading ? null : query.data.name }),
-    [query.data]
-  );
 
   if (query.isLoading || query.isError) return <LoadingScreen />;
   return (

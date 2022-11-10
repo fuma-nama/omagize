@@ -4,10 +4,8 @@ import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import items from 'sidebar';
 import ThemeSwitch from 'components/navbar/components/ThemeSwitch';
 import { UserMenu } from 'components/navbar/menu/UserMenu';
-import React, { useContext } from 'react';
 import { BiArrowBack } from 'react-icons/bi';
-import { useNavigate } from 'react-router-dom';
-import { PageContext } from 'contexts/PageContext';
+import { useSelected } from 'utils/navigate';
 
 export default function GroupNavbar() {
   // Chakra Color Mode
@@ -19,8 +17,7 @@ export default function GroupNavbar() {
     '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
     '14px 17px 40px 4px rgba(112, 144, 176, 0.06)'
   );
-  const { selectedGroup } = useContext(PageContext);
-  const navigate = useNavigate();
+  const { selectedGroup, setSelectedGroup } = useSelected();
 
   return (
     <Flex
@@ -35,7 +32,7 @@ export default function GroupNavbar() {
       <HStack ml={2}>
         <Button
           leftIcon={<BiArrowBack />}
-          onClick={() => navigate(`/user/${selectedGroup}`)}
+          onClick={() => setSelectedGroup(selectedGroup)}
           variant="link"
         >
           Back

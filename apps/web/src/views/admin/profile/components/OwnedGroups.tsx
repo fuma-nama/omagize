@@ -5,8 +5,7 @@ import Card, { CardButton } from 'components/card/Card';
 import { useColors } from 'variables/colors';
 import { Group } from '@omagize/api';
 import FadeImage from 'components/card/utils/FadeImage';
-import { useContext } from 'react';
-import { PageContext } from 'contexts/PageContext';
+import { useSelected } from 'utils/navigate';
 import { useUserStore } from 'stores/UserStore';
 
 export default function OwnedGroups(props: { [x: string]: any }) {
@@ -42,7 +41,7 @@ export default function OwnedGroups(props: { [x: string]: any }) {
 
 function GroupItem({ group }: { group: Group }) {
   const { brand, borderColor } = useColors();
-  const { setSelectedGroup } = useContext(PageContext);
+  const { setSelectedGroup } = useSelected();
 
   return (
     <CardButton

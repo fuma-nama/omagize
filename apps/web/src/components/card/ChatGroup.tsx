@@ -2,15 +2,13 @@ import Card from './Card';
 import {
   Avatar,
   Box,
-  Image,
   SkeletonCircle,
   SkeletonText,
   Text,
 } from '@chakra-ui/react';
-import { PageContext } from '../../contexts/PageContext';
-import { useContext } from 'react';
 import FadeImage from './utils/FadeImage';
 import { Group } from '@omagize/api';
+import { useSelected } from 'utils/navigate';
 
 export function ChatGroup({
   active,
@@ -20,7 +18,7 @@ export function ChatGroup({
   active: boolean;
 }) {
   const activeColor = 'brand.400';
-  const { setSelectedGroup } = useContext(PageContext);
+  const { setSelectedGroup } = useSelected();
 
   return (
     <Box

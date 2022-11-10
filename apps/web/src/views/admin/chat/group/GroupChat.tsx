@@ -1,14 +1,18 @@
 import ChatView from 'views/admin/chat/components/ChatView';
-import { useContext, useEffect } from 'react';
-import { PageContext } from 'contexts/PageContext';
-import { useGroupDetailQuery } from '@omagize/api';
+import { useEffect } from 'react';
+import { useSelected } from 'utils/navigate';
+import { useGroup } from 'stores/hooks';
+import { usePageStore } from 'stores/PageStore';
 
 export default function GroupChat() {
-  const { selectedGroup, setInfo } = useContext(PageContext);
-  const query = useGroupDetailQuery(selectedGroup);
+  const { selectedGroup } = useSelected();
+  const group = useGroup(selectedGroup);
+  const setInfo = usePageStore((s) => s.updateNavbar);
+  // useGroupDetailQuery(selectedGroup);
+
   useEffect(
-    () => setInfo(query.isSuccess ? { title: query.data.name } : null),
-    [query.data, query.isSuccess]
+    () => setInfo(group != null ? { title: group.name } : null),
+    [group]
   );
 
   return <ChatView />;

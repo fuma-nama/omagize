@@ -1,7 +1,7 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { Message, useInfiniteMessageQuery } from '@omagize/api';
-import { useContext, useRef } from 'react';
-import { PageContext } from 'contexts/PageContext';
+import { useRef } from 'react';
+import { useSelected } from 'utils/navigate';
 import MessageItem, {
   MessageItemSkeleton,
 } from 'components/card/chat/MessageItem';
@@ -20,7 +20,7 @@ function mapPage(messages: Message[]) {
 }
 
 export default function ChatView() {
-  const { selectedGroup } = useContext(PageContext);
+  const { selectedGroup } = useSelected();
 
   return (
     <Flex pos="relative" h="full" direction="column">

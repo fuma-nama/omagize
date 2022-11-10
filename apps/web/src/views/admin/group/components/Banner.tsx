@@ -19,14 +19,13 @@ import {
   useGroupDetailQuery,
   useGroupMembersQuery,
 } from '@omagize/api';
-import { useContext } from 'react';
-import { PageContext } from 'contexts/PageContext';
 import { GroupDetail } from '@omagize/api';
 import { useColors } from 'variables/colors';
 import { MdArrowDropDown } from 'react-icons/md';
+import { useSelected } from 'utils/navigate';
 
 export default function Banner() {
-  const { selectedGroup } = useContext(PageContext);
+  const { selectedGroup } = useSelected();
   const query = useGroupDetailQuery(selectedGroup);
   if (query.isLoading) return <></>;
 

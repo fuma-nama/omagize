@@ -5,8 +5,7 @@ import Brand from 'components/sidebar/components/Brand';
 import Links from 'components/sidebar/components/Links';
 import SidebarCard from 'components/sidebar/components/SidebarCard';
 import { ChatGroup, ChatGroupSkeleton } from '../../card/ChatGroup';
-import { useContext } from 'react';
-import { PageContext } from 'contexts/PageContext';
+import { useSelected } from 'utils/navigate';
 import ActionBar from './ActionBar';
 import { useUserStore } from 'stores/UserStore';
 
@@ -14,7 +13,7 @@ import { useUserStore } from 'stores/UserStore';
 
 function SidebarContent({ items }: { items: SidebarItem[] }) {
   const groups = useUserStore((s) => s.groups);
-  const { selectedGroup } = useContext(PageContext);
+  const { selectedGroup } = useSelected();
 
   // SIDEBAR
   return (

@@ -2,15 +2,14 @@
 import { Box, Flex } from '@chakra-ui/react';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin';
-import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
-import { PageContext } from 'contexts/PageContext';
+import { usePageStore } from 'stores/PageStore';
 import { useActiveSidebarItem } from 'utils/RouteUtil';
 
 export default function ChatLayout() {
   document.documentElement.dir = 'ltr';
 
-  const { info } = useContext(PageContext);
+  const info = usePageStore((s) => s.navbar);
   const active = useActiveSidebarItem();
 
   return (

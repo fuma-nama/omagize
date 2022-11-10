@@ -6,6 +6,7 @@ import { toFormData } from './utils/common';
 import { SelfUser } from './types/account';
 import { GroupEvent } from './types/group';
 import { RawGroupEvent } from './GroupAPI';
+import { User } from './types';
 
 export type RawUser = {
   id: Snowflake;
@@ -48,6 +49,11 @@ export function fetchGroupEvents(): Promise<GroupEvent[]> {
   return callReturn<RawGroupEvent[]>('/user/events', {
     method: 'GET',
   }).then((res) => res.map((event) => GroupEvent(event)));
+}
+export function fetchUserInfo(id: Snowflake) {
+  return callReturn<User>(`/users/${id}`, {
+    method: 'GET',
+  });
 }
 
 export async function sendFriendRequest(friendID: string) {

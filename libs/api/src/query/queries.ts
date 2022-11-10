@@ -7,6 +7,7 @@ export const Keys = {
   groups: ['groups'],
   groupDetail: (group: Snowflake) => ['group_detail', group],
   groupInvite: (group: Snowflake) => ['group_invite', group],
+  user: (id: Snowflake) => ['user', id],
   member: (group: Snowflake, id: Snowflake) => ['member', group, id],
   members: (group: Snowflake) => ['members', group],
   messages: (group: Snowflake) => ['messages', group],

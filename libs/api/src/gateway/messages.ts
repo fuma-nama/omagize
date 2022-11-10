@@ -1,5 +1,7 @@
+import { RawFriend } from '../UserAPI';
 import { RawGroup } from '../GroupAPI';
-export type GatewayEvent<T> = {
+import { Friend, Group } from '../types';
+export type GatewayMessage<T> = {
   op: OpCode;
   d: T;
   t?: EventType;
@@ -23,12 +25,27 @@ export enum EventType {
 type IdentityMessage = {
   token: string;
 };
-export function IdentityEvent(token: string): GatewayEvent<IdentityMessage> {
+export function IdentityEvent(token: string): GatewayMessage<IdentityMessage> {
   return {
     op: OpCode.Identity,
     d: {
       token,
     },
+  };
+}
+
+export type ReadyPayload = {
+  friends: Friend[];
+  groups: Group[];
+};
+export type RawReadyPayload = {
+  friends: RawFriend[];
+  groups: RawGroup[];
+};
+export function ReadyPayload(raw: RawReadyPayload): ReadyPayload {
+  return {
+    friends: raw.friends.map((f) => Friend(f)),
+    groups: raw.groups.map((g) => Group(g)),
   };
 }
 

@@ -17,11 +17,10 @@ export function SlideError({
           rounded="xl"
           px="40px"
           py="20px"
-          color="white"
           bg="red.500"
           shadow="md"
         >
-          <Text>{message}</Text>
+          <Text color="white">{message}</Text>
           <Button onClick={retry}>Retry</Button>
         </VStack>
       </Center>

@@ -4,7 +4,6 @@ import ReconnectingWebSocket, {
   CloseEvent,
   ErrorEvent,
 } from 'reconnecting-websocket';
-import { handleEvent } from './GatewayHandler';
 import {
   GatewayMessage,
   IdentityEvent,
@@ -15,6 +14,10 @@ import {
 
 export interface GatewayListener {
   onReady: (payload: ReadyPayload) => void;
+  /**
+   * Not including onReady event
+   */
+  onMessage: (message: GatewayMessage<unknown>) => void;
   onClose: (event: CloseEvent) => void;
   onError: (error: ErrorEvent) => void;
 }
@@ -44,7 +47,7 @@ export function startGateway(listener: GatewayListener) {
 
     switch (message.op) {
       case OpCode.Dispatch: {
-        handleEvent(message);
+        listener.onMessage(message);
         break;
       }
       case OpCode.Ready: {

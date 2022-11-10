@@ -1,4 +1,4 @@
-import { useGroupQuery, GroupEvent } from '@omagize/api';
+import { GroupEvent } from '@omagize/api';
 import Card, { TagCard } from './Card';
 import {
   Avatar,
@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { useColors } from 'variables/colors';
 import { stringOfTime } from 'utils/DateUtils';
+import { useGroup } from 'stores/hooks';
 
 function Info({
   name,
@@ -32,7 +33,7 @@ function Info({
 }
 
 export function GlobalGroupEventItem({ event }: { event: GroupEvent }) {
-  const group = useGroupQuery(event.group);
+  const group = useGroup(event.group);
   const { globalBg } = useColors();
 
   const happening = event.startAt <= new Date(Date.now());

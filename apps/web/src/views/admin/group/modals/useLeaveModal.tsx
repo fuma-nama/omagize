@@ -1,16 +1,13 @@
 import { Button } from '@chakra-ui/react';
-import {
-  GroupDetail,
-  leaveGroup,
-  removeGroup,
-  useSelfUser,
-} from '@omagize/api';
+import { GroupDetail, leaveGroup, useSelfUser } from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
 import { useConfirmDialog } from 'components/modals/dialogs/Dialog';
+import { useUserStore } from 'stores/UserStore';
 
 export function useLeaveModal(group: GroupDetail) {
   const user = useSelfUser();
   const isOwner = group.owner === user.id;
+  const removeGroup = useUserStore((s) => s.removeGroup);
   function Content(onClose: () => void) {
     const leaveMutation = useMutation(
       ['leave_group', group.id],

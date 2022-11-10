@@ -1,6 +1,4 @@
-import { useUserStore } from './../../../../apps/web/src/stores/UserStore';
 import { GroupInvite } from '../types/group';
-import { replaceMatch } from '../utils/common';
 import {
   useInfiniteQuery,
   useQuery,
@@ -12,37 +10,15 @@ import {
   fetchGroupMembers,
   fetchMemberInfo,
 } from '../GroupAPI';
-import { Group, GroupDetail, GroupEvent, Snowflake } from '../types';
+import { GroupDetail, GroupEvent, Snowflake } from '../types';
 import { client } from './client';
 import { Keys } from './queries';
 
 //dispatch
-export async function dispatchGroupDetail(detail: GroupDetail) {
-  client.setQueryData<Group[]>(Keys.groups, (prev) =>
-    replaceMatch(prev, (v) => v.id === detail.id, detail)
-  );
-
-  client.setQueryData<GroupDetail>(Keys.groupDetail(detail.id), detail);
-}
-
 export function dispatchGroupInvite(invite: GroupInvite) {
   return client.setQueryData<GroupInvite>(
     Keys.groupInvite(invite.group),
     invite
-  );
-}
-
-export async function addGroup(group: Group) {
-  client.setQueryData<Group[]>(Keys.groups, (prev) => {
-    const contains = prev.some((g) => g.id === group.id);
-
-    return contains ? prev : [...prev, group];
-  });
-}
-
-export async function removeGroup(group: Snowflake) {
-  client.setQueryData<Group[]>(Keys.groups, (prev) =>
-    prev.filter((g) => g.id !== group)
   );
 }
 
@@ -72,12 +48,6 @@ export function useGroupMembersQuery(group: Snowflake, enabled?: boolean) {
 //queries
 export function useMemberQuery(group: Snowflake, id: Snowflake) {
   return useQuery(Keys.member(group, id), () => fetchMemberInfo(group, id));
-}
-
-export function useGroupQuery(id: string) {
-  const groups = useUserStore((s) => s.groups);
-
-  return groups?.find((g: Group) => g.id === id);
 }
 
 export function useGroupDetailQuery(id: string) {

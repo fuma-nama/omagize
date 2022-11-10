@@ -10,6 +10,7 @@ import { Auth } from 'firebase/auth';
 import { useEffect } from 'react';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { CloseEvent, ErrorEvent } from 'reconnecting-websocket/dist/events';
+import { handleEvent } from './handler';
 
 const listeners: Set<Partial<GatewayListener>> = new Set();
 const RootListener: GatewayListener = {
@@ -18,6 +19,7 @@ const RootListener: GatewayListener = {
       if (listener.onReady) listener.onReady(payload);
     }
   },
+  onMessage: handleEvent,
   onClose(event: CloseEvent): void {
     for (const listener of listeners) {
       if (listener.onClose) listener.onClose(event);

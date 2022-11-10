@@ -32,7 +32,7 @@ function Info({
 }
 
 export function GlobalGroupEventItem({ event }: { event: GroupEvent }) {
-  const { data: group } = useGroupQuery(event.group);
+  const group = useGroupQuery(event.group);
   const { globalBg } = useColors();
 
   const happening = event.startAt <= new Date(Date.now());

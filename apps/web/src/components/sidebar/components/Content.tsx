@@ -4,27 +4,21 @@ import { Box, Flex, Stack } from '@chakra-ui/react';
 import Brand from 'components/sidebar/components/Brand';
 import Links from 'components/sidebar/components/Links';
 import SidebarCard from 'components/sidebar/components/SidebarCard';
-import { useGroupsQuery } from '@omagize/api';
 import { ChatGroup, ChatGroupSkeleton } from '../../card/ChatGroup';
 import { useContext } from 'react';
 import { PageContext } from 'contexts/PageContext';
 import ActionBar from './ActionBar';
-import { SlideError } from '../../card/utils/SlideError';
+import { useUserStore } from 'stores/UserStore';
 
 // FUNCTIONS
 
 function SidebarContent({ items }: { items: SidebarItem[] }) {
-  const query = useGroupsQuery();
+  const groups = useUserStore((s) => s.groups);
   const { selectedGroup } = useContext(PageContext);
 
   // SIDEBAR
   return (
     <>
-      <SlideError
-        isError={query.isError}
-        message="Failed to Fetch Groups"
-        retry={() => query.refetch()}
-      />
       <Flex
         direction="column"
         height="100%"
@@ -42,8 +36,8 @@ function SidebarContent({ items }: { items: SidebarItem[] }) {
           </Box>
 
           <Flex direction="column" ps="10px" gap={3}>
-            {query.isSuccess ? (
-              query.data?.map((group) => (
+            {groups != null ? (
+              groups.map((group) => (
                 <ChatGroup
                   key={group.id}
                   group={group}

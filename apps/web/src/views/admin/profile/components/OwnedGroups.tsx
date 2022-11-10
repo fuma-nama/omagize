@@ -3,20 +3,18 @@ import { Avatar, Flex, Text } from '@chakra-ui/react';
 // Custom components
 import Card, { CardButton } from 'components/card/Card';
 import { useColors } from 'variables/colors';
-import { useGroupsQuery, Group } from '@omagize/api';
+import { Group } from '@omagize/api';
 import FadeImage from 'components/card/utils/FadeImage';
 import { useContext } from 'react';
 import { PageContext } from 'contexts/PageContext';
+import { useUserStore } from 'stores/UserStore';
 
 export default function OwnedGroups(props: { [x: string]: any }) {
   const { ...rest } = props;
   // Chakra Color Mode
   const { textColorPrimary, textColorSecondary } = useColors();
 
-  const query = useGroupsQuery();
-
-  if (query.isLoading) return <></>;
-  const groups = query.data;
+  const groups = useUserStore((s) => s.groups);
   return (
     <Card {...rest}>
       <Text
@@ -33,8 +31,8 @@ export default function OwnedGroups(props: { [x: string]: any }) {
       </Text>
       <Flex direction="column" gap={3}>
         {groups
-          .filter((group) => group.owner)
-          .map((group) => (
+          ?.filter((group) => group.owner)
+          ?.map((group) => (
             <GroupItem key={group.id} group={group} />
           ))}
       </Flex>

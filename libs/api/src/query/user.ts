@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { LoginPayload, SelfUser } from '../types';
-import { fetchFriends, fetchGroupEvents } from '../UserAPI';
+import { fetchGroupEvents } from '../UserAPI';
 import { useLoginQuery } from './account';
 import { client } from './client';
 import { Keys } from './queries';
@@ -23,8 +23,4 @@ export function useSelfUser() {
 
 export function useGroupEventsQuery() {
   return useQuery(['all_group_event'], () => fetchGroupEvents());
-}
-
-export function useFriendsQuery() {
-  return useQuery(['friends'], () => fetchFriends());
 }

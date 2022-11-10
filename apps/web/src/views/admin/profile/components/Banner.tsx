@@ -10,24 +10,21 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import { useGroupsQuery, useFriendsQuery, useSelfUser } from '@omagize/api';
+import { useSelfUser } from '@omagize/api';
 import { useColors } from 'variables/colors';
 import { EditIcon } from '@chakra-ui/icons';
 import EditAccountModal from 'components/modals/EditAccount';
+import { useUserStore } from 'stores/UserStore';
 
 export default function Banner(props: any) {
   const user = useSelfUser();
-  const groupsQuery = useGroupsQuery();
-  const friendsQuery = useFriendsQuery();
+  const [groups, friends] = useUserStore((s) => [s.groups, s.friends]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Chakra Color Mode
   const { textColorPrimary, textColorSecondary, borderColor, brand } =
     useColors();
   const avatarSize = '120px';
-
-  const groups = groupsQuery.data;
-  const friends = friendsQuery.data?.friends;
 
   return (
     <Card alignItems="center" {...props}>

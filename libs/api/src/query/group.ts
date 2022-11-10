@@ -1,3 +1,4 @@
+import { useUserStore } from './../../../../apps/web/src/stores/UserStore';
 import { GroupInvite } from '../types/group';
 import { replaceMatch } from '../utils/common';
 import {
@@ -9,7 +10,6 @@ import {
   fetchGroupDetail,
   fetchGroupInvite,
   fetchGroupMembers,
-  fetchGroups,
   fetchMemberInfo,
 } from '../GroupAPI';
 import { Group, GroupDetail, GroupEvent, Snowflake } from '../types';
@@ -58,10 +58,6 @@ export async function addGroupEvent(event: GroupEvent) {
   });
 }
 
-export function useGroupsQuery() {
-  return useQuery(Keys.groups, () => fetchGroups());
-}
-
 export function useGroupMembersQuery(group: Snowflake, enabled?: boolean) {
   return useInfiniteQuery(
     Keys.members(group),
@@ -79,12 +75,9 @@ export function useMemberQuery(group: Snowflake, id: Snowflake) {
 }
 
 export function useGroupQuery(id: string) {
-  const groups = useGroupsQuery();
+  const groups = useUserStore((s) => s.groups);
 
-  return {
-    data: groups.data?.find((group) => group.id === id),
-    query: groups,
-  };
+  return groups?.find((g: Group) => g.id === id);
 }
 
 export function useGroupDetailQuery(id: string) {

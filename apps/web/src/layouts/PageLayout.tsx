@@ -5,7 +5,7 @@ import { ReactNode, useState } from 'react';
 import Sidebar from '../components/sidebar/Sidebar';
 import items from '../sidebar';
 import { Outlet } from 'react-router-dom';
-import { WebsocketConnect } from 'utils/gateway';
+import WebsocketConnect from 'gateway/WebsocketConnect';
 
 export default function PageLayout(props: { sidebar?: ReactNode }) {
   const [toggleSidebar, setToggleSidebar] = useState(false);

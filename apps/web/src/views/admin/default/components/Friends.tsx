@@ -6,7 +6,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { FriendsData, useFriendsQuery } from '@omagize/api';
+import { Friend, FriendRequest } from '@omagize/api';
 import {
   FriendItem,
   FriendRequestItem,
@@ -14,9 +14,10 @@ import {
 } from 'components/card/UserItem';
 import { Holder, Placeholder } from 'components/layout/Container';
 import AddFriendModal from 'components/modals/AddFriendModal';
+import { useUserStore } from 'stores/UserStore';
 
 export default function Friends() {
-  const query = useFriendsQuery();
+  const friends = useUserStore((s) => s.friends);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -30,20 +31,20 @@ export default function Friends() {
         </Button>
         <AddFriendModal isOpen={isOpen} onClose={onClose} />
       </HStack>
-      <Content data={query.data} />
+      <Content friends={friends} />
     </Flex>
   );
 }
 
-function Content({ data }: { data: FriendsData }) {
-  if (data != null && data.friends.length == 0 && data.requests.length === 0) {
+function Content({ friends }: { friends: Friend[] }) {
+  if (friends != null && friends.length === 0) {
     return <Placeholder>You don't have a Friend yet</Placeholder>;
   }
 
   return (
     <SimpleGrid columns={{ base: 1, lg: 2, '2xl': 3 }} gap={5}>
       <Holder
-        isLoading={data == null}
+        isLoading={friends == null}
         skeleton={
           <>
             <UserItemSkeleton />
@@ -52,11 +53,11 @@ function Content({ data }: { data: FriendsData }) {
           </>
         }
       >
-        {data?.requests?.map((request) => (
+        {[].map((request: FriendRequest) => (
           <FriendRequestItem key={request.user.id} request={request} />
         ))}
-        {data?.friends?.map((friend) => (
-          <FriendItem key={friend.id} friend={friend} />
+        {friends?.map((friend) => (
+          <FriendItem key={friend.user.id} friend={friend} />
         ))}
       </Holder>
     </SimpleGrid>

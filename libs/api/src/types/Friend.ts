@@ -1,4 +1,5 @@
-import { RawFriend, RawFriendRequest, RawFriendsData } from '../UserAPI';
+import { RawFriend, RawFriendRequest } from '../UserAPI';
+import { Snowflake } from './common';
 import { User } from './user';
 
 export class FriendRequest {
@@ -11,18 +12,13 @@ export class FriendRequest {
   }
 }
 
-export class Friend extends User {
-  constructor(raw: RawFriend) {
-    super(raw);
-  }
-}
-
-export class FriendsData {
-  friends: Friend[];
-  requests: FriendRequest[];
-
-  constructor(raw: RawFriendsData) {
-    this.friends = raw.friends.map((f) => new Friend(f));
-    this.requests = raw.requests.map((r) => new FriendRequest(r));
-  }
+export type Friend = {
+  user: User;
+  channel: Snowflake;
+};
+export function Friend(raw: RawFriend): Friend {
+  return {
+    ...raw,
+    user: new User(raw.user),
+  };
 }

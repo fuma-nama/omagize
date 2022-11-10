@@ -11,34 +11,34 @@ import {
 } from '../query';
 import { RawSelfUser } from '../UserAPI';
 import { RawGroupDetail, RawGroupEvent, RawMemberClip } from './../GroupAPI';
-import { EventType, GatewayEvent, OpCode, GroupAddedEvent } from './events';
+import { EventType, GatewayMessage, OpCode, GroupAddedEvent } from './messages';
 
-export function handleGateway(event: GatewayEvent<unknown>) {
+export function handleEvent(event: GatewayMessage<unknown>) {
   if (event.op !== OpCode.Dispatch) return;
 
   switch (event.t) {
     case EventType.GroupUpdated: {
-      onGroupUpdate(event as GatewayEvent<RawGroupDetail>);
+      onGroupUpdate(event as GatewayMessage<RawGroupDetail>);
       break;
     }
     case EventType.GroupAdded: {
-      onGroupAdded(event as GatewayEvent<GroupAddedEvent>);
+      onGroupAdded(event as GatewayMessage<GroupAddedEvent>);
       break;
     }
     case EventType.UserUpdated: {
-      onUserUpdated(event as GatewayEvent<RawSelfUser>);
+      onUserUpdated(event as GatewayMessage<RawSelfUser>);
       break;
     }
     case EventType.GroupEventCreated: {
-      onGroupEvent(event as GatewayEvent<RawGroupEvent>);
+      onGroupEvent(event as GatewayMessage<RawGroupEvent>);
       break;
     }
     case EventType.GroupRemoved: {
-      onGroupRemoved(event as GatewayEvent<RawMemberClip>);
+      onGroupRemoved(event as GatewayMessage<RawMemberClip>);
       break;
     }
     case EventType.MessageCreated: {
-      onReceiveMessage(event as GatewayEvent<RawMessage>);
+      onReceiveMessage(event as GatewayMessage<RawMessage>);
       break;
     }
     default: {
@@ -47,37 +47,37 @@ export function handleGateway(event: GatewayEvent<unknown>) {
   }
 }
 
-function onReceiveMessage(event: GatewayEvent<RawMessage>) {
+function onReceiveMessage(event: GatewayMessage<RawMessage>) {
   const message = Message(event.d);
 
   return addMessage(message);
 }
 
-function onUserUpdated(event: GatewayEvent<RawSelfUser>) {
+function onUserUpdated(event: GatewayMessage<RawSelfUser>) {
   const user = new SelfUser(event.d);
 
   return dispatchUser(user);
 }
 
-function onGroupEvent(event: GatewayEvent<RawGroupEvent>) {
+function onGroupEvent(event: GatewayMessage<RawGroupEvent>) {
   const e = GroupEvent(event.d);
 
   return addGroupEvent(e);
 }
 
-function onGroupUpdate(event: GatewayEvent<RawGroupDetail>) {
+function onGroupUpdate(event: GatewayMessage<RawGroupDetail>) {
   const updated = GroupDetail(event.d);
 
   return dispatchGroupDetail(updated);
 }
 
-function onGroupAdded(event: GatewayEvent<GroupAddedEvent>) {
+function onGroupAdded(event: GatewayMessage<GroupAddedEvent>) {
   const updated = Group(event.d.group);
 
   return addGroup(updated);
 }
 
-function onGroupRemoved(event: GatewayEvent<RawMemberClip>) {
+function onGroupRemoved(event: GatewayMessage<RawMemberClip>) {
   const clip = event.d;
   removeGroup(clip.group);
 }

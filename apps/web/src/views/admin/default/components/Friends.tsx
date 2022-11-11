@@ -13,7 +13,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { FriendRequest } from '@omagize/api';
+import { FriendRequest, FriendRequestType, useSelfUser } from '@omagize/api';
 import { FriendItem, UserItemSkeleton } from 'components/card/user/UserItem';
 import { FriendRequestItem } from 'components/card/user/FriendRequestItem';
 import { Holder, Placeholder } from 'components/layout/Container';
@@ -104,8 +104,17 @@ function All() {
 }
 
 function Pending() {
-  const friendRequests = useUserStore((s) => s.friendRequests);
-
+  const friendRequests: FriendRequest[] = [
+    {
+      user: useSelfUser(),
+      type: FriendRequestType.Incoming,
+    },
+    {
+      user: useSelfUser(),
+      type: FriendRequestType.Outgoing,
+    },
+  ];
+  //useUserStore((s) => s.friendRequests);
   if (friendRequests != null && friendRequests.length === 0) {
     return <FriendsPlaceholder />;
   }
@@ -122,9 +131,11 @@ function Pending() {
           </>
         }
       >
-        {friendRequests?.map((request: FriendRequest) => (
-          <FriendRequestItem key={request.user.id} request={request} />
-        ))}
+        {friendRequests
+          ?.sort((a) => (a.type === FriendRequestType.Incoming ? -1 : 1))
+          ?.map((request: FriendRequest) => (
+            <FriendRequestItem key={request.user.id} request={request} />
+          ))}
       </Holder>
     </SimpleGrid>
   );

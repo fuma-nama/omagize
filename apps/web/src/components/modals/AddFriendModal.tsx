@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { BiRightArrow } from 'react-icons/bi';
 import { useMutation } from '@tanstack/react-query';
 import { sendFriendRequest } from '@omagize/api';
+import { parseError } from 'utils/APIUtils';
 
 export default function AddFriendModal({
   isOpen,
@@ -30,6 +31,7 @@ export default function AddFriendModal({
   const mutation = useMutation(['send_friend_request', id], () =>
     sendFriendRequest(id)
   );
+  const disable = id.length === 0 || mutation.isLoading;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -47,7 +49,7 @@ export default function AddFriendModal({
               variant="main"
               placeholder="XXXXXX"
             />
-            <FormErrorMessage>{mutation.error?.toString()}</FormErrorMessage>
+            <FormErrorMessage>{parseError(mutation.error)}</FormErrorMessage>
             <FormHelperText hidden={mutation.isError}>
               Friend ID is a 6-length number
             </FormHelperText>
@@ -61,7 +63,7 @@ export default function AddFriendModal({
           <Button
             onClick={() => mutation.mutate()}
             isLoading={mutation.isLoading}
-            disabled={id.length !== 6}
+            disabled={disable}
             variant="brand"
             rightIcon={<BiRightArrow />}
           >

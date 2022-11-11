@@ -53,6 +53,17 @@ export function validEmail(email: string): boolean {
   return !!email.match(format);
 }
 
+export function parseError(
+  error: OmagizeError | FirebaseError | any,
+  def?: string
+): string | null {
+  if (error == null) return null;
+  if (error instanceof OmagizeError) return parseOmagizeError(error);
+  if (error instanceof FirebaseError) return parseFirebaseError(error);
+
+  return def || error.toString();
+}
+
 export function parseOmagizeError(error: OmagizeError, def?: string): string {
   switch (error.code) {
     case APIErrorCode.EmailAlreadyUsed:

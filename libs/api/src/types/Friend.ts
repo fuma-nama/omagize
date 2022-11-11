@@ -2,14 +2,18 @@ import { RawFriend, RawFriendRequest } from '../UserAPI';
 import { Snowflake } from './common';
 import { User } from './user';
 
-export class FriendRequest {
+export type FriendRequest = {
   user: User;
   message?: string;
+  type: FriendRequestType;
+};
 
-  constructor(raw: RawFriendRequest) {
-    this.user = new User(raw.user);
-    this.message = raw.message;
-  }
+export function FriendRequest(raw: RawFriendRequest): FriendRequest {
+  return {
+    ...raw,
+    user: new User(raw.user),
+    type: raw.type as FriendRequestType,
+  };
 }
 
 export type Friend = {
@@ -21,4 +25,9 @@ export function Friend(raw: RawFriend): Friend {
     ...raw,
     user: new User(raw.user),
   };
+}
+
+export enum FriendRequestType {
+  Incoming = 'incoming',
+  Outgoing = 'outgoing',
 }

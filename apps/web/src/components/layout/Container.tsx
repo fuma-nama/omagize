@@ -1,15 +1,17 @@
 import { ReactNode } from 'react';
-import { Center, CenterProps, Text } from '@chakra-ui/react';
+import { Box, Center, CenterProps, Text } from '@chakra-ui/react';
 import { useColors } from '../../variables/colors';
 
 export function Placeholder({
   children,
+  icon,
   ...rest
-}: { children: string } & CenterProps) {
-  const { textColorSecondary, cardBg } = useColors();
+}: { icon?: ReactNode; children: string } & CenterProps) {
+  const { textColorSecondary } = useColors();
 
   return (
-    <Center w="full" py="50px" bg={cardBg} rounded="xl" {...rest}>
+    <Center w="full" py="50px" flexDirection="column" rounded="xl" {...rest}>
+      <Box color={textColorSecondary}>{icon}</Box>
       <Text color={textColorSecondary} fontSize="xl" align="center">
         {children}
       </Text>

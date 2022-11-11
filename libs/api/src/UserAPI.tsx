@@ -51,9 +51,9 @@ export function fetchGroupEvents(): Promise<GroupEvent[]> {
   }).then((res) => res.map((event) => GroupEvent(event)));
 }
 export function fetchUserInfo(id: Snowflake) {
-  return callReturn<User>(`/users/${id}`, {
+  return callReturn<RawUser>(`/users/${id}`, {
     method: 'GET',
-  });
+  }).then((s) => new User(s));
 }
 
 export async function sendFriendRequest(friendID: string, message?: string) {

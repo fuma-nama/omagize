@@ -88,6 +88,10 @@ export function parseOmagizeError(error: OmagizeError, def?: string): string {
       return 'This password is too weak';
     case APIErrorCode.WrongPassword:
       return 'Wrong password';
+    case APIErrorCode.FriendRequestNotExist:
+      return "Friend Request doesn't exist";
+    case APIErrorCode.FriendRequestAlreadyExist:
+      return 'Friend Request already exists';
     default:
       return def;
   }

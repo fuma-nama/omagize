@@ -31,6 +31,8 @@ export enum APIErrorCode {
   InvalidInviteCode = 304,
   MissingParam = 305,
   WeakPassword = 400,
+  FriendRequestAlreadyExist = 205,
+  FriendRequestNotExist = 206,
 
   /** Caused by client-side */
   Client = 1,

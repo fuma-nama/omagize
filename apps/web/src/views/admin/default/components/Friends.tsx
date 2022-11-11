@@ -14,11 +14,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { FriendRequest } from '@omagize/api';
-import {
-  FriendItem,
-  FriendRequestItem,
-  UserItemSkeleton,
-} from 'components/card/UserItem';
+import { FriendItem, UserItemSkeleton } from 'components/card/user/UserItem';
+import { FriendRequestItem } from 'components/card/user/FriendRequestItem';
 import { Holder, Placeholder } from 'components/layout/Container';
 import AddFriendModal from 'components/modals/AddFriendModal';
 import { BiSad } from 'react-icons/bi';
@@ -59,8 +56,8 @@ export default function Friends() {
           <Text fontSize="2xl" fontWeight="700" mr={2}>
             Your Friends
           </Text>
-          <CTab count={friends.length}>All</CTab>
-          <CTab count={friendRequests.length}>Pending</CTab>
+          <CTab count={friends?.length}>All</CTab>
+          <CTab count={friendRequests?.length}>Pending</CTab>
           <Button onClick={onOpen} colorScheme="green" leftIcon={<AddIcon />}>
             Add
           </Button>

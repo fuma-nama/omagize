@@ -6,7 +6,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import UserItem from 'components/card/UserItem';
+import UserItem from 'components/card/user/UserItem';
 import { GroupDetail } from '@omagize/api';
 
 export default function AdminsCard({ group }: { group: GroupDetail }) {

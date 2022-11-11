@@ -1,6 +1,6 @@
 import { Avatar, Box, Flex, Input, Text, Textarea } from '@chakra-ui/react';
 import { GroupDetail, useMemberQuery } from '@omagize/api';
-import { SmallUserItem } from 'components/card/UserItem';
+import { SmallUserItem } from 'components/card/user/UserItem';
 import AutoImage from 'components/card/utils/AutoImage';
 import { CropImageModal } from 'components/modals/CropImageModal';
 import {

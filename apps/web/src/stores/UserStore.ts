@@ -1,5 +1,6 @@
 import {
   Friend,
+  FriendRequest,
   Group,
   LoginPayload,
   ReadyPayload,
@@ -12,6 +13,7 @@ export type UserStore = {
   groups: Group[] | null;
   friends: Friend[] | null;
   user: SelfUser | null;
+  friendRequests: FriendRequest[] | null;
   updateUser: (payload: LoginPayload) => void;
   acceptPayload: (payload: ReadyPayload) => void;
   addGroup: (group: Group) => void;
@@ -21,6 +23,7 @@ export type UserStore = {
 
 export const useUserStore = create<UserStore>((set, get) => ({
   friends: null,
+  friendRequests: null,
   groups: null,
   user: null,
   addGroup: (group) => {
@@ -45,6 +48,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
     }),
   acceptPayload: (payload) =>
     set({
+      friendRequests: payload.friendRequests,
       friends: payload.friends,
       groups: payload.groups,
     }),

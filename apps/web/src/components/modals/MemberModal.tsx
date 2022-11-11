@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { useGroupMembersQuery, Snowflake } from '@omagize/api';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import UserItem from '../card/UserItem';
+import UserItem from '../card/user/UserItem';
 
 export default function MemberModal(props: {
   isOpen: boolean;

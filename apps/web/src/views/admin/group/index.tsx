@@ -30,7 +30,7 @@ export default function GroupOverview() {
   useEffect(() => setInfo(group != null && { title: group.name }), [group]);
 
   if (query.isLoading) {
-    return <LoadingScreen />;
+    return <LoadingScreen size="sm" />;
   }
   if (query.isError) {
     return (

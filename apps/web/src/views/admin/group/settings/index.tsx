@@ -36,7 +36,7 @@ export default function GroupSettings() {
   const onChange = (d: Partial<UpdateGroupOptions>) =>
     setValue((prev) => ({ ...prev, ...d }));
 
-  if (query.isLoading || query.isError) return <LoadingScreen />;
+  if (query.isLoading || query.isError) return <LoadingScreen size="sm" />;
   return (
     <>
       <Flex

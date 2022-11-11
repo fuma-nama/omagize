@@ -29,11 +29,11 @@ import { columnsDataCheck } from 'views/admin/default/variables/columnsData';
 import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
 import Banner from './components/Banner';
 import { useGroupEventsQuery, useSelfUser } from '@omagize/api';
-import { ArrayHolder, Placeholder } from '../../../components/layout/Container';
+import { ArrayHolder } from 'components/layout/Container';
 import {
   GlobalGroupEventItem,
   GroupEventSkeleton,
-} from '../../../components/card/GroupEventItem';
+} from 'components/card/GroupEventItem';
 import Friends from './components/Friends';
 
 export default function UserReports() {
@@ -150,33 +150,30 @@ function Events() {
   const query = useGroupEventsQuery();
 
   const empty = query.data != null && query.data.length === 0;
+  if (empty) return <></>;
   return (
     <Flex direction="column" gap={3}>
       <Text fontSize="2xl" fontWeight="700">
         Group Events
       </Text>
-      {empty ? (
-        <Placeholder>No Group Events</Placeholder>
-      ) : (
-        <SimpleGrid columns={{ base: 1, md: 2, '2xl': 3 }} gap={3}>
-          <ArrayHolder
-            array={query.data}
-            skeleton={
-              <>
-                <GroupEventSkeleton />
-                <GroupEventSkeleton />
-                <GroupEventSkeleton />
-              </>
-            }
-          >
-            {() =>
-              query.data.map((event) => (
-                <GlobalGroupEventItem key={event.id} event={event} />
-              ))
-            }
-          </ArrayHolder>
-        </SimpleGrid>
-      )}
+      <SimpleGrid columns={{ base: 1, md: 2, '2xl': 3 }} gap={3}>
+        <ArrayHolder
+          array={query.data}
+          skeleton={
+            <>
+              <GroupEventSkeleton />
+              <GroupEventSkeleton />
+              <GroupEventSkeleton />
+            </>
+          }
+        >
+          {() =>
+            query.data.map((event) => (
+              <GlobalGroupEventItem key={event.id} event={event} />
+            ))
+          }
+        </ArrayHolder>
+      </SimpleGrid>
     </Flex>
   );
 }

@@ -1,7 +1,6 @@
-import { delay } from './model';
 import { Reset } from './AccountAPI';
 import { DateObject, Snowflake } from './types/common';
-import { callReturn } from './utils/core';
+import { callDefault, callReturn } from './utils/core';
 import { toFormData } from './utils/common';
 import { SelfUser } from './types/account';
 import { GroupEvent } from './types/group';
@@ -24,6 +23,7 @@ export type RawFriend = {
 export type RawFriendRequest = {
   user: RawUser;
   message?: string;
+  type: string;
 };
 
 export type RawSelfUser = RawUser;
@@ -56,15 +56,31 @@ export function fetchUserInfo(id: Snowflake) {
   });
 }
 
-export async function sendFriendRequest(friendID: string) {
-  if (friendID === '000000') throw new Error("Friend ID doesn't exist");
-  await delay(2000);
+export async function sendFriendRequest(friendID: string, message?: string) {
+  await callDefault(`/user/friends/requests`, {
+    method: 'POST',
+    body: JSON.stringify({
+      user: friendID,
+      message,
+    }),
+  });
 }
 
-export async function acceptFriendRequest(friendID: string) {
-  await delay(2000);
+export async function replyFriendRequest(
+  friendID: string,
+  reply: 'accept' | 'deny'
+) {
+  await callDefault(`/user/friends/requests`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      user: friendID,
+      accept: reply === 'accept',
+    }),
+  });
 }
 
-export async function denyFriendRequest(friendID: string) {
-  await delay(2000);
+export async function deleteFriendRequest(friendID: Snowflake) {
+  await callDefault(`/user/friends/requests/${friendID}`, {
+    method: 'DELETE',
+  });
 }

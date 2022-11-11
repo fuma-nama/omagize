@@ -46,8 +46,14 @@ export function useGroupMembersQuery(group: Snowflake, enabled?: boolean) {
 }
 
 //queries
-export function useMemberQuery(group: Snowflake, id: Snowflake) {
-  return useQuery(Keys.member(group, id), () => fetchMemberInfo(group, id));
+export function useMemberQuery(
+  group: Snowflake,
+  id: Snowflake,
+  enabled?: boolean
+) {
+  return useQuery(Keys.member(group, id), () => fetchMemberInfo(group, id), {
+    enabled,
+  });
 }
 
 export function useGroupDetailQuery(id: string) {

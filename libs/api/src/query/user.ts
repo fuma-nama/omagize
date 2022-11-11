@@ -26,8 +26,9 @@ export function useGroupEventsQuery() {
   return useQuery(['all_group_event'], () => fetchGroupEvents());
 }
 
-export function useUserInfo(id: Snowflake) {
+export function useUserInfo(id: Snowflake, enabled?: boolean) {
   return useQuery(Keys.user(id), () => fetchUserInfo(id), {
+    enabled,
     staleTime: 30 * 1000,
   });
 }

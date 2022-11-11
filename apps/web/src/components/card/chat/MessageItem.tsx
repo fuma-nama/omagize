@@ -14,6 +14,7 @@ import { stringOfTime } from 'utils/DateUtils';
 import MarkdownContent from './MarkdownContent';
 import { useColors } from 'variables/colors';
 import { MemberPopup } from 'components/modals/popup/UserPopup';
+import { PopoverTrigger } from 'components/PopoverTrigger';
 
 export default function MessageItem({ message }: { message: Message }) {
   const author = message.author;
@@ -25,50 +26,54 @@ export default function MessageItem({ message }: { message: Message }) {
     message.everyone || message.mentions.some((m) => m.id === user.id);
 
   return (
-    <Flex
-      pos="relative"
-      direction="row"
-      _hover={{ bg: hoverBg }}
-      transition="all 0.2s"
-      rounded="xl"
-      p={3}
-      gap={3}
-      overflow="hidden"
-    >
-      {mentioned && (
-        <Box bg={brand} pos="absolute" top={0} left={0} w={1} h="full" />
-      )}
-      <MemberPopup user={author.id} group={message.group}>
-        <Avatar
-          cursor="pointer"
-          name={author.username}
-          src={author.avatarUrl}
-        />
-      </MemberPopup>
+    <MemberPopup user={author.id} group={message.group}>
       <Flex
-        direction="column"
-        align="start"
-        ml={2}
-        flex={1}
-        w={0}
-        wordBreak="break-word"
+        pos="relative"
+        direction="row"
+        _hover={{ bg: hoverBg }}
+        transition="all 0.2s"
+        rounded="xl"
+        p={3}
+        gap={3}
+        overflow="hidden"
       >
-        <HStack>
-          <Text fontWeight="bold" fontSize="lg">
-            {author.username}
-          </Text>
-          <Text textColor={secondaryText} fontSize="sm">
-            - {stringOfTime(message.timestamp)}
-          </Text>
-        </HStack>
-        <MarkdownContent message={message} />
-        <Flex direction="column" gap={2} w="full">
-          {message.attachments.map((a) => (
-            <AttachmentItem key={a.id} attachment={a} />
-          ))}
+        {mentioned && (
+          <Box bg={brand} pos="absolute" top={0} left={0} w={1} h="full" />
+        )}
+        <PopoverTrigger>
+          <Avatar
+            cursor="pointer"
+            name={author.username}
+            src={author.avatarUrl}
+          />
+        </PopoverTrigger>
+        <Flex
+          direction="column"
+          align="start"
+          ml={2}
+          flex={1}
+          w={0}
+          wordBreak="break-word"
+        >
+          <HStack>
+            <PopoverTrigger>
+              <Text fontWeight="bold" fontSize="lg" cursor="pointer">
+                {author.username}
+              </Text>
+            </PopoverTrigger>
+            <Text textColor={secondaryText} fontSize="sm">
+              - {stringOfTime(message.timestamp)}
+            </Text>
+          </HStack>
+          <MarkdownContent message={message} />
+          <Flex direction="column" gap={2} w="full">
+            {message.attachments.map((a) => (
+              <AttachmentItem key={a.id} attachment={a} />
+            ))}
+          </Flex>
         </Flex>
       </Flex>
-    </Flex>
+    </MemberPopup>
   );
 }
 

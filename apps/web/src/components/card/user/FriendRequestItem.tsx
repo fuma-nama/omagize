@@ -8,25 +8,41 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useColors } from '../../../variables/colors';
-import { replyFriendRequest } from '@omagize/api';
+import {
+  deleteFriendRequest,
+  FriendRequestType,
+  replyFriendRequest,
+} from '@omagize/api';
 import { CustomCardProps } from 'theme/theme';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useMutation } from '@tanstack/react-query';
 import { WarningIcon } from '@chakra-ui/icons';
 import { FriendRequest } from '@omagize/api';
+import { UserPopup } from 'components/modals/popup/UserPopup';
+import { PopoverTrigger } from 'components/PopoverTrigger';
 
 export function FriendRequestItem({
   request,
   ...card
 }: { request: FriendRequest } & CustomCardProps) {
-  const user = request.user;
-  const image = user.bannerUrl ?? user.avatarUrl;
+  switch (request.type) {
+    case FriendRequestType.Incoming:
+      return <IncomingFriendRequestItem request={request} {...card} />;
+    case FriendRequestType.Outgoing:
+      return <OutgoingFriendRequestItem request={request} {...card} />;
+  }
+}
+
+function IncomingFriendRequestItem({
+  request,
+  ...card
+}: { request: FriendRequest } & CustomCardProps) {
   const reply = useMutation(
     ['accept_friend_request', request.user.id],
     (reply: 'accept' | 'deny') => replyFriendRequest(request.user.id, reply)
   );
 
-  const { textColorPrimary, textColorSecondary, cardBg, brand } = useColors();
+  const { cardBg, brand } = useColors();
   const breakpoint = '3sm';
 
   return (
@@ -36,20 +52,12 @@ export function FriendRequestItem({
       direction={{ base: 'column', [breakpoint]: 'row' }}
       {...card}
     >
-      <Box bg={cardBg} flex={1} p="21px">
-        <HStack mb={3}>
+      <Box bg={cardBg} flex={1} p={5}>
+        <HStack mb={3} color="yellow.500">
           <WarningIcon />
           <Text>Friend Request</Text>
         </HStack>
-        <HStack gap="10px" align="start">
-          <Avatar name={user.username} src={user.avatarUrl} variant="normal" />
-          <Flex direction="column">
-            <Text color={textColorPrimary} fontSize="xl" fontWeight="bold">
-              {user.username}
-            </Text>
-            <Text color={textColorSecondary}>{request.message}</Text>
-          </Flex>
-        </HStack>
+        <Content request={request} />
       </Box>
       <HStack
         align="end"
@@ -60,8 +68,6 @@ export function FriendRequestItem({
         w={{ [breakpoint]: '40%' }}
         h={{ [breakpoint]: 'full' }}
         bg={brand}
-        bgImg={image}
-        bgSize="cover"
       >
         <Button
           color="white"
@@ -82,5 +88,68 @@ export function FriendRequestItem({
         />
       </HStack>
     </Flex>
+  );
+}
+
+function OutgoingFriendRequestItem({
+  request,
+  ...card
+}: { request: FriendRequest } & CustomCardProps) {
+  const { cardBg } = useColors();
+  const deleteMutation = useMutation(() =>
+    deleteFriendRequest(request.user.id)
+  );
+
+  return (
+    <Flex rounded="2xl" bg={cardBg} p={5} direction="row" {...card}>
+      <Flex direction="column">
+        <HStack mb={3}>
+          <WarningIcon />
+          <Text>Outgoing Friend Request</Text>
+        </HStack>
+        <Content request={request} />
+      </Flex>
+      <IconButton
+        ml="auto"
+        isLoading={deleteMutation.isLoading}
+        onClick={() => deleteMutation.mutate()}
+        aria-label="delete"
+        icon={<AiOutlineClose />}
+        variant="danger"
+      />
+    </Flex>
+  );
+}
+
+function Content({ request }: { request: FriendRequest }) {
+  const { textColorPrimary, textColorSecondary } = useColors();
+  const user = request.user;
+
+  return (
+    <UserPopup user={user.id}>
+      <HStack gap={2} align="start">
+        <PopoverTrigger>
+          <Avatar
+            name={user.username}
+            src={user.avatarUrl}
+            variant="normal"
+            cursor="pointer"
+          />
+        </PopoverTrigger>
+        <Flex direction="column">
+          <PopoverTrigger>
+            <Text
+              color={textColorPrimary}
+              fontSize="xl"
+              fontWeight="bold"
+              cursor="pointer"
+            >
+              {user.username}
+            </Text>
+          </PopoverTrigger>
+          <Text color={textColorSecondary}>{request.message}</Text>
+        </Flex>
+      </HStack>
+    </UserPopup>
   );
 }

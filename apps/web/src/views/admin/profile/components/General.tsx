@@ -41,6 +41,7 @@ export default function GeneralInformation(props: { [x: string]: any }) {
           title="Created At"
           value={new Date(user.createdAt).toLocaleString()}
         />
+        <Information boxShadow={cardShadow} title="User ID" value={user.id} />
       </SimpleGrid>
     </Card>
   );

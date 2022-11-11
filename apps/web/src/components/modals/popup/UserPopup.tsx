@@ -48,11 +48,7 @@ export function UserPopup(props: {
           {user?.username}
         </Text>
         <Text color={textColorSecondary}>{user?.description}</Text>
-        <HStack mt={3}>
-          <Button leftIcon={<BiChat />} variant="brand">
-            Chat
-          </Button>
-        </HStack>
+        <HStack mt={3}>{user && <FriendActions user={user} />}</HStack>
       </Flex>
     </Popup>
   );

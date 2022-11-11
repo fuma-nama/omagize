@@ -104,17 +104,7 @@ function All() {
 }
 
 function Pending() {
-  const friendRequests: FriendRequest[] = [
-    {
-      user: useSelfUser(),
-      type: FriendRequestType.Incoming,
-    },
-    {
-      user: useSelfUser(),
-      type: FriendRequestType.Outgoing,
-    },
-  ];
-  //useUserStore((s) => s.friendRequests);
+  const friendRequests = useUserStore((s) => s.friendRequests);
   if (friendRequests != null && friendRequests.length === 0) {
     return <FriendsPlaceholder />;
   }

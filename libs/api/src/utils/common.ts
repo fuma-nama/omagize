@@ -32,9 +32,7 @@ export function toFormData(from: {
   return data;
 }
 
-export function toFormField(
-  input: Date | Blob | string | boolean | number
-): Blob | string {
+export function toFormField(input: Date | Blob | string | boolean | number): Blob | string {
   if (input instanceof Date) {
     return stringifyDate(input);
   }
@@ -60,4 +58,8 @@ export function parseDate(date?: DateObject): Date | null {
   } else {
     return null;
   }
+}
+
+export function boolToString(value: boolean): string {
+  return value === true ? 'true' : 'false';
 }

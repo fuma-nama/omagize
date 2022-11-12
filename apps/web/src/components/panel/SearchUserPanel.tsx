@@ -62,7 +62,7 @@ export function SearchUserNamePanel(props: Props) {
   const { cardBg } = useColors();
   const [name, setName] = useState('');
   const [search, setSearch] = useState(null);
-  const query = useQuery(['user_name', search], () => searchUser(search, 3), {
+  const query = useQuery(['user_name', search], () => searchUser(search, 3, true), {
     enabled: search != null,
   });
 

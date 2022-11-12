@@ -1,7 +1,7 @@
 import { Reset } from './AccountAPI';
 import { DateObject, Snowflake } from './types/common';
 import { callDefault, callReturn } from './utils/core';
-import { toFormData } from './utils/common';
+import { boolToString, toFormData } from './utils/common';
 import { SelfUser } from './types/account';
 import { GroupEvent } from './types/group';
 import { RawGroupEvent } from './GroupAPI';
@@ -57,10 +57,11 @@ export function fetchUserInfo(id: Snowflake) {
   }).then((s) => new User(s));
 }
 
-export async function searchUser(name: string, limit: number = 10) {
+export async function searchUser(name: string, limit: number = 10, onlyOthers: boolean = false) {
   const param = new URLSearchParams({
     name: name,
     limit: limit.toString(),
+    others: boolToString(onlyOthers),
   });
   const users = await callReturn<RawUser[]>(`/users?${param}`, {
     method: 'GET',
@@ -85,10 +86,7 @@ export async function sendFriendRequest(friendID: string, message?: string) {
   });
 }
 
-export async function replyFriendRequest(
-  friendID: string,
-  reply: 'accept' | 'deny'
-) {
+export async function replyFriendRequest(friendID: string, reply: 'accept' | 'deny') {
   await callDefault(`/user/friends/requests`, {
     method: 'PATCH',
     body: JSON.stringify({

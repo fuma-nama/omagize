@@ -36,8 +36,8 @@ export default function AddFriendModal({
 
   // prettier-ignore
   const selectChecks = self.id === selected?.id? 'Why do you want to add yourself as a friend?' :
-    friends.some(f => f.user.id === selected?.id)? 'He already is your friend' : 
-    friendRequests.some(f => f.user.id === selected?.id)? 'Already have existing friend request' : null
+    friends?.some(f => f.user.id === selected?.id)? 'He already is your friend' : 
+    friendRequests?.some(f => f.user.id === selected?.id)? 'Already have existing friend request' : null
 
   const disable = selected == null || selectChecks != null || mutation.isLoading;
   const error = mutation.isError ? parseError(mutation.error) : selectChecks;

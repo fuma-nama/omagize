@@ -12,6 +12,7 @@ export function initClient(): QueryClient {
            */
           staleTime: Infinity,
           retry: 1,
+          refetchOnWindowFocus: false,
         },
       },
     });

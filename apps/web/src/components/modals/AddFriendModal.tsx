@@ -16,23 +16,36 @@ import {
 import { useState } from 'react';
 import { BiRightArrow } from 'react-icons/bi';
 import { useMutation } from '@tanstack/react-query';
-import { sendFriendRequest, User } from '@omagize/api';
-import {
-  SearchUserIDPanel,
-  SearchUserNamePanel,
-} from '../panel/SearchUserPanel';
+import { sendFriendRequest, User, useSelfUser } from '@omagize/api';
+import { SearchUserIDPanel, SearchUserNamePanel } from '../panel/SearchUserPanel';
 import { TabButton } from 'components/layout/Tab';
+import { parseError } from 'utils/APIUtils';
+import { useUserStore } from 'stores/UserStore';
 
 export default function AddFriendModal({
   isOpen,
-  onClose,
+  onClose: closeModal,
 }: {
   isOpen: boolean;
   onClose: () => void;
 }) {
+  const self = useSelfUser();
   const [selected, setSelected] = useState<User>();
   const mutation = useMutation(() => sendFriendRequest(selected.id));
-  const disable = selected == null || mutation.isLoading;
+  const [friends, friendRequests] = useUserStore((s) => [s.friends, s.friendRequests]);
+
+  // prettier-ignore
+  const selectChecks = self.id === selected?.id? 'Why do you want to add yourself as a friend?' :
+    friends.some(f => f.user.id === selected?.id)? 'He already is your friend' : 
+    friendRequests.some(f => f.user.id === selected?.id)? 'Already have existing friend request' : null
+
+  const disable = selected == null || selectChecks != null || mutation.isLoading;
+  const error = mutation.isError ? parseError(mutation.error) : selectChecks;
+
+  const onClose = () => {
+    setSelected(null);
+    closeModal();
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -52,16 +65,19 @@ export default function AddFriendModal({
                 <SearchUserNamePanel
                   value={selected}
                   onChange={(e) => setSelected(e)}
+                  isInvalid={selectChecks != null}
                 />
               </TabPanel>
               <TabPanel px={0}>
                 <SearchUserIDPanel
                   value={selected}
                   onChange={(e) => setSelected(e)}
+                  isInvalid={selectChecks != null}
                 />
               </TabPanel>
             </TabPanels>
           </Tabs>
+          <Text color="red.400">{error}</Text>
         </ModalBody>
 
         <ModalFooter>

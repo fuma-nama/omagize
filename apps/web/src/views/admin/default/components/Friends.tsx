@@ -38,10 +38,7 @@ function CountTab(props: { count: number; children: string }) {
 
 export default function Friends() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [friends, friendRequests] = useUserStore((s) => [
-    s.friends,
-    s.friendRequests,
-  ]);
+  const [friends, friendRequests] = useUserStore((s) => [s.friends, s.friendRequests]);
 
   return (
     <Flex direction="column" gap={3}>
@@ -128,8 +125,6 @@ function Pending() {
 
 function FriendsPlaceholder() {
   return (
-    <Placeholder icon={<Icon as={BiSad} w={20} h={20} />}>
-      You don't have a Friend yet
-    </Placeholder>
+    <Placeholder icon={<Icon as={BiSad} w={20} h={20} />}>You don't have a Friend yet</Placeholder>
   );
 }

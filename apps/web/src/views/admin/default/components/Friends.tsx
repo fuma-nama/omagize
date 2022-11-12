@@ -5,7 +5,6 @@ import {
   Flex,
   Icon,
   SimpleGrid,
-  Tab,
   TabList,
   TabPanel,
   TabPanels,
@@ -13,31 +12,27 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { FriendRequest, FriendRequestType, useSelfUser } from '@omagize/api';
-import { FriendItem, UserItemSkeleton } from 'components/card/user/UserItem';
+import { FriendRequest, FriendRequestType } from '@omagize/api';
+import { UserItemSkeleton } from 'components/card/user/UserItem';
+import { FriendItem } from 'components/card/user/FriendItem';
 import { FriendRequestItem } from 'components/card/user/FriendRequestItem';
 import { Holder, Placeholder } from 'components/layout/Container';
 import AddFriendModal from 'components/modals/AddFriendModal';
 import { BiSad } from 'react-icons/bi';
 import { useUserStore } from 'stores/UserStore';
 import { useColors } from 'variables/colors';
+import { TabButton } from 'components/layout/Tab';
 
-function CTab(props: { count: number; children: string }) {
-  const { textColorPrimary, textColorSecondary, brand, cardBg } = useColors();
+function CountTab(props: { count: number; children: string }) {
+  const { brand } = useColors();
 
   return (
-    <Tab
-      color={textColorSecondary}
-      rounded="xl"
-      _focus={{ boxShadow: 'none' }}
-      _selected={{ color: textColorPrimary, bg: cardBg }}
-      py={1}
-    >
+    <TabButton>
       {props.children}
       <Box bg={brand} color="white" rounded="full" px={2} py={1} ml={2}>
         {props.count}
       </Box>
-    </Tab>
+    </TabButton>
   );
 }
 
@@ -56,8 +51,8 @@ export default function Friends() {
           <Text fontSize="2xl" fontWeight="700" mr={2}>
             Your Friends
           </Text>
-          <CTab count={friends?.length}>All</CTab>
-          <CTab count={friendRequests?.length}>Pending</CTab>
+          <CountTab count={friends?.length}>All</CountTab>
+          <CountTab count={friendRequests?.length}>Pending</CountTab>
           <Button onClick={onOpen} colorScheme="green" leftIcon={<AddIcon />}>
             Add
           </Button>

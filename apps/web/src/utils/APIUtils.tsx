@@ -58,10 +58,10 @@ export function parseError(
   def?: string
 ): string | null {
   if (error == null) return null;
-  if (error instanceof OmagizeError) return parseOmagizeError(error);
-  if (error instanceof FirebaseError) return parseFirebaseError(error);
+  if (error instanceof OmagizeError) return parseOmagizeError(error, def);
+  if (error instanceof FirebaseError) return parseFirebaseError(error, def);
 
-  return def || error.toString();
+  return def || error?.toString();
 }
 
 export function parseOmagizeError(error: OmagizeError, def?: string): string {

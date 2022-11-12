@@ -12,7 +12,7 @@ export function Placeholder({
   return (
     <Center w="full" py="50px" flexDirection="column" rounded="xl" {...rest}>
       <Box color={textColorSecondary}>{icon}</Box>
-      <Text color={textColorSecondary} fontSize="xl" align="center">
+      <Text color={textColorSecondary} align="center">
         {children}
       </Text>
     </Center>

@@ -1,7 +1,7 @@
-import { RawFriendRequest } from './../UserAPI';
+import { RawFriendRequest, RawUser } from './../UserAPI';
 import { RawFriend } from '../UserAPI';
 import { RawGroup } from '../GroupAPI';
-import { Friend, FriendRequest, Group } from '../types';
+import { Friend, FriendRequest, Group, Snowflake } from '../types';
 export type GatewayMessage<T> = {
   op: OpCode;
   d: T;
@@ -21,6 +21,9 @@ export enum EventType {
   GroupEventCreated = 'group_event_created',
   UserUpdated = 'user_updated',
   MessageCreated = 'message_created',
+  FriendRequestAdded = 'friend_request_added',
+  FriendRequestReplied = 'friend_request_replied',
+  FriendRemoved = 'friend_removed',
 }
 
 type IdentityMessage = {
@@ -55,4 +58,27 @@ export function ReadyPayload(raw: RawReadyPayload): ReadyPayload {
 
 export type GroupAddedEvent = {
   group: RawGroup;
+};
+
+export type FriendRequestAddedEvent = {
+  from: RawUser;
+  to: RawUser;
+  message?: string;
+};
+
+export enum FriendRequestReply {
+  Accepted = 'accept',
+  Deny = 'deny',
+  Deleted = 'deleted',
+}
+
+export type FriendRequestRepliedEvent = {
+  from: Snowflake;
+  to: Snowflake;
+  reply: FriendRequestReply;
+  friend?: RawFriend;
+};
+
+export type FriendRemovedEvent = {
+  user: Snowflake;
 };

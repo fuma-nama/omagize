@@ -19,6 +19,7 @@ export type UserStore = {
   addGroup: (group: Group) => void;
   updateGroup: (group: Group) => void;
   removeGroup: (group: Snowflake) => void;
+  addFriendRequest: (request: FriendRequest) => void;
 };
 
 export const useUserStore = create<UserStore>((set, get) => ({
@@ -52,4 +53,8 @@ export const useUserStore = create<UserStore>((set, get) => ({
       friends: payload.friends,
       groups: payload.groups,
     }),
+  addFriendRequest: (friend: FriendRequest) =>
+    set((g) => ({
+      friendRequests: [...g.friendRequests, friend],
+    })),
 }));

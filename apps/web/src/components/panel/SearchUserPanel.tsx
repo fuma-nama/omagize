@@ -7,7 +7,7 @@ import LoadingPanel from 'components/panel/LoadingPanel';
 import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { useColorModeValue } from '@chakra-ui/system';
 import { SmallUserItem } from 'components/card/user/UserItem';
-import { BiCheckCircle, BiSearch } from 'react-icons/bi';
+import { BiCheckCircle, BiErrorCircle, BiSearch } from 'react-icons/bi';
 import { Placeholder } from 'components/layout/Container';
 
 function ResultPlaceholder() {
@@ -17,11 +17,9 @@ function ResultPlaceholder() {
     </Placeholder>
   );
 }
+type Props = { value?: User; onChange: (user: User) => void; isInvalid?: boolean };
 
-export function SearchUserIDPanel(props: {
-  value?: User;
-  onChange: (user: User) => void;
-}) {
+export function SearchUserIDPanel(props: Props) {
   const { cardBg } = useColors();
   const [id, setId] = useState('');
   const [search, setSearch] = useState<string>(null);
@@ -38,6 +36,7 @@ export function SearchUserIDPanel(props: {
         user={user}
         selected={user.id === props.value?.id}
         onClick={() => props.onChange(user)}
+        invalid={props.isInvalid}
       />
     ) : (
       <ResultPlaceholder />
@@ -46,6 +45,7 @@ export function SearchUserIDPanel(props: {
     <>
       <SearchBar
         w="full"
+        mb={2}
         onSearch={() => setSearch(id)}
         input={{
           bg: cardBg,
@@ -58,10 +58,7 @@ export function SearchUserIDPanel(props: {
   );
 }
 
-export function SearchUserNamePanel(props: {
-  value?: User;
-  onChange: (user: User) => void;
-}) {
+export function SearchUserNamePanel(props: Props) {
   const { cardBg } = useColors();
   const [name, setName] = useState('');
   const [search, setSearch] = useState(null);
@@ -94,6 +91,7 @@ export function SearchUserNamePanel(props: {
           user={user}
           selected={user.id === props.value?.id}
           onClick={() => props.onChange(user)}
+          invalid={props.isInvalid}
         />
       ))}
     </Flex>
@@ -103,10 +101,12 @@ export function SearchUserNamePanel(props: {
 export function SelectedUserItem({
   user,
   selected,
+  invalid,
   ...props
-}: { user: User; selected: boolean } & FlexProps) {
+}: { user: User; selected: boolean; invalid?: boolean } & FlexProps) {
   const { textColorPrimary } = useColors();
   const green = useColorModeValue('green.200', 'green.400');
+  const red = useColorModeValue('red.200', 'red.400');
 
   return (
     <Flex direction="row" cursor="pointer" align="center" {...props}>
@@ -114,14 +114,14 @@ export function SelectedUserItem({
         user={user}
         w="full"
         color="white"
-        bg={selected ? green : undefined}
+        bg={selected ? (invalid ? red : green) : undefined}
       />
       {selected && (
         <Icon
           w="30px"
           h="30px"
           ml="-40px"
-          as={BiCheckCircle}
+          as={invalid ? BiErrorCircle : BiCheckCircle}
           zIndex={2}
           color={textColorPrimary}
         />

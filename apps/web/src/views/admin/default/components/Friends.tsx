@@ -44,16 +44,19 @@ export default function Friends() {
     <Flex direction="column" gap={3}>
       <AddFriendModal isOpen={isOpen} onClose={onClose} />
       <Tabs isLazy variant="soft-rounded">
-        <TabList gap={2}>
+        <Flex direction="row" flexWrap="wrap">
+          'row'
           <Text fontSize="2xl" fontWeight="700" mr={2}>
             Your Friends
           </Text>
-          <CountTab count={friends?.length}>All</CountTab>
-          <CountTab count={friendRequests?.length}>Pending</CountTab>
-          <Button onClick={onOpen} colorScheme="green" leftIcon={<AddIcon />}>
-            Add
-          </Button>
-        </TabList>
+          <TabList gap={2}>
+            <CountTab count={friends?.length}>All</CountTab>
+            <CountTab count={friendRequests?.length}>Pending</CountTab>
+            <Button onClick={onOpen} colorScheme="green" leftIcon={<AddIcon />}>
+              Add
+            </Button>
+          </TabList>
+        </Flex>
 
         <TabPanels>
           <TabPanel px={0}>

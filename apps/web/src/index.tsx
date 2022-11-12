@@ -8,13 +8,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { layouts, NormalLayout } from './layouts';
-import {
-  client,
-  firebase,
-  initClient,
-  initFirebase,
-  useLoginQuery,
-} from '@omagize/api';
+import { client, firebase, initClient, initFirebase, useLoginQuery } from '@omagize/api';
 import { QueryPanel } from 'components/panel/QueryPanel';
 import { initGateway } from 'gateway';
 
@@ -39,10 +33,7 @@ function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
         layout.loggedIn === loggedIn ? mapNestedLayout(layout, key) : null
       )}
 
-      <Route
-        path="*"
-        element={<Navigate to={loggedIn ? '/user' : '/auth'} />}
-      />
+      <Route path="*" element={<Navigate to={loggedIn ? '/user' : '/auth'} />} />
     </Routes>
   );
 }

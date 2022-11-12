@@ -5,7 +5,7 @@ import { useSelected } from 'utils/navigate';
 import MessageItem, {
   MessageItemSkeleton,
 } from 'components/card/chat/MessageItem';
-import ErrorPanel from 'components/card/ErrorPanel';
+import ErrorPanel from 'components/panel/ErrorPanel';
 import { MessageBar } from './MessageBar';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { LegacyRef } from 'react';

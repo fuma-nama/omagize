@@ -4,7 +4,7 @@ import { useInfiniteMessageQuery } from '@omagize/api';
 import MessageItem, {
   MessageItemSkeleton,
 } from 'components/card/chat/MessageItem';
-import { QueryErrorPanel } from 'components/card/ErrorPanel';
+import { QueryErrorPanel } from 'components/panel/ErrorPanel';
 import { Holder } from 'components/layout/Container';
 
 export function MessagesPreview() {

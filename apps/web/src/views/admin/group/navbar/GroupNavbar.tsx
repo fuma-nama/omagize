@@ -39,7 +39,7 @@ export default function GroupNavbar() {
         </Button>
       </HStack>
       <HStack align="center">
-        <SearchBar mb="unset" me="10px" borderRadius="30px" />
+        <SearchBar mb="unset" me="10px" />
         <SidebarResponsive items={items} />
 
         <ThemeSwitch color={navbarIcon} />

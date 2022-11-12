@@ -25,7 +25,7 @@ export default function HeaderLinks() {
       borderRadius="30px"
       boxShadow={shadow}
     >
-      <SearchBar mb="unset" me="10px" borderRadius="30px" />
+      <SearchBar mb="unset" me="10px" />
       <SidebarResponsive items={items} />
       <NotificationsMenu />
       <ThemeSwitch color={iconColor} />

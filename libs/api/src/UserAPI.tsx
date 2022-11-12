@@ -50,10 +50,29 @@ export function fetchGroupEvents(): Promise<GroupEvent[]> {
     method: 'GET',
   }).then((res) => res.map((event) => GroupEvent(event)));
 }
+
 export function fetchUserInfo(id: Snowflake) {
   return callReturn<RawUser>(`/users/${id}`, {
     method: 'GET',
   }).then((s) => new User(s));
+}
+
+export async function searchUser(name: string, limit: number = 10) {
+  const param = new URLSearchParams({
+    name: name,
+    limit: limit.toString(),
+  });
+  const users = await callReturn<RawUser[]>(`/users?${param}`, {
+    method: 'GET',
+  });
+
+  return users.map((u) => new User(u));
+}
+
+export async function deleteFriend(id: Snowflake) {
+  await callDefault(`/user/friends/${id}`, {
+    method: 'DELETE',
+  });
 }
 
 export async function sendFriendRequest(friendID: string, message?: string) {

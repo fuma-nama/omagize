@@ -4,7 +4,7 @@ import { useInfiniteMessageQuery } from '@omagize/api';
 import MessageItem, {
   MessageItemSkeleton,
 } from 'components/card/chat/MessageItem';
-import { QueryErrorPanel } from 'components/panel/ErrorPanel';
+import { SmallErrorPanel } from 'components/panel/ErrorPanel';
 import { Holder } from 'components/layout/Container';
 
 export function MessagesPreview() {
@@ -14,7 +14,7 @@ export function MessagesPreview() {
   if (query.error) {
     return (
       <Box flexGrow={1}>
-        <QueryErrorPanel query={query} />
+        <SmallErrorPanel error={query.error} retry={query.refetch} />
       </Box>
     );
   }

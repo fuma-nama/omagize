@@ -16,7 +16,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import CustomCard, { TagFlex } from 'components/card/Card';
 import SwitchField from 'components/fields/SwitchField';
-import LoadingScreen from 'components/layout/LoadingScreen';
+import LoadingPanel from 'components/panel/LoadingPanel';
 import { useSelected } from 'utils/navigate';
 import { useState } from 'react';
 import { useColors } from 'variables/colors';
@@ -36,7 +36,7 @@ export default function GroupSettings() {
   const onChange = (d: Partial<UpdateGroupOptions>) =>
     setValue((prev) => ({ ...prev, ...d }));
 
-  if (query.isLoading || query.isError) return <LoadingScreen size="sm" />;
+  if (query.isLoading || query.isError) return <LoadingPanel size="sm" />;
   return (
     <>
       <Flex

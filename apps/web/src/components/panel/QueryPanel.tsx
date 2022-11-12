@@ -1,32 +1,27 @@
-import { Button, Center, Icon, Text, VStack } from '@chakra-ui/react';
 import { UseQueryResult } from '@tanstack/react-query';
+import { ReactNode } from 'react';
+import { ErrorPanel } from './ErrorPanel';
+import LoadingPanel, { Props } from './LoadingPanel';
+import { Center, VStack, Icon, Button, Text } from '@chakra-ui/react';
 import { MdOutlineError } from 'react-icons/md';
 
-export function ErrorScreen({
+export function QueryPanel({
+  query,
+  error,
   children,
-  retry,
+  ...props
 }: {
-  children: string;
-  retry: () => void;
-}) {
-  const red = 'red.400';
-
-  return (
-    <Center w="full" h="full">
-      <VStack>
-        <Icon color={red} as={MdOutlineError} w="100px" h="100px" />
-        <Text color={red} fontWeight="bold">
-          {children}
-        </Text>
-        <Button variant="danger" onClick={retry}>
-          Try Again
-        </Button>
-      </VStack>
-    </Center>
-  );
+  query: UseQueryResult;
+  error: string;
+  children: ReactNode;
+} & Props) {
+  if (query.isError)
+    return <ErrorPanel retry={() => query.refetch()}>{error}</ErrorPanel>;
+  if (query.isLoading) return <LoadingPanel {...props} />;
+  return <>{children}</>;
 }
 
-export default function QueryErrorScreen({
+export function QueryErrorScreen({
   children,
   query,
 }: {

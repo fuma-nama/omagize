@@ -21,7 +21,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import SwitchField from 'components/fields/SwitchField';
 import { DatePicker } from 'components/picker/DatePicker';
-import { QueryScreen } from 'components/layout/LoadingScreen';
+import { QueryPanel } from 'components/panel/QueryPanel';
 import { useState } from 'react';
 import { onlyDate } from 'utils/DateUtils';
 
@@ -89,13 +89,13 @@ export default function GroupInviteModal({
         <ModalHeader>Invite Peoples</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <QueryScreen query={query} error="Failed to get Invite code">
+          <QueryPanel query={query} error="Failed to get Invite code">
             <InviteForm
               invite={invite}
               options={value}
               onChange={(v) => setOptions((prev) => ({ ...prev, ...v }))}
             />
-          </QueryScreen>
+          </QueryPanel>
         </ModalBody>
         <ModalFooter gap={2}>
           <Button

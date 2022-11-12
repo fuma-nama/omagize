@@ -11,8 +11,8 @@ import { useGroupDetailQuery, GroupDetail } from '@omagize/api';
 import GroupEventItem from 'components/card/GroupEventItem';
 import { AddIcon } from '@chakra-ui/icons';
 import { useColors } from 'variables/colors';
-import LoadingScreen from 'components/layout/LoadingScreen';
-import { ErrorScreen } from 'components/layout/ErrorScreen';
+import LoadingPanel from 'components/panel/LoadingPanel';
+import { ErrorPanel } from 'components/panel/ErrorPanel';
 import { GroupHeader, OptionsMenu } from './components/GroupHeader';
 import AutoImage from 'components/card/utils/AutoImage';
 import { MessagesPreview } from './MessagesPreview';
@@ -30,13 +30,13 @@ export default function GroupOverview() {
   useEffect(() => setInfo(group != null && { title: group.name }), [group]);
 
   if (query.isLoading) {
-    return <LoadingScreen size="sm" />;
+    return <LoadingPanel size="sm" />;
   }
   if (query.isError) {
     return (
-      <ErrorScreen retry={() => query.refetch()}>
+      <ErrorPanel retry={() => query.refetch()}>
         Failed to load Group
-      </ErrorScreen>
+      </ErrorPanel>
     );
   }
 

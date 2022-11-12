@@ -1,30 +1,22 @@
-import { Box, Center, Icon, Spinner, Text, VStack } from '@chakra-ui/react';
-import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
+import {
+  Box,
+  Center,
+  CenterProps,
+  Icon,
+  Spinner,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
+import { UseMutationResult } from '@tanstack/react-query';
 import { OmagizeLogo } from 'components/icons/Icons';
 import { ReactNode } from 'react';
 import { useColors } from 'variables/colors';
-import { ErrorScreen } from './ErrorScreen';
+import { ErrorPanel } from './ErrorPanel';
 
-type Props = {
+export type Props = {
   size?: 'sm' | 'lg';
 };
-export function QueryScreen({
-  query,
-  error,
-  children,
-  ...props
-}: {
-  query: UseQueryResult;
-  error: string;
-  children: ReactNode;
-} & Props) {
-  if (query.isError)
-    return <ErrorScreen retry={() => query.refetch()}>{error}</ErrorScreen>;
-  if (query.isLoading) return <LoadingScreen {...props} />;
-  return <>{children}</>;
-}
-
-export function MutationScreen({
+export function MutationPanel({
   mutation,
   retry,
   error,
@@ -36,17 +28,17 @@ export function MutationScreen({
   error: string;
   children: ReactNode;
 } & Props) {
-  if (mutation.isError) return <ErrorScreen retry={retry}>{error}</ErrorScreen>;
-  if (mutation.isLoading) return <LoadingScreen {...props} />;
+  if (mutation.isError) return <ErrorPanel retry={retry}>{error}</ErrorPanel>;
+  if (mutation.isLoading) return <LoadingPanel {...props} />;
   return <>{children}</>;
 }
 
-export default function LoadingScreen(props: Props) {
+export default function LoadingPanel({ size, ...props }: Props & CenterProps) {
   const { brand, textColorPrimary } = useColors();
 
-  if (props.size === 'sm') {
+  if (size === 'sm') {
     return (
-      <Center w="full" h="full">
+      <Center w="full" h="full" {...props}>
         <VStack>
           <Spinner size="lg" />
           <Text color={textColorPrimary}>Loading</Text>

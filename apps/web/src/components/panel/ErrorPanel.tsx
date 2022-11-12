@@ -1,22 +1,41 @@
 import {
-  Box,
   Button,
   Center,
-  Flex,
+  Icon,
+  Text,
+  VStack,
+  Box,
   Heading,
   Image,
-  Text,
 } from '@chakra-ui/react';
+import { MdOutlineError } from 'react-icons/md';
 import hole from 'assets/img/layout/hole.svg';
-import { QueryObserverRefetchErrorResult } from '@tanstack/query-core/src/types';
 
-export function QueryErrorPanel(props: {
-  query: QueryObserverRefetchErrorResult & any;
+export function ErrorPanel({
+  children,
+  retry,
+}: {
+  children: string;
+  retry: () => void;
 }) {
-  return <ErrorPanel error={props.query.error} retry={props.query.refetch} />;
+  const red = 'red.400';
+
+  return (
+    <Center w="full" h="full">
+      <VStack>
+        <Icon color={red} as={MdOutlineError} w="100px" h="100px" />
+        <Text color={red} fontWeight="bold">
+          {children}
+        </Text>
+        <Button variant="danger" onClick={retry}>
+          Try Again
+        </Button>
+      </VStack>
+    </Center>
+  );
 }
 
-export default function ErrorPanel(props: { error?: any; retry: () => void }) {
+export function SmallErrorPanel(props: { error?: any; retry: () => void }) {
   return (
     <Center w="full" h="full" flexDirection="column" overflow="hidden" gap={5}>
       <Box pos="relative">

@@ -15,7 +15,7 @@ import {
   initFirebase,
   useLoginQuery,
 } from '@omagize/api';
-import { QueryScreen } from 'components/layout/LoadingScreen';
+import { QueryPanel } from 'components/panel/QueryPanel';
 import { initGateway } from 'gateway';
 
 initClient();
@@ -51,9 +51,9 @@ function Pages() {
   const query = useLoginQuery();
 
   return (
-    <QueryScreen query={query} error="Failed to login" size="lg">
+    <QueryPanel query={query} error="Failed to login" size="lg">
       <RootRoutes loggedIn={query.data != null} />
-    </QueryScreen>
+    </QueryPanel>
   );
 }
 

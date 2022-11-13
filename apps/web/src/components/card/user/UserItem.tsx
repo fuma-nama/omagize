@@ -1,45 +1,37 @@
-import {
-  Avatar,
-  Flex,
-  HStack,
-  StackProps,
-  Text,
-  useToken,
-} from '@chakra-ui/react';
+import { Avatar, Flex, HStack, StackProps, Text, useToken } from '@chakra-ui/react';
 import { useColors } from '../../../variables/colors';
 import Card, { TagCard } from '../Card';
 import FadeImage from '../utils/FadeImage';
 import { User } from '@omagize/api';
 import { CustomCardProps } from 'theme/theme';
+import { UserPopup } from 'components/modals/popup/UserPopup';
+import { PopoverTrigger } from 'components/PopoverTrigger';
 
-export default function UserItem({
-  user,
-  ...props
-}: { user: User } & CustomCardProps) {
+export default function UserItem({ user, ...props }: { user: User } & CustomCardProps) {
   const [brand] = useToken('color', ['brand.400']);
   const { textColorPrimary } = useColors();
   const image = user.bannerUrl ?? user.avatarUrl;
 
   return (
-    <Card overflow="hidden" pos="relative" {...props}>
-      <FadeImage
-        direction="to left"
-        src={image}
-        placeholder={brand}
-        percent={60}
-        opacity={50}
-      />
+    <UserPopup user={user.id}>
+      <Card overflow="hidden" pos="relative" {...props}>
+        <FadeImage direction="to left" src={image} placeholder={brand} percent={60} opacity={50} />
 
-      <HStack gap="5px" pos="relative" align="start">
-        <Avatar name={user.username} src={user.avatarUrl} variant="normal" />
-        <Flex direction="column">
-          <Text color={textColorPrimary} fontSize="xl" fontWeight="bold">
-            {user.username}
-          </Text>
-          <Text color={textColorPrimary}>{user.description}</Text>
-        </Flex>
-      </HStack>
-    </Card>
+        <HStack gap="5px" pos="relative" align="start">
+          <PopoverTrigger>
+            <Avatar name={user.username} src={user.avatarUrl} variant="normal" />
+          </PopoverTrigger>
+          <Flex direction="column">
+            <PopoverTrigger>
+              <Text color={textColorPrimary} fontSize="xl" fontWeight="bold" cursor="pointer">
+                {user.username}
+              </Text>
+            </PopoverTrigger>
+            <Text color={textColorPrimary}>{user.description}</Text>
+          </Flex>
+        </HStack>
+      </Card>
+    </UserPopup>
   );
 }
 

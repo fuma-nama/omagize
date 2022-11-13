@@ -63,9 +63,7 @@ export function handleEvent(message: GatewayMessage<unknown>) {
       break;
     }
     case EventType.FriendRequestReplied: {
-      onFriendRequestReplied(
-        message as GatewayMessage<FriendRequestRepliedEvent>
-      );
+      onFriendRequestReplied(message as GatewayMessage<FriendRequestRepliedEvent>);
       break;
     }
     case EventType.FriendRemoved: {
@@ -95,9 +93,7 @@ function onFriendRequestAdded(event: GatewayMessage<FriendRequestAddedEvent>) {
   useUserStore.getState().addFriendRequest(request);
 }
 
-function onFriendRequestReplied(
-  event: GatewayMessage<FriendRequestRepliedEvent>
-) {
+function onFriendRequestReplied(event: GatewayMessage<FriendRequestRepliedEvent>) {
   const data = event.d;
 
   useUserStore.setState((prev) => ({
@@ -109,9 +105,9 @@ function onFriendRequestReplied(
       }
     }),
     friends:
-      data.reply === FriendRequestReply.Accepted
-        ? prev.friends
-        : [...prev.friends, Friend(data.friend)],
+      data.reply === FriendRequestReply.Accepted && data.friend != null
+        ? [...prev.friends, Friend(data.friend)]
+        : prev.friends,
   }));
 }
 

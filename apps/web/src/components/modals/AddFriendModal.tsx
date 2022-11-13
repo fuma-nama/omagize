@@ -12,6 +12,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  Textarea,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BiRightArrow } from 'react-icons/bi';
@@ -31,13 +32,14 @@ export default function AddFriendModal({
 }) {
   const self = useSelfUser();
   const [selected, setSelected] = useState<User>();
-  const mutation = useMutation(() => sendFriendRequest(selected.id));
+  const [message, setMessage] = useState('');
+  const mutation = useMutation(() => sendFriendRequest(selected.id, message));
   const [friends, friendRequests] = useUserStore((s) => [s.friends, s.friendRequests]);
 
   // prettier-ignore
   const selectChecks = self.id === selected?.id? 'Why do you want to add yourself as a friend?' :
     friends?.some(f => f.user.id === selected?.id)? 'He already is your friend' : 
-    friendRequests?.some(f => f.user.id === selected?.id)? 'Already have existing friend request' : null
+    friendRequests?.some(f => f.user.id === selected?.id)? 'Friend request had been sent' : null
 
   const disable = selected == null || selectChecks != null || mutation.isLoading;
   const error = mutation.isError ? parseError(mutation.error) : selectChecks;
@@ -77,6 +79,13 @@ export default function AddFriendModal({
               </TabPanel>
             </TabPanels>
           </Tabs>
+          <Textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            variant="main"
+            placeholder="Type your message here..."
+            p={3}
+          />
           <Text color="red.400">{error}</Text>
         </ModalBody>
 

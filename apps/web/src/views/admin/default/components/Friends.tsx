@@ -45,7 +45,6 @@ export default function Friends() {
       <AddFriendModal isOpen={isOpen} onClose={onClose} />
       <Tabs isLazy variant="soft-rounded">
         <Flex direction="row" flexWrap="wrap">
-          'row'
           <Text fontSize="2xl" fontWeight="700" mr={2}>
             Your Friends
           </Text>

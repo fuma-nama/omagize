@@ -1,26 +1,7 @@
-import { RawUser } from './UserAPI';
-import { DateObject } from './types/common';
-import { delay } from './model';
 import { Snowflake } from './types';
-import { RawMember } from './GroupAPI';
-import { Message } from './types/message';
+import { Message, RawMessage } from './types/message';
 import { callReturn } from './utils/core';
 import { toFormData } from './utils/common';
-
-export type RawMessage = {
-  id: Snowflake;
-  group: Snowflake;
-  author: RawMember;
-  content: string;
-  attachments: RawAttachment[];
-  timestamp: DateObject;
-  orderId: number;
-  /**
-   * Mentioned users in the message
-   */
-  mentions: RawUser[];
-  everyone: boolean;
-};
 
 export type RawAttachment = {
   id: Snowflake;
@@ -45,7 +26,7 @@ export type EveryoneMention = {
 };
 
 export async function sendMessage(
-  group: Snowflake,
+  channel: Snowflake,
   content: string,
   attachments: Blob[],
   mentions: Mention[] = []
@@ -58,22 +39,18 @@ export async function sendMessage(
     body.append(`File${i}`, a);
   });
 
-  return callReturn(`/groups/${group}/messages`, {
+  return callReturn(`/channels/${channel}/messages`, {
     method: 'POST',
     body,
   });
 }
 
-export async function fetchMessagesLatest(
-  groupID: string,
-  limit: number = 20
-): Promise<Message[]> {
-  await delay(2000);
+export async function fetchMessagesLatest(channel: string, limit: number = 20): Promise<Message[]> {
   const params = new URLSearchParams({
     limit: limit.toString(),
   });
 
-  return callReturn<RawMessage[]>(`/groups/${groupID}/messages?${params}`, {
+  return callReturn<RawMessage[]>(`/channels/${channel}/messages?${params}`, {
     method: 'GET',
   }).then((res) => res.map((m) => Message(m)));
 }
@@ -82,7 +59,7 @@ export async function fetchMessagesLatest(
  * Find messages sent before the specified message
  */
 export async function fetchMessagesBefore(
-  groupID: string,
+  channel: string,
   message: Message,
   limit: number = 20
 ): Promise<Message[]> {
@@ -92,7 +69,7 @@ export async function fetchMessagesBefore(
     before: message.orderId.toString(),
   });
 
-  return callReturn<RawMessage[]>(`/groups/${groupID}/messages?${params}`, {
+  return callReturn<RawMessage[]>(`/channels/${channel}/messages?${params}`, {
     method: 'GET',
   }).then((res) => res.map((m) => Message(m)));
 }

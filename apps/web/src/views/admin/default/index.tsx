@@ -14,26 +14,11 @@ import Usa from 'assets/img/dashboards/usa.png';
 // Custom components
 import MiniStatistics from 'components/card/MiniStatistics';
 import IconBox from 'components/icons/IconBox';
-import {
-  MdAddTask,
-  MdAttachMoney,
-  MdBarChart,
-  MdFileCopy,
-} from 'react-icons/md';
-import CheckTable from 'views/admin/default/components/CheckTable';
-import DailyTraffic from 'views/admin/default/components/DailyTraffic';
-import PieCard from 'views/admin/default/components/PieCard';
-import TotalSpent from 'views/admin/default/components/TotalSpent';
-import WeeklyRevenue from 'views/admin/default/components/WeeklyRevenue';
-import { columnsDataCheck } from 'views/admin/default/variables/columnsData';
-import tableDataCheck from 'views/admin/default/variables/tableDataCheck.json';
+import { MdAddTask, MdAttachMoney, MdBarChart, MdFileCopy } from 'react-icons/md';
 import Banner from './components/Banner';
 import { useGroupEventsQuery, useSelfUser } from '@omagize/api';
 import { ArrayHolder } from 'components/layout/Container';
-import {
-  GlobalGroupEventItem,
-  GroupEventSkeleton,
-} from 'components/card/GroupEventItem';
+import { GlobalGroupEventItem, GroupEventSkeleton } from 'components/card/GroupEventItem';
 import Friends from './components/Friends';
 
 export default function UserReports() {
@@ -46,20 +31,14 @@ export default function UserReports() {
     <Flex direction="column" gap={5}>
       <Banner user={user} />
 
-      <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3, '2xl': 6 }}
-        gap="20px"
-        mt="20px"
-      >
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3, '2xl': 6 }} gap="20px" mt="20px">
         <MiniStatistics
           startContent={
             <IconBox
               w="56px"
               h="56px"
               bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdBarChart} color={brandColor} />
-              }
+              icon={<Icon w="32px" h="32px" as={MdBarChart} color={brandColor} />}
             />
           }
           name="Earnings"
@@ -71,9 +50,7 @@ export default function UserReports() {
               w="56px"
               h="56px"
               bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdAttachMoney} color={brandColor} />
-              }
+              icon={<Icon w="32px" h="32px" as={MdAttachMoney} color={brandColor} />}
             />
           }
           name="Spend this month"
@@ -86,13 +63,7 @@ export default function UserReports() {
               <FormLabel htmlFor="balance">
                 <Avatar src={Usa} />
               </FormLabel>
-              <Select
-                id="balance"
-                variant="mini"
-                mt="5px"
-                me="0px"
-                defaultValue="usd"
-              >
+              <Select id="balance" variant="mini" mt="5px" me="0px" defaultValue="usd">
                 <option value="usd">USD</option>
                 <option value="eur">EUR</option>
                 <option value="gba">GBA</option>
@@ -120,28 +91,15 @@ export default function UserReports() {
               w="56px"
               h="56px"
               bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdFileCopy} color={brandColor} />
-              }
+              icon={<Icon w="32px" h="32px" as={MdFileCopy} color={brandColor} />}
             />
           }
           name="Total Projects"
           value="2935"
         />
       </SimpleGrid>
-      <Friends />
       <Events />
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px" mb="20px">
-        <TotalSpent />
-        <WeeklyRevenue />
-      </SimpleGrid>
-      <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
-        <CheckTable columnsData={columnsDataCheck} tableData={tableDataCheck} />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
-          <DailyTraffic />
-          <PieCard />
-        </SimpleGrid>
-      </SimpleGrid>
+      <Friends />
     </Flex>
   );
 }
@@ -167,11 +125,7 @@ function Events() {
             </>
           }
         >
-          {() =>
-            query.data.map((event) => (
-              <GlobalGroupEventItem key={event.id} event={event} />
-            ))
-          }
+          {() => query.data.map((event) => <GlobalGroupEventItem key={event.id} event={event} />)}
         </ArrayHolder>
       </SimpleGrid>
     </Flex>

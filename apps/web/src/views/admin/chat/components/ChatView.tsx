@@ -1,10 +1,7 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
-import { Message, useInfiniteMessageQuery } from '@omagize/api';
+import { Message, Snowflake, useInfiniteMessageQuery } from '@omagize/api';
 import { useRef } from 'react';
-import { useSelected } from 'utils/navigate';
-import MessageItem, {
-  MessageItemSkeleton,
-} from 'components/card/chat/MessageItem';
+import MessageItem, { MessageItemSkeleton } from 'components/card/chat/MessageItem';
 import { SmallErrorPanel as ErrorPanel } from 'components/panel/ErrorPanel';
 import { MessageBar } from './MessageBar';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
@@ -14,23 +11,19 @@ import { BiMessageX } from 'react-icons/bi';
 import React from 'react';
 
 function mapPage(messages: Message[]) {
-  return messages.map((message) => (
-    <MessageItem key={message.id} message={message} />
-  ));
+  return messages.map((message) => <MessageItem key={message.id} message={message} />);
 }
 
-export default function ChatView() {
-  const { selectedGroup } = useSelected();
-
+export default function ChatView({ channel }: { channel: Snowflake }) {
   return (
     <Flex pos="relative" h="full" direction="column">
       <Box flex={1} h={0}>
-        <MessageView group={selectedGroup} />
+        <MessageView channel={channel} />
       </Box>
 
       <Box w="full" p={{ '3sm': 4 }} pt={{ '3sm': 0 }}>
         <MessageBar
-          group={selectedGroup}
+          channel={channel}
           messageBar={{
             gap: { base: 1, '3sm': 2 },
             rounded: { base: 'none', '3sm': 'xl' },
@@ -41,16 +34,9 @@ export default function ChatView() {
   );
 }
 
-function MessageView({ group }: { group: string }) {
-  const {
-    data,
-    error,
-    isError,
-    fetchPreviousPage,
-    hasPreviousPage,
-    isLoading,
-    refetch,
-  } = useInfiniteMessageQuery(group);
+function MessageView({ channel }: { channel: string }) {
+  const { data, error, isError, fetchPreviousPage, hasPreviousPage, isLoading, refetch } =
+    useInfiniteMessageQuery(channel);
   const [sentryRef, { rootRef }] = useInfiniteScroll({
     loading: isLoading,
     hasNextPage: hasPreviousPage,
@@ -58,10 +44,7 @@ function MessageView({ group }: { group: string }) {
     disabled: isError,
     rootMargin: '0px 0px 0px 0px',
   });
-  const { endMessage, rootRefSetter, handleRootScroll } = useBottomScroll(
-    rootRef,
-    data?.pages
-  );
+  const { endMessage, rootRefSetter, handleRootScroll } = useBottomScroll(rootRef, data?.pages);
 
   if (error) {
     return <ErrorPanel error={error} retry={refetch} />;
@@ -78,11 +61,7 @@ function MessageView({ group }: { group: string }) {
       onScroll={handleRootScroll}
     >
       <Flex direction="column" gap={5}>
-        {hasPreviousPage || isLoading ? (
-          <LoadingBlock sentryRef={sentryRef} />
-        ) : (
-          <StartBox />
-        )}
+        {hasPreviousPage || isLoading ? <LoadingBlock sentryRef={sentryRef} /> : <StartBox />}
         {items}
         <Box ref={endMessage} />
       </Flex>
@@ -103,20 +82,15 @@ function StartBox() {
   );
 }
 
-function useBottomScroll(
-  rootRef: (e: HTMLDivElement) => void,
-  dependencies: React.DependencyList
-) {
+function useBottomScroll(rootRef: (e: HTMLDivElement) => void, dependencies: React.DependencyList) {
   const scrollableRootRef = React.useRef<HTMLDivElement | null>(null);
   const lastScrollDistanceToBottomRef = React.useRef<number>();
 
   React.useEffect(() => {
     const scrollableRoot = scrollableRootRef.current;
-    const lastScrollDistanceToBottom =
-      lastScrollDistanceToBottomRef.current ?? 0;
+    const lastScrollDistanceToBottom = lastScrollDistanceToBottomRef.current ?? 0;
     if (scrollableRoot) {
-      scrollableRoot.scrollTop =
-        scrollableRoot.scrollHeight - lastScrollDistanceToBottom;
+      scrollableRoot.scrollTop = scrollableRoot.scrollHeight - lastScrollDistanceToBottom;
     }
   }, [dependencies, rootRef]);
 

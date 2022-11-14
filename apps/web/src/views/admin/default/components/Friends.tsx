@@ -12,7 +12,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { FriendRequest, FriendRequestType } from '@omagize/api';
+import { FriendRequest, FriendRequestType, Relation, RelationShip } from '@omagize/api';
 import { UserItemSkeleton } from 'components/card/user/UserItem';
 import { FriendItem } from 'components/card/user/FriendItem';
 import { FriendRequestItem } from 'components/card/user/FriendRequestItem';
@@ -38,7 +38,10 @@ function CountTab(props: { count: number; children: string }) {
 
 export default function Friends() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [friends, friendRequests] = useUserStore((s) => [s.friends, s.friendRequests]);
+  const [friends, friendRequests] = useUserStore((s) => [
+    s.relations?.filter((r) => r.type === RelationShip.Friend),
+    s.friendRequests,
+  ]);
 
   return (
     <Flex direction="column" gap={3}>
@@ -59,7 +62,7 @@ export default function Friends() {
 
         <TabPanels>
           <TabPanel px={0}>
-            <All />
+            <All friends={friends} />
           </TabPanel>
           <TabPanel px={0}>
             <Pending />
@@ -70,9 +73,7 @@ export default function Friends() {
   );
 }
 
-function All() {
-  const friends = useUserStore((s) => s.friends);
-
+function All({ friends }: { friends?: Relation[] }) {
   if (friends != null && friends.length === 0) {
     return <FriendsPlaceholder />;
   }

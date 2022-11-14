@@ -62,12 +62,7 @@ export default function GroupInviteModal({
 
   const mutation = useMutation(
     ['regenerate_group_invite', group.id],
-    () =>
-      modifyGroupInvite(
-        group.id,
-        value.once,
-        value.expireEnabled ? value.expire : null
-      ),
+    () => modifyGroupInvite(group.id, value.once, value.expireEnabled ? value.expire : null),
     {
       onSuccess(invite) {
         setOptions({});
@@ -77,19 +72,13 @@ export default function GroupInviteModal({
   );
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      isCentered
-      size="2xl"
-      scrollBehavior="inside"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl" scrollBehavior="inside">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Invite Peoples</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <QueryPanel query={query} error="Failed to get Invite code">
+          <QueryPanel query={query} error="Failed to get Invite code" size="sm">
             <InviteForm
               invite={invite}
               options={value}
@@ -98,11 +87,7 @@ export default function GroupInviteModal({
           </QueryPanel>
         </ModalBody>
         <ModalFooter gap={2}>
-          <Button
-            variant="action"
-            isLoading={mutation.isLoading}
-            onClick={() => mutation.mutate()}
-          >
+          <Button variant="action" isLoading={mutation.isLoading} onClick={() => mutation.mutate()}>
             Create new Code
           </Button>
           <Button onClick={onClose}>Close</Button>

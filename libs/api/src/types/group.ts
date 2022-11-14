@@ -1,18 +1,15 @@
 import { RawGroupEvent } from '../GroupAPI';
-import {
-  RawGroup,
-  RawGroupDetail,
-  RawGroupInvite,
-  RawMember,
-} from '../GroupAPI';
+import { RawGroup, RawGroupDetail, RawGroupInvite, RawMember } from '../GroupAPI';
 import { Snowflake } from './common';
 import { toBannerUrl, toIconUrl } from '../utils/mediaUtils';
 import { User } from './user';
 import { parseDate } from '../utils/common';
+import { Channel } from './message';
 
 export type Group = {
   id: Snowflake;
   name: string;
+  channel: Channel;
   iconHash?: string;
   bannerHash?: string;
   /**
@@ -27,6 +24,7 @@ export type Group = {
 export function Group(raw: RawGroup): Group {
   return {
     ...raw,
+    channel: Channel(raw.channel),
     iconUrl: toIconUrl(raw.id, raw.iconHash),
     bannerUrl: toBannerUrl(raw.id, raw.bannerHash),
   };
@@ -34,7 +32,7 @@ export function Group(raw: RawGroup): Group {
 
 export type GroupDetail = Group & {
   memberCount: number;
-  admins: Member[]; //admins of the group
+  admins: Member[]; //admins' of the group
   events: GroupEvent[];
   /**
    * What does this group about
@@ -45,7 +43,8 @@ export type GroupDetail = Group & {
 export function GroupDetail(raw: RawGroupDetail): GroupDetail {
   return {
     ...Group(raw),
-    admins: raw.admins.map((r) => new Member(r)),
+    admins: raw.admins.map((a) => new Member(a)),
+    channel: Channel(raw.channel),
     events: raw.events.map((e) => GroupEvent(e)),
     memberCount: raw.memberCount,
     introduction: raw.introduction,

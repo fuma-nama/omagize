@@ -25,11 +25,7 @@ import { useUserStore } from 'stores/UserStore';
 import { useColors } from 'variables/colors';
 import { Popup } from './Popup';
 
-export function UserPopup(props: {
-  user: Snowflake;
-  group?: Snowflake;
-  children: ReactNode;
-}) {
+export function UserPopup(props: { user: Snowflake; group?: Snowflake; children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { textColorPrimary, textColorSecondary } = useColors();
   const query = useUserInfo(props.user, isOpen);
@@ -38,11 +34,7 @@ export function UserPopup(props: {
   return (
     <Popup root={props.children} popover={{ isOpen, onOpen, onClose }}>
       {query.isLoading && <Spinner />}
-      <Banner
-        banner={user?.bannerUrl}
-        avatar={user?.avatarUrl}
-        name={user?.username}
-      />
+      <Banner banner={user?.bannerUrl} avatar={user?.avatarUrl} name={user?.username} />
       <Flex direction="column" p={2} ml={4}>
         <Text fontSize="xl" fontWeight="600" color={textColorPrimary}>
           {user?.username}
@@ -54,11 +46,7 @@ export function UserPopup(props: {
   );
 }
 
-export function MemberPopup(props: {
-  user: Snowflake;
-  group: Snowflake;
-  children: ReactNode;
-}) {
+export function MemberPopup(props: { user: Snowflake; group: Snowflake; children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { textColorPrimary, textColorSecondary } = useColors();
   const query = useMemberQuery(props.group, props.user, isOpen);
@@ -66,11 +54,7 @@ export function MemberPopup(props: {
   const user = query.data;
   return (
     <Popup root={props.children} popover={{ isOpen, onOpen, onClose }}>
-      <Banner
-        banner={user?.bannerUrl}
-        avatar={user?.avatarUrl}
-        name={user?.username}
-      />
+      <Banner banner={user?.bannerUrl} avatar={user?.avatarUrl} name={user?.username} />
       <Flex direction="column" p={2} pb={4} ml={4}>
         <Text fontSize="xl" fontWeight="600" color={textColorPrimary}>
           {user?.username}
@@ -83,9 +67,8 @@ export function MemberPopup(props: {
 }
 function FriendActions({ user }: { user: User }) {
   const self = useSelfUser();
-  const friends = useUserStore((s) => s.friends);
-  const isFriend =
-    friends != null && friends.some((u) => u.user.id === user.id);
+  const friends = useUserStore((s) => s.relations);
+  const isFriend = friends != null && friends.some((u) => u.user.id === user.id);
   const mutation = useMutation(() => sendFriendRequest(user.id, ''));
 
   if (self.id === user.id) return <></>;

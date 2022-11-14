@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  HStack,
-  IconButton,
-  SlideFade,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Flex, HStack, IconButton, SlideFade, useDisclosure } from '@chakra-ui/react';
 import { searchMembers, sendMessage, Snowflake } from '@omagize/api';
 import { RefObject, useRef, useState } from 'react';
 import Card from '../../../../components/card/Card';
@@ -45,17 +38,18 @@ function useOptionState() {
     },
   };
 }
+
 export function MessageBar({
-  group,
+  channel,
   messageBar,
 }: {
-  group: Snowflake;
+  channel: Snowflake;
   messageBar?: CustomCardProps;
 }) {
   const suggestionRef = useRef<HTMLDivElement>();
   const { content, resetContent, dispatch } = useOptionState();
   const { isOpen: showToolbar, onToggle: toggleToolbar } = useDisclosure();
-  const sendMutation = useSendMutation(group);
+  const sendMutation = useSendMutation(channel);
   const picker = useFilePicker((f) =>
     dispatch((prev) => ({
       attachments: [...prev.attachments, f],
@@ -68,8 +62,7 @@ export function MessageBar({
   };
 
   const canSend =
-    (content.attachments.length !== 0 || !content.message.isEmpty) &&
-    !sendMutation.isLoading;
+    (content.attachments.length !== 0 || !content.message.isEmpty) && !sendMutation.isLoading;
 
   return (
     <Flex pos="relative" direction="column" w="full" gap={2}>
@@ -84,10 +77,7 @@ export function MessageBar({
       <Box ref={suggestionRef} />
       <HStack pos="absolute" maxW="full" h="50px" top="-50px" right={0}>
         <SlideFade in={showToolbar} unmountOnExit>
-          <Toolbar
-            value={content.message}
-            onChange={(m) => dispatch(() => ({ message: m }))}
-          />
+          <Toolbar value={content.message} onChange={(m) => dispatch(() => ({ message: m }))} />
         </SlideFade>
         <IconButton
           icon={showToolbar ? <ArrowDownIcon /> : <ArrowUpIcon />}
@@ -105,14 +95,10 @@ export function MessageBar({
         {...messageBar}
       >
         {picker.component}
-        <IconButton
-          aria-label="add-file"
-          icon={<FiFile />}
-          onClick={picker.pick}
-        />
+        <IconButton aria-label="add-file" icon={<FiFile />} onClick={picker.pick} />
         <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
         <Input
-          group={group}
+          channel={channel}
           suggestionRef={suggestionRef}
           value={content.message}
           onChange={(v) =>
@@ -136,17 +122,17 @@ export function MessageBar({
 
 function Input({
   value,
+  channel,
   onChange,
-  group,
   suggestionRef,
 }: ValueProps & {
-  group: Snowflake;
+  channel: Snowflake;
   suggestionRef: RefObject<HTMLDivElement>;
 }) {
   const [search, setSearch] = useState<string | null>(null);
   const query = useQuery(
-    ['search_member', group, search],
-    () => searchMembers(group, search, 10),
+    ['search_member', channel, search],
+    () => searchMembers(channel, search, 10),
     {
       enabled: search != null,
     }
@@ -172,10 +158,7 @@ function Input({
   );
 }
 
-function Attachments(props: {
-  value: File[];
-  onRemove: (remove: File) => void;
-}) {
+function Attachments(props: { value: File[]; onRemove: (remove: File) => void }) {
   const { value, onRemove } = props;
 
   return (
@@ -194,19 +177,11 @@ function Attachments(props: {
   );
 }
 
-function useSendMutation(group: Snowflake) {
-  return useMutation(
-    ['send_message', group],
-    async (content: MessageOptions) => {
-      const raw = convertToRaw(content.message.getCurrentContent());
-      const parsed = parseDraft(raw);
+function useSendMutation(channel: Snowflake) {
+  return useMutation(['send_message', channel], async (content: MessageOptions) => {
+    const raw = convertToRaw(content.message.getCurrentContent());
+    const parsed = parseDraft(raw);
 
-      return await sendMessage(
-        group,
-        parsed.markdown,
-        content.attachments,
-        parsed.mentions
-      );
-    }
-  );
+    return await sendMessage(channel, parsed.markdown, content.attachments, parsed.mentions);
+  });
 }

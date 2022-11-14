@@ -1,5 +1,6 @@
 import {
   Button,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,7 +13,6 @@ import {
   TabPanels,
   Tabs,
   Text,
-  Textarea,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BiRightArrow } from 'react-icons/bi';
@@ -34,7 +34,7 @@ export default function AddFriendModal({
   const [selected, setSelected] = useState<User>();
   const [message, setMessage] = useState('');
   const mutation = useMutation(() => sendFriendRequest(selected.id, message));
-  const [friends, friendRequests] = useUserStore((s) => [s.friends, s.friendRequests]);
+  const [friends, friendRequests] = useUserStore((s) => [s.relations, s.friendRequests]);
 
   // prettier-ignore
   const selectChecks = self.id === selected?.id? 'Why do you want to add yourself as a friend?' :
@@ -79,12 +79,11 @@ export default function AddFriendModal({
               </TabPanel>
             </TabPanels>
           </Tabs>
-          <Textarea
+          <Input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             variant="main"
             placeholder="Type your message here..."
-            p={3}
           />
           <Text color="red.400">{error}</Text>
         </ModalBody>

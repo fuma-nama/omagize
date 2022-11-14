@@ -4,13 +4,11 @@ import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMessagesBefore, fetchMessagesLatest } from '../MessageAPI';
 import { client } from './client';
 
-export function useInfiniteMessageQuery(group: Snowflake) {
+export function useInfiniteMessageQuery(channel: Snowflake) {
   return useInfiniteQuery(
-    Keys.messages(group),
+    Keys.messages(channel),
     ({ pageParam }) =>
-      pageParam == null
-        ? fetchMessagesLatest(group)
-        : fetchMessagesBefore(group, pageParam),
+      pageParam == null ? fetchMessagesLatest(channel) : fetchMessagesBefore(channel, pageParam),
     {
       refetchOnMount: false,
       getPreviousPageParam: (first) => first.length !== 0 && first[0],
@@ -21,7 +19,7 @@ export function useInfiniteMessageQuery(group: Snowflake) {
 
 export function addMessage(message: Message) {
   client.setQueryData<InfiniteData<Message[]>>(
-    Keys.messages(message.group),
+    Keys.messages(message.channel),
     ({ pages, ...prev }) => {
       const next: Message[][] = [...pages];
 

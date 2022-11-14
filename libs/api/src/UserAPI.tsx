@@ -5,7 +5,7 @@ import { boolToString, toFormData } from './utils/common';
 import { SelfUser } from './types/account';
 import { GroupEvent } from './types/group';
 import { RawGroupEvent } from './GroupAPI';
-import { User } from './types';
+import { Channel, RawChannel, User } from './types';
 
 export type RawUser = {
   id: Snowflake;
@@ -16,10 +16,6 @@ export type RawUser = {
   createdAt: DateObject;
 };
 
-export type RawFriend = {
-  user: RawUser;
-  channel: Snowflake;
-};
 export type RawFriendRequest = {
   user: RawUser;
   message?: string;
@@ -70,14 +66,22 @@ export async function searchUser(name: string, limit: number = 10, onlyOthers: b
   return users.map((u) => new User(u));
 }
 
+export async function openDMChannel(user: Snowflake): Promise<Channel> {
+  const channel = await callReturn<RawChannel>(`/users/${user}/dm`, {
+    method: 'POST',
+  });
+
+  return Channel(channel);
+}
+
 export async function deleteFriend(id: Snowflake) {
-  await callDefault(`/user/friends/${id}`, {
+  await callDefault(`/user/relations/${id}`, {
     method: 'DELETE',
   });
 }
 
 export async function sendFriendRequest(friendID: string, message?: string) {
-  await callDefault(`/user/friends/requests`, {
+  await callDefault(`/user/relations/requests`, {
     method: 'POST',
     body: JSON.stringify({
       user: friendID,
@@ -87,7 +91,7 @@ export async function sendFriendRequest(friendID: string, message?: string) {
 }
 
 export async function replyFriendRequest(friendID: string, reply: 'accept' | 'deny') {
-  await callDefault(`/user/friends/requests`, {
+  await callDefault(`/user/relations/requests`, {
     method: 'PATCH',
     body: JSON.stringify({
       user: friendID,
@@ -97,7 +101,7 @@ export async function replyFriendRequest(friendID: string, reply: 'accept' | 'de
 }
 
 export async function deleteFriendRequest(friendID: Snowflake) {
-  await callDefault(`/user/friends/requests/${friendID}`, {
+  await callDefault(`/user/relations/requests/${friendID}`, {
     method: 'DELETE',
   });
 }

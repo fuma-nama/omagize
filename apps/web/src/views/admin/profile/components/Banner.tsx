@@ -18,12 +18,11 @@ import { useUserStore } from 'stores/UserStore';
 
 export default function Banner(props: any) {
   const user = useSelfUser();
-  const [groups, friends] = useUserStore((s) => [s.groups, s.friends]);
+  const [groups, friends] = useUserStore((s) => [s.groups, s.relations]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Chakra Color Mode
-  const { textColorPrimary, textColorSecondary, borderColor, brand } =
-    useColors();
+  const { textColorPrimary, textColorSecondary, borderColor, brand } = useColors();
   const avatarSize = '120px';
 
   return (

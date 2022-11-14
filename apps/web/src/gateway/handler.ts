@@ -1,3 +1,4 @@
+import { RelationShip } from './../../../../libs/api/src/types/Friend';
 import { useUserStore } from 'stores/UserStore';
 import {
   FriendRemovedEvent,
@@ -9,7 +10,6 @@ import {
   FriendRequest,
   FriendRequestAddedEvent,
   FriendRequestRepliedEvent,
-  FriendRequestReply,
   GatewayMessage,
   Group,
   GroupAddedEvent,
@@ -27,7 +27,7 @@ import {
   SelfUser,
   User,
   FriendRequestType,
-  Friend,
+  Relation,
 } from '@omagize/api';
 
 export function handleEvent(message: GatewayMessage<unknown>) {
@@ -70,7 +70,9 @@ export function handleEvent(message: GatewayMessage<unknown>) {
       const event = (message as GatewayMessage<FriendRemovedEvent>).d;
 
       useUserStore.setState((prev) => ({
-        friends: prev.friends.filter((f) => f.user.id !== event.user),
+        relations: prev.relations.map((f) =>
+          f.user.id === event.user ? { ...f, type: RelationShip.None } : f
+        ),
       }));
       break;
     }
@@ -96,19 +98,32 @@ function onFriendRequestAdded(event: GatewayMessage<FriendRequestAddedEvent>) {
 function onFriendRequestReplied(event: GatewayMessage<FriendRequestRepliedEvent>) {
   const data = event.d;
 
-  useUserStore.setState((prev) => ({
-    friendRequests: prev.friendRequests.filter((request) => {
-      if (request.type === FriendRequestType.Incoming) {
-        return request.user.id !== data.from;
+  useUserStore.setState((prev) => {
+    let relations: Relation[] = prev.relations;
+
+    if (data.relation != null) {
+      //update or add new relation
+      const update = relations.findIndex((r) => r.id === data.relation.id);
+
+      if (update !== -1) {
+        relations = [...relations];
+        relations[update] = Relation(data.relation);
       } else {
-        return request.user.id !== data.to;
+        relations = [...relations, Relation(data.relation)];
       }
-    }),
-    friends:
-      data.reply === FriendRequestReply.Accepted && data.friend != null
-        ? [...prev.friends, Friend(data.friend)]
-        : prev.friends,
-  }));
+    }
+
+    return {
+      friendRequests: prev.friendRequests.filter((request) => {
+        if (request.type === FriendRequestType.Incoming) {
+          return request.user.id !== data.from;
+        } else {
+          return request.user.id !== data.to;
+        }
+      }),
+      relations: relations,
+    };
+  });
 }
 
 function onReceiveMessage(event: GatewayMessage<RawMessage>) {

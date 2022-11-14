@@ -1,5 +1,5 @@
 import {
-  Friend,
+  Relation,
   FriendRequest,
   Group,
   LoginPayload,
@@ -11,7 +11,7 @@ import create from 'zustand';
 
 export type UserStore = {
   groups: Group[] | null;
-  friends: Friend[] | null;
+  relations: Relation[] | null;
   user: SelfUser | null;
   friendRequests: FriendRequest[] | null;
   updateUser: (payload: LoginPayload) => void;
@@ -23,7 +23,7 @@ export type UserStore = {
 };
 
 export const useUserStore = create<UserStore>((set, get) => ({
-  friends: null,
+  relations: null,
   friendRequests: null,
   groups: null,
   user: null,
@@ -50,7 +50,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
   acceptPayload: (payload) =>
     set({
       friendRequests: payload.friendRequests,
-      friends: payload.friends,
+      relations: payload.relations,
       groups: payload.groups,
     }),
   addFriendRequest: (friend: FriendRequest) =>

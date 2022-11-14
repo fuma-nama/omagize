@@ -1,7 +1,6 @@
 import { RawFriendRequest, RawUser } from './../UserAPI';
-import { RawFriend } from '../UserAPI';
 import { RawGroup } from '../GroupAPI';
-import { Friend, FriendRequest, Group, Snowflake } from '../types';
+import { Relation, FriendRequest, Group, Snowflake, RawRelation } from '../types';
 export type GatewayMessage<T> = {
   op: OpCode;
   d: T;
@@ -39,18 +38,18 @@ export function IdentityEvent(token: string): GatewayMessage<IdentityMessage> {
 }
 
 export type ReadyPayload = {
-  friends: Friend[];
+  relations: Relation[];
   groups: Group[];
   friendRequests: FriendRequest[];
 };
 export type RawReadyPayload = {
-  friends: RawFriend[];
+  relations: RawRelation[];
   groups: RawGroup[];
   friendRequests: RawFriendRequest[];
 };
 export function ReadyPayload(raw: RawReadyPayload): ReadyPayload {
   return {
-    friends: raw.friends.map((f) => Friend(f)),
+    relations: raw.relations.map((f) => Relation(f)),
     groups: raw.groups.map((g) => Group(g)),
     friendRequests: raw.friendRequests.map((r) => FriendRequest(r)),
   };
@@ -76,7 +75,7 @@ export type FriendRequestRepliedEvent = {
   from: Snowflake;
   to: Snowflake;
   reply: FriendRequestReply;
-  friend?: RawFriend;
+  relation?: RawRelation;
 };
 
 export type FriendRemovedEvent = {

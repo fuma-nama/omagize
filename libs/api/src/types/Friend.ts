@@ -1,5 +1,6 @@
-import { RawFriend, RawFriendRequest } from '../UserAPI';
+import { RawFriendRequest, RawUser } from '../UserAPI';
 import { Snowflake } from './common';
+import { Channel, RawChannel } from './message';
 import { User } from './user';
 
 export type FriendRequest = {
@@ -16,14 +17,30 @@ export function FriendRequest(raw: RawFriendRequest): FriendRequest {
   };
 }
 
-export type Friend = {
-  user: User;
-  channel: Snowflake;
+export type RawRelation = {
+  id: Snowflake;
+  user: RawUser;
+  channel?: RawChannel;
+  type: RelationShip;
 };
-export function Friend(raw: RawFriend): Friend {
+
+export type Relation = {
+  id: Snowflake;
+  user: User;
+  channel?: Channel;
+  type: RelationShip;
+};
+
+export enum RelationShip {
+  None = 'none',
+  Friend = 'friend',
+}
+
+export function Relation(raw: RawRelation): Relation {
   return {
     ...raw,
     user: new User(raw.user),
+    channel: raw.channel != null ? Channel(raw.channel) : null,
   };
 }
 

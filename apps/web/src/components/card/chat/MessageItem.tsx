@@ -13,7 +13,7 @@ import { AttachmentItem } from './AttachmentItem';
 import { stringOfTime } from 'utils/DateUtils';
 import MarkdownContent from './MarkdownContent';
 import { useColors } from 'variables/colors';
-import { MemberPopup } from 'components/modals/popup/UserPopup';
+import { UserPopup } from 'components/modals/popup/UserPopup';
 import { PopoverTrigger } from 'components/PopoverTrigger';
 
 export default function MessageItem({ message }: { message: Message }) {
@@ -22,11 +22,10 @@ export default function MessageItem({ message }: { message: Message }) {
   const secondaryText = useColorModeValue('gray.400', 'white');
   const hoverBg = useColorModeValue('white', 'navy.800');
   const user = useSelfUser();
-  const mentioned =
-    message.everyone || message.mentions.some((m) => m.id === user.id);
+  const mentioned = message.everyone || message.mentions.some((m) => m.id === user.id);
 
   return (
-    <MemberPopup user={author.id} group={message.group}>
+    <UserPopup user={author.id}>
       <Flex
         pos="relative"
         direction="row"
@@ -37,24 +36,11 @@ export default function MessageItem({ message }: { message: Message }) {
         gap={3}
         overflow="hidden"
       >
-        {mentioned && (
-          <Box bg={brand} pos="absolute" top={0} left={0} w={1} h="full" />
-        )}
+        {mentioned && <Box bg={brand} pos="absolute" top={0} left={0} w={1} h="full" />}
         <PopoverTrigger>
-          <Avatar
-            cursor="pointer"
-            name={author.username}
-            src={author.avatarUrl}
-          />
+          <Avatar cursor="pointer" name={author.username} src={author.avatarUrl} />
         </PopoverTrigger>
-        <Flex
-          direction="column"
-          align="start"
-          ml={2}
-          flex={1}
-          w={0}
-          wordBreak="break-word"
-        >
+        <Flex direction="column" align="start" ml={2} flex={1} w={0} wordBreak="break-word">
           <HStack>
             <PopoverTrigger>
               <Text fontWeight="bold" fontSize="lg" cursor="pointer">
@@ -73,7 +59,7 @@ export default function MessageItem({ message }: { message: Message }) {
           </Flex>
         </Flex>
       </Flex>
-    </MemberPopup>
+    </UserPopup>
   );
 }
 
@@ -81,14 +67,7 @@ export function MessageItemSkeleton(props: { noOfLines: number }) {
   return (
     <Flex direction="row" p={7} transition="all 0.2s" rounded="xl">
       <SkeletonCircle w="50px" h="50px" />
-      <Flex
-        direction="column"
-        align="start"
-        ml={2}
-        gap={5}
-        w="full"
-        maxW="500px"
-      >
+      <Flex direction="column" align="start" ml={2} gap={5} w="full" maxW="500px">
         <SkeletonText w="46%" noOfLines={1} />
         <SkeletonText w="full" noOfLines={props.noOfLines} />
       </Flex>

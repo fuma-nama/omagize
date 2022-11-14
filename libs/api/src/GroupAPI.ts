@@ -6,6 +6,7 @@ import { DateObject, Snowflake } from './types/common';
 import { Group, GroupDetail, GroupInvite, Member } from './types/group';
 import { GroupEvent } from './types/group';
 import { Reset } from './AccountAPI';
+import { RawChannel } from './types';
 
 export type RawGroup = {
   id: Snowflake;
@@ -13,11 +14,12 @@ export type RawGroup = {
   iconHash?: string;
   bannerHash?: string;
   owner: Snowflake;
+  channel: RawChannel;
 };
 
 export type RawGroupDetail = RawGroup & {
   memberCount: number;
-  admins: RawMember[]; //admins of the group
+  admins: RawMember[]; //admins' user id of the group
   events: RawGroupEvent[];
   /**
    * What does this group about
@@ -66,20 +68,14 @@ export type UpdateGroupOptions = {
   //options
   mentionEveryone?: boolean;
 };
-export async function updateGroup(
-  group: Snowflake,
-  options: UpdateGroupOptions
-) {
+export async function updateGroup(group: Snowflake, options: UpdateGroupOptions) {
   await callDefault(`/groups/${group}`, {
     method: 'PATCH',
     body: toFormData(options),
   });
 }
 
-export function fetchMemberInfo(
-  group: Snowflake,
-  id: Snowflake
-): Promise<Member> {
+export function fetchMemberInfo(group: Snowflake, id: Snowflake): Promise<Member> {
   return callReturn<RawMember>(`/groups/${group}/members/${id}`, {
     method: 'GET',
   }).then((res) => new Member(res));
@@ -91,22 +87,15 @@ export function fetchGroupDetail(id: Snowflake): Promise<GroupDetail> {
   }).then((res) => GroupDetail(res));
 }
 
-export async function searchMembers(
-  group: Snowflake,
-  query?: string,
-  limit: number = 10
-) {
+export async function searchMembers(group: Snowflake, query?: string, limit: number = 10) {
   const param = new URLSearchParams({
     query: query,
     limit: limit.toString(),
   });
 
-  return await callReturn<RawMember[]>(
-    `/groups/${group}/members/search?${param}`,
-    {
-      method: 'GET',
-    }
-  ).then((res) => res.map((user) => new Member(user)));
+  return await callReturn<RawMember[]>(`/groups/${group}/members/search?${param}`, {
+    method: 'GET',
+  }).then((res) => res.map((user) => new Member(user)));
 }
 
 /**
@@ -155,11 +144,7 @@ export function fetchGroups(): Promise<Group[]> {
   }).then((res) => res.map((group) => Group(group)));
 }
 
-export async function createGroup(
-  name: string,
-  icon?: Blob,
-  banner?: Blob
-): Promise<Group> {
+export async function createGroup(name: string, icon?: Blob, banner?: Blob): Promise<Group> {
   const data = new FormData();
   data.append('name', name);
   if (icon != null) data.append('icon', icon);
@@ -178,16 +163,10 @@ export function joinGroup(code: string) {
 }
 
 export function fetchGroupInvite(group: string) {
-  return callReturn<RawGroupInvite>(`/groups/${group}/invite`, {}).then((res) =>
-    GroupInvite(res)
-  );
+  return callReturn<RawGroupInvite>(`/groups/${group}/invite`, {}).then((res) => GroupInvite(res));
 }
 
-export function modifyGroupInvite(
-  group: string,
-  once: boolean,
-  expire: Date | null
-) {
+export function modifyGroupInvite(group: string, once: boolean, expire: Date | null) {
   return callReturn<RawGroupInvite>(`/groups/${group}/invite`, {
     contentType: 'application/json',
     body: JSON.stringify({

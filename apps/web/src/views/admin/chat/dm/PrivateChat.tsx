@@ -82,7 +82,7 @@ export function PrivateChatModal({ user, onClose }: { user?: User; onClose: () =
           </Box>
         </ModalBody>
         <ModalFooter p={0}>
-          <MessageBar provider={provider} messageBar={{ m: 0 }} />
+          <MessageBar provider={provider} messageBar={{ rounded: 'md' }} />
         </ModalFooter>
       </ModalContent>
     </Modal>

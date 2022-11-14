@@ -8,13 +8,16 @@ import { useConfirmDialog } from 'components/modals/dialogs/Dialog';
 import { useMutation } from '@tanstack/react-query';
 import { UserPopup } from 'components/modals/popup/UserPopup';
 import { PopoverTrigger } from 'components/PopoverTrigger';
+import { useNavigate } from 'react-router-dom';
 
 export function FriendItem({ friend }: { friend: Relation }) {
   const [brand] = useToken('color', ['brand.400']);
   const { textColorPrimary } = useColors();
   const user = friend.user;
+  const navigate = useNavigate();
   const deleteMutation = useMutation(() => deleteFriend(friend.user.id));
-  const dialog = useConfirmDialog(
+
+  const deleteDialog = useConfirmDialog(
     {
       header: 'Confirm',
       message: 'Do you sure you want to end the friendship?',
@@ -33,11 +36,12 @@ export function FriendItem({ friend }: { friend: Relation }) {
       </Button>
     )
   );
+  const onChat = () => navigate(`/user/chat/users/${user.id}`);
 
   return (
     <UserPopup user={friend.user.id}>
       <Card overflow="hidden" pos="relative">
-        {dialog.modal}
+        {deleteDialog.modal}
         <FadeImage
           direction="to left"
           src={user.bannerUrl}
@@ -61,14 +65,14 @@ export function FriendItem({ friend }: { friend: Relation }) {
           </Flex>
         </HStack>
         <HStack ml="auto" align="end">
-          <Button leftIcon={<ChatIcon />} variant="action">
+          <Button leftIcon={<ChatIcon />} variant="action" onClick={onChat}>
             Chat
           </Button>
           <IconButton
             aria-label="Delete"
             icon={<CloseIcon />}
             variant="danger"
-            onClick={dialog.onOpen}
+            onClick={deleteDialog.onOpen}
           />
         </HStack>
       </Card>

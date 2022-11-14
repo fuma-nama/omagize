@@ -24,10 +24,7 @@ export function fileSizeString(bytes: number, si = false, dp = 1) {
   do {
     bytes /= thresh;
     ++u;
-  } while (
-    Math.round(Math.abs(bytes) * r) / r >= thresh &&
-    u < units.length - 1
-  );
+  } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
 
   return bytes.toFixed(dp) + ' ' + units[u];
 }
@@ -35,14 +32,12 @@ export function fileSizeString(bytes: number, si = false, dp = 1) {
 export function escapeHtml(string: string) {
   const { replace } = '';
   // escape
-  const ca = /[&<>'"]/g;
+  const ca = /[&<>]/g;
 
   const esca: any = {
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',
-    "'": '&#39;',
-    '"': '&quot;',
   };
 
   return replace.call(string, ca, (m: string) => esca[m]);
@@ -56,15 +51,8 @@ export function unescapeHtml(string: string) {
   // unescape
   const unes: any = {
     '&amp;': '&',
-    '&#38;': '&',
     '&lt;': '<',
-    '&#60;': '<',
     '&gt;': '>',
-    '&#62;': '>',
-    '&apos;': "'",
-    '&#39;': "'",
-    '&quot;': '"',
-    '&#34;': '"',
   };
 
   return replace.call(string, es, (m: string) => unes[m]);

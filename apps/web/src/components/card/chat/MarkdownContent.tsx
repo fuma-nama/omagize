@@ -31,9 +31,7 @@ const DefaultOptions: MarkdownToJSX.Options = {
     blockquote: (props) => <Quote>{props.children}</Quote>,
     code: (props) => (
       <code>
-        {typeof props.children === 'string'
-          ? unescapeHtml(props.children)
-          : props.children}
+        {typeof props.children === 'string' ? unescapeHtml(props.children) : props.children}
       </code>
     ),
   },
@@ -50,10 +48,7 @@ export default function MarkdownContent({ message }: { message: Message }) {
       escapeHtml(message.content)
         .replaceAll(/^\s$/gm, '<br>')
         .replaceAll('\n', '\n \n')
-        .replace(
-          /&lt;@([0-9]*)&gt;/g,
-          `<Mention id="$1" group="${message.group}" />`
-        )
+        .replace(/&lt;@([0-9]*)&gt;/g, `<Mention id="$1" group="${message.channel}" />`)
         .replace(/&lt;@everyone&gt;/g, '<Everyone />'),
     [message.content]
   );
@@ -67,19 +62,13 @@ export default function MarkdownContent({ message }: { message: Message }) {
 
 function Mention({ id, group }: { id: string; group?: string }) {
   const { mentions } = useContext(DataContext);
-  const mention = useMemo(
-    () => mentions.find((m) => m.id === id),
-    [id, mentions]
-  );
+  const mention = useMemo(() => mentions.find((m) => m.id === id), [id, mentions]);
 
   return (
     <MemberPopup user={mention.id} group={group}>
       <PopoverTrigger>
         <Box as="span">
-          <MentionEntity
-            avatar={mention?.avatar}
-            name={mention?.name ?? 'Deleted User'}
-          />
+          <MentionEntity avatar={mention?.avatar} name={mention?.name ?? 'Deleted User'} />
         </Box>
       </PopoverTrigger>
     </MemberPopup>

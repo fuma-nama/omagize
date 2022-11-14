@@ -11,6 +11,8 @@ import { layouts, NormalLayout } from './layouts';
 import { client, firebase, initClient, initFirebase, useLoginQuery } from '@omagize/api';
 import { QueryPanel } from 'components/panel/QueryPanel';
 import { initGateway } from 'gateway';
+import { usePageStore } from 'stores/PageStore';
+import { PrivateChatModal } from 'views/admin/chat/dm/PrivateChat';
 
 initClient();
 initFirebase();
@@ -48,12 +50,23 @@ function Pages() {
   );
 }
 
+function Modals() {
+  const [dm, setDM] = usePageStore((s) => [s.dm, s.setDM]);
+
+  return (
+    <>
+      <PrivateChatModal user={dm} onClose={() => setDM(null)} />
+    </>
+  );
+}
+
 ReactDOM.render(
   <ChakraProvider theme={theme}>
     <QueryClientProvider client={client}>
       <React.StrictMode>
         <BrowserRouter>
           <Pages />
+          <Modals />
         </BrowserRouter>
       </React.StrictMode>
     </QueryClientProvider>

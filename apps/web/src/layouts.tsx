@@ -13,6 +13,7 @@ import MainDashboard from 'views/admin/default';
 import NFTMarketplace from 'views/admin/marketplace';
 import Profile from 'views/admin/profile';
 import { EmailVerifiedHandle } from 'views/auth/signup/verify';
+import PrivateChat from 'views/admin/chat/dm/PrivateChat';
 
 export const layouts: RootLayout[] = [
   {
@@ -46,6 +47,10 @@ export const layouts: RootLayout[] = [
         path: 'chat',
         component: <ChatLayout />,
         subLayouts: [
+          {
+            path: 'users/:user',
+            component: <PrivateChat />,
+          },
           {
             path: ':group',
             component: <GroupChat />,

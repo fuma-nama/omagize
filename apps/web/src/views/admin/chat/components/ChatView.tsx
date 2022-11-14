@@ -9,6 +9,7 @@ import { LegacyRef } from 'react';
 import { useColors } from 'variables/colors';
 import { BiMessageX } from 'react-icons/bi';
 import React from 'react';
+import { parseError } from 'utils/APIUtils';
 
 function mapPage(messages: Message[]) {
   return messages.map((message) => <MessageItem key={message.id} message={message} />);
@@ -39,7 +40,7 @@ export default function ChatView({ provider }: { provider: MessageProvider }) {
   );
 }
 
-function MessageView({ channel }: { channel: string }) {
+export function MessageView({ channel }: { channel: string }) {
   const { data, error, isError, fetchPreviousPage, hasPreviousPage, isLoading, refetch } =
     useInfiniteMessageQuery(channel);
   const [sentryRef, { rootRef }] = useInfiniteScroll({
@@ -52,7 +53,7 @@ function MessageView({ channel }: { channel: string }) {
   const { endMessage, rootRefSetter, handleRootScroll } = useBottomScroll(rootRef, data?.pages);
 
   if (error) {
-    return <ErrorPanel error={error} retry={refetch} />;
+    return <ErrorPanel error={parseError(error, 'Failed to read messages')} retry={refetch} />;
   }
 
   const items = data?.pages.flatMap((a) => mapPage(a)) ?? [];

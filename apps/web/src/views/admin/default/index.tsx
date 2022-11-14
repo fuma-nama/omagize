@@ -28,7 +28,7 @@ export default function UserReports() {
   const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
 
   return (
-    <Flex direction="column" gap={5}>
+    <Flex direction="column" gap={5} mb={10}>
       <Banner user={user} />
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3, '2xl': 6 }} gap="20px" mt="20px">

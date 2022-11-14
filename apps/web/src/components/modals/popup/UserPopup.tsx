@@ -21,6 +21,7 @@ import { useMutation } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { BiChat } from 'react-icons/bi';
 import { FaUserFriends } from 'react-icons/fa';
+import { usePageStore } from 'stores/PageStore';
 import { useUserStore } from 'stores/UserStore';
 import { useColors } from 'variables/colors';
 import { Popup } from './Popup';
@@ -68,6 +69,8 @@ export function MemberPopup(props: { user: Snowflake; group: Snowflake; children
 function FriendActions({ user }: { user: User }) {
   const self = useSelfUser();
   const friends = useUserStore((s) => s.relations);
+  const setDM = usePageStore((s) => s.setDM);
+
   const isFriend = friends != null && friends.some((u) => u.user.id === user.id);
   const mutation = useMutation(() => sendFriendRequest(user.id, ''));
 
@@ -75,7 +78,7 @@ function FriendActions({ user }: { user: User }) {
   return (
     <>
       {isFriend ? (
-        <Button leftIcon={<BiChat />} variant="brand">
+        <Button leftIcon={<BiChat />} variant="action" onClick={() => setDM(user)}>
           Chat
         </Button>
       ) : (

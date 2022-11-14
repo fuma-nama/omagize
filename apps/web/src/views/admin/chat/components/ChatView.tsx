@@ -3,7 +3,7 @@ import { Message, Snowflake, useInfiniteMessageQuery } from '@omagize/api';
 import { useRef } from 'react';
 import MessageItem, { MessageItemSkeleton } from 'components/card/chat/MessageItem';
 import { SmallErrorPanel as ErrorPanel } from 'components/panel/ErrorPanel';
-import { MessageBar } from './MessageBar';
+import { InputProvider, MessageBar } from './MessageBar';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { LegacyRef } from 'react';
 import { useColors } from 'variables/colors';
@@ -14,16 +14,21 @@ function mapPage(messages: Message[]) {
   return messages.map((message) => <MessageItem key={message.id} message={message} />);
 }
 
-export default function ChatView({ channel }: { channel: Snowflake }) {
+export interface MessageProvider {
+  useInput: () => InputProvider;
+  channel: Snowflake;
+}
+
+export default function ChatView({ provider }: { provider: MessageProvider }) {
   return (
     <Flex pos="relative" h="full" direction="column">
       <Box flex={1} h={0}>
-        <MessageView channel={channel} />
+        <MessageView channel={provider.channel} />
       </Box>
 
       <Box w="full" p={{ '3sm': 4 }} pt={{ '3sm': 0 }}>
         <MessageBar
-          channel={channel}
+          provider={provider}
           messageBar={{
             gap: { base: 1, '3sm': 2 },
             rounded: { base: 'none', '3sm': 'xl' },

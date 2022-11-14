@@ -1,19 +1,27 @@
 import { Box, Flex, HStack, IconButton, SlideFade, useDisclosure } from '@chakra-ui/react';
-import { searchMembers, sendMessage, Snowflake } from '@omagize/api';
+import { sendMessage, Snowflake } from '@omagize/api';
 import { RefObject, useRef, useState } from 'react';
 import Card from '../../../../components/card/Card';
 import { FiFile, FiSend } from 'react-icons/fi';
 import { GrEmoji } from 'react-icons/gr';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import useFilePicker from 'components/picker/FilePicker';
 import { FileUploadItem } from './FileUploadItem';
 import { CustomCardProps } from 'theme/theme';
 import MessageInput, { ValueProps } from 'components/editor/MessageInput';
 import { convertToRaw, EditorState } from 'draft-js';
-import { Toolbar } from '../../../../components/editor/Toolbar';
+import { Toolbar } from 'components/editor/Toolbar';
 import { createDefault } from 'components/editor/TextEditor';
 import { parseDraft } from 'utils/markdown/parser';
 import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
+import { MentionData } from '@draft-js-plugins/mention';
+import { MessageProvider } from './ChatView';
+
+export interface InputProvider {
+  search: string;
+  setSearch: (search: string) => void;
+  suggestions: MentionData[];
+}
 
 export type MessageOptions = {
   message: EditorState;
@@ -40,16 +48,16 @@ function useOptionState() {
 }
 
 export function MessageBar({
-  channel,
+  provider,
   messageBar,
 }: {
-  channel: Snowflake;
+  provider: MessageProvider;
   messageBar?: CustomCardProps;
 }) {
   const suggestionRef = useRef<HTMLDivElement>();
   const { content, resetContent, dispatch } = useOptionState();
   const { isOpen: showToolbar, onToggle: toggleToolbar } = useDisclosure();
-  const sendMutation = useSendMutation(channel);
+  const sendMutation = useSendMutation(provider.channel);
   const picker = useFilePicker((f) =>
     dispatch((prev) => ({
       attachments: [...prev.attachments, f],
@@ -98,7 +106,7 @@ export function MessageBar({
         <IconButton aria-label="add-file" icon={<FiFile />} onClick={picker.pick} />
         <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
         <Input
-          channel={channel}
+          provider={provider}
           suggestionRef={suggestionRef}
           value={content.message}
           onChange={(v) =>
@@ -122,21 +130,14 @@ export function MessageBar({
 
 function Input({
   value,
-  channel,
   onChange,
+  provider,
   suggestionRef,
 }: ValueProps & {
-  channel: Snowflake;
+  provider: MessageProvider;
   suggestionRef: RefObject<HTMLDivElement>;
 }) {
-  const [search, setSearch] = useState<string | null>(null);
-  const query = useQuery(
-    ['search_member', channel, search],
-    () => searchMembers(channel, search, 10),
-    {
-      enabled: search != null,
-    }
-  );
+  const input = provider.useInput();
 
   return (
     <MessageInput
@@ -147,12 +148,8 @@ function Input({
       }}
       mentionSuggestions={{
         portal: suggestionRef,
-        onSearch: setSearch,
-        suggestions: query.data?.map((member) => ({
-          id: member.id,
-          name: member.username,
-          avatar: member.avatarUrl,
-        })),
+        onSearch: input.setSearch,
+        suggestions: input.suggestions,
       }}
     />
   );

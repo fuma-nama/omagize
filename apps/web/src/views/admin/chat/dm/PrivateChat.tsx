@@ -1,8 +1,7 @@
 import ChatView, { MessageProvider, MessageView } from 'views/admin/chat/components/ChatView';
-import { useEffect, useState } from 'react';
-import { usePageStore } from 'stores/PageStore';
+import { useState } from 'react';
 import LoadingPanel from 'components/panel/LoadingPanel';
-import { openDMChannel, Snowflake, User, useUserInfo } from '@omagize/api';
+import { openDMChannel, Snowflake, User } from '@omagize/api';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import {
@@ -16,16 +15,8 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { MessageBar } from '../components/MessageBar';
-
 export default function PrivateChat() {
   const { user } = useParams();
-  const query = useUserInfo(user);
-  const setInfo = usePageStore((s) => s.updateNavbar);
-
-  useEffect(
-    () => setInfo(query.data != null ? { title: query.data.username } : null),
-    [query.data]
-  );
 
   return <PrivateChatView user={user} />;
 }

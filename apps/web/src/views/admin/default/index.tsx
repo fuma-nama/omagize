@@ -1,9 +1,9 @@
 // Chakra imports
 import {
   Avatar,
-  Box,
   Flex,
   FormLabel,
+  HStack,
   Icon,
   Select,
   SimpleGrid,
@@ -18,9 +18,9 @@ import IconBox from 'components/icons/IconBox';
 import { MdAddTask, MdAttachMoney, MdBarChart, MdFileCopy } from 'react-icons/md';
 import Banner from './components/Banner';
 import { useGroupEventsQuery, useSelfUser } from '@omagize/api';
-import { ArrayHolder } from 'components/layout/Container';
 import { GlobalGroupEventItem, GroupEventSkeleton } from 'components/card/GroupEventItem';
 import Friends from './components/Friends';
+import { Carousel, LeftButton, Provider, RightButton } from 'chakra-ui-carousel';
 
 export default function UserReports() {
   // Chakra Color Mode
@@ -112,33 +112,25 @@ function Events() {
   if (empty) return <></>;
   return (
     <Flex direction="column" gap={3}>
-      <Text fontSize="2xl" fontWeight="700">
-        Group Events
-      </Text>
-      <Flex direction="row" overflow="auto" gap={3} pb={3}>
-        <ArrayHolder
-          array={query.data}
-          skeleton={
-            <>
-              <GroupEventSkeleton />
-              <GroupEventSkeleton />
-              <GroupEventSkeleton />
-            </>
+      <Provider>
+        <HStack>
+          <Text fontSize="2xl" fontWeight="700">
+            Group Events
+          </Text>
+          <LeftButton variant="action" />
+          <RightButton variant="action" />
+        </HStack>
+        <Carousel
+          gap={20}
+          children={
+            query.data != null
+              ? query.data.map((event) => (
+                  <GlobalGroupEventItem key={event.id} event={event} minW="fit-content" />
+                ))
+              : [<GroupEventSkeleton />, <GroupEventSkeleton />, <GroupEventSkeleton />]
           }
-        >
-          {() =>
-            query.data.map((event) => (
-              <GlobalGroupEventItem
-                key={event.id}
-                event={event}
-                flexShrink={0}
-                w="fit-content"
-                minW="400px"
-              />
-            ))
-          }
-        </ArrayHolder>
-      </Flex>
+        />
+      </Provider>
     </Flex>
   );
 }

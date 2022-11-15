@@ -82,6 +82,7 @@ export const globalStyles = {
     global: (props: any) => ({
       '::-webkit-scrollbar': {
         w: '5px',
+        h: '5px',
         bg: 'transparent',
       },
       '::-webkit-scrollbar-thumb': {

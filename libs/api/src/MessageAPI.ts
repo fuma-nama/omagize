@@ -1,6 +1,6 @@
 import { Snowflake } from './types';
 import { Message, RawMessage } from './types/message';
-import { callReturn } from './utils/core';
+import { callDefault, callReturn } from './utils/core';
 import { toFormData } from './utils/common';
 
 export type RawAttachment = {
@@ -72,4 +72,22 @@ export async function fetchMessagesBefore(
   return callReturn<RawMessage[]>(`/channels/${channel}/messages?${params}`, {
     method: 'GET',
   }).then((res) => res.map((m) => Message(m)));
+}
+
+export type EditMessageBody = {
+  content: string;
+  mentions: Mention[];
+};
+
+export async function editMessage(id: Snowflake, channel: Snowflake, body: EditMessageBody) {
+  await callDefault(`/channels/${channel}/messages/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  });
+}
+
+export async function deleteMessage(id: Snowflake, channel: Snowflake) {
+  await callDefault(`/channels/${channel}/messages/${id}`, {
+    method: 'DELETE',
+  });
 }

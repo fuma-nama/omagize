@@ -13,7 +13,8 @@ import MainDashboard from 'views/admin/default';
 import NFTMarketplace from 'views/admin/marketplace';
 import Profile from 'views/admin/profile';
 import { EmailVerifiedHandle } from 'views/auth/signup/verify';
-import PrivateChat, { PrivateChatNavbar } from 'views/admin/chat/dm/PrivateChat';
+import PrivateChat from 'views/admin/chat/dm/PrivateChat';
+import { PrivateChatNavbar } from 'views/admin/chat/dm/PrivateChatNavbar';
 
 export const layouts: RootLayout[] = [
   {

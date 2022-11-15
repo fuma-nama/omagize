@@ -1,19 +1,19 @@
 import AuthLayout from './layouts/auth';
 import AdminLayout from './layouts/admin';
-import { ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import PageLayout from './layouts/PageLayout';
 import ChatLayout from './layouts/chat';
 import { Navigate } from 'react-router-dom';
 import GroupOverview from 'views/admin/group';
 import GroupSettings from 'views/admin/group/settings';
 import GroupChat from 'views/admin/chat/group/GroupChat';
-import GroupNavbar from 'views/admin/group/navbar/GroupNavbar';
+import { GroupNavbar } from 'views/admin/group/navbar/GroupNavbar';
 import SignIn from './views/auth';
 import MainDashboard from 'views/admin/default';
 import NFTMarketplace from 'views/admin/marketplace';
 import Profile from 'views/admin/profile';
 import { EmailVerifiedHandle } from 'views/auth/signup/verify';
-import PrivateChat from 'views/admin/chat/dm/PrivateChat';
+import PrivateChat, { PrivateChatNavbar } from 'views/admin/chat/dm/PrivateChat';
 
 export const layouts: RootLayout[] = [
   {
@@ -50,6 +50,7 @@ export const layouts: RootLayout[] = [
           {
             path: 'users/:user',
             component: <PrivateChat />,
+            navbar: <PrivateChatNavbar />,
           },
           {
             path: ':group',
@@ -79,6 +80,7 @@ export const layouts: RootLayout[] = [
             subLayouts: [
               {
                 index: true,
+                navbar: <GroupNavbar isRoot />,
                 component: <GroupOverview />,
               },
               {
@@ -109,7 +111,8 @@ export type IndexRoute = Layout & {
 
 export type Layout = {
   component?: ReactNode;
-  navbar?: ReactNode;
+  navbarLinks?: ReactNode;
+  navbar?: ReactElement;
 };
 
 export type RootLayout = NormalLayout & {

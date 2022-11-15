@@ -110,7 +110,7 @@ function GroupEventContent({ event }: { event: GroupEvent }) {
   return (
     <Flex p={4} direction="row" gap={2}>
       {event.imageUrl && (
-        <Image w="250px" objectFit="cover" src={event.imageUrl} maxH="200px" rounded="lg" />
+        <Image w="30%" objectFit="cover" src={event.imageUrl} maxH="200px" rounded="lg" />
       )}
 
       <Flex direction="column" w="full">

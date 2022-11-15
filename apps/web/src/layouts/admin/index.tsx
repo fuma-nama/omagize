@@ -4,12 +4,10 @@ import { Box, Flex } from '@chakra-ui/react';
 import Navbar from 'components/navbar/NavbarAdmin';
 import { Outlet } from 'react-router-dom';
 import { useActiveSidebarItem } from 'utils/RouteUtil';
-import { usePageStore } from 'stores/PageStore';
 
 export default function Dashboard() {
   document.documentElement.dir = 'ltr';
 
-  const info = usePageStore((s) => s.navbar);
   const activeItem = useActiveSidebarItem();
 
   return (
@@ -28,7 +26,7 @@ export default function Dashboard() {
       transitionProperty="top, bottom, width"
       transitionTimingFunction="linear, linear, ease"
     >
-      <Navbar brandText={activeItem?.name || info?.title} />
+      <Navbar brandText={activeItem?.name} />
       <Box mx="auto" w="full" pe="20px" padding={0} flex="1 1" mt="50px">
         <Outlet />
       </Box>

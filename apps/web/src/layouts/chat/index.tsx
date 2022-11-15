@@ -3,13 +3,10 @@ import { Box, Flex } from '@chakra-ui/react';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin';
 import { Outlet } from 'react-router-dom';
-import { usePageStore } from 'stores/PageStore';
 import { useActiveSidebarItem } from 'utils/RouteUtil';
 
 export default function ChatLayout() {
   document.documentElement.dir = 'ltr';
-
-  const info = usePageStore((s) => s.navbar);
   const active = useActiveSidebarItem();
 
   return (
@@ -26,7 +23,7 @@ export default function ChatLayout() {
       transitionTimingFunction="linear, linear, ease"
     >
       <Box pos="sticky" top={0} px={{ '3sm': '10px' }} py={{ '3sm': '10px' }} w="full">
-        <Navbar brandText={active?.name || info?.title} />
+        <Navbar brandText={active?.name} />
       </Box>
       <Box flex={1} h={0}>
         <Outlet />

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 // Chakra imports
 import { Center, Flex, Grid, SimpleGrid, Text } from '@chakra-ui/react';
 
@@ -18,16 +17,10 @@ import AutoImage from 'components/card/utils/AutoImage';
 import { MessagesPreview } from './MessagesPreview';
 import Banner from './components/Banner';
 import { useGroupModals } from './modals/useGroupModals';
-import { usePageStore } from 'stores/PageStore';
-import { useGroup } from 'stores/hooks';
 
 export default function GroupOverview() {
   const { selectedGroup } = useSelected();
-
-  const setInfo = usePageStore((s) => s.updateNavbar);
-  const group = useGroup(selectedGroup);
   const query = useGroupDetailQuery(selectedGroup);
-  useEffect(() => setInfo(group != null && { title: group.name }), [group]);
 
   if (query.isLoading) {
     return <LoadingPanel size="sm" />;

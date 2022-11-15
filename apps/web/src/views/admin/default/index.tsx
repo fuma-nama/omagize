@@ -1,6 +1,7 @@
 // Chakra imports
 import {
   Avatar,
+  Box,
   Flex,
   FormLabel,
   Icon,
@@ -114,7 +115,7 @@ function Events() {
       <Text fontSize="2xl" fontWeight="700">
         Group Events
       </Text>
-      <SimpleGrid columns={{ base: 1, md: 2, '2xl': 3 }} gap={3}>
+      <Flex direction="row" overflow="auto" gap={3} pb={3}>
         <ArrayHolder
           array={query.data}
           skeleton={
@@ -125,9 +126,19 @@ function Events() {
             </>
           }
         >
-          {() => query.data.map((event) => <GlobalGroupEventItem key={event.id} event={event} />)}
+          {() =>
+            query.data.map((event) => (
+              <GlobalGroupEventItem
+                key={event.id}
+                event={event}
+                flexShrink={0}
+                w="fit-content"
+                minW="400px"
+              />
+            ))
+          }
         </ArrayHolder>
-      </SimpleGrid>
+      </Flex>
     </Flex>
   );
 }

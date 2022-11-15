@@ -1,115 +1,105 @@
 import { GroupEvent } from '@omagize/api';
-import Card, { TagCard } from './Card';
+import Card from './Card';
 import {
   Avatar,
+  Button,
   Flex,
   HStack,
+  Icon,
+  IconButton,
   Image,
   Skeleton,
   SkeletonCircle,
   SkeletonText,
-  StackProps,
   Text,
 } from '@chakra-ui/react';
 import { useColors } from 'variables/colors';
 import { stringOfTime } from 'utils/DateUtils';
 import { useGroup } from 'stores/hooks';
+import { MdDateRange, MdPlace } from 'react-icons/md';
+import { HSeparator } from 'components/layout/Separator';
+import { BiDotsHorizontalRounded } from 'react-icons/bi';
+import { DeleteIcon } from '@chakra-ui/icons';
+import { CustomCardProps } from 'theme/theme';
 
-function Info({
-  name,
-  value,
-  ...rest
-}: { name: string; value: any } & StackProps) {
-  const { textColorPrimary, textColorSecondary, globalBg } = useColors();
-
-  return (
-    <TagCard bg={globalBg} {...rest}>
-      <Text color={textColorSecondary} fontWeight="bold">
-        {name}
-      </Text>
-      <Text color={textColorPrimary}>{value}</Text>
-    </TagCard>
-  );
-}
-
-export function GlobalGroupEventItem({ event }: { event: GroupEvent }) {
+export function GlobalGroupEventItem({ event, ...props }: { event: GroupEvent } & CustomCardProps) {
+  const { brand, textColorPrimary, textColorSecondary } = useColors();
   const group = useGroup(event.group);
-  const { globalBg } = useColors();
-
   const happening = event.startAt <= new Date(Date.now());
-  const iconSize = '35px';
 
   return (
-    <Card overflow="hidden" gap={3}>
-      <Flex direction="row" flexWrap="wrap" gap={2}>
-        {happening && <EventStarted />}
-        <TagCard bg={globalBg}>
-          {!!group ? (
-            <>
-              <Avatar
-                src={group.iconUrl}
-                name={group.name}
-                w={iconSize}
-                h={iconSize}
-              />
-              <Text fontWeight="bold">{group.name}</Text>
-            </>
-          ) : (
-            <>
-              <SkeletonCircle w={iconSize} h={iconSize} />
-              <SkeletonText noOfLines={2} w="100px" h="23px" />
-            </>
-          )}
-        </TagCard>
-      </Flex>
+    <Card overflow="hidden" gap={1} p={0} {...props}>
+      <HStack
+        w="full"
+        bg={happening ? brand : 'transparent'}
+        p={3}
+        color={happening ? 'white' : textColorPrimary}
+      >
+        <Icon as={MdDateRange} />
+        <Text fontWeight="bold">
+          {happening ? 'Event Started' : `Start at ${stringOfTime(event.startAt)}`}
+        </Text>
+        {happening && event.endAt && <Text fontSize="sm">End at {stringOfTime(event.endAt)}</Text>}
+      </HStack>
       <GroupEventContent event={event} />
-      <Flex direction="row" flexWrap="wrap" gap={4} mt="auto" pt={2}>
-        {!!event.place && <Info name="Take Place At" value={event.place} />}
 
-        {happening ? (
-          !!event.endAt && (
-            <Info name="End At" value={stringOfTime(event.endAt)} />
-          )
-        ) : (
-          <Info name="Starting At" value={stringOfTime(event.startAt)} />
+      <HSeparator mt="auto" />
+      <Flex direction="row" px={4} py={2} color={textColorSecondary} gap={2}>
+        {group != null && (
+          <HStack spacing={2}>
+            <Avatar src={group.iconUrl} name={group.name} size="sm" />
+            <Text fontWeight="600">{group.name}</Text>
+          </HStack>
         )}
+        {event.place != null && (
+          <HStack spacing={1}>
+            <Icon as={MdPlace} />
+            <Text fontWeight="600">{event.place}</Text>
+          </HStack>
+        )}
+        <Button ml="auto" variant="danger" leftIcon={<DeleteIcon />}>
+          Delete
+        </Button>
+        <IconButton aria-label="options" icon={<BiDotsHorizontalRounded />} />
       </Flex>
     </Card>
   );
 }
 
 export default function GroupEventItem({ event }: { event: GroupEvent }) {
+  const { brand, textColorPrimary, textColorSecondary } = useColors();
   const happening = event.startAt <= new Date(Date.now());
 
   return (
-    <Card overflow="hidden" gap={3}>
-      {happening && (
-        <Flex direction="row" gap={2} wrap="wrap">
-          <EventStarted />
-          {!!event.endAt && (
-            <Info name="End At" value={stringOfTime(event.endAt)} />
-          )}
-        </Flex>
-      )}
+    <Card overflow="hidden" gap={1} p={0}>
+      <HStack
+        w="full"
+        bg={happening ? brand : 'transparent'}
+        p={3}
+        color={happening ? 'white' : textColorPrimary}
+      >
+        <Icon as={MdDateRange} />
+        <Text fontWeight="bold">
+          {happening ? 'Event Started' : `Start at ${stringOfTime(event.startAt)}`}
+        </Text>
+        {happening && event.endAt && <Text fontSize="sm">End at {stringOfTime(event.endAt)}</Text>}
+      </HStack>
       <GroupEventContent event={event} />
-      <Flex direction="row" flexWrap="wrap" gap={4} mt="auto" pt={2}>
-        {!!event.place && <Info name="Take Place At" value={event.place} />}
 
-        {!happening && (
-          <Info name="Starting At" value={stringOfTime(event.startAt)} />
+      <HSeparator mt="auto" />
+      <Flex direction="row" px={4} py={2} color={textColorSecondary} gap={2}>
+        {event.place != null && (
+          <HStack spacing={1}>
+            <Icon as={MdPlace} />
+            <Text fontWeight="600">{event.place}</Text>
+          </HStack>
         )}
+        <Button ml="auto" variant="danger" leftIcon={<DeleteIcon />}>
+          Delete
+        </Button>
+        <IconButton aria-label="options" icon={<BiDotsHorizontalRounded />} />
       </Flex>
     </Card>
-  );
-}
-
-function EventStarted() {
-  return (
-    <TagCard bg="green.500">
-      <Text color="white" fontWeight="bold" fontSize="md">
-        Event Started
-      </Text>
-    </TagCard>
   );
 }
 
@@ -118,26 +108,19 @@ function GroupEventContent({ event }: { event: GroupEvent }) {
   const author = event.author;
 
   return (
-    <>
-      <Image
-        w="full"
-        objectFit="cover"
-        src={event.imageUrl}
-        maxH="200px"
-        rounded="lg"
-      />
+    <Flex p={4} direction="row" gap={2}>
+      {event.imageUrl && (
+        <Image w="250px" objectFit="cover" src={event.imageUrl} maxH="200px" rounded="lg" />
+      )}
 
-      <HStack justify="space-between">
-        <Flex direction="column">
-          <Text color={textColorPrimary} fontWeight="bold" fontSize="md">
-            {event.name}
-          </Text>
-          <Text color={textColorSecondary}>{event.description}</Text>
-          <Text color={textColorSecondary}>By {author.username}</Text>
-        </Flex>
-        <Avatar src={author.avatarUrl} name={author.username} />
-      </HStack>
-    </>
+      <Flex direction="column" w="full">
+        <Text color={textColorPrimary} fontWeight="bold" fontSize="xl">
+          {event.name}
+        </Text>
+        <Text color={textColorSecondary}>{event.description}</Text>
+        <Text color={textColorSecondary}>By {author.username}</Text>
+      </Flex>
+    </Flex>
   );
 }
 

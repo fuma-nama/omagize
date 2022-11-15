@@ -33,11 +33,7 @@ export default function GroupOverview() {
     return <LoadingPanel size="sm" />;
   }
   if (query.isError) {
-    return (
-      <ErrorPanel retry={() => query.refetch()}>
-        Failed to load Group
-      </ErrorPanel>
-    );
+    return <ErrorPanel retry={() => query.refetch()}>Failed to load Group</ErrorPanel>;
   }
 
   return <Content group={query.data} />;
@@ -52,10 +48,7 @@ function Content({ group }: { group: GroupDetail }) {
       gap={{ base: '20px', xl: '20px' }}
       display={{ base: 'block', xl: 'grid' }}
     >
-      <Flex
-        flexDirection="column"
-        gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}
-      >
+      <Flex flexDirection="column" gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}>
         <Main group={group} />
       </Flex>
       <Flex
@@ -88,11 +81,7 @@ function Main({ group }: { group: GroupDetail }) {
         <Banner />
       </OptionsMenu>
       <Flex direction="column" flexGrow={1} mt="25px" mb="20px" gap="20px">
-        <GroupHeader
-          createEvent={CreateEvent.onOpen}
-          invite={Invite.onOpen}
-          group={group}
-        />
+        <GroupHeader createEvent={CreateEvent.onOpen} invite={Invite.onOpen} group={group} />
         <GroupEvents onOpen={CreateEvent.onOpen} detail={group} />
         <Text fontSize="2xl" fontWeight="600">
           Recent Messages
@@ -124,13 +113,7 @@ function About({ group }: { group: GroupDetail }) {
   );
 }
 
-function GroupEvents({
-  detail,
-  onOpen,
-}: {
-  detail: GroupDetail;
-  onOpen: () => void;
-}) {
+function GroupEvents({ detail, onOpen }: { detail: GroupDetail; onOpen: () => void }) {
   const { textColorSecondary } = useColors();
   const atBottom = detail.events.length === 0 || detail.events.length % 2 === 0;
 
@@ -138,7 +121,9 @@ function GroupEvents({
     <SimpleGrid
       columns={{
         base: 1,
-        md: 2,
+        lg: 2,
+        xl: 1,
+        '2xl': 2,
       }}
       gap={3}
     >
@@ -147,13 +132,7 @@ function GroupEvents({
       ))}
       {!atBottom && (
         <CardButton onClick={() => onOpen()}>
-          <Center
-            p="50px"
-            color={textColorSecondary}
-            h="full"
-            flexDirection="column"
-            gap={3}
-          >
+          <Center p="50px" color={textColorSecondary} h="full" flexDirection="column" gap={3}>
             <AddIcon w="50px" h="50px" />
             <Text>Create Event</Text>
           </Center>

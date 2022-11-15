@@ -1,6 +1,5 @@
 // Chakra imports
 import { Box, Flex } from '@chakra-ui/react';
-import Footer from 'components/footer/FooterAdmin';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin';
 import { Outlet } from 'react-router-dom';
@@ -32,9 +31,6 @@ export default function Dashboard() {
       <Navbar brandText={activeItem?.name || info?.title} />
       <Box mx="auto" w="full" pe="20px" padding={0} flex="1 1" mt="50px">
         <Outlet />
-      </Box>
-      <Box>
-        <Footer />
       </Box>
     </Flex>
   );

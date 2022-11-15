@@ -14,11 +14,7 @@ import {
   DrawerCloseButton,
 } from '@chakra-ui/react';
 import Content from 'components/sidebar/components/Content';
-import {
-  renderThumb,
-  renderTrack,
-  renderView,
-} from 'components/layout/Scrollbar';
+import { renderThumb, renderTrack, renderView } from 'components/layout/Scrollbar';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
 // Assets
@@ -26,10 +22,7 @@ import { IoMenuOutline } from 'react-icons/io5';
 
 function Sidebar({ items }: { items: SidebarItem[]; [x: string]: any }) {
   let variantChange = '0.2s linear';
-  let shadow = useColorModeValue(
-    '14px 17px 40px 4px rgba(112, 144, 176, 0.08)',
-    'unset'
-  );
+  let shadow = useColorModeValue('14px 17px 40px 4px rgba(112, 144, 176, 0.08)', 'unset');
   // Chakra Color Mode
   let sidebarBg = useColorModeValue('white', 'navy.800');
   let sidebarMargins = '0px';

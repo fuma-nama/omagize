@@ -65,8 +65,8 @@ ReactDOM.render(
     <QueryClientProvider client={client}>
       <React.StrictMode>
         <BrowserRouter>
-          <Pages />
           <Modals />
+          <Pages />
         </BrowserRouter>
       </React.StrictMode>
     </QueryClientProvider>

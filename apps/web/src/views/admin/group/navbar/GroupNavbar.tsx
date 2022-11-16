@@ -1,7 +1,5 @@
 import { Avatar, Box, Button, HStack, Text } from '@chakra-ui/react';
 import { SearchBar } from 'components/navbar/searchBar/SearchBar';
-import { SidebarResponsive } from 'components/sidebar/Sidebar';
-import items from 'sidebar';
 import ThemeSwitch from 'components/navbar/components/ThemeSwitch';
 import { UserMenu } from 'components/navbar/menu/UserMenu';
 import { BiArrowBack } from 'react-icons/bi';
@@ -10,6 +8,7 @@ import { NavbarLinksBox } from 'components/navbar/NavbarLinksAdmin';
 import { NavbarBox } from 'components/navbar/NavbarAdmin';
 import { useGroup } from 'stores/hooks';
 import { useNavbarColors } from 'variables/colors';
+import { SidebarTrigger } from 'components/sidebar/Sidebar';
 
 export function GroupNavbar({ isRoot }: { isRoot?: boolean }) {
   const { selectedGroup } = useSelected();
@@ -49,7 +48,7 @@ export default function GroupNavbarLinks({ isRoot }: { isRoot?: boolean }) {
       )}
       <HStack w="full" align="center">
         <SearchBar mb="unset" me="10px" w="full" />
-        <SidebarResponsive items={items} />
+        <SidebarTrigger />
 
         <ThemeSwitch color={iconColor} />
         <UserMenu color={textColorPrimary} shadow={shadow} bg={menuBg} />

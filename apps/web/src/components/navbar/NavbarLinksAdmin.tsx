@@ -2,9 +2,8 @@
 import { Flex, FlexProps } from '@chakra-ui/react';
 // Custom Components
 import { SearchBar } from 'components/navbar/searchBar/SearchBar';
-import { SidebarResponsive } from 'components/sidebar/Sidebar';
+import { SidebarTrigger } from 'components/sidebar/Sidebar';
 
-import items from 'sidebar';
 import { UserMenu } from './menu/UserMenu';
 import ThemeSwitch from './components/ThemeSwitch';
 import NotificationsMenu from './menu/NotificationsMenu';
@@ -24,7 +23,7 @@ export function NavbarDefaultItems() {
 
   return (
     <>
-      <SidebarResponsive items={items} />
+      <SidebarTrigger />
       <NotificationsMenu />
       <ThemeSwitch color={iconColor} />
       <UserMenu color={textColorPrimary} shadow={shadow} bg={menuBg} />

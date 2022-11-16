@@ -1,6 +1,6 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { Message, Snowflake, useInfiniteMessageQuery } from '@omagize/api';
-import { useRef } from 'react';
+import { createContext, useContext, useRef } from 'react';
 import MessageItem, { MessageItemSkeleton } from 'components/card/chat/MessageItem';
 import { SmallErrorPanel as ErrorPanel } from 'components/panel/ErrorPanel';
 import { InputProvider, MessageBar } from './MessageBar';
@@ -15,6 +15,11 @@ function mapPage(messages: Message[]) {
   return messages.map((message) => <MessageItem key={message.id} message={message} />);
 }
 
+const MessageContext = createContext<MessageProvider>(undefined);
+export function useMessageProvider(): MessageProvider {
+  return useContext(MessageContext);
+}
+
 export interface MessageProvider {
   useInput: () => InputProvider;
   channel: Snowflake;
@@ -22,21 +27,23 @@ export interface MessageProvider {
 
 export default function ChatView({ provider }: { provider: MessageProvider }) {
   return (
-    <Flex pos="relative" h="full" direction="column">
-      <Box flex={1} h={0}>
-        <MessageView channel={provider.channel} />
-      </Box>
+    <MessageContext.Provider value={provider}>
+      <Flex pos="relative" h="full" direction="column">
+        <Box flex={1} h={0}>
+          <MessageView channel={provider.channel} />
+        </Box>
 
-      <Box w="full" p={{ '3sm': 4 }} pt={{ '3sm': 0 }}>
-        <MessageBar
-          provider={provider}
-          messageBar={{
-            gap: { base: 1, '3sm': 2 },
-            rounded: { base: 'none', '3sm': 'xl' },
-          }}
-        />
-      </Box>
-    </Flex>
+        <Box w="full" p={{ '3sm': 4 }} pt={{ '3sm': 0 }}>
+          <MessageBar
+            provider={provider}
+            messageBar={{
+              gap: { base: 1, '3sm': 2 },
+              rounded: { base: 'none', '3sm': 'xl' },
+            }}
+          />
+        </Box>
+      </Flex>
+    </MessageContext.Provider>
   );
 }
 

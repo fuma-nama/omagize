@@ -1,8 +1,6 @@
 import { EditorState, EditorProps } from 'draft-js';
 import TextEditor from './TextEditor';
-import createMentionPlugin, {
-  defaultSuggestionsFilter,
-} from '@draft-js-plugins/mention';
+import createMentionPlugin, { defaultSuggestionsFilter } from '@draft-js-plugins/mention';
 import React, { useState, ReactNode, useMemo, useRef } from 'react';
 import { EntryComponentProps } from '@draft-js-plugins/mention/lib/MentionSuggestions/Entry/Entry';
 import { Avatar, Box, HStack, Icon, Portal, Text } from '@chakra-ui/react';
@@ -98,9 +96,7 @@ function Mention(props: SubMentionComponentProps) {
     case 'everyone':
       return <EveryoneMention>{props.children}</EveryoneMention>;
     default:
-      return (
-        <MentionEntity name={props.children} className={props.className} />
-      );
+      return <MentionEntity name={props.children} className={props.className} />;
   }
 }
 
@@ -117,14 +113,7 @@ function Suggestions({ children }: { children: ReactNode }) {
 }
 
 function Entry(props: EntryComponentProps) {
-  const {
-    mention,
-    theme,
-    searchValue,
-    isFocused,
-    selectMention,
-    ...parentProps
-  } = props;
+  const { mention, theme, searchValue, isFocused, selectMention, ...parentProps } = props;
   const type = (props.mention as MentionData).type;
   const hoverBg = useItemHoverBg();
   let content;
@@ -149,12 +138,7 @@ function Entry(props: EntryComponentProps) {
   }
 
   return (
-    <CustomCard
-      cursor="pointer"
-      p={2}
-      {...parentProps}
-      {...(isFocused && hoverBg)}
-    >
+    <CustomCard cursor="pointer" p={2} {...parentProps} {...(isFocused && hoverBg)}>
       <HStack>{content}</HStack>
     </CustomCard>
   );

@@ -4,6 +4,7 @@ import { CompositeDecorator, ContentBlock, ContentState } from 'draft-js';
 import { ReactNode } from 'react';
 import { Syntax } from 'utils/markdown/types';
 import { useColors } from 'variables/colors';
+import { MentionEntity } from './entities';
 
 export interface MentionData {
   link?: string;
@@ -40,9 +41,19 @@ function strategy(
 
 type Element = {
   regex: RegExp;
-  render: (s: ReactNode) => ReactNode;
+  render: (s: ReactNode, props: any) => ReactNode;
 };
 const Elements: Array<Element> = [
+  {
+    regex: /<@([0-9]*)>/g,
+    render: (s, props) => {
+      const text = props.decoratedText;
+      const id = /<@([0-9]*)>/g.exec(text)[1];
+
+      console.log(id, props);
+      return <MentionEntity data-offset-key={props.offsetKey} name="Test" />;
+    },
+  },
   //{ regex: Syntax.CodeBlock, render: (s) => <code>{s}</code> },
   { regex: Syntax.Header, render: (s) => <Heading fontSize="xl">{s}</Heading> },
   { regex: Syntax.Quote, render: (s) => <Quote>{s}</Quote> },
@@ -60,7 +71,7 @@ const MarkdownDecorator = new CompositeDecorator([
     return {
       strategy: strategy(e.regex),
       component: (props: { children: any }) => {
-        return e.render(props.children);
+        return e.render(props.children, props);
       },
     };
   }),

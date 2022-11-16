@@ -68,7 +68,13 @@ export function PrivateChatModal({ user, onClose }: { user?: User; onClose: () =
   return (
     <Modal isOpen={user != null} onClose={onClose} size="lg" scrollBehavior="inside">
       <ModalOverlay />
-      <ModalContent h="full" my="auto" maxH={{ base: '100%', md: 'calc(100% - 4vh)' }} zIndex={1}>
+      <ModalContent
+        h="full"
+        my="auto"
+        maxH={{ base: '100%', md: 'calc(100% - 4vh)' }}
+        zIndex={1}
+        overflow="hidden"
+      >
         <ModalHeader>{user?.username}</ModalHeader>
         <ModalCloseButton />
         <ModalBody p={0} h="full">

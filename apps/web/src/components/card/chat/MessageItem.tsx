@@ -1,12 +1,12 @@
-import { deleteMessage, editMessage, EditMessageBody, Message, useSelfUser } from '@omagize/api';
+import { deleteMessage, Message, useSelfUser } from '@omagize/api';
 import {
   Avatar,
   Box,
-  Button,
-  ButtonGroup,
   Flex,
   HStack,
   IconButton,
+  MenuItem,
+  MenuList,
   SkeletonCircle,
   SkeletonText,
   StackProps,
@@ -22,25 +22,40 @@ import { PopoverTrigger } from 'components/PopoverTrigger';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { useMutation } from '@tanstack/react-query';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
-import { useMessageProvider } from 'views/admin/chat/components/ChatView';
-import MessageInput from 'components/editor/MessageInput';
-import { useRef, useState } from 'react';
-import { ContentState, convertToRaw, EditorState } from 'draft-js';
-import { parseDraft } from 'utils/markdown/parser';
+import { useState } from 'react';
+import { useContextMenu } from 'components/menu/ContextMenu';
+import { MessageEditInput } from './MessageEditInput';
+
+export function useMessageMenu(message: Message, onEdit: () => void) {
+  const { globalBg, brand } = useColors();
+  const deleteMutation = useMessageDeleteMutation(message);
+
+  return useContextMenu<HTMLDivElement>(
+    <MenuList bg={globalBg} border={0}>
+      <MenuItem icon={<EditIcon color={brand} />} onClick={onEdit}>
+        Edit Message
+      </MenuItem>
+      <MenuItem color="red.400" onClick={() => deleteMutation.mutate()} icon={<DeleteIcon />}>
+        Delete
+      </MenuItem>
+    </MenuList>
+  );
+}
 
 export default function MessageItem({ message }: { message: Message }) {
   const author = message.author;
   //colors
-  const { brand } = useColors();
-  const secondaryText = useColorModeValue('gray.400', 'white');
+  const { brand, textColorPrimary } = useColors();
   const hoverBg = useColorModeValue('white', 'navy.800');
 
   const [edit, setEdit] = useState(false);
   const user = useSelfUser();
   const mentioned = message.everyone || message.mentions.some((m) => m.id === user.id);
+  const menu = useMessageMenu(message, () => setEdit(true));
 
   return (
     <UserPopup user={author.id}>
+      {menu.menu}
       <Flex
         className="message-item"
         pos="relative"
@@ -52,6 +67,7 @@ export default function MessageItem({ message }: { message: Message }) {
         gap={3}
         overflow="hidden"
         role="group"
+        ref={menu.targetRef}
       >
         {mentioned && <Box bg={brand} pos="absolute" top={0} left={0} w={1} h="full" />}
         <MessageActions
@@ -67,15 +83,13 @@ export default function MessageItem({ message }: { message: Message }) {
           <Avatar cursor="pointer" name={author.username} src={author.avatarUrl} />
         </PopoverTrigger>
         <Flex direction="column" align="start" ml={2} flex={1} w={0} wordBreak="break-word">
-          <HStack>
+          <HStack color={textColorPrimary}>
             <PopoverTrigger>
               <Text fontWeight="bold" fontSize="lg" cursor="pointer">
                 {author.username}
               </Text>
             </PopoverTrigger>
-            <Text textColor={secondaryText} fontSize="sm">
-              - {stringOfTime(message.timestamp)}
-            </Text>
+            <Text fontSize="sm">- {stringOfTime(message.timestamp)}</Text>
           </HStack>
           {edit ? (
             <MessageEditInput message={message} onClose={() => setEdit(false)} />
@@ -93,64 +107,12 @@ export default function MessageItem({ message }: { message: Message }) {
   );
 }
 
-export function MessageEditInput({ message, onClose }: { message: Message; onClose: () => void }) {
-  const input = useMessageProvider().useInput();
-  const suggestionRef = useRef();
-  const [value, setValue] = useState(
-    EditorState.createWithContent(ContentState.createFromText(message.content))
-  );
-  const editMutation = useMutation(
-    (body: EditMessageBody) => editMessage(message.id, message.channel, body),
-    {
-      onSuccess: onClose,
-    }
-  );
-
-  const onSave = () => {
-    const parsed = parseDraft(convertToRaw(value.getCurrentContent()));
-
-    editMutation.mutate({
-      content: parsed.markdown,
-      mentions: parsed.mentions,
-    });
-  };
-
-  return (
-    <Flex direction="column" gap={2} w="full">
-      <Box ref={suggestionRef} w="full" />
-      <MessageInput
-        value={value}
-        onChange={(v) => setValue(v)}
-        editor={{
-          placeholder: 'Input your message here...',
-        }}
-        mentionSuggestions={{
-          portal: suggestionRef,
-          onSearch: input.setSearch,
-          suggestions: input.suggestions,
-        }}
-      />
-      <ButtonGroup>
-        <Button onClick={onClose}>Close</Button>
-        <Button
-          variant="action"
-          leftIcon={<EditIcon />}
-          isLoading={editMutation.isLoading}
-          onClick={onSave}
-        >
-          Edit
-        </Button>
-      </ButtonGroup>
-    </Flex>
-  );
-}
-
 export function MessageActions({
   message,
   onEdit,
   ...props
 }: { message: Message; onEdit: () => void } & StackProps) {
-  const deleteMutation = useMutation(() => deleteMessage(message.id, message.channel));
+  const deleteMutation = useMessageDeleteMutation(message);
 
   return (
     <HStack {...props}>
@@ -175,5 +137,11 @@ export function MessageItemSkeleton(props: { noOfLines: number }) {
         <SkeletonText w="full" noOfLines={props.noOfLines} />
       </Flex>
     </Flex>
+  );
+}
+
+export function useMessageDeleteMutation(message: Message) {
+  return useMutation(['delete_message', message.id], () =>
+    deleteMessage(message.id, message.channel)
   );
 }

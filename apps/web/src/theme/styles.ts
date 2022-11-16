@@ -93,7 +93,7 @@ export const globalStyles = {
         filter: mode('none', 'invert(1)')(props),
       },
       body: {
-        overflowX: 'hidden',
+        overflow: 'hidden',
         bg: mode('secondaryGray.300', 'navy.900')(props),
         fontFamily: 'DM Sans',
         letterSpacing: '-0.5px',

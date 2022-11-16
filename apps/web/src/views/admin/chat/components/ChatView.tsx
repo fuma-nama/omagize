@@ -15,7 +15,7 @@ function mapPage(messages: Message[]) {
   return messages.map((message) => <MessageItem key={message.id} message={message} />);
 }
 
-const MessageContext = createContext<MessageProvider>(undefined);
+export const MessageContext = createContext<MessageProvider>(undefined);
 export function useMessageProvider(): MessageProvider {
   return useContext(MessageContext);
 }

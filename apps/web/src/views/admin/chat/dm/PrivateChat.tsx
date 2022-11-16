@@ -1,4 +1,8 @@
-import ChatView, { MessageProvider, MessageView } from 'views/admin/chat/components/ChatView';
+import ChatView, {
+  MessageContext,
+  MessageProvider,
+  MessageView,
+} from 'views/admin/chat/components/ChatView';
 import { useState } from 'react';
 import LoadingPanel from 'components/panel/LoadingPanel';
 import { openDMChannel, Snowflake, User } from '@omagize/api';
@@ -68,9 +72,11 @@ export function PrivateChatModal({ user, onClose }: { user?: User; onClose: () =
         <ModalHeader>{user?.username}</ModalHeader>
         <ModalCloseButton />
         <ModalBody p={0} h="full">
-          <Box w="full" h="full" pos="relative">
-            {dmQuery.data && <MessageView channel={dmQuery.data?.id} />}
-          </Box>
+          <MessageContext.Provider value={provider}>
+            <Box w="full" h="full" pos="relative">
+              {dmQuery.data && <MessageView channel={dmQuery.data?.id} />}
+            </Box>
+          </MessageContext.Provider>
         </ModalBody>
         <ModalFooter p={0}>
           <MessageBar provider={provider} messageBar={{ rounded: 'md' }} />

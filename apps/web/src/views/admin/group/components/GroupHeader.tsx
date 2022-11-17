@@ -1,12 +1,4 @@
-import {
-  Box,
-  Icon,
-  MenuItem,
-  MenuList,
-  SimpleGrid,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Icon, MenuItem, MenuList, SimpleGrid, Text, useDisclosure } from '@chakra-ui/react';
 import { CardButton } from 'components/card/Card';
 import { GroupDetail } from '@omagize/api';
 import { AddIcon, ChatIcon } from '@chakra-ui/icons';
@@ -33,11 +25,7 @@ export function GroupHeader(props: GroupHeaderProps) {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const navigate = useNavigate();
 
-  function Item({
-    text,
-    icon,
-    ...props
-  }: { text: string; icon: any } & CustomCardProps) {
+  function Item({ text, icon, ...props }: { text: string; icon: any } & CustomCardProps) {
     return (
       <CardButton alignItems="center" gap={2} rounded="lg" {...props}>
         {icon}
@@ -81,22 +69,19 @@ export function OptionsMenu({
   children: ReactNode;
   leave: () => void;
 }) {
-  const { brand, globalBg } = useColors();
+  const { brand } = useColors();
   const menu = useContextMenu<HTMLDivElement>(
-    <MenuList bg={globalBg} border={0}>
+    <>
       <MenuItem onClick={createEvent} icon={<AddIcon color={brand} />}>
         Create Event
       </MenuItem>
-      <MenuItem
-        icon={<Icon as={BsPeopleFill} color={brand} />}
-        onClick={invite}
-      >
+      <MenuItem icon={<Icon as={BsPeopleFill} color={brand} />} onClick={invite}>
         Invite People
       </MenuItem>
       <MenuItem color="red.400" icon={<Icon as={FcLeave} />} onClick={leave}>
         Leave Group
       </MenuItem>
-    </MenuList>
+    </>
   );
 
   return (

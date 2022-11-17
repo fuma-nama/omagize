@@ -1,13 +1,19 @@
 import * as React from 'react';
 import { useRef, useState } from 'react';
-import { useEventListener, Menu, MenuButton } from '@chakra-ui/react';
+import { useEventListener, Menu, MenuButton, MenuList } from '@chakra-ui/react';
+import { useColors } from 'variables/colors';
+
+function inElement(element: HTMLElement, target: EventTarget) {
+  return element.contains(target as any) || target === element;
+}
 
 export function useContextMenu<T extends HTMLElement = HTMLElement>(children: React.ReactNode) {
+  const { globalBg } = useColors();
   const [position, setPosition] = useState<[number, number] | null>(null);
   const targetRef = useRef<T>(null);
 
   useEventListener('contextmenu', (e) => {
-    if (targetRef.current?.contains(e.target as any) || e.target === targetRef.current) {
+    if (targetRef.current != null && inElement(targetRef.current, e.target)) {
       setPosition([e.pageX, e.pageY]);
       e.preventDefault();
     } else {
@@ -19,6 +25,7 @@ export function useContextMenu<T extends HTMLElement = HTMLElement>(children: Re
 
   return {
     targetRef,
+    isOpen: position != null,
     open: (x: number, y: number) => {
       setPosition([x, y]);
     },
@@ -31,7 +38,9 @@ export function useContextMenu<T extends HTMLElement = HTMLElement>(children: Re
           left={position && position[0]}
           top={position && position[1]}
         />
-        {children}
+        <MenuList bg={globalBg} border={0}>
+          {children}
+        </MenuList>
       </Menu>
     ),
   };

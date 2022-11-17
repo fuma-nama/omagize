@@ -6,7 +6,6 @@ import {
   HStack,
   IconButton,
   MenuItem,
-  MenuList,
   SkeletonCircle,
   SkeletonText,
   StackProps,
@@ -22,23 +21,23 @@ import { PopoverTrigger } from 'components/PopoverTrigger';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { useMutation } from '@tanstack/react-query';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { useContextMenu } from 'components/menu/ContextMenu';
 import { MessageEditInput } from './MessageEditInput';
 
 export function useMessageMenu(message: Message, onEdit: () => void) {
-  const { globalBg, brand } = useColors();
+  const { brand } = useColors();
   const deleteMutation = useMessageDeleteMutation(message);
 
   return useContextMenu<HTMLDivElement>(
-    <MenuList bg={globalBg} border={0}>
+    <>
       <MenuItem icon={<EditIcon color={brand} />} onClick={onEdit}>
         Edit Message
       </MenuItem>
       <MenuItem color="red.400" onClick={() => deleteMutation.mutate()} icon={<DeleteIcon />}>
         Delete
       </MenuItem>
-    </MenuList>
+    </>
   );
 }
 
@@ -50,8 +49,10 @@ export default function MessageItem({ message }: { message: Message }) {
 
   const [edit, setEdit] = useState(false);
   const user = useSelfUser();
-  const mentioned = message.everyone || message.mentions.some((m) => m.id === user.id);
   const menu = useMessageMenu(message, () => setEdit(true));
+
+  const selected = menu.isOpen || edit;
+  const mentioned = message.everyone || message.mentions.some((m) => m.id === user.id);
 
   return (
     <UserPopup user={author.id}>
@@ -60,6 +61,7 @@ export default function MessageItem({ message }: { message: Message }) {
         className="message-item"
         pos="relative"
         direction="row"
+        bg={selected && hoverBg}
         _hover={{ bg: hoverBg }}
         transition="all 0.2s"
         rounded="xl"
@@ -72,13 +74,14 @@ export default function MessageItem({ message }: { message: Message }) {
           <Box bg={brand} pos="absolute" top={0} left={0} w={1} h="full" roundedLeft="xl" />
         )}
         <MessageActions
+          message={message}
           onEdit={() => setEdit(true)}
+          onOpenMenu={(e) => menu.open(e.pageX, e.pageY)}
           pos="absolute"
           top={0}
           right={0}
-          display="none"
+          display={{ base: 'none', '3sm': selected && 'flex' }}
           _groupHover={{ display: { '3sm': 'flex' } }}
-          message={message}
         />
         <PopoverTrigger>
           <Avatar cursor="pointer" name={author.username} src={author.avatarUrl} />
@@ -111,8 +114,13 @@ export default function MessageItem({ message }: { message: Message }) {
 export function MessageActions({
   message,
   onEdit,
+  onOpenMenu,
   ...props
-}: { message: Message; onEdit: () => void } & StackProps) {
+}: {
+  message: Message;
+  onEdit: () => void;
+  onOpenMenu: (e: MouseEvent) => void;
+} & StackProps) {
   const deleteMutation = useMessageDeleteMutation(message);
 
   return (
@@ -124,7 +132,11 @@ export function MessageActions({
         isLoading={deleteMutation.isLoading}
         onClick={() => deleteMutation.mutate()}
       />
-      <IconButton aria-label="options" icon={<BiDotsVerticalRounded />} />
+      <IconButton
+        aria-label="options"
+        icon={<BiDotsVerticalRounded />}
+        onClick={(e) => onOpenMenu(e)}
+      />
     </HStack>
   );
 }

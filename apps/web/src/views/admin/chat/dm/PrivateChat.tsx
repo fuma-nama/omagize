@@ -7,18 +7,26 @@ import { useState } from 'react';
 import LoadingPanel from 'components/panel/LoadingPanel';
 import { openDMChannel, Snowflake, User } from '@omagize/api';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
+  Button,
+  ButtonGroup,
+  Heading,
+  HStack,
+  IconButton,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spacer,
 } from '@chakra-ui/react';
 import { MessageBar } from '../components/MessageBar';
+import { IoOpen } from 'react-icons/io5';
+import { CloseIcon } from '@chakra-ui/icons';
+
 export default function PrivateChat() {
   const { user } = useParams();
 
@@ -47,6 +55,7 @@ function PrivateChatView({ user }: { user: Snowflake }) {
 
 export function PrivateChatModal({ user, onClose }: { user?: User; onClose: () => void }) {
   const userId = user?.id;
+  const navigate = useNavigate();
   const dmQuery = useQuery(['dm', userId], () => openDMChannel(userId), {
     enabled: user != null,
   });
@@ -61,8 +70,12 @@ export function PrivateChatModal({ user, onClose }: { user?: User; onClose: () =
         suggestions: [],
       };
     },
-
     channel: dmQuery.data?.id,
+  };
+
+  const onOpen = () => {
+    navigate(`/user/chat/users/${userId}`);
+    onClose();
   };
 
   return (
@@ -75,8 +88,16 @@ export function PrivateChatModal({ user, onClose }: { user?: User; onClose: () =
         zIndex={1}
         overflow="hidden"
       >
-        <ModalHeader>{user?.username}</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader as={HStack} w="full">
+          <Heading size="md">{user?.username}</Heading>
+          <Spacer />
+          <ButtonGroup>
+            <Button leftIcon={<IoOpen />} variant="action" onClick={onOpen}>
+              Open Chat
+            </Button>
+            <IconButton icon={<CloseIcon />} aria-label="Close" onClick={onClose} />
+          </ButtonGroup>
+        </ModalHeader>
         <ModalBody p={0} h="full">
           <MessageContext.Provider value={provider}>
             <Box w="full" h="full" pos="relative">

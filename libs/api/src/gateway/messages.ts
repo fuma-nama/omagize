@@ -1,6 +1,7 @@
 import { RawFriendRequest, RawUser } from './../UserAPI';
 import { RawGroup } from '../GroupAPI';
 import { Relation, FriendRequest, Group, Snowflake, RawRelation } from '../types';
+
 export type GatewayMessage<T> = {
   op: OpCode;
   d: T;
@@ -20,6 +21,8 @@ export enum EventType {
   GroupEventCreated = 'group_event_created',
   UserUpdated = 'user_updated',
   MessageCreated = 'message_created',
+  MessageUpdated = 'message_updated',
+  MessageDeleted = 'message_deleted',
   FriendRequestAdded = 'friend_request_added',
   FriendRequestReplied = 'friend_request_replied',
   FriendRemoved = 'friend_removed',
@@ -80,4 +83,9 @@ export type FriendRequestRepliedEvent = {
 
 export type FriendRemovedEvent = {
   user: Snowflake;
+};
+
+export type MessageRemovedEvent = {
+  id: Snowflake;
+  channel: Snowflake;
 };

@@ -28,7 +28,9 @@ import {
   User,
   FriendRequestType,
   Relation,
+  MessageRemovedEvent,
 } from '@omagize/api';
+import { InfiniteData } from '@tanstack/react-query';
 
 export function handleEvent(message: GatewayMessage<unknown>) {
   if (message.op !== OpCode.Dispatch) return;
@@ -74,6 +76,37 @@ export function handleEvent(message: GatewayMessage<unknown>) {
           f.user.id === event.user ? { ...f, type: RelationShip.None } : f
         ),
       }));
+      break;
+    }
+    case EventType.MessageUpdated: {
+      const updated = Message((message as GatewayMessage<RawMessage>).d);
+
+      client.setQueryData<InfiniteData<Message[]>>(
+        Keys.messages(updated.channel),
+        ({ pages, ...prev }) => {
+          return {
+            ...prev,
+            pages: pages.map((page) =>
+              page.map((message) => (message.id === updated.id ? updated : message))
+            ),
+          };
+        }
+      );
+      break;
+    }
+    case EventType.MessageDeleted: {
+      const payload = (message as GatewayMessage<MessageRemovedEvent>).d;
+      console.log(payload);
+
+      client.setQueryData<InfiniteData<Message[]>>(
+        Keys.messages(payload.channel),
+        ({ pages, ...prev }) => {
+          return {
+            ...prev,
+            pages: pages.map((page) => page.filter((message) => message.id !== payload.id)),
+          };
+        }
+      );
       break;
     }
     default: {

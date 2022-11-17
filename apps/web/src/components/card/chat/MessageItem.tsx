@@ -65,11 +65,12 @@ export default function MessageItem({ message }: { message: Message }) {
         rounded="xl"
         p={3}
         gap={3}
-        overflow="hidden"
         role="group"
         ref={menu.targetRef}
       >
-        {mentioned && <Box bg={brand} pos="absolute" top={0} left={0} w={1} h="full" />}
+        {mentioned && (
+          <Box bg={brand} pos="absolute" top={0} left={0} w={1} h="full" roundedLeft="xl" />
+        )}
         <MessageActions
           onEdit={() => setEdit(true)}
           pos="absolute"

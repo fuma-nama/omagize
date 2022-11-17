@@ -96,7 +96,6 @@ export function handleEvent(message: GatewayMessage<unknown>) {
     }
     case EventType.MessageDeleted: {
       const payload = (message as GatewayMessage<MessageRemovedEvent>).d;
-      console.log(payload);
 
       client.setQueryData<InfiniteData<Message[]>>(
         Keys.messages(payload.channel),

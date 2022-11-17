@@ -18,25 +18,44 @@ import MarkdownContent from './MarkdownContent';
 import { useColors } from 'variables/colors';
 import { UserPopup } from 'components/modals/popup/UserPopup';
 import { PopoverTrigger } from 'components/PopoverTrigger';
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { CopyIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { useMutation } from '@tanstack/react-query';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { MouseEvent, useState } from 'react';
 import { useContextMenu } from 'components/menu/ContextMenu';
 import { MessageEditInput } from './MessageEditInput';
 
-export function useMessageMenu(message: Message, onEdit: () => void) {
+export type MessagePermission = {
+  edit: boolean;
+  delete: boolean;
+};
+
+export function useMessageMenu(
+  message: Message,
+  permission: MessagePermission,
+  onEdit: () => void
+) {
   const { brand } = useColors();
   const deleteMutation = useMessageDeleteMutation(message);
 
   return useContextMenu<HTMLDivElement>(
     <>
-      <MenuItem icon={<EditIcon color={brand} />} onClick={onEdit}>
-        Edit Message
+      <MenuItem
+        icon={<CopyIcon color={brand} />}
+        onClick={() => navigator.clipboard.writeText(message.content)}
+      >
+        Copy Message
       </MenuItem>
-      <MenuItem color="red.400" onClick={() => deleteMutation.mutate()} icon={<DeleteIcon />}>
-        Delete
-      </MenuItem>
+      {permission.edit && (
+        <MenuItem icon={<EditIcon color={brand} />} onClick={onEdit}>
+          Edit Message
+        </MenuItem>
+      )}
+      {permission.delete && (
+        <MenuItem color="red.400" onClick={() => deleteMutation.mutate()} icon={<DeleteIcon />}>
+          Delete
+        </MenuItem>
+      )}
     </>
   );
 }
@@ -49,7 +68,11 @@ export default function MessageItem({ message }: { message: Message }) {
 
   const [edit, setEdit] = useState(false);
   const user = useSelfUser();
-  const menu = useMessageMenu(message, () => setEdit(true));
+  const permission: MessagePermission = {
+    edit: message.author.id === user.id,
+    delete: message.author.id === user.id,
+  };
+  const menu = useMessageMenu(message, permission, () => setEdit(true));
 
   const selected = menu.isOpen || edit;
   const mentioned = message.everyone || message.mentions.some((m) => m.id === user.id);
@@ -77,9 +100,7 @@ export default function MessageItem({ message }: { message: Message }) {
           message={message}
           onEdit={() => setEdit(true)}
           onOpenMenu={(e) => menu.open(e.pageX, e.pageY)}
-          pos="absolute"
-          top={0}
-          right={0}
+          permission={permission}
           display={{ base: 'none', '3sm': selected && 'flex' }}
           _groupHover={{ display: { '3sm': 'flex' } }}
         />
@@ -115,23 +136,27 @@ export function MessageActions({
   message,
   onEdit,
   onOpenMenu,
+  permission,
   ...props
 }: {
   message: Message;
+  permission: MessagePermission;
   onEdit: () => void;
   onOpenMenu: (e: MouseEvent) => void;
 } & StackProps) {
   const deleteMutation = useMessageDeleteMutation(message);
 
   return (
-    <HStack {...props}>
-      <IconButton aria-label="edit" icon={<EditIcon />} onClick={onEdit} />
-      <IconButton
-        aria-label="delete"
-        icon={<DeleteIcon />}
-        isLoading={deleteMutation.isLoading}
-        onClick={() => deleteMutation.mutate()}
-      />
+    <HStack pos="absolute" top={0} right={0} {...props}>
+      {permission.edit && <IconButton aria-label="edit" icon={<EditIcon />} onClick={onEdit} />}
+      {permission.delete && (
+        <IconButton
+          aria-label="delete"
+          icon={<DeleteIcon />}
+          isLoading={deleteMutation.isLoading}
+          onClick={() => deleteMutation.mutate()}
+        />
+      )}
       <IconButton
         aria-label="options"
         icon={<BiDotsVerticalRounded />}

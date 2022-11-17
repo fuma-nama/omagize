@@ -12,3 +12,13 @@ export function useSelected() {
     },
   };
 }
+
+export function useDM() {
+  const { user } = useParams();
+  const navigate = useNavigate();
+
+  return {
+    current: user,
+    openDM: (user: Snowflake) => navigate(`/user/chat/users/${user}`),
+  };
+}

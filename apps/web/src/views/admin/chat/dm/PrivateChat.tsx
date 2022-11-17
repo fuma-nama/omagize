@@ -7,7 +7,6 @@ import { useState } from 'react';
 import LoadingPanel from 'components/panel/LoadingPanel';
 import { openDMChannel, Snowflake, User } from '@omagize/api';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -26,11 +25,12 @@ import {
 import { MessageBar } from '../components/MessageBar';
 import { IoOpen } from 'react-icons/io5';
 import { CloseIcon } from '@chakra-ui/icons';
+import { useDM } from 'utils/navigate';
 
 export default function PrivateChat() {
-  const { user } = useParams();
+  const { current } = useDM();
 
-  return <PrivateChatView user={user} />;
+  return <PrivateChatView user={current} />;
 }
 
 function PrivateChatView({ user }: { user: Snowflake }) {
@@ -55,7 +55,7 @@ function PrivateChatView({ user }: { user: Snowflake }) {
 
 export function PrivateChatModal({ user, onClose }: { user?: User; onClose: () => void }) {
   const userId = user?.id;
-  const navigate = useNavigate();
+  const { openDM } = useDM();
   const dmQuery = useQuery(['dm', userId], () => openDMChannel(userId), {
     enabled: user != null,
   });
@@ -74,7 +74,7 @@ export function PrivateChatModal({ user, onClose }: { user?: User; onClose: () =
   };
 
   const onOpen = () => {
-    navigate(`/user/chat/users/${userId}`);
+    openDM(userId);
     onClose();
   };
 

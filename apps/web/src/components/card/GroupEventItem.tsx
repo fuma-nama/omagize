@@ -21,11 +21,13 @@ import { HSeparator } from 'components/layout/Separator';
 import { BiDotsHorizontalRounded } from 'react-icons/bi';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { CustomCardProps } from 'theme/theme';
+import { useSelected } from 'utils/navigate';
 
 export function GlobalGroupEventItem({ event, ...props }: { event: GroupEvent } & CustomCardProps) {
   const { brand, textColorPrimary, textColorSecondary } = useColors();
   const group = useGroup(event.group);
   const happening = event.startAt <= new Date(Date.now());
+  const { setSelectedGroup } = useSelected();
 
   return (
     <Card overflow="hidden" gap={1} p={0} {...props}>
@@ -46,7 +48,7 @@ export function GlobalGroupEventItem({ event, ...props }: { event: GroupEvent } 
       <HSeparator mt="auto" />
       <Flex direction="row" px={4} py={2} color={textColorSecondary} gap={2}>
         {group != null && (
-          <HStack spacing={2}>
+          <HStack spacing={2} cursor="pointer" onClick={() => setSelectedGroup(event.group)}>
             <Avatar src={group.iconUrl} name={group.name} size="sm" />
             <Text fontWeight="600">{group.name}</Text>
           </HStack>

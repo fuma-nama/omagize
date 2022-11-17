@@ -11,7 +11,7 @@ export enum MentionType {
 }
 
 export const Syntax = {
-  Quote: /> (.+)/g, // > Hello
+  Quote: /^> (.+)$/gm, // > Hello
   Header: /^# (.+)$/gm, // # Hello
   CodeBlock: /```((.|\n)*)```/gm, // ```Hello \n World```
 };

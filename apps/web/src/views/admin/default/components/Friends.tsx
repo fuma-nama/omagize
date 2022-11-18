@@ -75,7 +75,7 @@ export default function Friends() {
 
 function All({ friends }: { friends?: Relation[] }) {
   if (friends != null && friends.length === 0) {
-    return <FriendsPlaceholder />;
+    return <FriendsPlaceholder>You don't have a Friend yet</FriendsPlaceholder>;
   }
 
   return (
@@ -101,7 +101,7 @@ function All({ friends }: { friends?: Relation[] }) {
 function Pending() {
   const friendRequests = useUserStore((s) => s.friendRequests);
   if (friendRequests != null && friendRequests.length === 0) {
-    return <FriendsPlaceholder />;
+    return <FriendsPlaceholder>No one sent you a friend request</FriendsPlaceholder>;
   }
 
   return (
@@ -126,8 +126,6 @@ function Pending() {
   );
 }
 
-function FriendsPlaceholder() {
-  return (
-    <Placeholder icon={<Icon as={BiSad} w={20} h={20} />}>You don't have a Friend yet</Placeholder>
-  );
+function FriendsPlaceholder({ children }: { children: string }) {
+  return <Placeholder icon={<Icon as={BiSad} w={20} h={20} />}>{children}</Placeholder>;
 }

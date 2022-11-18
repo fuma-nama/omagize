@@ -48,8 +48,7 @@ export default function Banner({ user }: { user: User }) {
         mb="40px"
         lineHeight="28px"
       >
-        Enter in this creative world. Discover now the latest NFTs or start
-        creating your own!
+        Enter in this creative world. Create your own group and start chating!
       </Text>
       <Flex align="center">
         <Button

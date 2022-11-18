@@ -46,7 +46,7 @@ export function GlobalGroupEventItem({ event, ...props }: { event: GroupEvent } 
       <GroupEventContent event={event} />
 
       <HSeparator mt="auto" />
-      <Flex direction="row" px={4} py={2} color={textColorSecondary} gap={2}>
+      <Flex direction="row" px={4} py={2} gap={2}>
         {group != null && (
           <HStack spacing={2} cursor="pointer" onClick={() => setSelectedGroup(event.group)}>
             <Avatar src={group.iconUrl} name={group.name} size="sm" />
@@ -54,7 +54,7 @@ export function GlobalGroupEventItem({ event, ...props }: { event: GroupEvent } 
           </HStack>
         )}
         {event.place != null && (
-          <HStack spacing={1}>
+          <HStack spacing={1} color={textColorSecondary}>
             <Icon as={MdPlace} />
             <Text fontWeight="600">{event.place}</Text>
           </HStack>
@@ -89,9 +89,9 @@ export default function GroupEventItem({ event }: { event: GroupEvent }) {
       <GroupEventContent event={event} />
 
       <HSeparator mt="auto" />
-      <Flex direction="row" px={4} py={2} color={textColorSecondary} gap={2}>
+      <Flex direction="row" px={4} py={2} gap={2}>
         {event.place != null && (
-          <HStack spacing={1}>
+          <HStack spacing={1} color={textColorSecondary}>
             <Icon as={MdPlace} />
             <Text fontWeight="600">{event.place}</Text>
           </HStack>

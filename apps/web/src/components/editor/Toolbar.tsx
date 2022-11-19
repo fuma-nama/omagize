@@ -1,15 +1,9 @@
-import { Button, ButtonGroup, Hide, IconButton, Show } from '@chakra-ui/react';
-import { Fragment, ReactElement } from 'react';
+import { ButtonGroup, IconButton, Tooltip } from '@chakra-ui/react';
+import { ReactElement } from 'react';
 import { ValueProps } from 'components/editor/MessageInput';
 import { DraftInlineStyleType, RichUtils } from 'draft-js';
 import { useColors } from 'variables/colors';
-import {
-  BiBold,
-  BiCode,
-  BiItalic,
-  BiStrikethrough,
-  BiUnderline,
-} from 'react-icons/bi';
+import { BiBold, BiCode, BiItalic, BiStrikethrough, BiUnderline } from 'react-icons/bi';
 
 const styles: Array<{
   style: DraftInlineStyleType;
@@ -56,29 +50,16 @@ export function Toolbar({ value, onChange }: ValueProps) {
         };
 
         return (
-          <Fragment key={s.style}>
-            <Show above="md">
-              <Button
-                onMouseDown={onMouseDown}
-                color={checked && 'white'}
-                bg={checked && brand}
-                _hover={{}}
-                leftIcon={s.icon}
-              >
-                {s.label}
-              </Button>
-            </Show>
-            <Hide above="md">
-              <IconButton
-                aria-label={s.style}
-                onMouseDown={onMouseDown}
-                color={checked && 'white'}
-                bg={checked && brand}
-                icon={s.icon}
-                _hover={{}}
-              />
-            </Hide>
-          </Fragment>
+          <Tooltip key={s.style} label={s.label}>
+            <IconButton
+              aria-label={s.style}
+              onMouseDown={onMouseDown}
+              color={checked && 'white'}
+              bg={checked && brand}
+              icon={s.icon}
+              _hover={{}}
+            />
+          </Tooltip>
         );
       })}
     </ButtonGroup>

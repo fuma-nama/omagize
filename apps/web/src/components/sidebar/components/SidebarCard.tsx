@@ -1,7 +1,5 @@
 import { Avatar, Box, Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { useSelfUser } from '@omagize/api';
-import { UserPopup } from 'components/modals/popup/UserPopup';
-import { PopoverTrigger } from 'components/PopoverTrigger';
 import { FiSettings } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
@@ -11,41 +9,35 @@ export default function SidebarProfile() {
   const user = useSelfUser();
 
   return (
-    <UserPopup user={user.id}>
-      <Flex align="center" direction="column" bg={bgColor} rounded="3xl">
-        <PopoverTrigger>
-          <Box
-            border="5px solid"
-            borderColor={borderColor}
-            borderRadius="50%"
-            w="94px"
-            h="94px"
-            mx="auto"
-            mt="-47px"
-            cursor="pointer"
-          >
-            <Avatar name={user.username} src={user.avatarUrl} w="full" h="full" />
-          </Box>
-        </PopoverTrigger>
-        <Flex direction="column" mb="5px" align="center" justify="center" px="15px" pt="3px">
-          <PopoverTrigger>
-            <Text
-              fontSize={{ base: 'lg', xl: '18px' }}
-              color="white"
-              fontWeight="bold"
-              lineHeight="150%"
-              textAlign="center"
-              px="10px"
-              mb="14px"
-              cursor="pointer"
-            >
-              {user.username}
-            </Text>
-          </PopoverTrigger>
-        </Flex>
-        <SettingsButton />
+    <Flex align="center" direction="column" bg={bgColor} rounded="3xl">
+      <Box
+        border="5px solid"
+        borderColor={borderColor}
+        borderRadius="50%"
+        w="94px"
+        h="94px"
+        mx="auto"
+        mt="-47px"
+        cursor="pointer"
+      >
+        <Avatar name={user.username} src={user.avatarUrl} w="full" h="full" />
+      </Box>
+      <Flex direction="column" mb="5px" align="center" justify="center" px="15px" pt="3px">
+        <Text
+          fontSize={{ base: 'lg', xl: '18px' }}
+          color="white"
+          fontWeight="bold"
+          lineHeight="150%"
+          textAlign="center"
+          px="10px"
+          mb="14px"
+          cursor="pointer"
+        >
+          {user.username}
+        </Text>
       </Flex>
-    </UserPopup>
+      <SettingsButton />
+    </Flex>
   );
 }
 

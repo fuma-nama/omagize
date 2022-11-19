@@ -5,6 +5,7 @@ import { useGroup } from 'stores/hooks';
 import LoadingPanel from 'components/panel/LoadingPanel';
 import { searchMembers } from '@omagize/api';
 import { useQuery } from '@tanstack/react-query';
+import { MentionType } from 'utils/markdown/types';
 
 export default function GroupChat() {
   const { selectedGroup } = useSelected();
@@ -23,9 +24,10 @@ export default function GroupChat() {
 
       return {
         search,
-        setSearch: (s) => setSearch(s),
+        setSearch,
         suggestions:
           query.data?.map((member) => ({
+            type: MentionType.User,
             id: member.id,
             name: member.username,
             avatar: member.avatarUrl,

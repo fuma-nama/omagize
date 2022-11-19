@@ -14,8 +14,8 @@ import { Toolbar } from 'components/editor/Toolbar';
 import { createDefault } from 'components/editor/TextEditor';
 import { parseDraft } from 'utils/markdown/parser';
 import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
-import { MentionData } from '@draft-js-plugins/mention';
 import { MessageProvider } from './ChatView';
+import { MentionData } from 'components/editor/MarkdownPlugin';
 
 export interface InputProvider {
   search: string;

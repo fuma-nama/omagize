@@ -1,15 +1,13 @@
 import { EditorState, EditorProps } from 'draft-js';
-import TextEditor from './TextEditor';
-import createMentionPlugin, { defaultSuggestionsFilter } from '@draft-js-plugins/mention';
-import React, { useState, ReactNode, useMemo, useRef } from 'react';
-import { EntryComponentProps } from '@draft-js-plugins/mention/lib/MentionSuggestions/Entry/Entry';
+import React, { useState, ReactNode, useEffect } from 'react';
 import { Avatar, Box, HStack, Icon, Portal, Text } from '@chakra-ui/react';
 import CustomCard from '../card/Card';
-import { SubMentionComponentProps } from '@draft-js-plugins/mention/lib/Mention';
 import { useColors, useItemHoverBg } from '../../variables/colors';
-import { Everyone, MarkdownPlugin, MentionData } from './MarkdownPlugin';
-import { EveryoneMention, MentionEntity } from 'components/editor/entities';
+import { Everyone, MentionData } from './MarkdownPlugin';
 import { BsPeopleFill } from 'react-icons/bs';
+import { SlateEditor, SuggestionControl, SuggestionSearch } from './SlateEditor';
+import { CustomCardProps } from 'theme/theme';
+import { MentionType } from 'utils/markdown/types';
 
 export type SuggestionProps = {
   portal?: React.RefObject<HTMLElement | null>;
@@ -27,17 +25,6 @@ export type ValueProps = {
   onChange: (next: EditorState) => void;
 };
 
-function usePlugins() {
-  return useMemo(() => {
-    const mentionPlugin = createMentionPlugin({
-      entityMutability: 'IMMUTABLE',
-      mentionComponent: Mention,
-    });
-
-    return { mention: mentionPlugin, markdown: MarkdownPlugin };
-  }, []);
-}
-
 /**
  * Input field that Supports mentions, markdown, suggestions
  */
@@ -47,57 +34,54 @@ export default function MessageInput({
   editor,
   mentionSuggestions,
 }: MessageInputProps) {
-  const { mention, markdown } = usePlugins();
-  const [open, setOpen] = useState(false);
-  const lastSearch = useRef<string>();
-  const onSearchChange = ({ value }: { value: string }) => {
-    mentionSuggestions.onSearch(value);
-    lastSearch.current = value;
+  const [mention, setMention] = useState<SuggestionSearch>();
+
+  useEffect(() => {
+    mentionSuggestions.onSearch(mention?.text);
+  }, [mention?.text]);
+
+  const suggestions = [...mentionSuggestions.suggestions];
+  if ('everyone'.startsWith(mention?.text.toLowerCase())) {
+    suggestions.push(Everyone);
+  }
+
+  const suggestionControl: SuggestionControl = {
+    length: suggestions.length,
+    accept(state) {
+      const selected = suggestions[state.selected];
+
+      if (selected == null) return;
+      state.acceptMention(selected.type, {
+        name: selected.name,
+        id: selected.id,
+        avatar: selected.avatar,
+      });
+    },
+    render: (state) => (
+      <Portal containerRef={mentionSuggestions.portal}>
+        <Suggestions>
+          {suggestions.map((s, i) => (
+            <Entry
+              key={s.id}
+              mention={s}
+              selected={i === state.selected}
+              onClick={() =>
+                state.acceptMention(s.type, {
+                  name: s.name,
+                  id: s.id,
+                  avatar: s.avatar,
+                })
+              }
+            />
+          ))}
+        </Suggestions>
+      </Portal>
+    ),
   };
 
   return (
-    <>
-      <TextEditor
-        editorState={value}
-        onChange={onChange}
-        plugins={[mention, markdown]}
-        {...editor}
-        box={{
-          w: 'full',
-          minWidth: 0,
-        }}
-      />
-      <mention.MentionSuggestions
-        open={open}
-        onOpenChange={setOpen}
-        suggestions={[
-          ...(mentionSuggestions.suggestions ?? []),
-          ...defaultSuggestionsFilter(lastSearch.current ?? '', [Everyone]),
-        ]}
-        onSearchChange={onSearchChange}
-        onAddMention={() => {
-          // get the mention object selected
-        }}
-        entryComponent={Entry}
-        popoverContainer={({ children }) => (
-          <Portal containerRef={mentionSuggestions.portal}>
-            <Suggestions>{children}</Suggestions>
-          </Portal>
-        )}
-      />
-    </>
+    <SlateEditor mentionSuggestions={[mention, setMention]} suggestionControl={suggestionControl} />
   );
-}
-
-function Mention(props: SubMentionComponentProps) {
-  const mention = props.mention as MentionData;
-
-  switch (mention.type) {
-    case 'everyone':
-      return <EveryoneMention>{props.children}</EveryoneMention>;
-    default:
-      return <MentionEntity name={props.children} className={props.className} />;
-  }
 }
 
 function Suggestions({ children }: { children: ReactNode }) {
@@ -112,14 +96,17 @@ function Suggestions({ children }: { children: ReactNode }) {
   );
 }
 
-function Entry(props: EntryComponentProps) {
-  const { mention, theme, searchValue, isFocused, selectMention, ...parentProps } = props;
-  const type = (props.mention as MentionData).type;
+function Entry({
+  mention,
+  selected,
+  ...props
+}: { mention: MentionData; selected: boolean } & CustomCardProps) {
+  const type = (mention as MentionData).type;
   const hoverBg = useItemHoverBg();
   let content;
 
   switch (type) {
-    case 'everyone':
+    case MentionType.Everyone:
       content = (
         <>
           <Icon as={BsPeopleFill} />
@@ -138,7 +125,7 @@ function Entry(props: EntryComponentProps) {
   }
 
   return (
-    <CustomCard cursor="pointer" p={2} {...parentProps} {...(isFocused && hoverBg)}>
+    <CustomCard cursor="pointer" p={2} {...(selected && hoverBg)} {...props}>
       <HStack>{content}</HStack>
     </CustomCard>
   );

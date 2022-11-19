@@ -23,6 +23,9 @@
     "markdown-to-jsx": "^7.1.7",
     "react-infinite-scroll-hook": "^4.0.4",
     "vite": "^3.1.7",
+    "slate": "0.66.0",
+    "slate-history": "0.66.0",
+    "slate-react": "0.66.0",
     "vite-plugin-svgr": "^2.2.1",
     "vite-tsconfig-paths": "^3.5.1",
     "zustand": "^4.1.4"

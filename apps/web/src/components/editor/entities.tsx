@@ -13,16 +13,8 @@ export function MentionEntity({
   const { brand } = useColors();
 
   return (
-    <Box
-      as="span"
-      bg={brand}
-      color="white"
-      px={1}
-      fontWeight="600"
-      cursor="pointer"
-      contentEditable={false}
-      {...props}
-    >
+    <Box as="span" bg={brand} color="white" px={1} fontWeight="600" cursor="pointer" {...props}>
+      {props.children}
       <span>@</span>
       <span>{name}</span>
     </Box>
@@ -35,7 +27,7 @@ export function EveryoneMention(props: any) {
   return (
     <Box as="span" bg={brand} color="white" fontWeight="600" cursor="pointer" px={1} {...props}>
       <span>@</span>
-      {props.children}
+      everyone
     </Box>
   );
 }

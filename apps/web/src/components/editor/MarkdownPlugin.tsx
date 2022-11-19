@@ -2,17 +2,16 @@ import { Box, Flex, Heading } from '@chakra-ui/react';
 import { EditorPlugin } from '@draft-js-plugins/editor';
 import { CompositeDecorator, ContentBlock, ContentState } from 'draft-js';
 import { ReactNode } from 'react';
-import { Syntax } from 'utils/markdown/types';
+import { MentionType, Syntax } from 'utils/markdown/types';
 import { useColors } from 'variables/colors';
 import { MentionEntity } from './entities';
 
 export interface MentionData {
-  link?: string;
   avatar?: string;
-  name: string;
-  id?: null | string | number;
+  name?: string;
+  id?: string;
 
-  type?: 'everyone' | 'user' | 'role';
+  type?: MentionType;
 }
 
 function findWithRegex(
@@ -60,8 +59,8 @@ const Elements: Array<Element> = [
 ];
 
 export const Everyone: MentionData = {
-  name: 'everyone',
-  type: 'everyone',
+  id: 'everyone',
+  type: MentionType.Everyone,
 };
 /**
  * It only takes effects on markdown syntaxes that don't allow nested elements

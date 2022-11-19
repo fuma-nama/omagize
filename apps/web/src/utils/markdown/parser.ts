@@ -2,6 +2,7 @@ import { Mention } from '@omagize/api';
 import { MentionData } from 'components/editor/MarkdownPlugin';
 import { RawDraftContentState, RawDraftEntity } from 'draft-js';
 import draftToMarkdown from './draftToMarkdown';
+import { MentionType } from './types';
 
 export type Parsed = {
   mentions: Mention[];
@@ -28,11 +29,11 @@ function parseEntity(entity: RawDraftEntity): Mention {
       const data = entity.data.mention as MentionData;
 
       switch (data.type) {
-        case 'everyone':
+        case MentionType.Everyone:
           return {
             type: 'everyone',
           };
-        case 'role':
+        case MentionType.Group:
           return {
             type: 'role',
             id: data.id as string,

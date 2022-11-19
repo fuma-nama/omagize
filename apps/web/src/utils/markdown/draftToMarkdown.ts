@@ -8,13 +8,14 @@ import {
   RawDraftInlineStyleRange,
 } from 'draft-js';
 import { MentionData } from 'components/editor/MarkdownPlugin';
+import { MentionType } from './types';
 
 const blockWeight = -1; //should be the least weight
 const entityMap: EntityMapping = {
   mention(entity) {
     const mention = entity.data.mention as MentionData;
     switch (mention.type) {
-      case 'everyone':
+      case MentionType.Everyone:
         return '<@everyone>';
       default:
         return `<@${mention.id}>`;
@@ -130,9 +131,7 @@ function getStyleScope(type: DraftInlineStyleType): Scope {
 }
 
 function mapBlock(type: DraftBlockType): Modify[] {
-  const add = (c: string): Modify[] => [
-    { type: 'insert', text: c, index: 0, weight: blockWeight },
-  ];
+  const add = (c: string): Modify[] => [{ type: 'insert', text: c, index: 0, weight: blockWeight }];
 
   switch (type) {
     case 'header-one':

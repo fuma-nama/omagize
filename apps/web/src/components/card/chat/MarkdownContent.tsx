@@ -27,7 +27,7 @@ const DefaultOptions: MarkdownToJSX.Options = {
     img: Blocked,
     h1: (props: any) => <Heading fontSize="xl">{props.children}</Heading>,
     Mention: Mention,
-    Everyone: () => <EveryoneMention>everyone</EveryoneMention>,
+    Everyone: () => <EveryoneMention />,
     blockquote: (props) => <Quote>{props.children}</Quote>,
     code: (props) => (
       <code>

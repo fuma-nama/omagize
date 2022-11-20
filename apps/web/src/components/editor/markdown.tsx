@@ -91,7 +91,7 @@ export function elementToMarkdown(node: Element, children: string, entities: Ent
       });
       return children;
     }
-    case 'paragraph':
+    default:
       return children;
   }
 }

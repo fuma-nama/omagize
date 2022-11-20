@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "chakra-ui-carousel": "^1.0.6",
+    "emojibase": "^6.1.0",
     "markdown-to-jsx": "^7.1.7",
     "react-infinite-scroll-hook": "^4.0.4",
     "slate": "0.76.0",

@@ -160,6 +160,7 @@ importers:
   apps/web:
     specifiers:
       chakra-ui-carousel: ^1.0.6
+      emojibase: ^6.1.0
       markdown-to-jsx: ^7.1.7
       react-infinite-scroll-hook: ^4.0.4
       slate: 0.76.0
@@ -171,6 +172,7 @@ importers:
       zustand: ^4.1.4
     dependencies:
       chakra-ui-carousel: 1.0.6
+      emojibase: 6.1.0
       markdown-to-jsx: 7.1.7
       react-infinite-scroll-hook: 4.0.4
       slate: 0.76.0
@@ -7894,6 +7896,10 @@ packages:
   /emoji-regex/9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
     dev: true
+
+  /emojibase/6.1.0:
+    resolution: {integrity: sha512-1GkKJPXP6tVkYJHOBSJHoGOr/6uaDxZ9xJ6H7m6PfdGXTmQgbALHLWaVRY4Gi/qf5x/gT/NUXLPuSHYLqtLtrQ==}
+    dev: false
 
   /emojis-list/2.1.0:
     resolution: {integrity: sha512-knHEZMgs8BB+MInokmNTg/OyPlAddghe1YBgNwJBc5zsJi/uyIcXoSDsL/W9ymOsBoBGdPIHXYJ9+qKFwRwDng==}

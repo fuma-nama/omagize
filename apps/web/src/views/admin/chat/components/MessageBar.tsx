@@ -194,6 +194,6 @@ function useSendMutation(channel: Snowflake) {
   return useMutation(['send_message', channel], async (content: MessageOptions) => {
     const parsed = slateToMarkdown(content.editor);
 
-    return await sendMessage(channel, parsed.markdown, content.attachments, []);
+    return await sendMessage(channel, parsed.markdown, content.attachments, parsed.mentions);
   });
 }

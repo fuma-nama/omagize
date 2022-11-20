@@ -6,7 +6,7 @@
 
 export enum MentionType {
   User = 'user',
-  Group = 'group',
+  Role = 'role',
   Everyone = 'all',
 }
 
@@ -15,3 +15,14 @@ export const Syntax = {
   Header: /^# (.+)$/gm, // # Hello
   CodeBlock: /```((.|\n)*)```/gm, // ```Hello \n World```
 };
+
+export function toAPIMentionType(type: MentionType): 'user' | 'role' | 'everyone' {
+  switch (type) {
+    case MentionType.Everyone:
+      return 'everyone';
+    case MentionType.Role:
+      return 'role';
+    case MentionType.User:
+      return 'user';
+  }
+}

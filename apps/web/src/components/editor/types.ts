@@ -13,7 +13,7 @@ export type MentionEntity = {
 export type MentionElement = BaseElement & {
   type: 'mention';
   mention_type: MentionType;
-  data?: MentionEntity;
+  data: MentionEntity;
 };
 
 type CustomElement = { type: 'paragraph'; children: CustomText[] } | MentionElement;

@@ -37,7 +37,7 @@ export function MessageEditInput({ message, onClose }: { message: Message; onClo
 
     editMutation.mutate({
       content: parsed.markdown,
-      mentions: [],
+      mentions: parsed.mentions,
     });
   };
 

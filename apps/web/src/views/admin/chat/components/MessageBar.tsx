@@ -8,14 +8,14 @@ import { useMutation } from '@tanstack/react-query';
 import useFilePicker from 'components/picker/FilePicker';
 import { FileUploadItem } from './FileUploadItem';
 import { CustomCardProps } from 'theme/theme';
-import { useMessageInputPlugin } from 'components/editor/plugins';
+import { useMessageInputPlugin } from 'components/editor/plugins/plugins';
 import { Toolbar } from 'components/editor/Toolbar';
 import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
 import { MessageProvider } from './ChatView';
 import { MentionData } from 'utils/markdown/mention';
 import { Descendant, Editor } from 'slate';
 import { isEmpty, slateToMarkdown } from 'components/editor/markdown';
-import { createSlateEditor, SlateEditor } from 'components/editor/editor';
+import { createSlateEditor, initialValue, SlateEditor } from 'components/editor/editor';
 import { Slate } from 'slate-react';
 
 export interface InputProvider {
@@ -29,15 +29,11 @@ export type MessageOptions = {
   message: Descendant[];
   attachments: File[];
 };
+
 function useOptionState() {
   const [content, setContent] = useState<MessageOptions>(() => ({
     editor: createSlateEditor(),
-    message: [
-      {
-        type: 'paragraph',
-        children: [{ text: '' }],
-      },
-    ],
+    message: initialValue,
     attachments: [],
   }));
 
@@ -45,10 +41,15 @@ function useOptionState() {
     content,
     setContent,
     resetContent: () =>
-      setContent((prev) => ({
-        ...prev,
-        attachments: [],
-      })),
+      setContent((prev) => {
+        prev.editor.children = initialValue;
+
+        return {
+          ...prev,
+          message: initialValue,
+          attachments: [],
+        };
+      }),
     dispatch: (v: (prev: MessageOptions) => Partial<MessageOptions>) => {
       return setContent((prev) => ({ ...prev, ...v(prev) }));
     },
@@ -64,7 +65,6 @@ export function MessageBar({
 }) {
   const { content, resetContent, dispatch } = useOptionState();
   const suggestionRef = useRef<HTMLDivElement>();
-  const { isOpen: showToolbar, onToggle: toggleToolbar } = useDisclosure();
   const sendMutation = useSendMutation(provider.channel);
   const picker = useFilePicker((f) =>
     dispatch((prev) => ({
@@ -72,8 +72,8 @@ export function MessageBar({
     }))
   );
 
-  const send = () => {
-    sendMutation.mutate(content);
+  const send = async () => {
+    await sendMutation.mutateAsync(content);
     resetContent();
   };
 
@@ -91,18 +91,7 @@ export function MessageBar({
         }
       />
       <Box ref={suggestionRef} />
-      <HStack pos="absolute" maxW="full" h="50px" top="-50px" right={0}>
-        <SlideFade in={showToolbar} unmountOnExit>
-          <Toolbar editor={content.editor} />
-        </SlideFade>
-        <IconButton
-          icon={showToolbar ? <ArrowDownIcon /> : <ArrowUpIcon />}
-          onClick={toggleToolbar}
-          aria-label="open-toolbar"
-          variant="ghost"
-        />
-      </HStack>
-
+      <Tools editor={content.editor} />
       <Card
         flexDirection="row"
         alignItems="center"
@@ -134,6 +123,24 @@ export function MessageBar({
         />
       </Card>
     </Flex>
+  );
+}
+
+function Tools({ editor }: { editor: Editor }) {
+  const { isOpen, onToggle } = useDisclosure();
+
+  return (
+    <HStack pos="absolute" maxW="full" h="50px" top="-50px" right={0}>
+      <SlideFade in={isOpen} unmountOnExit>
+        <Toolbar editor={editor} />
+      </SlideFade>
+      <IconButton
+        icon={isOpen ? <ArrowDownIcon /> : <ArrowUpIcon />}
+        onClick={onToggle}
+        aria-label="open-toolbar"
+        variant="ghost"
+      />
+    </HStack>
   );
 }
 

@@ -1,52 +1,63 @@
 import { ButtonGroup, IconButton, Tooltip } from '@chakra-ui/react';
 import { ReactElement } from 'react';
-import { ValueProps } from 'components/editor/MessageInput';
-import { DraftInlineStyleType, RichUtils } from 'draft-js';
 import { useColors } from 'variables/colors';
 import { BiBold, BiCode, BiItalic, BiStrikethrough, BiUnderline } from 'react-icons/bi';
+import { Editor } from 'slate';
+import { TextMarks } from './types';
+
+export function toggleFormat(editor: Editor, format: keyof TextMarks) {
+  const isActive = isFormatActive(editor, format);
+
+  if (isActive) {
+    Editor.removeMark(editor, format);
+  } else {
+    Editor.addMark(editor, format, true);
+  }
+}
+
+function isFormatActive(editor: Editor, format: keyof TextMarks) {
+  const marks = Editor.marks(editor);
+  return marks ? marks[format] === true : false;
+}
 
 const styles: Array<{
-  style: DraftInlineStyleType;
+  style: keyof TextMarks;
   label: string;
   icon?: ReactElement;
 }> = [
   {
-    style: 'BOLD',
+    style: 'bold',
     label: 'Bold',
     icon: <BiBold />,
   },
-  { style: 'ITALIC', label: 'Italic', icon: <BiItalic /> },
+  { style: 'italic', label: 'Italic', icon: <BiItalic /> },
   {
-    style: 'CODE',
+    style: 'code',
     label: 'Code',
     icon: <BiCode />,
   },
   {
-    style: 'STRIKETHROUGH',
+    style: 'strikethrough',
     label: 'Strike Through',
     icon: <BiStrikethrough />,
   },
   {
-    style: 'UNDERLINE',
+    style: 'underlined',
     label: 'Underline',
     icon: <BiUnderline />,
   },
 ];
 
-export function Toolbar({ value, onChange }: ValueProps) {
-  const style = value.getCurrentInlineStyle();
+export function Toolbar({ editor }: { editor: Editor }) {
   const { brand, globalBg } = useColors();
-  const toggleStyle = (style: DraftInlineStyleType) => {
-    onChange(RichUtils.toggleInlineStyle(value, style));
-  };
 
   return (
     <ButtonGroup w="full" bg={globalBg} rounded="2xl" p={1} spacing={1}>
       {styles.map((s) => {
-        const checked = style?.contains(s.style);
+        const checked = isFormatActive(editor, s.style);
         const onMouseDown = (e: any) => {
           e.preventDefault();
-          toggleStyle(s.style);
+          toggleFormat(editor, s.style);
         };
 
         return (

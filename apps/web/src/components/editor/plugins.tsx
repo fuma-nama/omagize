@@ -1,13 +1,14 @@
-import { EditorState, EditorProps } from 'draft-js';
-import React, { useState, ReactNode, useEffect } from 'react';
+import { EditorState } from 'draft-js';
+import React, { useState, ReactNode } from 'react';
 import { Avatar, Box, HStack, Icon, Portal, Text } from '@chakra-ui/react';
 import CustomCard from '../card/Card';
 import { useColors, useItemHoverBg } from '../../variables/colors';
-import { Everyone, MentionData } from './MarkdownPlugin';
+import { Everyone, MentionData } from '../../utils/markdown/mention';
 import { BsPeopleFill } from 'react-icons/bs';
-import { SlateEditor, SuggestionControl, SuggestionSearch } from './SlateEditor';
+import { SuggestionControl, SuggestionSearch, useSuggestions } from './editor';
 import { CustomCardProps } from 'theme/theme';
 import { MentionType } from 'utils/markdown/types';
+import { Descendant, Editor } from 'slate';
 
 export type SuggestionProps = {
   portal?: React.RefObject<HTMLElement | null>;
@@ -15,8 +16,7 @@ export type SuggestionProps = {
   suggestions?: MentionData[];
 };
 
-export type MessageInputProps = ValueProps & {
-  editor?: Partial<EditorProps>;
+export type MessageInputProps = {
   mentionSuggestions: SuggestionProps;
 };
 
@@ -25,27 +25,19 @@ export type ValueProps = {
   onChange: (next: EditorState) => void;
 };
 
-/**
- * Input field that Supports mentions, markdown, suggestions
- */
-export default function MessageInput({
-  value,
-  onChange,
-  editor,
-  mentionSuggestions,
-}: MessageInputProps) {
+export function useMessageInputPlugin(editor: Editor, props: SuggestionProps) {
+  const [selected, setSelected] = useState<number>();
   const [mention, setMention] = useState<SuggestionSearch>();
+  const mentionSuggestions = useSuggestions(editor, [mention, setMention]);
 
-  useEffect(() => {
-    mentionSuggestions.onSearch(mention?.text);
-  }, [mention?.text]);
-
-  const suggestions = [...mentionSuggestions.suggestions];
+  const suggestions = [...props.suggestions];
   if ('everyone'.startsWith(mention?.text.toLowerCase())) {
     suggestions.push(Everyone);
   }
 
   const suggestionControl: SuggestionControl = {
+    selected,
+    setSelected,
     length: suggestions.length,
     accept(state) {
       const selected = suggestions[state.selected];
@@ -58,7 +50,7 @@ export default function MessageInput({
       });
     },
     render: (state) => (
-      <Portal containerRef={mentionSuggestions.portal}>
+      <Portal containerRef={props.portal}>
         <Suggestions>
           {suggestions.map((s, i) => (
             <Entry
@@ -79,9 +71,17 @@ export default function MessageInput({
     ),
   };
 
-  return (
-    <SlateEditor mentionSuggestions={[mention, setMention]} suggestionControl={suggestionControl} />
-  );
+  return {
+    onChange: (v: Descendant[]) => {
+      const search = mentionSuggestions.updateSearch();
+      if (search == null) return;
+
+      setSelected(0);
+      props.onSearch(search.text);
+    },
+    suggestions: mentionSuggestions,
+    suggestionControl,
+  };
 }
 
 function Suggestions({ children }: { children: ReactNode }) {

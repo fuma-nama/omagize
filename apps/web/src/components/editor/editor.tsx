@@ -1,11 +1,12 @@
 import CustomCard from 'components/card/Card';
-import { useState, useCallback, useMemo, ReactNode } from 'react';
-import { createEditor, Descendant, Transforms, Editor, Point, Range } from 'slate';
+import { useCallback, ReactNode } from 'react';
+import { createEditor, Transforms, Editor, Point, Range } from 'slate';
 import { withHistory } from 'slate-history';
-import { withReact, Slate, Editable } from 'slate-react';
+import { withReact, Editable, RenderLeafProps, useSlate } from 'slate-react';
 import { MentionType } from 'utils/markdown/types';
 import { renderElements } from './elements';
-import { MentionElement, MentionEntity } from './slate';
+import { Leaf } from './leafs';
+import { MentionElement, MentionEntity } from './types';
 
 export type SuggestionSearch = {
   /**
@@ -28,11 +29,13 @@ export type SuggestionState = {
 };
 
 export type EditorProps = {
-  mentionSuggestions: ForwardState<SuggestionSearch | null>;
+  suggestions: UseSuggestions;
   suggestionControl: SuggestionControl;
 };
 
 export type SuggestionControl = {
+  selected: number;
+  setSelected: (updateFn: (prev: number) => number) => void;
   accept: (state: SuggestionState) => void;
   length?: number;
   render: (state: SuggestionState) => ReactNode;
@@ -40,84 +43,78 @@ export type SuggestionControl = {
 
 export type ForwardState<T> = [T, (update: T) => void];
 
-export function SlateEditor({ mentionSuggestions, suggestionControl }: EditorProps) {
-  const editor = useMemo(() => withMentions(withHistory(withReact(createEditor()))), []);
-  const suggestions = useSuggestions(editor, mentionSuggestions);
-  const [value, setValue] = useState<Descendant[]>([
-    {
-      type: 'paragraph',
-      children: [{ text: 'A line of text in a paragraph.' }],
-    },
-  ]);
+export function createSlateEditor() {
+  return withMentions(withHistory(withReact(createEditor())));
+}
+
+export function SlateEditor({ suggestions, suggestionControl }: EditorProps) {
+  const editor = useSlate();
 
   const state: SuggestionState = {
-    selected: suggestions.selected,
+    selected: suggestionControl.selected,
     acceptMention(type, data?) {
       const current = suggestions.search;
 
       if (current != null) {
         Transforms.delete(editor, {
-          at: current.anchor,
+          at: editor.selection.focus,
           distance: current.length,
           unit: 'character',
+          voids: false,
+          reverse: true,
         });
 
         insertMention(editor, type, data);
       }
     },
   };
+  const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, []);
 
   // Render the Slate context.
   return (
     <>
       {suggestions.search != null && suggestionControl.render(state)}
-      <Slate
-        editor={editor}
-        value={value}
-        onChange={(e) => {
-          setValue(e);
-          suggestions.updateSearch();
-        }}
-      >
-        <CustomCard
-          placeholder="Type here..."
-          transition="0.5s all"
-          variant="input"
-          as={Editable}
-          w="full"
-          renderElement={renderElements}
-          onKeyDown={(e) => {
-            if (suggestions.search == null) return;
+      <CustomCard
+        placeholder="Type here..."
+        transition="0.5s all"
+        variant="input"
+        as={Editable}
+        w="full"
+        renderElement={renderElements}
+        renderLeaf={renderLeaf}
+        onKeyDown={(e) => {
+          if (suggestions.search == null) return;
 
-            switch (e.key) {
-              case 'ArrowUp': {
-                suggestions.setSelected((prev) => Math.max(prev - 1, 0));
-                e.preventDefault();
-                break;
-              }
-              case 'ArrowDown': {
-                suggestions.setSelected((prev) => Math.min(prev + 1, suggestionControl.length));
-                e.preventDefault();
-                break;
-              }
-              case 'Enter': {
-                suggestionControl.accept(state);
-                e.preventDefault();
-                break;
-              }
+          switch (e.key) {
+            case 'ArrowUp': {
+              suggestionControl.setSelected((prev: number) => Math.max(prev - 1, 0));
+              e.preventDefault();
+              break;
             }
-          }}
-        />
-      </Slate>
+            case 'ArrowDown': {
+              suggestionControl.setSelected((prev: number) =>
+                Math.min(prev + 1, suggestionControl.length - 1)
+              );
+              e.preventDefault();
+              break;
+            }
+            case 'Enter': {
+              suggestionControl.accept(state);
+              e.preventDefault();
+              break;
+            }
+          }
+        }}
+      />
     </>
   );
 }
 
-const insertMention = (editor: Editor, type: MentionType, data?: MentionEntity) => {
+const insertMention = (editor: Editor, type: MentionType, data: MentionEntity) => {
   const mention: MentionElement = {
     type: 'mention',
     mention_type: type,
-    children: [{ text: '' }],
+    children: [{ text: `<@${data.id}>` }],
     data,
   };
   Transforms.insertNodes(editor, mention);
@@ -138,9 +135,16 @@ function withMentions<T extends Editor>(editor: T): T {
   return editor;
 }
 
-export function useSuggestions(editor: Editor, state: ForwardState<SuggestionSearch>) {
+export type UseSuggestions = {
+  search: SuggestionSearch;
+  setSearch: (v: SuggestionSearch) => void;
+  updateSearch: () => SuggestionSearch;
+};
+export function useSuggestions(
+  editor: Editor,
+  state: ForwardState<SuggestionSearch>
+): UseSuggestions {
   const [search, setSearch] = state;
-  const [selected, setSelected] = useState<number>();
 
   const updateSearch = useCallback(() => {
     const selection = editor.selection;
@@ -151,10 +155,10 @@ export function useSuggestions(editor: Editor, state: ForwardState<SuggestionSea
     const wordBefore = before && Editor.string(editor, { anchor: before, focus: start });
     const regex = /@(\w*)$/g;
     const result = regex.exec(wordBefore);
+    let set: SuggestionSearch = null;
 
     if (result != null) {
-      setSelected(0);
-      setSearch({
+      set = {
         anchor: Editor.after(editor, before, {
           distance: result.index,
           unit: 'character',
@@ -162,15 +166,14 @@ export function useSuggestions(editor: Editor, state: ForwardState<SuggestionSea
         }),
         length: result[0].length,
         text: result[1],
-      });
-    } else {
-      setSearch(null);
+      };
     }
+
+    setSearch(set);
+    return set;
   }, [editor]);
 
   return {
-    selected,
-    setSelected,
     search,
     setSearch,
     updateSearch,

@@ -3,17 +3,28 @@ import { Box, Button, ButtonGroup, Flex } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { useMutation } from '@tanstack/react-query';
 import { useMessageProvider } from 'views/admin/chat/components/ChatView';
-import MessageInput from 'components/editor/MessageInput';
-import { useRef, useState } from 'react';
-import { ContentState, convertToRaw, EditorState } from 'draft-js';
-import { parseDraft } from 'utils/markdown/parser';
+import { useMemo, useRef, useState } from 'react';
+import { useMessageInputPlugin } from 'components/editor/plugins';
+import { createSlateEditor, SlateEditor } from 'components/editor/editor';
+import { Descendant } from 'slate';
+import { slateToMarkdown } from 'components/editor/markdown';
+import { Slate } from 'slate-react';
 
 export function MessageEditInput({ message, onClose }: { message: Message; onClose: () => void }) {
+  const editor = useMemo(() => createSlateEditor(), []);
   const input = useMessageProvider().useInput();
   const suggestionRef = useRef();
-  const [value, setValue] = useState(
-    EditorState.createWithContent(ContentState.createFromText(message.content))
-  );
+  const plugin = useMessageInputPlugin(editor, {
+    portal: suggestionRef,
+    onSearch: input.setSearch,
+    suggestions: input.suggestions,
+  });
+  const [value, setValue] = useState<Descendant[]>([
+    {
+      type: 'paragraph',
+      children: [{ text: message.content }],
+    },
+  ]);
   const editMutation = useMutation(
     (body: EditMessageBody) => editMessage(message.id, message.channel, body),
     {
@@ -22,29 +33,30 @@ export function MessageEditInput({ message, onClose }: { message: Message; onClo
   );
 
   const onSave = () => {
-    const parsed = parseDraft(convertToRaw(value.getCurrentContent()));
+    const parsed = slateToMarkdown(editor);
 
     editMutation.mutate({
       content: parsed.markdown,
-      mentions: parsed.mentions,
+      mentions: [],
     });
   };
 
   return (
     <Flex direction="column" gap={2} w="full">
       <Box ref={suggestionRef} w="full" />
-      <MessageInput
+      <Slate
+        editor={editor}
         value={value}
-        onChange={(v) => setValue(v)}
-        editor={{
-          placeholder: 'Input your message here...',
+        onChange={(v) => {
+          setValue(v);
+          plugin.onChange(v);
         }}
-        mentionSuggestions={{
-          portal: suggestionRef,
-          onSearch: input.setSearch,
-          suggestions: input.suggestions,
-        }}
-      />
+      >
+        <SlateEditor
+          suggestions={plugin.suggestions}
+          suggestionControl={plugin.suggestionControl}
+        />
+      </Slate>
       <ButtonGroup>
         <Button onClick={onClose}>Close</Button>
         <Button

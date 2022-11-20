@@ -1,6 +1,5 @@
 import { Box, Heading } from '@chakra-ui/react';
 import { Message } from '@omagize/api';
-import { Quote } from 'components/editor/MarkdownPlugin';
 import { MemberPopup } from 'components/modals/popup/UserPopup';
 import { PopoverTrigger } from 'components/PopoverTrigger';
 import Markdown, { MarkdownToJSX } from 'markdown-to-jsx';
@@ -28,7 +27,6 @@ const DefaultOptions: MarkdownToJSX.Options = {
     h1: (props: any) => <Heading fontSize="xl">{props.children}</Heading>,
     Mention: Mention,
     Everyone: () => <EveryoneMention />,
-    blockquote: (props) => <Quote>{props.children}</Quote>,
     code: (props) => (
       <code>
         {typeof props.children === 'string' ? unescapeHtml(props.children) : props.children}

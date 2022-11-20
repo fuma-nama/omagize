@@ -1,21 +1,22 @@
 import { Box, Flex, HStack, IconButton, SlideFade, useDisclosure } from '@chakra-ui/react';
 import { sendMessage, Snowflake } from '@omagize/api';
 import { RefObject, useRef, useState } from 'react';
-import Card from '../../../../components/card/Card';
+import Card from 'components/card/Card';
 import { FiFile, FiSend } from 'react-icons/fi';
 import { GrEmoji } from 'react-icons/gr';
 import { useMutation } from '@tanstack/react-query';
 import useFilePicker from 'components/picker/FilePicker';
 import { FileUploadItem } from './FileUploadItem';
 import { CustomCardProps } from 'theme/theme';
-import MessageInput, { ValueProps } from 'components/editor/MessageInput';
-import { convertToRaw, EditorState } from 'draft-js';
+import { useMessageInputPlugin } from 'components/editor/plugins';
 import { Toolbar } from 'components/editor/Toolbar';
-import { createDefault } from 'components/editor/TextEditor';
-import { parseDraft } from 'utils/markdown/parser';
 import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
 import { MessageProvider } from './ChatView';
-import { MentionData } from 'components/editor/MarkdownPlugin';
+import { MentionData } from 'utils/markdown/mention';
+import { Descendant, Editor } from 'slate';
+import { isEmpty, slateToMarkdown } from 'components/editor/markdown';
+import { createSlateEditor, SlateEditor } from 'components/editor/editor';
+import { Slate } from 'slate-react';
 
 export interface InputProvider {
   search: string;
@@ -24,12 +25,19 @@ export interface InputProvider {
 }
 
 export type MessageOptions = {
-  message: EditorState;
+  editor: Editor;
+  message: Descendant[];
   attachments: File[];
 };
 function useOptionState() {
   const [content, setContent] = useState<MessageOptions>(() => ({
-    message: createDefault(),
+    editor: createSlateEditor(),
+    message: [
+      {
+        type: 'paragraph',
+        children: [{ text: '' }],
+      },
+    ],
     attachments: [],
   }));
 
@@ -37,10 +45,10 @@ function useOptionState() {
     content,
     setContent,
     resetContent: () =>
-      setContent({
+      setContent((prev) => ({
+        ...prev,
         attachments: [],
-        message: createDefault(),
-      }),
+      })),
     dispatch: (v: (prev: MessageOptions) => Partial<MessageOptions>) => {
       return setContent((prev) => ({ ...prev, ...v(prev) }));
     },
@@ -54,8 +62,8 @@ export function MessageBar({
   provider: MessageProvider;
   messageBar?: CustomCardProps;
 }) {
-  const suggestionRef = useRef<HTMLDivElement>();
   const { content, resetContent, dispatch } = useOptionState();
+  const suggestionRef = useRef<HTMLDivElement>();
   const { isOpen: showToolbar, onToggle: toggleToolbar } = useDisclosure();
   const sendMutation = useSendMutation(provider.channel);
   const picker = useFilePicker((f) =>
@@ -70,7 +78,7 @@ export function MessageBar({
   };
 
   const canSend =
-    (content.attachments.length !== 0 || !content.message.isEmpty) && !sendMutation.isLoading;
+    (content.attachments.length !== 0 || !isEmpty(content.editor)) && !sendMutation.isLoading;
 
   return (
     <Flex pos="relative" direction="column" w="full" gap={2}>
@@ -85,7 +93,7 @@ export function MessageBar({
       <Box ref={suggestionRef} />
       <HStack pos="absolute" maxW="full" h="50px" top="-50px" right={0}>
         <SlideFade in={showToolbar} unmountOnExit>
-          <Toolbar value={content.message} onChange={(m) => dispatch(() => ({ message: m }))} />
+          <Toolbar editor={content.editor} />
         </SlideFade>
         <IconButton
           icon={showToolbar ? <ArrowDownIcon /> : <ArrowUpIcon />}
@@ -108,12 +116,13 @@ export function MessageBar({
         <Input
           provider={provider}
           suggestionRef={suggestionRef}
+          editor={content.editor}
           value={content.message}
-          onChange={(v) =>
+          onChange={(v) => {
             dispatch(() => ({
               message: v,
-            }))
-          }
+            }));
+          }}
         />
         <IconButton
           onClick={send}
@@ -129,29 +138,36 @@ export function MessageBar({
 }
 
 function Input({
+  editor,
   value,
   onChange,
   provider,
   suggestionRef,
-}: ValueProps & {
+}: {
+  editor: Editor;
+  value: Descendant[];
+  onChange: (v: Descendant[]) => void;
   provider: MessageProvider;
   suggestionRef: RefObject<HTMLDivElement>;
 }) {
   const input = provider.useInput();
+  const plugin = useMessageInputPlugin(editor, {
+    portal: suggestionRef,
+    onSearch: input.setSearch,
+    suggestions: input.suggestions,
+  });
 
   return (
-    <MessageInput
+    <Slate
       value={value}
-      onChange={onChange}
-      editor={{
-        placeholder: 'Input your message here...',
+      onChange={(v) => {
+        plugin.onChange(v);
+        onChange(v);
       }}
-      mentionSuggestions={{
-        portal: suggestionRef,
-        onSearch: input.setSearch,
-        suggestions: input.suggestions,
-      }}
-    />
+      editor={editor}
+    >
+      <SlateEditor suggestions={plugin.suggestions} suggestionControl={plugin.suggestionControl} />
+    </Slate>
   );
 }
 
@@ -176,9 +192,8 @@ function Attachments(props: { value: File[]; onRemove: (remove: File) => void })
 
 function useSendMutation(channel: Snowflake) {
   return useMutation(['send_message', channel], async (content: MessageOptions) => {
-    const raw = convertToRaw(content.message.getCurrentContent());
-    const parsed = parseDraft(raw);
+    const parsed = slateToMarkdown(content.editor);
 
-    return await sendMessage(channel, parsed.markdown, content.attachments, parsed.mentions);
+    return await sendMessage(channel, parsed.markdown, content.attachments, []);
   });
 }

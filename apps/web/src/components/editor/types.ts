@@ -17,7 +17,18 @@ export type MentionElement = BaseElement & {
 };
 
 type CustomElement = { type: 'paragraph'; children: CustomText[] } | MentionElement;
-type CustomText = { text: string };
+export type TextMarks = {
+  underlined?: boolean;
+  bold?: boolean;
+  blockquote?: boolean;
+  title?: boolean;
+  code?: boolean;
+  italic?: boolean;
+  strikethrough?: boolean;
+};
+export type CustomText = TextMarks & {
+  text: string;
+};
 
 declare module 'slate' {
   interface CustomTypes {

@@ -29,7 +29,6 @@ const convert: {
 function nodeToMarkdown(
   node: Node,
   entities: Entities,
-  level: number = 0,
   styles: Set<keyof TextMarks> = new Set()
 ): string {
   if (Editor.isEditor(node)) return slateToMarkdown(node, entities).markdown;
@@ -48,7 +47,7 @@ function nodeToMarkdown(
     return string;
   }
 
-  let children = node.children.map((n) => nodeToMarkdown(n, entities, level + 1, styles)).join('');
+  let children = node.children.map((n) => nodeToMarkdown(n, entities, styles)).join('');
 
   for (const style of [...styles.values()].reverse()) {
     children += convert[style];

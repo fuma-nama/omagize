@@ -24,6 +24,10 @@ export function renderElements(props: RenderElementProps) {
           {content}
         </span>
       );
+
+    case 'emoji':
+      const emoji = element.emoji;
+      return <span {...props.attributes}>{props.children}</span>;
     default:
       return <p {...props.attributes}>{props.children}</p>;
   }

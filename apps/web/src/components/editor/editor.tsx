@@ -6,6 +6,7 @@ import { withReact, Editable, RenderLeafProps, useSlate } from 'slate-react';
 import { MentionType } from 'utils/markdown/types';
 import { renderElements } from './elements';
 import { Leaf } from './leafs';
+import { withEmoji } from './plugins/emoji';
 import { insertMention, MentionEntity, withMentions } from './plugins/mention';
 import { UseSuggestions } from './plugins/suggestions';
 
@@ -40,7 +41,7 @@ export const initialValue: Descendant[] = [
 ];
 
 export function createSlateEditor() {
-  return withMentions(withHistory(withReact(createEditor())));
+  return withEmoji(withMentions(withHistory(withReact(createEditor()))));
 }
 
 export function SlateEditor({ suggestions, suggestionControl }: EditorProps) {

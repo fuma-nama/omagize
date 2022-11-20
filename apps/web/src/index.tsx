@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/css/App.css';
 import 'react-image-crop/dist/ReactCrop.css';
-import 'draft-js/dist/Draft.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';

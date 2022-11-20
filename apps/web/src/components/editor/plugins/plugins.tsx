@@ -1,14 +1,14 @@
-import { EditorState } from 'draft-js';
 import React, { useState, ReactNode } from 'react';
 import { Avatar, Box, HStack, Icon, Portal, Text } from '@chakra-ui/react';
-import CustomCard from '../card/Card';
-import { useColors, useItemHoverBg } from '../../variables/colors';
-import { Everyone, MentionData } from '../../utils/markdown/mention';
+import CustomCard from '../../card/Card';
+import { useColors, useItemHoverBg } from '../../../variables/colors';
+import { Everyone, MentionData } from '../../../utils/markdown/mention';
 import { BsPeopleFill } from 'react-icons/bs';
-import { SuggestionControl, SuggestionSearch, useSuggestions } from './editor';
+import { SuggestionControl } from '../editor';
 import { CustomCardProps } from 'theme/theme';
 import { MentionType } from 'utils/markdown/types';
 import { Descendant, Editor } from 'slate';
+import { SuggestionSearch, useSuggestions } from './suggestions';
 
 export type SuggestionProps = {
   portal?: React.RefObject<HTMLElement | null>;
@@ -18,11 +18,6 @@ export type SuggestionProps = {
 
 export type MessageInputProps = {
   mentionSuggestions: SuggestionProps;
-};
-
-export type ValueProps = {
-  value: EditorState;
-  onChange: (next: EditorState) => void;
 };
 
 export function useMessageInputPlugin(editor: Editor, props: SuggestionProps) {

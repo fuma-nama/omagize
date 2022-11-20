@@ -4,7 +4,7 @@ import { EditIcon } from '@chakra-ui/icons';
 import { useMutation } from '@tanstack/react-query';
 import { useMessageProvider } from 'views/admin/chat/components/ChatView';
 import { useMemo, useRef, useState } from 'react';
-import { useMessageInputPlugin } from 'components/editor/plugins';
+import { useMessageInputPlugin } from 'components/editor/plugins/plugins';
 import { createSlateEditor, SlateEditor } from 'components/editor/editor';
 import { Descendant } from 'slate';
 import { slateToMarkdown } from 'components/editor/markdown';

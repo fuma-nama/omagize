@@ -155,7 +155,7 @@ function Content({ onSelect }: { onSelect: (emoji: CompactEmoji) => void }) {
         ) : (
           <SimpleGrid columns={4} gap={1} flex={1} overflow="auto">
             {emoijs.data?.map((emoji) => (
-              <Emoji key={emoji.unicode} emoji={emoji} onClick={() => onSelect(emoji)} />
+              <EmojiButton key={emoji.unicode} emoji={emoji} onClick={() => onSelect(emoji)} />
             ))}
           </SimpleGrid>
         )}
@@ -164,7 +164,7 @@ function Content({ onSelect }: { onSelect: (emoji: CompactEmoji) => void }) {
   );
 }
 
-function Emoji({ emoji, ...props }: { emoji: CompactEmoji } & ButtonProps) {
+function EmojiButton({ emoji, ...props }: { emoji: CompactEmoji } & ButtonProps) {
   return (
     <Tooltip label={`:${emoji.shortcodes}:`}>
       <Button rounded="sm" {...props}>

@@ -7,12 +7,10 @@ import {
   HStack,
   Button,
   ButtonProps,
-  Icon,
   Avatar,
   SimpleGrid,
 } from '@chakra-ui/react';
 import ReactCrop, { Crop } from 'react-image-crop';
-import { FaImage } from 'react-icons/fa';
 import { MutableRefObject } from 'react';
 import { DatePicker } from 'components/picker/DatePicker';
 import { TimePicker } from 'components/picker/TimePicker';
@@ -29,45 +27,10 @@ export type CropOptions = {
   onCrop: (img: HTMLImageElement | null) => void;
 };
 
-export function ImageCropPicker(
-  props: {
-    select: () => void;
-    url: string | null;
-  } & CropProps
-) {
-  const bannerBg = useColorModeValue('blackAlpha.200', 'whiteAlpha.200');
-
-  if (props.crop) {
-    return (
-      <ImageCropper
-        crop={props.crop}
-        buttonStyle={props.buttonStyle}
-        aspect={props.aspect}
-      />
-    );
-  }
-
-  return (
-    <Pick w="full" onClick={props.select} rounded="xl" overflow="hidden">
-      {props.url ? (
-        <Image w="full" maxH="500px" src={props.url} objectFit="contain" />
-      ) : (
-        <Center w="full" h="200px" bg={bannerBg} p={5}>
-          <Icon as={FaImage} w="100px" h="50px" />
-        </Center>
-      )}
-    </Pick>
-  );
-}
-
 export function ProfileCropPicker(props: ProfilePickerProps & CropProps) {
   if (props.crop) {
     return (
-      <ImageCropper
-        crop={props.crop}
-        buttonStyle={props.buttonStyle}
-        aspect={props.aspect ?? 1}
-      />
+      <ImageCropper crop={props.crop} buttonStyle={props.buttonStyle} aspect={props.aspect ?? 1} />
     );
   }
 
@@ -96,7 +59,7 @@ export function CustomImageCropper(props: {
   }
 }
 
-function ImageCropper(props: CropProps) {
+export function ImageCropper(props: CropProps) {
   const ref = useRef<HTMLImageElement>();
 
   if (props.crop) {
@@ -166,13 +129,7 @@ export function ProfilePicker(props: ProfilePickerProps) {
  * @param children
  * @constructor
  */
-export function DynamicModal({
-  isOpen,
-  children,
-}: {
-  isOpen: boolean;
-  children: ReactNode;
-}) {
+export function DynamicModal({ isOpen, children }: { isOpen: boolean; children: ReactNode }) {
   const [id, setId] = useState(0);
   useEffect(() => {
     if (isOpen) {

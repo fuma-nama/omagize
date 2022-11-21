@@ -1,4 +1,4 @@
-import { DateTimeForm, ImageCropPicker } from './Modal';
+import { DateTimeForm } from './Modal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createGroupEvent, GroupDetail, Keys } from '@omagize/api';
 import {
@@ -19,14 +19,11 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import { BiRightArrow } from 'react-icons/bi';
-import {
-  BannerFormat,
-  UploadImage,
-  useImagePickerCrop,
-} from 'utils/ImageUtils';
+import { BannerFormat, UploadImage } from 'utils/ImageUtils';
 import { Step, Steps } from 'chakra-ui-steps';
 import { onlyDate, onlyTime } from '../../utils/DateUtils';
 import { useState } from 'react';
+import { useImagePickerCrop } from 'components/picker/ImagePicker';
 
 function getInitialStart(): Date {
   const date = new Date(Date.now());
@@ -71,13 +68,7 @@ export default function CreateEventModal(props: {
   const [step, setStep] = useState(0);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      isCentered
-      size="2xl"
-      scrollBehavior="inside"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl" scrollBehavior="inside">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Create Group Event</ModalHeader>
@@ -85,10 +76,7 @@ export default function CreateEventModal(props: {
         <ModalBody>
           <Steps activeStep={step} width="100%">
             <Step label="Basic Info">
-              <Form
-                value={value}
-                onChange={(v) => setValue((prev) => ({ ...prev, ...v }))}
-              />
+              <Form value={value} onChange={(v) => setValue((prev) => ({ ...prev, ...v }))} />
             </Step>
             <Step label="Advanced Settings">
               <AdvancedForm
@@ -174,9 +162,7 @@ function AdvancedForm({ value, onChange }: FormProps) {
         <Switch
           colorScheme="brandScheme"
           isChecked={value.endAt != null}
-          onChange={(e) =>
-            onChange({ endAt: e.target.checked ? minEnd : null })
-          }
+          onChange={(e) => onChange({ endAt: e.target.checked ? minEnd : null })}
         />
       </HStack>
       <FormControl isDisabled={value.endAt == null}>
@@ -199,32 +185,12 @@ function Form({
   onChange: (options: Partial<EventOptions>) => void;
   error?: any;
 }) {
-  const image = useImagePickerCrop(
-    value.image,
-    (v) => onChange({ image: v }),
-    BannerFormat
-  );
+  const image = useImagePickerCrop(value.image, (v) => onChange({ image: v }), BannerFormat);
 
   return (
     <Flex flexDirection="column" gap={3} pt={5}>
       <Flex flexDirection="column" gap={3} w="300px" mx="auto">
         {image.picker}
-        <ImageCropPicker
-          select={image.select}
-          url={image.url}
-          crop={image.crop}
-          aspect={BannerFormat.aspect}
-        />
-        {!image.crop && (
-          <Button
-            mx="auto"
-            onClick={() => {
-              image.setValue(null);
-            }}
-          >
-            Reset
-          </Button>
-        )}
       </Flex>
       <FormControl isRequired>
         <FormLabel htmlFor="name">Event Name</FormLabel>

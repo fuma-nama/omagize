@@ -23,3 +23,25 @@ export function CustomEmoji(raw: RawCustomEmoji): CustomEmoji {
     createdAt: new Date(raw.createdAt),
   };
 }
+
+export type RawCustomSticker = {
+  id: Snowflake;
+  name: string;
+  author: RawUser;
+  createdAt: DateObject;
+};
+
+export type CustomSticker = {
+  id: Snowflake;
+  name: string;
+  author: User;
+  createdAt: Date;
+};
+
+export function CustomSticker(raw: RawCustomSticker): CustomSticker {
+  return {
+    ...raw,
+    author: new User(raw.author),
+    createdAt: new Date(raw.createdAt),
+  };
+}

@@ -3,6 +3,7 @@ import { useCallback, ReactNode } from 'react';
 import { createEditor, Transforms, Descendant } from 'slate';
 import { withHistory } from 'slate-history';
 import { withReact, Editable, RenderLeafProps, useSlate } from 'slate-react';
+import { CustomCardProps } from 'theme/theme';
 import { MentionType } from 'utils/markdown/types';
 import { renderElements } from './elements';
 import { Leaf } from './leafs';
@@ -21,6 +22,8 @@ export type SuggestionState = {
 export type EditorProps = {
   suggestions: UseSuggestions;
   suggestionControl: SuggestionControl;
+  input?: CustomCardProps;
+  onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
 };
 
 export type SuggestionControl = {
@@ -44,7 +47,7 @@ export function createSlateEditor() {
   return withEmoji(withMentions(withHistory(withReact(createEditor()))));
 }
 
-export function SlateEditor({ suggestions, suggestionControl }: EditorProps) {
+export function SlateEditor({ suggestions, suggestionControl, ...props }: EditorProps) {
   const editor = useSlate();
 
   const state: SuggestionState = {
@@ -80,6 +83,7 @@ export function SlateEditor({ suggestions, suggestionControl }: EditorProps) {
         renderElement={renderElements}
         renderLeaf={renderLeaf}
         onKeyDown={(e) => {
+          if (props.onKeyDown != null) props.onKeyDown(e);
           if (suggestions.search == null) return;
 
           switch (e.key) {
@@ -102,6 +106,7 @@ export function SlateEditor({ suggestions, suggestionControl }: EditorProps) {
             }
           }
         }}
+        {...props.input}
       />
     </>
   );

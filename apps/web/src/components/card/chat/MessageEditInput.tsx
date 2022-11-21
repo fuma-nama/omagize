@@ -55,6 +55,13 @@ export function MessageEditInput({ message, onClose }: { message: Message; onClo
         <SlateEditor
           suggestions={plugin.suggestions}
           suggestionControl={plugin.suggestionControl}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              onClose();
+              e.stopPropagation();
+              e.preventDefault();
+            }
+          }}
         />
       </Slate>
       <ButtonGroup>

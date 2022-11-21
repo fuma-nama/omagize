@@ -1,10 +1,4 @@
-import {
-  InputHTMLAttributes,
-  LegacyRef,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { InputHTMLAttributes, LegacyRef, useMemo, useRef, useState } from 'react';
 import { Box, BoxProps, Circle, useColorModeValue } from '@chakra-ui/react';
 import { VscNewFile } from 'react-icons/vsc';
 import { Reset } from '@omagize/api';
@@ -20,6 +14,12 @@ export const BannerFormat: Format = {
   maxWidth: 1500,
   maxHeight: 800,
   aspect: 1500 / 800,
+};
+
+export const EmojiFormat: Format = {
+  maxWidth: 50,
+  maxHeight: 50,
+  aspect: 1,
 };
 
 export type UploadImage = Blob;
@@ -58,14 +58,8 @@ export function cropImage(
   const context = canvas.getContext('2d');
 
   if (crop != null) {
-    canvas.width = Math.min(
-      crop?.width ?? imageObj.naturalWidth,
-      format.maxWidth
-    );
-    canvas.height = Math.min(
-      crop?.height ?? imageObj.naturalHeight,
-      format.maxHeight
-    );
+    canvas.width = Math.min(crop?.width ?? imageObj.naturalWidth, format.maxWidth);
+    canvas.height = Math.min(crop?.height ?? imageObj.naturalHeight, format.maxHeight);
     const scaleX = imageObj.naturalWidth / imageObj.width;
     const scaleY = imageObj.naturalHeight / imageObj.height;
     /*
@@ -241,11 +235,7 @@ export function useImagePicker<T extends UploadImage | Reset>(
   return {
     ...base,
     picker: (
-      <FilePicker
-        {...props}
-        onChange={(f) => onChange(f as unknown as T)}
-        inputRef={base.ref}
-      />
+      <FilePicker {...props} onChange={(f) => onChange(f as unknown as T)} inputRef={base.ref} />
     ),
   };
 }

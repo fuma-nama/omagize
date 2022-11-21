@@ -68,7 +68,7 @@ export default function Banner() {
         </Button>
         <Link>
           <Text color="white" fontSize="sm" fontWeight="500">
-            Watch video
+            Learn More
           </Text>
         </Link>
       </Flex>

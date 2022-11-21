@@ -22,6 +22,12 @@ export const EmojiFormat: Format = {
   aspect: 1,
 };
 
+export const StickerFormat: Format = {
+  maxWidth: 100,
+  maxHeight: 100,
+  aspect: 1,
+};
+
 export type UploadImage = Blob;
 export type Format = {
   aspect?: number;

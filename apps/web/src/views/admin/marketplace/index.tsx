@@ -41,7 +41,7 @@ import { BiUpload } from 'react-icons/bi';
 import { BsPeople } from 'react-icons/bs';
 import { QueryStatus } from 'components/panel/QueryPanel';
 import { Repeat } from 'components/layout/Container';
-import CreateAssetModal from './components/modals/CreateAssetModal';
+import CreateAssetModal from './components/modals/UploadAssetModal';
 
 export default function Marketplace() {
   // Chakra Color Mode
@@ -68,7 +68,7 @@ export default function Marketplace() {
             align="center"
           >
             <Text color={textColor} fontSize="2xl" fontWeight="700" mr={10}>
-              Trending NFTs
+              Latest Emojis
             </Text>
             <ActionBar />
           </Flex>
@@ -86,7 +86,7 @@ export default function Marketplace() {
             </QueryStatus>
           </SimpleGrid>
           <Text mt="45px" mb="36px" color={textColor} fontSize="2xl" ms="24px" fontWeight="700">
-            Recently Added
+            New Stickers
           </Text>
           <SimpleGrid columns={{ base: 1, '2sm': 2, md: 3 }} gap="20px">
             <QueryStatus

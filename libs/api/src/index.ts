@@ -9,3 +9,4 @@ export * from './query';
 export * from './UserAPI';
 export * from './utils';
 export * from './firebase';
+export * from './MarketAPI';

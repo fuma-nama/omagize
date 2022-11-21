@@ -11,6 +11,9 @@ export const Keys = {
   member: (group: Snowflake, id: Snowflake) => ['member', group, id],
   members: (group: Snowflake) => ['members', group],
   messages: (group: Snowflake) => ['messages', group],
+  market: {
+    assets: ['assets'],
+  },
   groupEvent: {
     all: ['all_group_event'],
   },
@@ -31,7 +34,5 @@ export const Keys = {
  * Update query data if exists
  */
 export function updateQueryData<T>(key: QueryKey, updater: (prev: T) => T) {
-  return client.setQueryData<T>(key, (prev) =>
-    prev == null ? undefined : updater(prev)
-  );
+  return client.setQueryData<T>(key, (prev) => (prev == null ? undefined : updater(prev)));
 }

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { Fragment, ReactNode } from 'react';
 import { Box, Center, CenterProps, Text } from '@chakra-ui/react';
 import { useColors } from '../../variables/colors';
 
@@ -64,4 +64,10 @@ export function Holder({
   }
 
   return <>{typeof children === 'function' ? children() : children}</>;
+}
+
+export function Repeat({ times, children }: { times: number; children: ReactNode }) {
+  const repeat = Array.from({ length: times }, (_, i) => <Fragment key={i}>{children}</Fragment>);
+
+  return <>{repeat}</>;
 }

@@ -5,6 +5,24 @@ import LoadingPanel, { Props } from './LoadingPanel';
 import { Center, VStack, Icon, Button, Text } from '@chakra-ui/react';
 import { MdOutlineError } from 'react-icons/md';
 
+export function QueryStatus({
+  query,
+  error,
+  skeleton,
+  children,
+}: {
+  query: UseQueryResult;
+  error: string;
+  skeleton: ReactNode;
+  children: ReactNode;
+}) {
+  if (query.isError) return <ErrorPanel retry={() => query.refetch()}>{error}</ErrorPanel>;
+  if (query.isLoading) return <>{skeleton}</>;
+  if (query.isSuccess) return <>{children}</>;
+
+  return <></>;
+}
+
 export function QueryPanel({
   query,
   error,
@@ -15,19 +33,12 @@ export function QueryPanel({
   error: string;
   children: ReactNode;
 } & Props) {
-  if (query.isError)
-    return <ErrorPanel retry={() => query.refetch()}>{error}</ErrorPanel>;
+  if (query.isError) return <ErrorPanel retry={() => query.refetch()}>{error}</ErrorPanel>;
   if (query.isLoading) return <LoadingPanel {...props} />;
   return <>{children}</>;
 }
 
-export function QueryErrorScreen({
-  children,
-  query,
-}: {
-  children: string;
-  query: UseQueryResult;
-}) {
+export function QueryErrorScreen({ children, query }: { children: string; query: UseQueryResult }) {
   const red = 'red.400';
 
   return (
@@ -38,11 +49,7 @@ export function QueryErrorScreen({
           <Text color={red} fontWeight="bold">
             {children}
           </Text>
-          <Button
-            variant="brand"
-            isLoading={query.isLoading}
-            onClick={() => query.refetch()}
-          >
+          <Button variant="brand" isLoading={query.isLoading} onClick={() => query.refetch()}>
             Retry
           </Button>
         </VStack>

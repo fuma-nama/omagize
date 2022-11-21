@@ -15,17 +15,12 @@ export type SignUpIssues = {
   password?: string;
 };
 
-export function verifySignUp({
-  username,
-  email,
-  password,
-}: SignUpOptions): SignUpIssues {
+export function verifySignUp({ username, email, password }: SignUpOptions): SignUpIssues {
   const errors: SignUpIssues = {};
 
   if (username.length === 0) errors.username = 'Name cannot be Blank';
   if (!validEmail(email)) errors.email = 'Invalid Email';
-  if (password.length < 8)
-    errors.password = 'Password cannot less than 8 characters';
+  if (password.length < 8) errors.password = 'Password cannot less than 8 characters';
 
   return errors;
 }
@@ -53,10 +48,7 @@ export function validEmail(email: string): boolean {
   return !!email.match(format);
 }
 
-export function parseError(
-  error: OmagizeError | FirebaseError | any,
-  def?: string
-): string | null {
+export function parseError(error: OmagizeError | FirebaseError | any, def?: string): string | null {
   if (error == null) return null;
   if (error instanceof OmagizeError) return parseOmagizeError(error, def);
   if (error instanceof FirebaseError) return parseFirebaseError(error, def);
@@ -92,6 +84,8 @@ export function parseOmagizeError(error: OmagizeError, def?: string): string {
       return "Friend Request doesn't exist";
     case APIErrorCode.FriendRequestAlreadyExist:
       return 'Friend Request already exists';
+    case APIErrorCode.InvalidMessage:
+      return 'Message content must not be blank or longer than 1000 characters';
     default:
       return def;
   }

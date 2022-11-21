@@ -1,8 +1,9 @@
 // Chakra imports
-import { Button, Flex, Image, Link, Text } from '@chakra-ui/react';
+import { Button, Flex, Link, Text } from '@chakra-ui/react';
 
 // Assets
 import banner from 'assets/img/nfts/NftBanner1.png';
+import { BiUpload } from 'react-icons/bi';
 
 export default function Banner() {
   // Chakra Color Mode
@@ -30,7 +31,7 @@ export default function Banner() {
         fontWeight="700"
         lineHeight={{ base: '32px', md: '42px' }}
       >
-        Discover, collect, and sell extraordinary NFTs
+        Custom Emoji & Sticker
       </Text>
       <Text
         fontSize="md"
@@ -47,8 +48,7 @@ export default function Banner() {
         mb="40px"
         lineHeight="28px"
       >
-        Enter in this creative world. Discover now the latest NFTs or start
-        creating your own!
+        Create custom Emojis or Stickers and use them anywhere!
       </Text>
       <Flex align="center">
         <Button
@@ -62,8 +62,9 @@ export default function Banner() {
           py="20px"
           px="27"
           me="38px"
+          leftIcon={<BiUpload />}
         >
-          Discover now
+          Upload
         </Button>
         <Link>
           <Text color="white" fontSize="sm" fontWeight="500">

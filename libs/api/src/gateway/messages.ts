@@ -1,6 +1,14 @@
 import { RawFriendRequest, RawUser } from './../UserAPI';
 import { RawGroup } from '../GroupAPI';
-import { Relation, FriendRequest, Group, Snowflake, RawRelation } from '../types';
+import {
+  Relation,
+  FriendRequest,
+  Group,
+  Snowflake,
+  RawRelation,
+  Assets,
+  RawAssets,
+} from '../types';
 
 export type GatewayMessage<T> = {
   op: OpCode;
@@ -44,17 +52,20 @@ export type ReadyPayload = {
   relations: Relation[];
   groups: Group[];
   friendRequests: FriendRequest[];
+  favorite_assets: Assets;
 };
 export type RawReadyPayload = {
   relations: RawRelation[];
   groups: RawGroup[];
   friendRequests: RawFriendRequest[];
+  favorite_assets: RawAssets;
 };
 export function ReadyPayload(raw: RawReadyPayload): ReadyPayload {
   return {
     relations: raw.relations.map((f) => Relation(f)),
     groups: raw.groups.map((g) => Group(g)),
     friendRequests: raw.friendRequests.map((r) => FriendRequest(r)),
+    favorite_assets: Assets(raw.favorite_assets),
   };
 }
 

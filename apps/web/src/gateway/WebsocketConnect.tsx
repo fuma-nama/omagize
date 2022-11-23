@@ -1,6 +1,6 @@
 import { HStack, Slide, Text } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useUserStore } from 'stores/UserStore';
+import { applyReadyPayload } from 'stores/hooks';
 import { useGatewayQuery, useGatewayListener } from './index';
 
 export default function WebsocketConnect() {
@@ -9,7 +9,7 @@ export default function WebsocketConnect() {
   useGatewayListener({
     onReady(payload) {
       setFailed(false);
-      useUserStore.getState().acceptPayload(payload);
+      applyReadyPayload(payload);
     },
     onClose: () => setFailed(true),
     onError: () => setFailed(true),

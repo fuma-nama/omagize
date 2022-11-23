@@ -41,3 +41,20 @@ export function CustomSticker(raw: RawCustomSticker): CustomSticker {
     url: getAssetUrl(AssetType.Stickers, raw.id),
   };
 }
+
+export type RawAssets = {
+  emojis: RawCustomEmoji[];
+  stickers: RawCustomSticker[];
+};
+
+export type Assets = {
+  emojis: CustomEmoji[];
+  stickers: CustomSticker[];
+};
+
+export function Assets(raw: RawAssets): Assets {
+  return {
+    emojis: raw.emojis.map((emoji) => CustomEmoji(emoji)),
+    stickers: raw.stickers.map((sticker) => CustomSticker(sticker)),
+  };
+}

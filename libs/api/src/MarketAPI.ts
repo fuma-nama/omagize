@@ -1,17 +1,14 @@
 import { Snowflake } from './types/common';
-import { CustomEmoji, CustomSticker, RawCustomEmoji, RawCustomSticker } from './types';
+import {
+  Assets,
+  CustomEmoji,
+  CustomSticker,
+  RawAssets,
+  RawCustomEmoji,
+  RawCustomSticker,
+} from './types';
 import { toFormData } from './utils';
 import { callDefault, callReturn } from './utils/core';
-
-export type RawAssets = {
-  emojis: RawCustomEmoji[];
-  stickers: RawCustomSticker[];
-};
-
-export type Assets = {
-  emojis: CustomEmoji[];
-  stickers: CustomSticker[];
-};
 
 export async function fetchLatestAssets(): Promise<Assets> {
   const result = await callReturn<RawAssets>(`/market/assets`, {

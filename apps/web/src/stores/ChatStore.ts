@@ -1,7 +1,8 @@
-import { CustomSticker, CustomEmoji, Snowflake } from '@omagize/api';
+import { CustomSticker, CustomEmoji, Snowflake, ReadyPayload } from '@omagize/api';
 import create from 'zustand';
 
 export type ChatStore = {
+  acceptPayload: (payload: ReadyPayload) => void;
   liked_emojis: CustomEmoji[] | null;
   likeEmoji: (emoji: CustomEmoji) => void;
   unlikeEmoji: (emoji: Snowflake) => void;
@@ -13,6 +14,11 @@ export type ChatStore = {
 export const useChatStore = create<ChatStore>((set, get) => ({
   liked_emojis: [],
   liked_stickers: [],
+  acceptPayload: (payload) =>
+    set({
+      liked_emojis: payload.favorite_assets.emojis,
+      liked_stickers: payload.favorite_assets.stickers,
+    }),
   likeEmoji: (emoji) =>
     set((store) => {
       const prev = store.liked_emojis;

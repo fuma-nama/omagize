@@ -1,4 +1,4 @@
-import { Box, StackProps } from '@chakra-ui/react';
+import { Box, Image, StackProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { useColors } from 'variables/colors';
 
@@ -29,5 +29,11 @@ export function EveryoneMention(props: any) {
       <span>@</span>
       everyone
     </Box>
+  );
+}
+
+export function EmojiEntity({ name, src }: { name: string; src: string }) {
+  return (
+    <Image display="inline" src={src} alt={name} w="25px" h="25px" objectFit="contain" mx="5px" />
   );
 }

@@ -8,6 +8,7 @@ import {
   Input,
   Modal,
   ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -16,10 +17,13 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { createEmoji, createSticker } from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
+import CustomCard from 'components/card/Card';
+import { EmojiEntity } from 'components/editor/entities';
 import { TabButton } from 'components/layout/Tab';
 import { useImagePickerCrop } from 'components/picker/ImagePicker';
 import { useState } from 'react';
@@ -36,7 +40,7 @@ export default function CreateAssetModal({
   onClose: () => void;
 }) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Create Asset</ModalHeader>
@@ -53,6 +57,7 @@ function Body({ onClose }: { onClose: () => void }) {
 
   return (
     <>
+      <ModalCloseButton />
       <ModalBody>
         <Tabs index={current} onChange={setCurrent} variant="soft-rounded">
           <TabList>
@@ -60,8 +65,8 @@ function Body({ onClose }: { onClose: () => void }) {
             <TabButton>Sticker</TabButton>
           </TabList>
           <TabPanels>
-            <TabPanel>{emoji.component}</TabPanel>
-            <TabPanel>{sticker.component}</TabPanel>
+            <TabPanel pb={0}>{emoji.component}</TabPanel>
+            <TabPanel pb={0}>{sticker.component}</TabPanel>
           </TabPanels>
         </Tabs>
       </ModalBody>
@@ -163,6 +168,12 @@ function useEmojiForm(onClose: () => void) {
           placeholder="Give it a cool name"
         />
         <FormErrorMessage>{parseError(mutation.error, 'Failed to upload')}</FormErrorMessage>
+        <CustomCard mt={5}>
+          <Text fontWeight="600">Preview</Text>
+          <Text as="span" align="center" display="inline-flex">
+            Hello World <EmojiEntity src={picker.url} name={name} />
+          </Text>
+        </CustomCard>
       </FormControl>
     ),
   };

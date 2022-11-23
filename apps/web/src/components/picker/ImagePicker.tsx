@@ -46,6 +46,7 @@ export function useImagePickerCrop<T extends Blob | Reset>(
   }
 
   return {
+    url: filePicker.url,
     picker: (
       <>
         {filePicker.picker}

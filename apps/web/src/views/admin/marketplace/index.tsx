@@ -42,6 +42,7 @@ import { BsPeople } from 'react-icons/bs';
 import { QueryStatus } from 'components/panel/QueryPanel';
 import { Repeat } from 'components/layout/Container';
 import CreateAssetModal from './components/modals/UploadAssetModal';
+import EmoijItem from './components/EmojiItem';
 
 export default function Marketplace() {
   // Chakra Color Mode
@@ -142,30 +143,9 @@ function ActionBar() {
 function LatestEmojis({ assets }: { assets: Assets }) {
   return (
     <>
-      <NFT
-        name="Abstract Colors"
-        author="By Esthera Jackson"
-        bidders={[Avatar1, Avatar2, Avatar3, Avatar4, Avatar1, Avatar1, Avatar1, Avatar1]}
-        image={Nft1}
-        currentbid="0.91 ETH"
-        download="#"
-      />
-      <NFT
-        name="ETH AI Brain"
-        author="By Nick Wilson"
-        bidders={[Avatar1, Avatar2, Avatar3, Avatar4, Avatar1, Avatar1, Avatar1, Avatar1]}
-        image={Nft2}
-        currentbid="0.91 ETH"
-        download="#"
-      />
-      <NFT
-        name="Mesh Gradients "
-        author="By Will Smith"
-        bidders={[Avatar1, Avatar2, Avatar3, Avatar4, Avatar1, Avatar1, Avatar1, Avatar1]}
-        image={Nft3}
-        currentbid="0.91 ETH"
-        download="#"
-      />
+      {assets.emojis.map((emoji) => (
+        <EmoijItem key={emoji.id} emoji={emoji} />
+      ))}
     </>
   );
 }

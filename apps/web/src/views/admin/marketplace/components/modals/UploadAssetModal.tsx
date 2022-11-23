@@ -20,7 +20,15 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { createEmoji, createSticker } from '@omagize/api';
+import {
+  Assets,
+  client,
+  createEmoji,
+  createSticker,
+  CustomEmoji,
+  CustomSticker,
+  Keys,
+} from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
 import CustomCard from 'components/card/Card';
 import { EmojiEntity } from 'components/editor/entities';
@@ -79,6 +87,28 @@ function Body({ onClose }: { onClose: () => void }) {
   );
 }
 
+function updateEmojis(add: CustomEmoji) {
+  client.setQueryData<Assets>(
+    Keys.market.assets,
+    (prev) =>
+      prev && {
+        ...prev,
+        emojis: [add, ...prev.emojis],
+      }
+  );
+}
+
+function updateStickers(add: CustomSticker) {
+  client.setQueryData<Assets>(
+    Keys.market.assets,
+    (prev) =>
+      prev && {
+        ...prev,
+        stickers: [add, ...prev.stickers],
+      }
+  );
+}
+
 function useStickerForm(onClose: () => void) {
   const [name, setName] = useState('');
   const [image, setImage] = useState<Blob>();
@@ -94,7 +124,10 @@ function useStickerForm(onClose: () => void) {
   });
 
   const mutation = useMutation(() => createSticker(name, image), {
-    onSuccess: onClose,
+    onSuccess: (sticker) => {
+      updateStickers(sticker);
+      onClose();
+    },
   });
 
   return {
@@ -141,7 +174,10 @@ function useEmojiForm(onClose: () => void) {
   });
 
   const mutation = useMutation(() => createEmoji(name, image), {
-    onSuccess: onClose,
+    onSuccess: (emoji) => {
+      updateEmojis(emoji);
+      onClose();
+    },
   });
 
   return {

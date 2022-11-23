@@ -5,10 +5,12 @@ import { callDefault, callReturn } from './utils/core';
 
 export type RawAssets = {
   emojis: RawCustomEmoji[];
+  stickers: RawCustomSticker[];
 };
 
 export type Assets = {
   emojis: CustomEmoji[];
+  stickers: CustomSticker[];
 };
 
 export async function fetchLatestAssets(): Promise<Assets> {
@@ -18,6 +20,7 @@ export async function fetchLatestAssets(): Promise<Assets> {
 
   return {
     emojis: result.emojis.map((emoji) => CustomEmoji(emoji)),
+    stickers: result.stickers.map((sticker) => CustomSticker(sticker)),
   };
 }
 
@@ -34,7 +37,7 @@ export async function createEmoji(name: string, image: Blob) {
 }
 
 export async function createSticker(name: string, image: Blob) {
-  const created = await callReturn<RawCustomSticker>(`/market/emojis`, {
+  const created = await callReturn<RawCustomSticker>(`/market/stickers`, {
     method: 'POST',
     body: toFormData({
       name,

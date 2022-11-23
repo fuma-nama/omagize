@@ -1,6 +1,7 @@
+import { Snowflake } from './types/common';
 import { CustomEmoji, CustomSticker, RawCustomEmoji, RawCustomSticker } from './types';
 import { toFormData } from './utils';
-import { callReturn } from './utils/core';
+import { callDefault, callReturn } from './utils/core';
 
 export type RawAssets = {
   emojis: RawCustomEmoji[];
@@ -42,4 +43,20 @@ export async function createSticker(name: string, image: Blob) {
   });
 
   return CustomSticker(created);
+}
+
+export async function likeAsset(asset: Snowflake, type: 'emoji' | 'sticker') {
+  const route = type === 'emoji' ? 'emojis' : 'stickers';
+
+  await callDefault(`/market/${route}/${asset}/like`, {
+    method: 'POST',
+  });
+}
+
+export async function unlikeAsset(asset: Snowflake, type: 'emoji' | 'sticker') {
+  const route = type === 'emoji' ? 'emojis' : 'stickers';
+
+  await callDefault(`/market/${route}/${asset}/like`, {
+    method: 'DELETE',
+  });
 }

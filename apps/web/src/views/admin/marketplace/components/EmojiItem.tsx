@@ -62,20 +62,13 @@ export default function EmoijItem(props: { emoji: CustomEmoji }) {
             top="7px"
             right="7px"
             _hover={{ bg: 'whiteAlpha.900' }}
-            _active={{ bg: 'white' }}
-            _focus={{ bg: 'white' }}
+            _active={{ bg: 'whiteAlpha.900' }}
             borderRadius="50%"
             w="36px"
             h="36px"
+            color="brand.500"
             onClick={() => likeMutation.mutate(!store.hasLike)}
-            icon={
-              <Icon
-                w="20px"
-                h="20px"
-                as={store.hasLike ? IoHeart : IoHeartOutline}
-                color="brand.500"
-              />
-            }
+            icon={<Icon w="20px" h="20px" as={store.hasLike ? IoHeart : IoHeartOutline} />}
           />
         </Box>
         <Flex flexDirection="column" justify="space-between" h="100%">

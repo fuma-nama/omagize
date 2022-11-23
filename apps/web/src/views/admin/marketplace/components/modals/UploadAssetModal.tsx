@@ -52,6 +52,7 @@ export default function CreateAssetModal({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Create Asset</ModalHeader>
+        <ModalCloseButton />
         <Body onClose={onClose} />
       </ModalContent>
     </Modal>
@@ -65,7 +66,6 @@ function Body({ onClose }: { onClose: () => void }) {
 
   return (
     <>
-      <ModalCloseButton />
       <ModalBody>
         <Tabs index={current} onChange={setCurrent} variant="soft-rounded">
           <TabList>

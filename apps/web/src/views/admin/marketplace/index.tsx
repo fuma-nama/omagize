@@ -56,10 +56,12 @@ function Content() {
   // Chakra Color Mode
   const { textColorPrimary: textColor } = useColors();
   const query = useQuery(Keys.market.assets, () => fetchLatestAssets());
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
     <>
-      <Banner />
+      <CreateAssetModal isOpen={isOpen} onClose={onClose} />
+      <Banner upload={onOpen} />
       <Flex direction="column">
         <Flex
           ms="24px"
@@ -83,7 +85,12 @@ function Content() {
               />
             </Tooltip>
           </Text>
-          <ActionBar />
+          <HStack>
+            <Button variant="brand" leftIcon={<BiUpload />} onClick={onOpen}>
+              Upload
+            </Button>
+            <Button leftIcon={<BsPeople />}>My Assets</Button>
+          </HStack>
         </Flex>
         <QueryStatusLayout
           query={query}
@@ -141,20 +148,6 @@ function AssetItemSkeleton() {
       <Skeleton h="100px" rounded="lg" />
       <SkeletonText />
     </Card>
-  );
-}
-
-function ActionBar() {
-  const { isOpen, onClose, onOpen } = useDisclosure();
-
-  return (
-    <HStack>
-      <CreateAssetModal isOpen={isOpen} onClose={onClose} />
-      <Button variant="brand" leftIcon={<BiUpload />} onClick={onOpen}>
-        Upload
-      </Button>
-      <Button leftIcon={<BsPeople />}>My Assets</Button>
-    </HStack>
   );
 }
 

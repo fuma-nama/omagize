@@ -5,7 +5,7 @@ import { Button, Flex, Link, Text } from '@chakra-ui/react';
 import banner from 'assets/img/nfts/NftBanner1.png';
 import { BiUpload } from 'react-icons/bi';
 
-export default function Banner() {
+export default function Banner({ upload }: { upload: () => void }) {
   // Chakra Color Mode
   return (
     <Flex
@@ -63,6 +63,7 @@ export default function Banner() {
           px="27"
           me="38px"
           leftIcon={<BiUpload />}
+          onClick={upload}
         >
           Upload
         </Button>

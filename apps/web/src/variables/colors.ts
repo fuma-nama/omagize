@@ -1,13 +1,52 @@
-import { useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@chakra-ui/react';
 
-export function useItemHoverBg() {
-  return useColorModeValue(
-    { bg: 'white', boxShadow: '0px 40px 58px -20px rgba(112, 144, 176, 0.12)' },
-    { bg: 'navy.700', boxShadow: 'unset' }
+const light = {
+  globalBg: 'secondaryGray.300',
+  brand: 'brand.500',
+  textColorPrimary: 'secondaryGray.900',
+  textColorSecondary: 'gray.400',
+  textColorDetails: 'navy.700',
+  borderColor: 'white !important',
+  cardBg: 'white',
+  menuBg: 'white',
+  shadow: '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
+};
+
+const dark = {
+  globalBg: 'navy.900',
+  brand: 'brand.400',
+  textColorPrimary: 'white',
+  textColorSecondary: 'gray.400',
+  textColorDetails: 'secondaryGray.600',
+  borderColor: '#111C44 !important',
+  cardBg: 'navy.800',
+  menuBg: 'navy.800',
+  shadow: '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
+};
+
+export function useColors() {
+  return useColorModeValue(light, dark);
+}
+
+export function useColorsExtend<T>(_light: T, _dark: T) {
+  return useColorModeValue({ ...light, ..._light }, { ...dark, ..._dark });
+}
+
+export function useNavbarColors() {
+  return useColorsExtend(
+    {
+      textColorBrand: 'brand.700',
+      iconColor: 'gray.400',
+    },
+    {
+      textColorBrand: 'brand.400',
+      iconColor: 'white',
+    }
   );
 }
+
 export function useAuthColors() {
-  const extand = useColorModeValue(
+  return useColorsExtend(
     {
       textColorBrand: 'brand.500',
       brandStars: 'brand.500',
@@ -25,45 +64,11 @@ export function useAuthColors() {
       buttonActive: { bg: 'whiteAlpha.200' },
     }
   );
-  return {
-    ...extand,
-    ...useColors(),
-  };
 }
-export function useColors() {
+
+export function useItemHoverBg() {
   return useColorModeValue(
-    {
-      globalBg: 'secondaryGray.300',
-      brand: 'brand.500',
-      textColorPrimary: 'secondaryGray.900',
-      textColorSecondary: 'gray.400',
-      textColorDetails: 'navy.700',
-      borderColor: 'white !important',
-      cardBg: 'white',
-      menuBg: 'white',
-      shadow: '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
-    },
-    {
-      globalBg: 'navy.900',
-      brand: 'brand.400',
-      textColorPrimary: 'white',
-      textColorSecondary: 'gray.400',
-      textColorDetails: 'secondaryGray.600',
-      borderColor: '#111C44 !important',
-      cardBg: 'navy.800',
-      menuBg: 'navy.800',
-      shadow: '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
-    }
+    { bg: 'white', boxShadow: '0px 40px 58px -20px rgba(112, 144, 176, 0.12)' },
+    { bg: 'navy.700', boxShadow: 'unset' }
   );
-}
-
-export function useNavbarColors() {
-  const { colorMode } = useColorMode();
-  const dark = colorMode === 'dark';
-
-  return {
-    textColorBrand: dark ? 'brand.400' : 'brand.700',
-    iconColor: dark ? 'white' : 'gray.400',
-    ...useColors(),
-  };
 }

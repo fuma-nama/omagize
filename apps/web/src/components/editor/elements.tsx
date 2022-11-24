@@ -51,7 +51,6 @@ function EmojiElement(props: RenderElementProps) {
         h="25px"
         borderWidth={focused ? 2 : 0}
         borderColor="brand.400"
-        contentEditable={false}
       >
         <Image src={emoji.url} alt={emoji.name} w="full" h="full" objectFit="contain" />
       </Box>

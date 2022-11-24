@@ -32,6 +32,7 @@ import EmoijItem from './components/EmojiItem';
 import StickerItem from './components/StickerItem';
 import { FaSadCry } from 'react-icons/fa';
 import { SidePanel } from './SidePanel';
+import { useNavigate } from 'react-router-dom';
 
 export default function Marketplace() {
   return (
@@ -57,6 +58,7 @@ function Content() {
   const { textColorPrimary: textColor } = useColors();
   const query = useQuery(Keys.market.assets, () => fetchLatestAssets());
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -89,7 +91,9 @@ function Content() {
             <Button variant="brand" leftIcon={<BiUpload />} onClick={onOpen}>
               Upload
             </Button>
-            <Button leftIcon={<BsPeople />}>My Assets</Button>
+            <Button leftIcon={<BsPeople />} onClick={() => navigate('/user/explore/me')}>
+              My Assets
+            </Button>
           </HStack>
         </Flex>
         <QueryStatusLayout

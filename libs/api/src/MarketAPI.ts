@@ -60,3 +60,23 @@ export async function unlikeAsset(asset: Snowflake, type: 'emoji' | 'sticker') {
     method: 'DELETE',
   });
 }
+
+type RawMyAssets = {
+  owned: RawAssets;
+  favorites: RawAssets;
+};
+export type MyAssets = {
+  owned: Assets;
+  favorites: Assets;
+};
+
+export async function fetchMyAssets(): Promise<MyAssets> {
+  const raw = await callReturn<RawMyAssets>(`/market/assets/me`, {
+    method: 'GET',
+  });
+
+  return {
+    owned: Assets(raw.owned),
+    favorites: Assets(raw.favorites),
+  };
+}

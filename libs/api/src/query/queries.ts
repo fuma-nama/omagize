@@ -13,6 +13,7 @@ export const Keys = {
   messages: (group: Snowflake) => ['messages', group],
   market: {
     assets: ['assets'],
+    me: ['my_assets'],
   },
   groupEvent: {
     all: ['all_group_event'],

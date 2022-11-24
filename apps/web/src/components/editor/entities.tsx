@@ -37,3 +37,7 @@ export function EmojiEntity({ name, src }: { name: string; src: string }) {
     <Image display="inline" src={src} alt={name} w="25px" h="25px" objectFit="contain" mx="5px" />
   );
 }
+
+export function StickerEntity({ name, src }: { name: string; src: string }) {
+  return <Image display="inline" src={src} alt={name} w="100px" h="100px" objectFit="contain" />;
+}

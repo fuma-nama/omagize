@@ -1,15 +1,13 @@
-import { CompactEmoji } from 'emojibase';
 import { BaseEditor } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { CustomEmojiElement, CustomStickerElement } from './plugins/emoji';
 import { MentionElement } from './plugins/mention';
 
-type EmojiElement = {
-  type: 'emoji';
-  emoji: CompactEmoji;
-  children: CustomText[];
-};
-
-type CustomElement = { type: 'paragraph'; children: CustomText[] } | MentionElement | EmojiElement;
+type CustomElement =
+  | { type: 'paragraph'; children: CustomText[] }
+  | MentionElement
+  | CustomEmojiElement
+  | CustomStickerElement;
 
 export type TextMarks = {
   underlined?: boolean;

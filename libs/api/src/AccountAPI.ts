@@ -6,13 +6,7 @@ import { FirebaseAuth } from './firebase';
 export type Reset = 'reset';
 
 export type RawLoginPayload = {
-  account: RawAccount;
   user: RawSelfUser;
-  token: string;
-};
-
-export type RawAccount = {
-  email: string;
 };
 
 /**

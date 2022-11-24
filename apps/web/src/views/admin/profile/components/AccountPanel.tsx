@@ -10,18 +10,11 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import {
-  Account,
-  FirebaseAuth,
-  useLoginQuery,
-  deleteAccount,
-} from '@omagize/api';
+import { FirebaseAuth, deleteAccount, firebase } from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
 import CustomCard from 'components/card/Card';
 import PasswordInput from 'components/fields/PasswordInput';
-import ReAuthentricateModal, {
-  ReauthTarget,
-} from 'components/modals/auth/ReAuthenticateModal';
+import ReAuthentricateModal, { ReauthTarget } from 'components/modals/auth/ReAuthenticateModal';
 import { useResetPasswordModal } from 'components/modals/auth/ResetPasswordModal';
 import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
@@ -29,7 +22,6 @@ import { parseFirebaseError } from 'utils/APIUtils';
 import { useColors } from 'variables/colors';
 
 export default function AccountPanel() {
-  const { account } = useLoginQuery().data;
   const [reauth, setReauth] = useState<ReauthTarget>();
   const { textColorPrimary } = useColors();
 
@@ -40,7 +32,7 @@ export default function AccountPanel() {
         Account Settings
       </Text>
       <Flex direction="column" gap={2} mt={2}>
-        <Email account={account} setTarget={setReauth} />
+        <Email setTarget={setReauth} />
         <Pasword setTarget={setReauth} />
         <Footer setTarget={setReauth} />
       </Flex>
@@ -60,18 +52,10 @@ function Footer({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
 
   return (
     <ButtonGroup mt={8}>
-      <Button
-        color="red.400"
-        isLoading={logout.isLoading}
-        onClick={() => logout.mutate()}
-      >
+      <Button color="red.400" isLoading={logout.isLoading} onClick={() => logout.mutate()}>
         Logout
       </Button>
-      <Button
-        variant="danger"
-        isLoading={deleteMutation.isLoading}
-        onClick={onDelete}
-      >
+      <Button variant="danger" isLoading={deleteMutation.isLoading} onClick={onDelete}>
         Delete Account
       </Button>
     </ButtonGroup>
@@ -102,11 +86,7 @@ function Pasword({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
         }}
       />
       <ButtonGroup mt={2}>
-        <Button
-          variant="brand"
-          isLoading={mutation.isLoading}
-          onClick={onChange}
-        >
+        <Button variant="brand" isLoading={mutation.isLoading} onClick={onChange}>
           Update Password
         </Button>
         <Button
@@ -118,26 +98,15 @@ function Pasword({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
       </ButtonGroup>
       <FormErrorMessage>
         {mutation.error instanceof FirebaseError &&
-          parseFirebaseError(
-            mutation.error as FirebaseError,
-            'Failed to change password'
-          )}
+          parseFirebaseError(mutation.error as FirebaseError, 'Failed to change password')}
       </FormErrorMessage>
     </Block>
   );
 }
 
-function Email({
-  account,
-  setTarget,
-}: {
-  account: Account;
-  setTarget: (target: ReauthTarget) => void;
-}) {
-  const [email, setEmail] = useState<string>(account.email);
-  const emailMutation = useMutation((email: string) =>
-    FirebaseAuth.changeEmail(email)
-  );
+function Email({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
+  const [email, setEmail] = useState<string>(() => firebase.auth.currentUser?.email);
+  const emailMutation = useMutation((email: string) => FirebaseAuth.changeEmail(email));
 
   const onChangeMail = () => {
     setTarget({
@@ -149,25 +118,14 @@ function Email({
   return (
     <Block text="Email" isInvalid={emailMutation.isError}>
       <HStack>
-        <Input
-          variant="focus"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Button
-          isLoading={emailMutation.isLoading}
-          onClick={onChangeMail}
-          variant="brand"
-        >
+        <Input variant="focus" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Button isLoading={emailMutation.isLoading} onClick={onChangeMail} variant="brand">
           Update
         </Button>
       </HStack>
       <FormErrorMessage>
         {emailMutation.error instanceof FirebaseError &&
-          parseFirebaseError(
-            emailMutation.error as FirebaseError,
-            'Failed to change email'
-          )}
+          parseFirebaseError(emailMutation.error as FirebaseError, 'Failed to change email')}
       </FormErrorMessage>
     </Block>
   );

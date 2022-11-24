@@ -21,9 +21,10 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import SwitchField from 'components/fields/SwitchField';
 import { DatePicker } from 'components/picker/DatePicker';
-import { QueryPanel } from 'components/panel/QueryPanel';
+import { QueryStatus } from 'components/panel/QueryPanel';
 import { useState } from 'react';
 import { onlyDate } from 'utils/DateUtils';
+import LoadingPanel from 'components/panel/LoadingPanel';
 
 type Options = {
   expireEnabled: boolean;
@@ -78,13 +79,17 @@ export default function GroupInviteModal({
         <ModalHeader>Invite Peoples</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <QueryPanel query={query} error="Failed to get Invite code" size="sm">
+          <QueryStatus
+            query={query}
+            error="Failed to get Invite code"
+            skeleton={<LoadingPanel size="sm" />}
+          >
             <InviteForm
               invite={invite}
               options={value}
               onChange={(v) => setOptions((prev) => ({ ...prev, ...v }))}
             />
-          </QueryPanel>
+          </QueryStatus>
         </ModalBody>
         <ModalFooter gap={2}>
           <Button variant="action" isLoading={mutation.isLoading} onClick={() => mutation.mutate()}>

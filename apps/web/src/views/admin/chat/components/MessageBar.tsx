@@ -17,9 +17,8 @@ import { Descendant, Editor } from 'slate';
 import { isEmpty, slateToMarkdown } from 'components/editor/markdown';
 import { createSlateEditor, initialValue, SlateEditor } from 'components/editor/editor';
 import { Slate } from 'slate-react';
-import EmojiPicker from 'components/picker/EmojiPicker';
+import EmojiPicker from 'components/picker/emoji';
 import { PopoverTrigger } from 'components/PopoverTrigger';
-import { insertEmoji } from 'components/editor/plugins/emoji';
 
 export interface InputProvider {
   search: string;
@@ -104,15 +103,7 @@ export function MessageBar({
       >
         {picker.component}
         <IconButton aria-label="add-file" icon={<FiFile />} onClick={picker.pick} />
-        <EmojiPicker
-          onSelect={(emoji) => {
-            insertEmoji(content.editor, emoji);
-
-            dispatch(() => ({
-              message: content.editor.children,
-            }));
-          }}
-        >
+        <EmojiPicker editor={content.editor}>
           <PopoverTrigger>
             <IconButton aria-label="add-emoji" icon={<GrEmoji />} />
           </PopoverTrigger>

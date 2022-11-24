@@ -1,15 +1,15 @@
 import { Flex, Icon, Menu, MenuButton, MenuList, Text } from '@chakra-ui/react';
-import React from 'react';
 import { useNavbarColors } from 'variables/colors';
 import { useUserNotificationsQuery } from '@omagize/api';
-import { ArrayHolder } from 'components/layout/Container';
+import { Placeholder, Repeat } from 'components/layout/Container';
 import { NotificationSkeleton } from '../../card/notification/Notification';
 import UserNotificationItem from '../../card/notification/UserNotification';
 import { MdNotificationsNone } from 'react-icons/md';
+import { QueryStatusLayout } from 'components/panel/QueryPanel';
+import { BiNotificationOff } from 'react-icons/bi';
 
 export default function NotificationsMenu() {
-  const { iconColor, textColorPrimary, menuBg, shadow, textColorBrand } =
-    useNavbarColors();
+  const { iconColor, textColorPrimary, menuBg, shadow, textColorBrand } = useNavbarColors();
   const query = useUserNotificationsQuery();
 
   return (
@@ -19,14 +19,7 @@ export default function NotificationsMenu() {
       }}
     >
       <MenuButton p="0px">
-        <Icon
-          mt="6px"
-          as={MdNotificationsNone}
-          color={iconColor}
-          w="18px"
-          h="18px"
-          me="10px"
-        />
+        <Icon mt="6px" as={MdNotificationsNone} color={iconColor} w="18px" h="18px" me="10px" />
       </MenuButton>
       <MenuList
         boxShadow={shadow}
@@ -39,31 +32,26 @@ export default function NotificationsMenu() {
           <Text fontSize="md" fontWeight="600" color={textColorPrimary}>
             Notifications
           </Text>
-          <Text
-            fontSize="sm"
-            fontWeight="500"
-            color={textColorBrand}
-            ms="auto"
-            cursor="pointer"
-          >
+          <Text fontSize="sm" fontWeight="500" color={textColorBrand} ms="auto" cursor="pointer">
             Mark all read
           </Text>
         </Flex>
         <Flex flexDirection="column">
-          <ArrayHolder
-            array={query.data}
-            placeholder="No Notifications"
+          <QueryStatusLayout
+            query={query}
+            watch={query.data}
+            placeholder={<Placeholder icon={<BiNotificationOff />}>No Notifcations</Placeholder>}
+            error="Failed to fetch Notifications"
             skeleton={
-              <>
+              <Repeat times={2}>
                 <NotificationSkeleton />
-                <NotificationSkeleton />
-              </>
+              </Repeat>
             }
           >
-            {() =>
-              query.data.map((n) => <UserNotificationItem key={n.id} {...n} />)
-            }
-          </ArrayHolder>
+            {query.data?.map((n) => (
+              <UserNotificationItem key={n.id} {...n} />
+            ))}
+          </QueryStatusLayout>
         </Flex>
       </MenuList>
     </Menu>

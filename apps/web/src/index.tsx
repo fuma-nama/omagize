@@ -8,10 +8,11 @@ import theme from './theme/theme';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { layouts, NormalLayout } from './layouts';
 import { client, firebase, initClient, initFirebase, useLoginQuery } from '@omagize/api';
-import { QueryPanel } from 'components/panel/QueryPanel';
+import { QueryStatus } from 'components/panel/QueryPanel';
 import { initGateway } from 'gateway';
 import { usePageStore } from 'stores/PageStore';
 import { PrivateChatModal } from 'views/admin/chat/dm/PrivateChat';
+import LoadingPanel from 'components/panel/LoadingPanel';
 
 initClient();
 initFirebase();
@@ -43,9 +44,9 @@ function Pages() {
   const query = useLoginQuery();
 
   return (
-    <QueryPanel query={query} error="Failed to login" size="lg">
+    <QueryStatus query={query} error="Failed to login" skeleton={<LoadingPanel size="sm" />}>
       <RootRoutes loggedIn={query.data != null} />
-    </QueryPanel>
+    </QueryStatus>
   );
 }
 

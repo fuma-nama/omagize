@@ -46,21 +46,14 @@ function EmojiElement(props: RenderElementProps) {
     <span {...props.attributes}>
       {props.children}
       <Box
-        display="inline-flex"
+        display="inline-block"
         w="25px"
         h="25px"
         borderWidth={focused ? 2 : 0}
         borderColor="brand.400"
         contentEditable={false}
       >
-        <Image
-          display="inline"
-          src={emoji.url}
-          alt={emoji.name}
-          w="full"
-          h="full"
-          objectFit="contain"
-        />
+        <Image src={emoji.url} alt={emoji.name} w="full" h="full" objectFit="contain" />
       </Box>
     </span>
   );

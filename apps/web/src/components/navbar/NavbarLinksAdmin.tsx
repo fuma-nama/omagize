@@ -37,7 +37,6 @@ export function NavbarLinksBox(props: FlexProps) {
 
   return (
     <Flex
-      w={{ base: '100%', md: 'auto' }}
       alignItems="center"
       direction="row"
       bg={menuBg}

@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, HStack, Text } from '@chakra-ui/react';
+import { Avatar, Button, HStack, Text } from '@chakra-ui/react';
 import { SearchBar } from 'components/navbar/searchBar/SearchBar';
 import ThemeSwitch from 'components/navbar/components/ThemeSwitch';
 import { UserMenu } from 'components/navbar/menu/UserMenu';
@@ -22,9 +22,7 @@ export function GroupNavbar({ isRoot }: { isRoot?: boolean }) {
           {group?.name}
         </Text>
       </HStack>
-      <Box ms="auto" w={{ sm: '100%', md: 'unset' }}>
-        <GroupNavbarLinks isRoot={isRoot} />
-      </Box>
+      <GroupNavbarLinks isRoot={isRoot} />
     </NavbarBox>
   );
 }

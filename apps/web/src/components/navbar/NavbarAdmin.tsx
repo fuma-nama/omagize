@@ -69,9 +69,7 @@ export default function AdminNavbar(
           {brandText || <SkeletonText w="full" noOfLines={2} />}
         </Link>
       </Box>
-      <Box ms="auto" w={{ sm: '100%', md: 'unset' }}>
-        {active?.navbarLinks || <AdminNavbarLinks />}
-      </Box>
+      {active?.navbarLinks || <AdminNavbarLinks />}
     </NavbarBox>
   );
 }
@@ -122,10 +120,12 @@ export function NavbarBox({
       <Flex
         w="100%"
         direction={{
-          sm: 'column',
-          md: 'row',
+          base: 'column',
+          '3sm': 'row',
         }}
-        alignItems={{ xl: 'center' }}
+        gap={2}
+        justify="space-between"
+        alignItems="stretch"
         {...bar}
       >
         {children}

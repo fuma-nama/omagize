@@ -28,6 +28,7 @@ import {
   CustomEmoji,
   CustomSticker,
   Keys,
+  MyAssets,
 } from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
 import CustomCard from 'components/card/Card';
@@ -88,6 +89,18 @@ function Body({ onClose }: { onClose: () => void }) {
 }
 
 function updateEmojis(add: CustomEmoji) {
+  client.setQueryData<MyAssets>(
+    Keys.market.me,
+    (prev) =>
+      prev && {
+        ...prev,
+        owned: {
+          ...prev.owned,
+          emojis: [add, ...prev.owned.emojis],
+        },
+      }
+  );
+
   client.setQueryData<Assets>(
     Keys.market.assets,
     (prev) =>
@@ -99,6 +112,17 @@ function updateEmojis(add: CustomEmoji) {
 }
 
 function updateStickers(add: CustomSticker) {
+  client.setQueryData<MyAssets>(
+    Keys.market.me,
+    (prev) =>
+      prev && {
+        ...prev,
+        owned: {
+          ...prev.owned,
+          stickers: [add, ...prev.owned.stickers],
+        },
+      }
+  );
   client.setQueryData<Assets>(
     Keys.market.assets,
     (prev) =>

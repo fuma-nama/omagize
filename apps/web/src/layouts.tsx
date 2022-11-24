@@ -15,6 +15,8 @@ import Profile from 'views/admin/profile';
 import { EmailVerifiedHandle } from 'views/auth/signup/verify';
 import PrivateChat from 'views/admin/chat/dm/PrivateChat';
 import { PrivateChatNavbar } from 'views/admin/chat/dm/PrivateChatNavbar';
+import MyAssets from 'views/admin/marketplace/me';
+import MyAssetsNavbar from 'views/admin/marketplace/me/navbar';
 
 export const layouts: RootLayout[] = [
   {
@@ -70,7 +72,17 @@ export const layouts: RootLayout[] = [
           },
           {
             path: 'explore',
-            component: <NFTMarketplace />,
+            subLayouts: [
+              {
+                index: true,
+                component: <NFTMarketplace />,
+              },
+              {
+                path: 'me',
+                component: <MyAssets />,
+                navbar: <MyAssetsNavbar />,
+              },
+            ],
           },
           {
             path: 'profile',

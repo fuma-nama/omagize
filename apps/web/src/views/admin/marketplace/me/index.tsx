@@ -25,8 +25,8 @@ import { BiRefresh, BiUpload } from 'react-icons/bi';
 import { QueryStatusLayout } from 'components/panel/QueryPanel';
 import { Placeholder, PlaceholderLayout, Repeat } from 'components/layout/Container';
 import CreateAssetModal from '../components/modals/UploadAssetModal';
-import EmoijItem from '../components/EmojiItem';
-import StickerItem from '../components/StickerItem';
+import EmoijItem from '../components/assets/EmojiItem';
+import StickerItem from '../components/assets/StickerItem';
 import { FaSadCry, FaThinkPeaks } from 'react-icons/fa';
 import { useChatStore } from 'stores/ChatStore';
 import { HSeparator } from 'components/layout/Separator';
@@ -99,9 +99,7 @@ function Content() {
             </Repeat>
           }
           container={(c) => (
-            <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3, xl: 4 }} gap="20px">
-              {c}
-            </SimpleGrid>
+            <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3, xl: 4 }} gap="20px" children={c} />
           )}
           placeholder={
             <Placeholder icon={<Icon as={FaSadCry} w="40px" h="40px" />}>No any Assets</Placeholder>

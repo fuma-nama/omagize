@@ -1,4 +1,5 @@
 import { mode } from '@chakra-ui/theme-tools';
+import { dark, light } from 'variables/colors';
 export const globalStyles = {
   colors: {
     brand: {
@@ -93,6 +94,7 @@ export const globalStyles = {
         filter: mode('none', 'invert(1)')(props),
       },
       body: {
+        color: mode(light.textColorPrimary, dark.textColorPrimary)(props),
         overflow: 'hidden',
         bg: mode('secondaryGray.300', 'navy.900')(props),
         fontFamily: 'DM Sans',

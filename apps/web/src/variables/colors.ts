@@ -1,6 +1,6 @@
 import { useColorModeValue } from '@chakra-ui/react';
 
-const light = {
+export const light = {
   globalBg: 'secondaryGray.300',
   brand: 'brand.500',
   textColorPrimary: 'secondaryGray.900',
@@ -12,7 +12,7 @@ const light = {
   shadow: '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
 };
 
-const dark = {
+export const dark = {
   globalBg: 'navy.900',
   brand: 'brand.400',
   textColorPrimary: 'white',

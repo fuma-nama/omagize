@@ -1,16 +1,7 @@
-import { firebase } from './../firebase/firebase';
 import { ws } from '../utils/core';
-import ReconnectingWebSocket, {
-  CloseEvent,
-  ErrorEvent,
-} from 'reconnecting-websocket';
-import {
-  GatewayMessage,
-  IdentityEvent,
-  OpCode,
-  ReadyPayload,
-  RawReadyPayload,
-} from './messages';
+import ReconnectingWebSocket, { CloseEvent, ErrorEvent } from 'reconnecting-websocket';
+import { GatewayMessage, IdentityEvent, OpCode, ReadyPayload, RawReadyPayload } from './messages';
+import { User } from 'firebase/auth';
 
 export interface GatewayListener {
   onReady: (payload: ReadyPayload) => void;
@@ -22,14 +13,17 @@ export interface GatewayListener {
   onError: (error: ErrorEvent) => void;
 }
 
-export function startGateway(listener: GatewayListener) {
-  const socket = new ReconnectingWebSocket(ws);
+export let websocket: ReconnectingWebSocket;
+export function connectGateway(user: User, listener: GatewayListener) {
+  if (websocket != null) {
+    websocket.close();
+  }
+  const socket = (websocket = new ReconnectingWebSocket(ws));
 
   socket.onopen = () => {
-    firebase.auth.currentUser
+    user
       .getIdToken()
       .then((token) => {
-        console.log(token);
         const message = IdentityEvent(token);
 
         socket.send(JSON.stringify(message));
@@ -64,9 +58,7 @@ export function startGateway(listener: GatewayListener) {
 
   socket.onclose = (event) => {
     if (event.wasClean) {
-      console.log(
-        `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
-      );
+      console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
     } else {
       console.log('[close] Connection died');
     }
@@ -83,8 +75,6 @@ export function startGateway(listener: GatewayListener) {
   return socket;
 }
 
-export enum GatewayStatus {
-  Connecting,
-  Ready,
-  Disconnected,
+export function closeGateway() {
+  websocket?.close();
 }

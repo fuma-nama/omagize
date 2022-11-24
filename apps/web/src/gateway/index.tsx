@@ -1,20 +1,22 @@
 import {
+  client,
+  closeGateway,
+  connectGateway,
+  firebase,
   GatewayListener,
-  Keys,
   ReadyPayload,
-  startGateway,
-  useLoginQuery,
 } from '@omagize/api';
-import { useQuery } from '@tanstack/react-query';
 import { Auth } from 'firebase/auth';
 import { useEffect } from 'react';
-import ReconnectingWebSocket from 'reconnecting-websocket';
 import { CloseEvent, ErrorEvent } from 'reconnecting-websocket/dist/events';
+import { applyReadyPayload } from 'stores/hooks';
 import { handleEvent } from './handler';
 
 const listeners: Set<Partial<GatewayListener>> = new Set();
 const RootListener: GatewayListener = {
   onReady(payload: ReadyPayload): void {
+    applyReadyPayload(payload);
+
     for (const listener of listeners) {
       if (listener.onReady) listener.onReady(payload);
     }
@@ -43,19 +45,25 @@ export function useGatewayListener(listener: Partial<GatewayListener>) {
 }
 
 export function initGateway(auth: Auth) {
-  auth.onAuthStateChanged((user) => {
-    console.log('refresh');
-  });
-}
+  firebase.auth.beforeAuthStateChanged((next) => {
+    const prev = firebase.auth.currentUser;
 
-export function useGatewayQuery() {
-  const login = useLoginQuery();
+    if (prev != null && next == null) {
+      console.log('Closing Gateway connection');
+      closeGateway();
+      console.log('Clear cache on logout');
 
-  return useQuery<ReconnectingWebSocket>(
-    Keys.ws.connect,
-    () => startGateway(RootListener),
-    {
-      enabled: login.isSuccess,
+      // useUserStore.getState().reset();
+      // useChatStore.getState().reset();
+      client.clear();
+      return;
     }
-  );
+  });
+
+  auth.onAuthStateChanged((user) => {
+    if (user != null) {
+      connectGateway(user, RootListener);
+      console.log('Reconnect to Gateway after update auth state');
+    }
+  });
 }

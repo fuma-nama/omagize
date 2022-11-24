@@ -25,13 +25,19 @@ import { orgin } from '../utils/core';
 
 export function initFirebase() {
   //setup listeners
+  firebase.auth.beforeAuthStateChanged((next) => {
+    const prev = firebase.auth.currentUser;
+
+    if (prev != null && next == null) {
+      //on logout
+      onSignin(null);
+    }
+  });
   firebase.auth.onAuthStateChanged((e) => {
     if (e != null) {
       dispatchAccount(() => ({
         email: e.email,
       }));
-    } else {
-      onSignin(null);
     }
   });
 }

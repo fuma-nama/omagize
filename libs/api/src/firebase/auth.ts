@@ -40,10 +40,7 @@ const googleProvider = new GoogleAuthProvider();
 
 const Reauthentricate = {
   async withGoogle() {
-    return await reauthenticateWithPopup(
-      firebase.auth.currentUser,
-      googleProvider
-    );
+    return await reauthenticateWithPopup(firebase.auth.currentUser, googleProvider);
   },
   async withPassword(password: string) {
     const user = firebase.auth.currentUser;

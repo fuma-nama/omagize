@@ -21,7 +21,6 @@ export function dispatchAccount(updated: (prev: LoginPayload) => Account) {
 }
 
 /**
- *
  * @param data login payload, null if logged out
  */
 export async function onSignin(data: LoginPayload | null) {

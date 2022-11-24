@@ -40,24 +40,31 @@ export async function authorize(): Promise<LoginPayload | null> {
   if (!loggedIn()) {
     return null;
   }
-
-  return await callReturn<RawLoginPayload | null>('/auth', {
+  const result = await callReturn<RawLoginPayload | null>('/auth', {
     method: 'POST',
     allowed: {
       401: () => null,
     },
-  }).then((res) => (res == null ? null : LoginPayload(res)));
+  });
+
+  if (result == null) return null;
+
+  await firebase.auth.currentUser.getIdToken(true); //take sure token is updated
+  return LoginPayload(result);
 }
 
 /**
  * Must be called after login to firebase
  */
 export async function signup(username: string): Promise<LoginPayload> {
-  return await callReturn<RawLoginPayload>('/signup', {
+  const res = await callReturn<RawLoginPayload>('/signup', {
     method: 'POST',
     body: JSON.stringify({
       name: username,
     }),
     errorOnFail: true,
-  }).then((res) => LoginPayload(res));
+  });
+
+  await firebase.auth.currentUser.getIdToken(true); //take sure token is updated
+  return LoginPayload(res);
 }

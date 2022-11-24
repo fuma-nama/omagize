@@ -61,6 +61,12 @@ export async function unlikeAsset(asset: Snowflake, type: 'emoji' | 'sticker') {
   });
 }
 
+export async function deleteAsset(asset: Snowflake, type: 'emojis' | 'stickers') {
+  await callDefault(`/market/${type}/${asset}`, {
+    method: 'DELETE',
+  });
+}
+
 type RawMyAssets = {
   owned: RawAssets;
   favorites: RawAssets;

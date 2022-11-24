@@ -21,9 +21,6 @@ export const CardComponent = {
           px: 3,
           py: 2,
           border: '2px solid',
-          _focus: {
-            borderColor: mode('brand.300', 'brand.400')(props),
-          },
           color: mode('secondaryGray.900', 'white')(props),
           borderColor: mode('secondaryGray.400', 'navy.600')(props),
           borderRadius: '16px',

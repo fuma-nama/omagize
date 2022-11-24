@@ -2,9 +2,10 @@ import CustomCard from 'components/card/Card';
 import { useCallback, ReactNode } from 'react';
 import { createEditor, Transforms, Descendant } from 'slate';
 import { withHistory } from 'slate-history';
-import { withReact, Editable, RenderLeafProps, useSlate } from 'slate-react';
+import { withReact, Editable, RenderLeafProps, useSlate, useFocused } from 'slate-react';
 import { CustomCardProps } from 'theme/theme';
 import { MentionType } from 'utils/markdown/types';
+import { useColorsExtend } from 'variables/colors';
 import { renderElements } from './elements';
 import { Leaf } from './leafs';
 import { withEmoji } from './plugins/emoji';
@@ -49,6 +50,11 @@ export function createSlateEditor() {
 
 export function SlateEditor({ suggestions, suggestionControl, ...props }: EditorProps) {
   const editor = useSlate();
+  const focused = useFocused();
+  const { brand, border } = useColorsExtend(
+    { border: 'secondaryGray.400' },
+    { border: 'navy.600' }
+  );
 
   const state: SuggestionState = {
     selected: suggestionControl.selected,
@@ -82,6 +88,7 @@ export function SlateEditor({ suggestions, suggestionControl, ...props }: Editor
         w="full"
         renderElement={renderElements}
         renderLeaf={renderLeaf}
+        borderColor={focused ? brand : border}
         onKeyDown={(e) => {
           if (props.onKeyDown != null) props.onKeyDown(e);
           if (suggestions.search == null) return;

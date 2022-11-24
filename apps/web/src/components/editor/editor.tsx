@@ -91,7 +91,7 @@ export function SlateEditor({ suggestions, suggestionControl, ...props }: Editor
         borderColor={focused ? brand : border}
         onKeyDown={(e) => {
           if (props.onKeyDown != null) props.onKeyDown(e);
-          if (suggestions.search == null) return;
+          if (suggestions.search == null || e.isDefaultPrevented()) return;
 
           switch (e.key) {
             case 'ArrowUp': {

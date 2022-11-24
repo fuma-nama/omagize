@@ -13,10 +13,10 @@ import { Toolbar } from 'components/editor/Toolbar';
 import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
 import { MessageProvider } from './ChatView';
 import { MentionData } from 'utils/markdown/mention';
-import { Descendant, Editor } from 'slate';
+import { Descendant, Editor, Transforms } from 'slate';
 import { isEmpty, slateToMarkdown } from 'components/editor/markdown';
 import { createSlateEditor, initialValue, SlateEditor } from 'components/editor/editor';
-import { Slate } from 'slate-react';
+import { ReactEditor, Slate } from 'slate-react';
 import EmojiPicker from 'components/picker/emoji';
 import { PopoverTrigger } from 'components/PopoverTrigger';
 
@@ -38,17 +38,21 @@ function useOptionState() {
     message: initialValue,
     attachments: [],
   }));
-  content.editor.children = content.message;
 
   return {
     content,
     setContent,
     resetContent: () => {
-      setContent((prev) => ({
-        ...prev,
-        message: initialValue,
-        attachments: [],
-      }));
+      setContent((prev) => {
+        Transforms.select(prev.editor, Editor.start(prev.editor, []));
+        prev.editor.children = initialValue;
+
+        return {
+          editor: prev.editor,
+          message: prev.editor.children,
+          attachments: [],
+        };
+      });
     },
     dispatch: (v: (prev: MessageOptions) => Partial<MessageOptions>) => {
       return setContent((prev) => ({ ...prev, ...v(prev) }));

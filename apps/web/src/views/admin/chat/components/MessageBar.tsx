@@ -16,7 +16,7 @@ import { MentionData } from 'utils/markdown/mention';
 import { Descendant, Editor, Transforms } from 'slate';
 import { isEmpty, slateToMarkdown } from 'components/editor/markdown';
 import { createSlateEditor, initialValue, SlateEditor } from 'components/editor/editor';
-import { ReactEditor, Slate } from 'slate-react';
+import { Slate } from 'slate-react';
 import EmojiPicker from 'components/picker/emoji';
 import { PopoverTrigger } from 'components/PopoverTrigger';
 

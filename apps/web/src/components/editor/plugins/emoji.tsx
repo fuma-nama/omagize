@@ -38,7 +38,7 @@ export function insertCustomEmoji(editor: Editor, emoji: CustomEmoji) {
   Editor.insertNode(editor, {
     type: 'custom_emoji',
     emoji: emoji,
-    children: [{ text: '' }],
+    children: [{ text: `<E:${emoji.id}>` }],
   });
   Editor.insertNode(editor, { text: ' ' });
 }
@@ -47,7 +47,7 @@ export function insertCustomSticker(editor: Editor, sticker: CustomSticker) {
   Editor.insertNode(editor, {
     type: 'custom_sticker',
     sticker: sticker,
-    children: [{ text: '' }],
+    children: [{ text: `<S:${sticker.id}>` }],
   });
   Editor.insertSoftBreak(editor);
 }

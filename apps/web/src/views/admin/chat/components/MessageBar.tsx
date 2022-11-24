@@ -38,20 +38,18 @@ function useOptionState() {
     message: initialValue,
     attachments: [],
   }));
+  content.editor.children = content.message;
 
   return {
     content,
     setContent,
-    resetContent: () =>
-      setContent((prev) => {
-        prev.editor.children = initialValue;
-
-        return {
-          ...prev,
-          message: initialValue,
-          attachments: [],
-        };
-      }),
+    resetContent: () => {
+      setContent((prev) => ({
+        ...prev,
+        message: initialValue,
+        attachments: [],
+      }));
+    },
     dispatch: (v: (prev: MessageOptions) => Partial<MessageOptions>) => {
       return setContent((prev) => ({ ...prev, ...v(prev) }));
     },

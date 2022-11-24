@@ -22,7 +22,7 @@ export default function ChatLayout() {
       transitionProperty="top, bottom, width"
       transitionTimingFunction="linear, linear, ease"
     >
-      <Box pos="sticky" top={0} px={{ '3sm': '10px' }} py={{ '3sm': '10px' }} w="full">
+      <Box px={{ '3sm': '10px' }} py={{ '3sm': '10px' }} w="full">
         <Navbar brandText={active?.name} />
       </Box>
       <Box flex={1} h={0}>

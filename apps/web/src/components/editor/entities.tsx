@@ -33,11 +33,9 @@ export function EveryoneMention(props: any) {
 }
 
 export function EmojiEntity({ name, src }: { name: string; src: string }) {
-  return (
-    <Image display="inline" src={src} alt={name} w="25px" h="25px" objectFit="contain" mx="5px" />
-  );
+  return <Image display="inline" src={src} alt={name} w="25px" h="25px" objectFit="contain" />;
 }
 
 export function StickerEntity({ name, src }: { name: string; src: string }) {
-  return <Image display="inline" src={src} alt={name} w="100px" h="100px" objectFit="contain" />;
+  return <Image src={src} alt={name} w="100px" h="100px" objectFit="contain" />;
 }

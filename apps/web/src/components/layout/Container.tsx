@@ -9,11 +9,11 @@ export function PlaceholderLayout({
 }: {
   watch?: any[] | null;
   placeholder: ReactElement;
-  children: ReactElement;
+  children: ReactNode;
 }) {
   if (watch?.length === 0) return placeholder;
 
-  return children;
+  return <>{children}</>;
 }
 
 export function Placeholder({

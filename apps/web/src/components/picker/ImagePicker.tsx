@@ -24,21 +24,26 @@ export function useImagePickerCropSimple<T extends Blob | Reset>(
 
   return {
     ...base,
-    picker: base.cropper ?? (
-      <Pick
-        w="full"
-        h="full"
-        onClick={filePicker.select}
-        rounded="xl"
-        overflow="hidden"
-        {...picker.preview}
-      >
-        {filePicker.url ? (
-          <Image w="full" maxH="500px" src={filePicker.url} objectFit="contain" />
-        ) : (
-          picker.holder ?? <DefaultImageHolder />
+    component: (
+      <>
+        {filePicker.component}
+        {base.cropper ?? (
+          <Pick
+            w="full"
+            h="full"
+            onClick={filePicker.select}
+            rounded="xl"
+            overflow="hidden"
+            {...picker.preview}
+          >
+            {filePicker.url ? (
+              <Image w="full" maxH="500px" src={filePicker.url} objectFit="contain" />
+            ) : (
+              picker.holder ?? <DefaultImageHolder />
+            )}
+          </Pick>
         )}
-      </Pick>
+      </>
     ),
   };
 }

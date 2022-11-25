@@ -190,7 +190,7 @@ function Form({
   return (
     <Flex flexDirection="column" gap={3} pt={5}>
       <Flex flexDirection="column" gap={3} w="300px" mx="auto">
-        {image.picker}
+        {image.component}
       </Flex>
       <FormControl isRequired>
         <FormLabel htmlFor="name">Event Name</FormLabel>

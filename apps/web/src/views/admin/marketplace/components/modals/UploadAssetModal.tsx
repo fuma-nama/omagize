@@ -168,7 +168,7 @@ function useStickerForm(onClose: () => void) {
     ),
     component: (
       <FormControl isRequired isInvalid={mutation.isError}>
-        <Center maxH="500px">{picker.picker}</Center>
+        <Center maxH="500px">{picker.component}</Center>
         <FormLabel htmlFor="emoji-name">Name</FormLabel>
         <Input
           id="emoji-name"
@@ -218,7 +218,7 @@ function useEmojiForm(onClose: () => void) {
     ),
     component: (
       <FormControl isRequired isInvalid={mutation.isError}>
-        <Center maxH="500px">{picker.picker}</Center>
+        <Center maxH="500px">{picker.component}</Center>
         <FormLabel htmlFor="emoji-name">Name</FormLabel>
         <Input
           id="emoji-name"

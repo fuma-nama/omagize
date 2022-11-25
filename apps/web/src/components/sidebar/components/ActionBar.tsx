@@ -1,6 +1,5 @@
 import { Button, useDisclosure } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import CreateGroupModal from '../../modals/CreateGroup';
 import { DynamicModal } from '../../modals/Modal';
 import { AddGroupModal } from 'components/modals/AddGroupModal';
 

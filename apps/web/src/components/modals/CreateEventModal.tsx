@@ -23,7 +23,7 @@ import { BannerFormat, UploadImage } from 'utils/ImageUtils';
 import { Step, Steps } from 'chakra-ui-steps';
 import { onlyDate, onlyTime } from '../../utils/DateUtils';
 import { useState } from 'react';
-import { useImagePickerCrop } from 'components/picker/ImagePicker';
+import { useImagePickerCropSimple } from 'components/picker/ImagePicker';
 
 function getInitialStart(): Date {
   const date = new Date(Date.now());
@@ -185,7 +185,7 @@ function Form({
   onChange: (options: Partial<EventOptions>) => void;
   error?: any;
 }) {
-  const image = useImagePickerCrop(value.image, (v) => onChange({ image: v }), BannerFormat);
+  const image = useImagePickerCropSimple(value.image, (v) => onChange({ image: v }), BannerFormat);
 
   return (
     <Flex flexDirection="column" gap={3} pt={5}>

@@ -1,8 +1,5 @@
-import { InputHTMLAttributes, LegacyRef, useMemo, useRef, useState } from 'react';
-import { Box, BoxProps, Circle, useColorModeValue } from '@chakra-ui/react';
-import { VscNewFile } from 'react-icons/vsc';
+import { InputHTMLAttributes, LegacyRef, useMemo, useRef } from 'react';
 import { Reset } from '@omagize/api';
-import { CropImage, CropOptions } from '../components/modals/Modal';
 import { Crop } from 'react-image-crop';
 
 export const AvatarFormat: Format = {
@@ -113,96 +110,7 @@ function resizeImageBase(
     }
   }
 
-  context.drawImage(
-    imageObj,
-    0,
-    0,
-    canvas.width,
-    imageObj.naturalHeight * (canvas.width / imageObj.naturalWidth)
-  );
-}
-
-export function Pick({ children, ...rest }: { children: any } & BoxProps) {
-  const iconBg = useColorModeValue('white', 'brand.400');
-
-  return (
-    <Box
-      className="pick"
-      pos="relative"
-      _hover={{ cursor: 'pointer' }}
-      css={{
-        '&:has(.pick:hover) > .tip': {
-          opacity: 0,
-        },
-        '&:hover > .tip': {
-          opacity: 1,
-        },
-        '& > .tip': {
-          opacity: 0,
-        },
-      }}
-      {...rest}
-    >
-      {children}
-      <Circle
-        className="tip"
-        pos="absolute"
-        bottom={0}
-        right={0}
-        bg={iconBg}
-        p={2}
-        transition="all 0.1s"
-      >
-        <VscNewFile />
-      </Circle>
-    </Box>
-  );
-}
-
-export function useImagePickerCrop<T extends UploadImage | Reset>(
-  value: T,
-  onChange: (file: T) => void,
-  format: Format,
-  props: InputHTMLAttributes<HTMLInputElement> | null = {
-    accept: supportedImageTypes,
-  }
-) {
-  const [edit, setEdit] = useState<{
-    crop: CropImage;
-    preview: string;
-  } | null>();
-  const base = useImagePickerBase<T>(value, (f) => onChange(f));
-
-  return {
-    ...base,
-    picker: (
-      <FilePicker
-        {...props}
-        onChange={(v: File) => {
-          const url = URL.createObjectURL(v);
-          setEdit({ preview: url, crop: null });
-        }}
-        inputRef={base.ref}
-      />
-    ),
-    crop:
-      edit &&
-      ({
-        preview: edit.preview,
-        crop: edit.crop,
-        setCrop: (v: CropImage) => setEdit((prev) => ({ ...prev, crop: v })),
-        onCrop: (img) => {
-          if (img == null) {
-            setEdit(null);
-          } else {
-            cropImage(edit.crop, img, format).then((result) => {
-              setEdit(null);
-              onChange(result as T);
-            });
-          }
-        },
-      } as CropOptions),
-  };
+  context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
 }
 
 export function useImagePickerResize<T extends UploadImage | Reset>(
@@ -225,23 +133,6 @@ export function useImagePickerResize<T extends UploadImage | Reset>(
         }}
         inputRef={base.ref}
       />
-    ),
-  };
-}
-
-export function useImagePicker<T extends UploadImage | Reset>(
-  value: T,
-  onChange: (file: T) => void,
-  props: InputHTMLAttributes<HTMLInputElement> | null = {
-    accept: supportedImageTypes,
-  }
-) {
-  const base = useImagePickerBase(value, onChange);
-
-  return {
-    ...base,
-    picker: (
-      <FilePicker {...props} onChange={(f) => onChange(f as unknown as T)} inputRef={base.ref} />
     ),
   };
 }

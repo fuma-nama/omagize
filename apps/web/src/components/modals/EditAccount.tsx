@@ -19,14 +19,14 @@ import {
   BannerFormat,
   UploadImage,
   url,
-  useImagePickerCrop,
   useImagePickerResize,
 } from 'utils/ImageUtils';
 import { useMutation } from '@tanstack/react-query';
 import { dispatchSelfUser, updateProfile, useSelfUser } from '@omagize/api';
-import { ProfileCropPicker } from './Modal';
+import { ProfilePicker } from '../picker/ProfilePicker';
 import { Reset, SelfUser } from '@omagize/api';
 import { useState } from 'react';
+import { useImagePickerCrop } from 'components/picker/ImagePicker';
 
 type ProfileOptions = {
   name?: string;
@@ -34,10 +34,7 @@ type ProfileOptions = {
   banner?: UploadImage | Reset;
 };
 
-export default function EditAccountModal(props: {
-  isOpen: boolean;
-  onClose: () => void;
-}) {
+export default function EditAccountModal(props: { isOpen: boolean; onClose: () => void }) {
   const { isOpen, onClose } = props;
 
   const [value, setValue] = useState<ProfileOptions>({});
@@ -100,43 +97,39 @@ function Form(props: {
   const acceptedFileTypes = '.png, .jpg, .gif';
 
   const [name, setName] = [value.name, (v: string) => onChange({ name: v })];
-  const icon = useImagePickerCrop(
-    value.avatar,
-    (v) => onChange({ avatar: v }),
-    AvatarFormat
-  );
-  const banner = useImagePickerResize(
-    value.banner,
-    (v) => onChange({ banner: v }),
-    BannerFormat,
-    { accept: acceptedFileTypes }
-  );
+  const icon = useImagePickerCrop(value.avatar, (v) => onChange({ avatar: v }), AvatarFormat);
+  const banner = useImagePickerResize(value.banner, (v) => onChange({ banner: v }), BannerFormat, {
+    accept: acceptedFileTypes,
+  });
 
   const invalid = false;
 
   return (
     <FormControl isInvalid={invalid} isRequired>
       <InputGroup flexDirection="column">
-        {icon.picker}
+        {icon.filePicker.component}
         {banner.picker}
-        <ProfileCropPicker
-          selectBanner={banner.select}
-          selectIcon={icon.select}
-          bannerUrl={url(user.bannerUrl, banner.url)}
-          iconUrl={url(user.avatarUrl, icon.url)}
-          crop={icon.crop}
-        />
-
-        {!icon.crop && (
-          <Button
-            mx="auto"
-            onClick={() => {
-              icon.setValue('reset');
-              banner.setValue('reset');
-            }}
-          >
-            Reset
-          </Button>
+        {icon.cropper ?? (
+          <>
+            <ProfilePicker
+              selectBanner={banner.select}
+              selectIcon={icon.filePicker.select}
+              bannerUrl={url(user.bannerUrl, banner.url)}
+              iconUrl={url(user.avatarUrl, icon.url)}
+              name={user.username}
+            />
+            <Button
+              mx="auto"
+              onClick={() =>
+                onChange({
+                  avatar: 'reset',
+                  banner: 'reset',
+                })
+              }
+            >
+              Reset
+            </Button>
+          </>
         )}
       </InputGroup>
       <FormErrorMessage>{invalid}</FormErrorMessage>

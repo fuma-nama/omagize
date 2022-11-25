@@ -34,7 +34,7 @@ import { useMutation } from '@tanstack/react-query';
 import CustomCard from 'components/card/Card';
 import { EmojiEntity } from 'components/editor/entities';
 import { TabButton } from 'components/layout/Tab';
-import { useImagePickerCrop } from 'components/picker/ImagePicker';
+import { useImagePickerCropSimple } from 'components/picker/ImagePicker';
 import { useState } from 'react';
 import { BiUpload } from 'react-icons/bi';
 import { FaImage } from 'react-icons/fa';
@@ -136,7 +136,7 @@ function updateStickers(add: CustomSticker) {
 function useStickerForm(onClose: () => void) {
   const [name, setName] = useState('');
   const [image, setImage] = useState<Blob>();
-  const picker = useImagePickerCrop(image, setImage, StickerFormat, {
+  const picker = useImagePickerCropSimple(image, setImage, StickerFormat, {
     input: {
       accept: `${supportedImageTypes} .svg`,
     },
@@ -186,7 +186,7 @@ function useStickerForm(onClose: () => void) {
 function useEmojiForm(onClose: () => void) {
   const [name, setName] = useState('');
   const [image, setImage] = useState<Blob>();
-  const picker = useImagePickerCrop(image, setImage, EmojiFormat, {
+  const picker = useImagePickerCropSimple(image, setImage, EmojiFormat, {
     input: {
       accept: `${supportedImageTypes} .svg`,
     },

@@ -23,7 +23,7 @@ export function useFilePickerUrl<T extends Blob | Reset>(
     select() {
       ref.current.click();
     },
-    picker: <FilePicker inputRef={ref} onChange={(files) => onChange(files[0])} input={props} />,
+    component: <FilePicker inputRef={ref} onChange={(files) => onChange(files[0])} input={props} />,
     url,
   };
 }

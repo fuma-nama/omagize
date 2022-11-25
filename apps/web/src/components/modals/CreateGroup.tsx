@@ -6,14 +6,9 @@ import {
   Input,
   InputGroup,
 } from '@chakra-ui/react';
-import {
-  useImagePickerCrop,
-  UploadImage,
-  AvatarFormat,
-  useImagePickerResize,
-  BannerFormat,
-} from 'utils/ImageUtils';
-import { ProfileCropPicker } from './Modal';
+import { useImagePickerCrop } from 'components/picker/ImagePicker';
+import { ProfilePicker } from 'components/picker/ProfilePicker';
+import { UploadImage, AvatarFormat, useImagePickerResize, BannerFormat } from 'utils/ImageUtils';
 
 export type GroupOptions = {
   name: string;
@@ -41,25 +36,29 @@ export function CreateGroupForm({
   return (
     <FormControl isRequired isInvalid={isError}>
       <InputGroup flexDirection="column">
-        {icon.picker}
+        {icon.filePicker.component}
         {banner.picker}
-        <ProfileCropPicker
-          selectBanner={banner.select}
-          selectIcon={icon.select}
-          bannerUrl={banner.url}
-          iconUrl={icon.url}
-          crop={icon.crop}
-        />
-        {!icon.crop && (
-          <Button
-            mx="auto"
-            onClick={() => {
-              icon.setValue(null);
-              banner.setValue(null);
-            }}
-          >
-            Reset
-          </Button>
+        {icon.cropper ?? (
+          <>
+            <ProfilePicker
+              selectBanner={banner.select}
+              selectIcon={icon.filePicker.select}
+              bannerUrl={banner.url}
+              iconUrl={icon.url}
+              name={name}
+            />
+            <Button
+              mx="auto"
+              onClick={() =>
+                onChange({
+                  icon: null,
+                  banner: null,
+                })
+              }
+            >
+              Reset
+            </Button>
+          </>
         )}
       </InputGroup>
       <FormLabel>Group Name</FormLabel>

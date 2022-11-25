@@ -1,22 +1,57 @@
 import { BoxProps, Button, Center, Flex, FlexProps, HStack, Icon, Image } from '@chakra-ui/react';
 import { useColorModeValue } from '@chakra-ui/system';
 import { Reset } from '@omagize/api';
-import { InputHTMLAttributes, ReactNode, useRef, useState } from 'react';
+import { InputHTMLAttributes, ReactElement, useRef, useState } from 'react';
 import { FaImage } from 'react-icons/fa';
 import ReactCrop, { Crop } from 'react-image-crop';
-import { cropImage, Format, Pick, supportedImageTypes } from 'utils/ImageUtils';
+import { cropImage, Format, supportedImageTypes } from 'utils/ImageUtils';
+import { Pick } from 'components/layout/Pick';
 import { useFilePickerUrl } from './FilePicker';
 
+export type SimplePickerProps = BasePickerProps & {
+  holder?: ReactElement;
+  preview?: BoxProps;
+};
+
+export function useImagePickerCropSimple<T extends Blob | Reset>(
+  value: T,
+  onChange: (file: T) => void,
+  format: Format,
+  picker: SimplePickerProps = {}
+) {
+  const base = useImagePickerCrop(value, onChange, format, picker);
+  const filePicker = base.filePicker;
+
+  return {
+    ...base,
+    picker: base.cropper ?? (
+      <Pick
+        w="full"
+        h="full"
+        onClick={filePicker.select}
+        rounded="xl"
+        overflow="hidden"
+        {...picker.preview}
+      >
+        {filePicker.url ? (
+          <Image w="full" maxH="500px" src={filePicker.url} objectFit="contain" />
+        ) : (
+          picker.holder ?? <DefaultImageHolder />
+        )}
+      </Pick>
+    ),
+  };
+}
+
+export type BasePickerProps = {
+  input?: InputHTMLAttributes<HTMLInputElement>;
+  cropper?: FlexProps;
+};
 export function useImagePickerCrop<T extends Blob | Reset>(
   value: T,
   onChange: (file: T) => void,
   format: Format,
-  picker: {
-    holder?: ReactNode;
-    input?: InputHTMLAttributes<HTMLInputElement>;
-    preview?: BoxProps;
-    cropper?: FlexProps;
-  } = {}
+  picker: BasePickerProps = {}
 ) {
   const [edit, setEdit] = useState<{
     crop: Crop | null;
@@ -46,36 +81,19 @@ export function useImagePickerCrop<T extends Blob | Reset>(
   }
 
   return {
+    cancelEdit: () => setEdit(null),
     url: filePicker.url,
-    picker: (
-      <>
-        {filePicker.picker}
-        {edit ? (
-          <Cropper
-            value={edit}
-            aspect={format.aspect}
-            onChange={(v) => setEdit((prev) => ({ ...prev, crop: v }))}
-            onCrop={onCrop}
-            box={picker.cropper}
-          />
-        ) : (
-          <Pick
-            w="full"
-            h="full"
-            onClick={filePicker.select}
-            rounded="xl"
-            overflow="hidden"
-            {...picker.preview}
-          >
-            {filePicker.url ? (
-              <Image w="full" maxH="500px" src={filePicker.url} objectFit="contain" />
-            ) : (
-              picker.holder ?? <DefaultImageHolder />
-            )}
-          </Pick>
-        )}
-      </>
-    ),
+    filePicker: filePicker,
+    cropper:
+      edit != null ? (
+        <Cropper
+          value={edit}
+          aspect={format.aspect}
+          onChange={(v) => setEdit((prev) => ({ ...prev, crop: v }))}
+          onCrop={onCrop}
+          box={picker.cropper}
+        />
+      ) : null,
   };
 }
 

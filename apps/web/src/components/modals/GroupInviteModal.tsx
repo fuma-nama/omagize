@@ -82,7 +82,7 @@ export default function GroupInviteModal({
           <QueryStatus
             query={query}
             error="Failed to get Invite code"
-            skeleton={<LoadingPanel size="sm" />}
+            loading={<LoadingPanel size="sm" />}
           >
             <InviteForm
               invite={invite}

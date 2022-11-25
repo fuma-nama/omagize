@@ -5,16 +5,19 @@ import { ErrorPanel } from './ErrorPanel';
 export function QueryStatus({
   query,
   error,
-  skeleton,
+  loading,
   children,
 }: {
   query: UseQueryResult;
   error: string;
-  skeleton: ReactNode;
+  /**
+   * element to display when loading
+   */
+  loading: ReactNode;
   children: ReactNode;
 }) {
   if (query.isError) return <ErrorPanel retry={() => query.refetch()}>{error}</ErrorPanel>;
-  if (query.isLoading) return <>{skeleton}</>;
+  if (query.isLoading) return <>{loading}</>;
   if (query.isSuccess) return <>{children}</>;
 
   return <></>;
@@ -25,6 +28,7 @@ export function QueryStatusLayout({
   query,
   error,
   placeholder,
+  loading,
   skeleton,
   children,
   container = (s) => <>{s}</>,
@@ -33,13 +37,20 @@ export function QueryStatusLayout({
   query: UseQueryResult;
   error: string;
   placeholder: ReactElement;
-  skeleton: ReactNode;
+  /**
+   * element to display when loading
+   */
+  loading?: ReactElement;
+  /**
+   * element to display in container when loading
+   */
+  skeleton?: ReactNode;
   children: ReactNode;
   container?: (c: ReactNode) => ReactElement;
 }) {
   if (watch?.length === 0) return placeholder;
   if (query.isError) return <ErrorPanel retry={() => query.refetch()}>{error}</ErrorPanel>;
-  if (query.isLoading) return container(skeleton);
+  if (query.isLoading) return loading ?? container(skeleton);
   if (query.isSuccess) return container(children);
 
   return <></>;

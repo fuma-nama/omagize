@@ -1,8 +1,7 @@
-import { Tab } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { Tab, TabProps } from '@chakra-ui/react';
 import { useColors } from 'variables/colors';
 
-export function TabButton(props: { children: ReactNode }) {
+export function TabButton(props: TabProps) {
   const { textColorPrimary, textColorSecondary, cardBg } = useColors();
 
   return (
@@ -12,6 +11,8 @@ export function TabButton(props: { children: ReactNode }) {
       _focus={{ boxShadow: 'none' }}
       _selected={{ color: textColorPrimary, bg: cardBg }}
       py={1}
+      fontWeight="600"
+      {...props}
     >
       {props.children}
     </Tab>

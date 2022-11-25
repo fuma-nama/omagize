@@ -4,12 +4,15 @@ import {
   connectGateway,
   firebase,
   GatewayListener,
+  onSignin,
   ReadyPayload,
 } from '@omagize/api';
 import { Auth } from 'firebase/auth';
 import { useEffect } from 'react';
 import { CloseEvent, ErrorEvent } from 'reconnecting-websocket/dist/events';
+import { useChatStore } from 'stores/ChatStore';
 import { applyReadyPayload } from 'stores/hooks';
+import { useUserStore } from 'stores/UserStore';
 import { handleEvent } from './handler';
 
 const listeners: Set<Partial<GatewayListener>> = new Set();
@@ -44,6 +47,15 @@ export function useGatewayListener(listener: Partial<GatewayListener>) {
   }, []);
 }
 
+async function resetCache() {
+  await onSignin(null); //logout to login page
+  //start clearing unused cache
+  await client.resetQueries();
+
+  useUserStore.getState().reset();
+  useChatStore.getState().reset();
+}
+
 export function initGateway(auth: Auth) {
   firebase.auth.beforeAuthStateChanged((next) => {
     const prev = firebase.auth.currentUser;
@@ -51,11 +63,9 @@ export function initGateway(auth: Auth) {
     if (prev != null && next == null) {
       console.log('Closing Gateway connection');
       closeGateway();
-      console.log('Clear cache on logout');
 
-      // useUserStore.getState().reset();
-      // useChatStore.getState().reset();
-      client.clear();
+      console.log('Clear cache on logout');
+      resetCache();
       return;
     }
   });

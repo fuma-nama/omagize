@@ -44,7 +44,7 @@ function Pages() {
   const query = useLoginQuery();
 
   return (
-    <QueryStatus query={query} error="Failed to login" loading={<LoadingPanel size="sm" />}>
+    <QueryStatus query={query} error="Failed to login" loading={<LoadingPanel size="lg" />}>
       <RootRoutes loggedIn={query.data != null} />
     </QueryStatus>
   );

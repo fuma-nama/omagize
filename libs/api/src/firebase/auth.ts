@@ -20,26 +20,11 @@ import {
 } from 'firebase/auth';
 import { firebase } from './firebase';
 import { authorize, signup } from '../AccountAPI';
-import { dispatchAccount, onSignin } from '../query';
+import { onSignin } from '../query';
 import { orgin } from '../utils/core';
 
 export function initFirebase() {
   //setup listeners
-  firebase.auth.beforeAuthStateChanged((next) => {
-    const prev = firebase.auth.currentUser;
-
-    if (prev != null && next == null) {
-      //on logout
-      onSignin(null);
-    }
-  });
-  firebase.auth.onAuthStateChanged((e) => {
-    if (e != null) {
-      dispatchAccount(() => ({
-        email: e.email,
-      }));
-    }
-  });
 }
 
 const googleProvider = new GoogleAuthProvider();

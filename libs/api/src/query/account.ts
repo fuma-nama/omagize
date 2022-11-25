@@ -1,4 +1,4 @@
-import { Account, LoginPayload } from '../types/account';
+import { LoginPayload } from '../types/account';
 import { Keys, updateQueryData } from './queries';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { authorize } from '../AccountAPI';
@@ -13,18 +13,11 @@ export function dispatchSelfUser(updated: User) {
   }));
 }
 
-export function dispatchAccount(updated: (prev: LoginPayload) => Account) {
-  return updateQueryData<LoginPayload>(Keys.login, (prev) => ({
-    ...prev,
-    account: updated(prev),
-  }));
-}
-
 /**
  * @param data login payload, null if logged out
  */
 export async function onSignin(data: LoginPayload | null) {
-  return client.setQueryData<LoginPayload>(Keys.login, data);
+  await client.setQueryData<LoginPayload>(Keys.login, data);
 }
 
 export function useLogoutMutation() {

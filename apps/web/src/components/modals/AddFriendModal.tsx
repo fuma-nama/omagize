@@ -19,6 +19,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  useModalContext,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BiSend } from 'react-icons/bi';
@@ -198,8 +199,11 @@ function MessageBar({
   isDisabled,
   ...props
 }: { selected: User; error?: string } & FormControlProps) {
+  const { onClose } = useModalContext();
   const [message, setMessage] = useState('');
-  const mutation = useMutation(() => sendFriendRequest(selected.id, message));
+  const mutation = useMutation(() => sendFriendRequest(selected.id, message), {
+    onSuccess: onClose,
+  });
   const errorMessage = mutation.isError ? parseError(mutation.error) : error;
 
   return (

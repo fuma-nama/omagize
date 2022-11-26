@@ -25,7 +25,7 @@ export function useMessageInputPlugin(editor: Editor, props: SuggestionProps) {
   const [mention, setMention] = useState<SuggestionSearch>();
   //If empty, ignore the delay
   const empty = mention == null || mention.text.length === 0;
-  const debouncedMention = useDebounce(mention, empty ? 0 : 1000);
+  const debouncedMention = useDebounce(mention, empty ? 0 : 500);
   let suggestions = props.useQuery(debouncedMention);
 
   const mentionSuggestions = useSuggestions(editor, [debouncedMention, setMention]);

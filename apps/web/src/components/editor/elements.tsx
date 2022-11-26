@@ -1,4 +1,5 @@
 import { Box, Image } from '@chakra-ui/react';
+import { AssetType, getAssetUrl } from '@omagize/api';
 import { RenderElementProps, useSelected } from 'slate-react';
 import { MentionType } from 'utils/markdown/types';
 import { EveryoneMention, MentionEntity } from './entities';
@@ -17,7 +18,7 @@ export function renderElements(props: RenderElementProps) {
           content = <EveryoneMention />;
           break;
         default:
-          content = <MentionEntity id={data.id} name={data.name} avatar={data.avatar} />;
+          content = <MentionEntity name={data.name} avatar={data.avatar} />;
       }
 
       return (
@@ -39,7 +40,7 @@ export function renderElements(props: RenderElementProps) {
 
 function EmojiElement(props: RenderElementProps) {
   const element = props.element as CustomEmojiElement;
-  const emoji = element.emoji;
+  const url = getAssetUrl(AssetType.Emojis, element.emojiId);
   const focused = useSelected();
 
   return (
@@ -52,7 +53,7 @@ function EmojiElement(props: RenderElementProps) {
         borderWidth={focused ? 2 : 0}
         borderColor="brand.400"
       >
-        <Image src={emoji.url} alt={emoji.name} w="full" h="full" objectFit="contain" />
+        <Image src={url} alt="Custom Emoji" w="full" h="full" objectFit="contain" />
       </Box>
     </span>
   );
@@ -60,7 +61,7 @@ function EmojiElement(props: RenderElementProps) {
 
 function StickerElement(props: RenderElementProps) {
   const element = props.element as CustomStickerElement;
-  const sticker = element.sticker;
+  const url = getAssetUrl(AssetType.Stickers, element.stickerId);
   const focused = useSelected();
 
   return (
@@ -73,7 +74,7 @@ function StickerElement(props: RenderElementProps) {
         borderColor="brand.400"
         contentEditable={false}
       >
-        <Image src={sticker.url} alt={sticker.name} w="full" h="full" objectFit="contain" />
+        <Image src={url} alt="Custom Sticker" w="full" h="full" objectFit="contain" />
       </Box>
     </div>
   );

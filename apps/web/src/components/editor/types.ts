@@ -13,7 +13,6 @@ export type TextMarks = {
   underlined?: boolean;
   bold?: boolean;
   blockquote?: boolean;
-  title?: boolean;
   code?: boolean;
   italic?: boolean;
   strikethrough?: boolean;

@@ -3,7 +3,6 @@ import ChatView, {
   MessageProvider,
   MessageView,
 } from 'views/admin/chat/components/ChatView';
-import { useState } from 'react';
 import LoadingPanel from 'components/panel/LoadingPanel';
 import { openDMChannel, Snowflake, User } from '@omagize/api';
 import { useQuery } from '@tanstack/react-query';
@@ -37,16 +36,9 @@ function PrivateChatView({ user }: { user: Snowflake }) {
   const dmQuery = useQuery(['dm', user], () => openDMChannel(user));
 
   const provider: MessageProvider = {
-    useInput() {
-      const [search, setSearch] = useState<string | null>(null);
-
-      return {
-        search,
-        setSearch: (s) => setSearch(s),
-        suggestions: [],
-      };
+    input: {
+      useSuggestion: (v) => [],
     },
-
     channel: dmQuery.data?.id,
   };
 
@@ -61,14 +53,8 @@ export function PrivateChatModal({ user, onClose }: { user?: User; onClose: () =
   });
 
   const provider: MessageProvider = {
-    useInput() {
-      const [search, setSearch] = useState<string | null>(null);
-
-      return {
-        search,
-        setSearch: (s) => setSearch(s),
-        suggestions: [],
-      };
+    input: {
+      useSuggestion: (v) => [],
     },
     channel: dmQuery.data?.id,
   };

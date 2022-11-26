@@ -11,13 +11,13 @@ import { markdownToSlate, slateToMarkdown } from 'components/editor/markdown';
 import { Slate } from 'slate-react';
 
 export function MessageEditInput({ message, onClose }: { message: Message; onClose: () => void }) {
+  const input = useMessageProvider().input;
+
   const editor = useMemo(() => createSlateEditor(), []);
-  const input = useMessageProvider().useInput();
   const suggestionRef = useRef();
   const plugin = useMessageInputPlugin(editor, {
+    useQuery: (v) => input.useSuggestion(v?.text),
     portal: suggestionRef,
-    onSearch: input.setSearch,
-    suggestions: input.suggestions,
   });
   const [value, setValue] = useState<Descendant[]>(() => markdownToSlate(message.content, message));
   const editMutation = useMutation(

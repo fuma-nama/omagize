@@ -1,5 +1,4 @@
 import ChatView, { MessageProvider } from 'views/admin/chat/components/ChatView';
-import { useState } from 'react';
 import { useSelected } from 'utils/navigate';
 import { useGroup } from 'stores/hooks';
 import LoadingPanel from 'components/panel/LoadingPanel';
@@ -12,29 +11,26 @@ export default function GroupChat() {
   const group = useGroup(selectedGroup);
 
   const provider: MessageProvider = {
-    useInput() {
-      const [search, setSearch] = useState<string | null>(null);
-      const query = useQuery(
-        ['search_member', selectedGroup, search],
-        () => searchMembers(selectedGroup, search, 10),
-        {
-          enabled: search != null,
-        }
-      );
+    input: {
+      useSuggestion(search) {
+        const query = useQuery(
+          ['search_member', selectedGroup, search],
+          () => searchMembers(selectedGroup, search, 10),
+          {
+            enabled: search != null,
+          }
+        );
 
-      return {
-        search,
-        setSearch,
-        suggestions:
+        return (
           query.data?.map((member) => ({
             type: MentionType.User,
             id: member.id,
             name: member.username,
             avatar: member.avatarUrl,
-          })) ?? [],
-      };
+          })) ?? []
+        );
+      },
     },
-
     channel: group?.channel?.id,
   };
 

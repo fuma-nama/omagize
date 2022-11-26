@@ -12,7 +12,7 @@ import { useMessageInputPlugin } from 'components/editor/plugins/plugins';
 import { Toolbar } from 'components/editor/Toolbar';
 import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
 import { MessageProvider } from './ChatView';
-import { MentionData } from 'utils/markdown/mention';
+import { MentionSuggestion } from 'utils/markdown/mention';
 import { Descendant, Editor, Transforms } from 'slate';
 import { isEmpty, slateToMarkdown } from 'components/editor/markdown';
 import { createSlateEditor, initialValue, SlateEditor } from 'components/editor/editor';
@@ -21,9 +21,7 @@ import EmojiPicker from 'components/picker/emoji';
 import { PopoverTrigger } from 'components/PopoverTrigger';
 
 export interface InputProvider {
-  search: string;
-  setSearch: (search: string) => void;
-  suggestions: MentionData[];
+  useSuggestion: (search: string | null) => MentionSuggestion[];
 }
 
 export type MessageOptions = {
@@ -165,11 +163,10 @@ function Input({
   provider: MessageProvider;
   suggestionRef: RefObject<HTMLDivElement>;
 }) {
-  const input = provider.useInput();
+  const input = provider.input;
   const plugin = useMessageInputPlugin(editor, {
+    useQuery: (v) => input.useSuggestion(v?.text),
     portal: suggestionRef,
-    onSearch: input.setSearch,
-    suggestions: input.suggestions,
   });
 
   return (

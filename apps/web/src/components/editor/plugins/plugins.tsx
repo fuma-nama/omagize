@@ -9,11 +9,11 @@ import { CustomCardProps } from 'theme/theme';
 import { MentionType } from 'utils/markdown/types';
 import { Descendant, Editor } from 'slate';
 import { SuggestionSearch, useSuggestions } from './suggestions';
+import { useDebounce } from 'utils/common';
 
 export type SuggestionProps = {
   portal?: React.RefObject<HTMLElement | null>;
-  onSearch: (value: string) => void;
-  suggestions?: MentionSuggestion[];
+  useQuery: (search: SuggestionSearch) => MentionSuggestion[];
 };
 
 export type MessageInputProps = {
@@ -23,12 +23,20 @@ export type MessageInputProps = {
 export function useMessageInputPlugin(editor: Editor, props: SuggestionProps) {
   const [selected, setSelected] = useState<number>();
   const [mention, setMention] = useState<SuggestionSearch>();
-  const mentionSuggestions = useSuggestions(editor, [mention, setMention]);
+  //If empty, ignore the delay
+  const empty = mention == null || mention.text.length === 0;
+  const debouncedMention = useDebounce(mention, empty ? 0 : 1000);
+  let suggestions = props.useQuery(debouncedMention);
 
-  const suggestions = [...props.suggestions];
+  const mentionSuggestions = useSuggestions(editor, [debouncedMention, setMention]);
   if ('everyone'.startsWith(mention?.text.toLowerCase())) {
-    suggestions.push(EveryoneSuggestion);
+    suggestions = [...suggestions, EveryoneSuggestion];
   }
+
+  const onChange = (v: Descendant[]) => {
+    mentionSuggestions.updateSearch();
+    setSelected(0);
+  };
 
   const suggestionControl: SuggestionControl = {
     selected,
@@ -57,13 +65,7 @@ export function useMessageInputPlugin(editor: Editor, props: SuggestionProps) {
   };
 
   return {
-    onChange: (v: Descendant[]) => {
-      const search = mentionSuggestions.updateSearch();
-      if (search == null) return;
-
-      setSelected(0);
-      props.onSearch(search.text);
-    },
+    onChange,
     suggestions: mentionSuggestions,
     suggestionControl,
   };

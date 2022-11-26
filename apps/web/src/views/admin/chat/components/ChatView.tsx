@@ -21,7 +21,7 @@ export function useMessageProvider(): MessageProvider {
 }
 
 export interface MessageProvider {
-  useInput: () => InputProvider;
+  input: InputProvider;
   channel: Snowflake;
 }
 

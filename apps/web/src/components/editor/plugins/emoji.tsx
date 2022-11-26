@@ -1,4 +1,4 @@
-import { CustomEmoji, CustomSticker } from '@omagize/api';
+import { CustomEmoji, CustomSticker, Snowflake } from '@omagize/api';
 import { CompactEmoji } from 'emojibase';
 import { Editor } from 'slate';
 import { CustomText } from '../types';
@@ -34,32 +34,36 @@ export function insertEmoji(editor: Editor, emoji: CompactEmoji) {
   Editor.insertText(editor, emoji.unicode);
 }
 
-export function insertCustomEmoji(editor: Editor, emoji: CustomEmoji) {
+export function insertCustomEmoji(editor: Editor, emoji: CustomEmoji | Snowflake) {
+  const id = typeof emoji === 'string' ? emoji : emoji.id;
+
   Editor.insertNode(editor, {
     type: 'custom_emoji',
-    emoji: emoji,
-    children: [{ text: `<E:${emoji.id}>` }],
+    emojiId: id,
+    children: [{ text: `<E:${id}>` }],
   });
-  Editor.insertNode(editor, { text: ' ' });
+  Editor.insertNode(editor, { text: '' });
 }
 
-export function insertCustomSticker(editor: Editor, sticker: CustomSticker) {
+export function insertCustomSticker(editor: Editor, sticker: CustomSticker | Snowflake) {
+  const id = typeof sticker === 'string' ? sticker : sticker.id;
+
   Editor.insertNode(editor, {
     type: 'custom_sticker',
-    sticker: sticker,
-    children: [{ text: `<S:${sticker.id}>` }],
+    stickerId: id,
+    children: [{ text: `<S:${id}>` }],
   });
   Editor.insertSoftBreak(editor);
 }
 
 export type CustomEmojiElement = {
   type: 'custom_emoji';
-  emoji: CustomEmoji;
+  emojiId: Snowflake;
   children: CustomText[];
 };
 
 export type CustomStickerElement = {
   type: 'custom_sticker';
-  sticker: CustomSticker;
+  stickerId: Snowflake;
   children: CustomText[];
 };

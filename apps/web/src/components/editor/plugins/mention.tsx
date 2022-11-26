@@ -14,13 +14,29 @@ export type MentionElement = BaseElement & {
   data: MentionEntity;
 };
 
-export function insertMention(editor: Editor, type: MentionType, data: MentionEntity) {
-  const mention: MentionElement = {
+export function createEveryoneMentionElement(): MentionElement {
+  return {
+    type: 'mention',
+    mention_type: MentionType.Everyone,
+    children: [{ text: `<@everyone>` }],
+    data: {
+      id: 'everyone',
+      name: 'everyone',
+    },
+  };
+}
+
+export function createMentionElement(type: MentionType, data: MentionEntity): MentionElement {
+  return {
     type: 'mention',
     mention_type: type,
     children: [{ text: `<@${data.id}>` }],
     data,
   };
+}
+
+export function insertMention(editor: Editor, type: MentionType, data: MentionEntity) {
+  const mention = createMentionElement(type, data);
   Transforms.insertNodes(editor, mention);
   Transforms.move(editor);
 }

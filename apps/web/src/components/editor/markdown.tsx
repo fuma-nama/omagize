@@ -1,7 +1,8 @@
-import { Mention } from '@omagize/api';
-import { Editor, Element, Node, Text } from 'slate';
-import { toAPIMentionType } from 'utils/markdown/types';
-import { TextMarks } from './types';
+import { Mention, Message } from '@omagize/api';
+import { Descendant, Editor, Element, Node, Text } from 'slate';
+import { MentionType, toAPIMentionType } from 'utils/markdown/types';
+import { createMentionElement, createEveryoneMentionElement } from './plugins/mention';
+import { CustomText, TextMarks } from './types';
 
 export type Parsed = Entities & {
   markdown: string;
@@ -39,9 +40,6 @@ function nodeToMarkdown(
     //important
     if (node.blockquote) {
       string = `> ${string}`;
-    }
-    if (node.title) {
-      string = `# ${string}`;
     }
 
     return string;
@@ -94,6 +92,87 @@ export function elementToMarkdown(node: Element, children: string, entities: Ent
     default:
       return children;
   }
+}
+
+type Deserializer<T> = {
+  regex: RegExp;
+  data?: (match: RegExpMatchArray) => T;
+  element: (data: T) => Descendant;
+};
+function getDeserializers(info: Message): Deserializer<any>[] {
+  return [
+    {
+      regex: /<@([0-9]*)>/g,
+      data: (match) => info.mentions.find((m) => m.id === match[1]),
+      element: (user) =>
+        createMentionElement(MentionType.User, {
+          id: user.id,
+          name: user.username,
+          avatar: user.avatarUrl,
+        }),
+    },
+    {
+      regex: /<@everyone>/g,
+      element: () => createEveryoneMentionElement(),
+    },
+    {
+      regex: /<(E|S):([0-9]*)>/g,
+      data: ([_, type, id]) => {
+        return {
+          id: id,
+          type: type,
+        };
+      },
+      element: (data) => {
+        switch (data.type) {
+          case 'S':
+            return {
+              type: 'custom_sticker',
+              stickerId: data.id,
+              children: [{ text: '' }],
+            };
+          case 'E':
+            return {
+              type: 'custom_emoji',
+              emojiId: data.id,
+              children: [{ text: '' }],
+            };
+          default:
+            return { text: '' };
+        }
+      },
+    },
+  ];
+}
+export function markdownToSlate(content: string, info: Message): Descendant[] {
+  const deserializers = getDeserializers(info);
+  const deserialize = (index: number, text: string): Descendant[] => {
+    if (index >= deserializers.length) return [{ text: text }];
+    const deserializer = deserializers[index];
+    let lastIndex = 0;
+    const elements: Descendant[] = [];
+
+    for (const match of text.matchAll(deserializer.regex)) {
+      let param = null;
+
+      if (deserializer.data != null) {
+        param = deserializer.data(match);
+        if (param == null) continue;
+      }
+
+      elements.push(...deserialize(index + 1, text.slice(lastIndex, match.index)));
+
+      elements.push(deserializer.element(param));
+      lastIndex = match.index + match[0].length;
+    }
+
+    elements.push(...deserialize(index + 1, text.slice(lastIndex)));
+    return elements;
+  };
+
+  return content
+    .split('\n')
+    .map((line) => ({ type: 'paragraph', children: deserialize(0, line) as CustomText[] }));
 }
 
 export function isEmpty(editor: Editor): boolean {

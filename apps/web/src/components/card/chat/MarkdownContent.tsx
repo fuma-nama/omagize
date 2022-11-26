@@ -78,11 +78,15 @@ function Mention({ id, group }: { id: string; group?: string }) {
   const { mentions } = useContext(DataContext);
   const mention = useMemo(() => mentions.find((m) => m.id === id), [id, mentions]);
 
+  if (mention == null) {
+    return <MentionEntity name="Deleted User" />;
+  }
+
   return (
     <MemberPopup user={mention.id} group={group}>
       <PopoverTrigger>
         <Box as="span">
-          <MentionEntity avatar={mention?.avatar} name={mention?.name ?? 'Deleted User'} />
+          <MentionEntity avatar={mention.avatar} name={mention.name} />
         </Box>
       </PopoverTrigger>
     </MemberPopup>

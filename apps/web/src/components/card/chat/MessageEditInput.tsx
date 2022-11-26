@@ -7,7 +7,7 @@ import { useMemo, useRef, useState } from 'react';
 import { useMessageInputPlugin } from 'components/editor/plugins/plugins';
 import { createSlateEditor, SlateEditor } from 'components/editor/editor';
 import { Descendant } from 'slate';
-import { slateToMarkdown } from 'components/editor/markdown';
+import { markdownToSlate, slateToMarkdown } from 'components/editor/markdown';
 import { Slate } from 'slate-react';
 
 export function MessageEditInput({ message, onClose }: { message: Message; onClose: () => void }) {
@@ -19,12 +19,7 @@ export function MessageEditInput({ message, onClose }: { message: Message; onClo
     onSearch: input.setSearch,
     suggestions: input.suggestions,
   });
-  const [value, setValue] = useState<Descendant[]>([
-    {
-      type: 'paragraph',
-      children: [{ text: message.content }],
-    },
-  ]);
+  const [value, setValue] = useState<Descendant[]>(() => markdownToSlate(message.content, message));
   const editMutation = useMutation(
     (body: EditMessageBody) => editMessage(message.id, message.channel, body),
     {

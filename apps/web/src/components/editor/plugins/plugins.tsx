@@ -1,8 +1,8 @@
 import React, { useState, ReactNode } from 'react';
 import { Avatar, Box, HStack, Icon, Portal, Text } from '@chakra-ui/react';
 import CustomCard from '../../card/Card';
-import { useColors, useItemHoverBg } from '../../../variables/colors';
-import { Everyone, MentionData } from '../../../utils/markdown/mention';
+import { useColors, useItemHoverBg } from 'variables/colors';
+import { EveryoneSuggestion, MentionSuggestion } from 'utils/markdown/mention';
 import { BsPeopleFill } from 'react-icons/bs';
 import { SuggestionControl } from '../editor';
 import { CustomCardProps } from 'theme/theme';
@@ -13,7 +13,7 @@ import { SuggestionSearch, useSuggestions } from './suggestions';
 export type SuggestionProps = {
   portal?: React.RefObject<HTMLElement | null>;
   onSearch: (value: string) => void;
-  suggestions?: MentionData[];
+  suggestions?: MentionSuggestion[];
 };
 
 export type MessageInputProps = {
@@ -27,7 +27,7 @@ export function useMessageInputPlugin(editor: Editor, props: SuggestionProps) {
 
   const suggestions = [...props.suggestions];
   if ('everyone'.startsWith(mention?.text.toLowerCase())) {
-    suggestions.push(Everyone);
+    suggestions.push(EveryoneSuggestion);
   }
 
   const suggestionControl: SuggestionControl = {
@@ -38,11 +38,7 @@ export function useMessageInputPlugin(editor: Editor, props: SuggestionProps) {
       const selected = suggestions[state.selected];
 
       if (selected == null) return;
-      state.acceptMention(selected.type, {
-        name: selected.name,
-        id: selected.id,
-        avatar: selected.avatar,
-      });
+      state.acceptMention(selected);
     },
     render: (state) => (
       <Portal containerRef={props.portal}>
@@ -52,13 +48,7 @@ export function useMessageInputPlugin(editor: Editor, props: SuggestionProps) {
               key={s.id}
               mention={s}
               selected={i === state.selected}
-              onClick={() =>
-                state.acceptMention(s.type, {
-                  name: s.name,
-                  id: s.id,
-                  avatar: s.avatar,
-                })
-              }
+              onClick={() => state.acceptMention(s)}
             />
           ))}
         </Suggestions>
@@ -95,8 +85,8 @@ function Entry({
   mention,
   selected,
   ...props
-}: { mention: MentionData; selected: boolean } & CustomCardProps) {
-  const type = (mention as MentionData).type;
+}: { mention: MentionSuggestion; selected: boolean } & CustomCardProps) {
+  const type = (mention as MentionSuggestion).type;
   const hoverBg = useItemHoverBg();
   let content;
 

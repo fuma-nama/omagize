@@ -1,6 +1,6 @@
 import { MentionType } from 'utils/markdown/types';
 
-export interface MentionData {
+export interface MentionSuggestion {
   avatar?: string;
   name?: string;
   id?: string;
@@ -8,7 +8,7 @@ export interface MentionData {
   type?: MentionType;
 }
 
-export const Everyone: MentionData = {
+export const EveryoneSuggestion: MentionSuggestion = {
   id: 'everyone',
   type: MentionType.Everyone,
 };

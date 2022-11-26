@@ -4,12 +4,12 @@ import { createEditor, Transforms, Descendant } from 'slate';
 import { withHistory } from 'slate-history';
 import { withReact, Editable, RenderLeafProps, useSlate, useFocused } from 'slate-react';
 import { CustomCardProps } from 'theme/theme';
-import { MentionType } from 'utils/markdown/types';
+import { MentionSuggestion } from 'utils/markdown/mention';
 import { useColorsExtend } from 'variables/colors';
 import { renderElements } from './elements';
 import { Leaf } from './leafs';
 import { withEmoji } from './plugins/emoji';
-import { insertMention, MentionEntity, withMentions } from './plugins/mention';
+import { insertMention, withMentions } from './plugins/mention';
 import { UseSuggestions } from './plugins/suggestions';
 
 export type SuggestionState = {
@@ -17,7 +17,7 @@ export type SuggestionState = {
    * Selected index
    */
   selected: number | null;
-  acceptMention: (type: MentionType, data?: MentionEntity) => void;
+  acceptMention: (suggestion: MentionSuggestion) => void;
 };
 
 export type EditorProps = {
@@ -58,7 +58,7 @@ export function SlateEditor({ suggestions, suggestionControl, ...props }: Editor
 
   const state: SuggestionState = {
     selected: suggestionControl.selected,
-    acceptMention(type, data?) {
+    acceptMention(suggestion) {
       const current = suggestions.search;
 
       if (current != null) {
@@ -70,7 +70,11 @@ export function SlateEditor({ suggestions, suggestionControl, ...props }: Editor
           reverse: true,
         });
 
-        insertMention(editor, type, data);
+        insertMention(editor, suggestion.type, {
+          id: suggestion.id,
+          name: suggestion.name,
+          avatar: suggestion.avatar,
+        });
       }
     },
   };

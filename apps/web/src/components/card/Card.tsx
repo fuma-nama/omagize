@@ -1,22 +1,64 @@
-// import { Box, useStyleConfig} from '@chakra-ui/react';
-
 import {
-  useStyleConfig,
   chakra,
-  forwardRef,
   HStack,
   StackProps,
   FlexProps,
   Flex,
+  defineStyle,
+  defineStyleConfig,
 } from '@chakra-ui/react';
 import { CustomCardProps } from 'theme/theme';
 import { useItemHoverBg } from '../../variables/colors';
-const CustomCard = forwardRef<CustomCardProps, 'div'>((props, ref) => {
-  const { size, variant, ...rest } = props;
-  const styles = useStyleConfig('Card', { size, variant });
 
-  return <chakra.div ref={ref} __css={styles} {...rest} />;
-});
+export const CardInput = chakra(
+  'div',
+  defineStyleConfig({
+    baseStyle: defineStyle({
+      display: 'flex',
+      flexDirection: 'column',
+      position: 'relative',
+      minWidth: '0px',
+      wordWrap: 'break-word',
+      _light: {
+        bg: 'transparent',
+        borderColor: 'secondaryGray.400',
+        color: 'secondaryGray.900',
+      },
+      _dark: {
+        bg: 'navy.800',
+        borderColor: 'navy.600',
+        color: 'white',
+      },
+      backgroundClip: 'border-box',
+      px: 3,
+      py: 2,
+      border: 'solid 2px',
+      borderRadius: '16px',
+    }),
+  })
+);
+const CustomCard = chakra(
+  'div',
+  defineStyleConfig({
+    baseStyle: defineStyle({
+      p: '20px',
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+      position: 'relative',
+      borderRadius: '20px',
+      minWidth: '0px',
+      wordWrap: 'break-word',
+      _light: {
+        bg: '#ffffff',
+      },
+      _dark: {
+        bg: 'navy.800',
+      },
+      backgroundClip: 'border-box',
+    }),
+  })
+);
 
 export default CustomCard;
 export function CardButton(props: CustomCardProps) {
@@ -40,14 +82,7 @@ export function TagCard(props: StackProps) {
 
 export function TagFlex(props: FlexProps) {
   return (
-    <Flex
-      rounded="full"
-      p={2}
-      gap={2}
-      direction="row"
-      align="center"
-      {...props}
-    >
+    <Flex rounded="full" p={2} gap={2} direction="row" align="center" {...props}>
       {props.children}
     </Flex>
   );

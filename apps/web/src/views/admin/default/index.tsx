@@ -38,9 +38,9 @@ function Events() {
         <Carousel
           gap={20}
           children={
-            false
+            query.data != null
               ? query.data.map((event) => (
-                  <GlobalGroupEventItem key={event.id} event={event} minW="fit-content" w="full" />
+                  <GlobalGroupEventItem key={event.id} event={event} minW="fit-content" />
                 ))
               : [<GroupEventSkeleton />, <GroupEventSkeleton />, <GroupEventSkeleton />]
           }

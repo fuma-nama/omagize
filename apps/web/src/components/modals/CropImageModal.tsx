@@ -1,4 +1,11 @@
-import { Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import {
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+} from '@chakra-ui/react';
 import { Reset } from '@omagize/api';
 import { BasePickerProps, useImagePickerCrop } from 'components/picker/ImagePicker';
 import { ReactElement } from 'react';
@@ -13,9 +20,16 @@ export function CropImageModal({
   };
 }) {
   return (
-    <Modal isOpen={picker.cropper != null} onClose={picker.cancelEdit} isCentered>
+    <Modal
+      isOpen={picker.cropper != null}
+      onClose={picker.cancelEdit}
+      isCentered
+      size="xl"
+      scrollBehavior="outside"
+    >
       <ModalOverlay />
       <ModalContent>
+        <ModalCloseButton />
         <ModalHeader>Crop Image</ModalHeader>
         <ModalBody>{picker.cropper}</ModalBody>
       </ModalContent>

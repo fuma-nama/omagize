@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { BiRightArrow } from 'react-icons/bi';
 import { BannerFormat, UploadImage } from 'utils/ImageUtils';
-import { Step, Steps } from 'chakra-ui-steps';
+import { Step, Steps } from '@omagize/chakra-ui-steps';
 import { onlyDate, onlyTime } from '../../utils/DateUtils';
 import { useState } from 'react';
 import { useImagePickerCropSimple } from 'components/picker/ImagePicker';

@@ -1,24 +1,35 @@
+import { modalAnatomy as parts } from '@chakra-ui/anatomy';
+import { createMultiStyleConfigHelpers } from '@chakra-ui/styled-system';
 import { mode } from '@chakra-ui/theme-tools';
-import { Dict } from '@chakra-ui/utils';
 
-export const modalStyles: Dict = {
-  components: {
-    Modal: {
-      parts: ['content', 'overlay'],
-      baseStyle: (props: any) => ({
-        dialog: {
-          bg: mode('secondaryGray.300', 'navy.900')(props),
-        },
-        overlay: {
-          backdropFilter: 'auto',
-          backdropBlur: 'lg',
-        },
-        closeButton: {
-          _hover: {},
-          _focus: {},
-        },
-      }),
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(parts.keys);
+
+const baseStyle = definePartsStyle({
+  overlay: {
+    backdropFilter: 'auto',
+    backdropBlur: 'lg',
+  },
+  closeButton: {
+    _hover: {},
+    _focus: {
+      boxShadow: 'none',
     },
+  },
+  dialog: {
+    _light: {
+      bg: 'secondaryGray.300',
+    },
+    _dark: {
+      bg: 'navy.900',
+    },
+  },
+});
+
+export const modalStyles = {
+  components: {
+    Modal: defineMultiStyleConfig({
+      baseStyle,
+    }),
     Popover: {
       baseStyle: (props: any) => ({
         content: {

@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 import Content from 'components/sidebar/components/Content';
 import { renderThumb, renderTrack, renderView } from 'components/layout/Scrollbar';
-import { Scrollbars } from 'react-custom-scrollbars-2';
 
 // Assets
 import { IoMenuOutline } from 'react-icons/io5';
@@ -40,14 +39,7 @@ function Sidebar({ items }: { items: SidebarItem[]; [x: string]: any }) {
         overflowX="hidden"
         boxShadow={shadow}
       >
-        <Scrollbars
-          autoHide
-          renderTrackVertical={renderTrack}
-          renderThumbVertical={renderThumb}
-          renderView={renderView}
-        >
           <Content items={items} />
-        </Scrollbars>
       </Box>
     </Box>
   );
@@ -94,14 +86,7 @@ export function SidebarResponsive({ items }: { items: SidebarItem[] }) {
           _hover={{ boxShadow: 'none' }}
         />
         <DrawerBody maxW="285px" px="0rem" pb="0">
-          <Scrollbars
-            autoHide
-            renderTrackVertical={renderTrack}
-            renderThumbVertical={renderThumb}
-            renderView={renderView}
-          >
             <Content items={items} />
-          </Scrollbars>
         </DrawerBody>
       </DrawerContent>
     </Drawer>

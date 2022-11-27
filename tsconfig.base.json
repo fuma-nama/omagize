@@ -19,6 +19,7 @@
     "baseUrl": ".",
     "paths": {
       "@omagize/api": ["libs/api/src/index.ts"],
+      "@omagize/chakra-ui-steps": ["libs/chakra-ui-steps/src/index.ts"],
       "@omagize/utils": ["libs/utils/src/index.ts"]
     }
   },

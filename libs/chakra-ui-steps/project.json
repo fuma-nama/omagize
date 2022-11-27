@@ -1,0 +1,24 @@
+{
+  "name": "chakra-ui-steps",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/chakra-ui-steps/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/chakra-ui-steps/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/chakra-ui-steps"],
+      "options": {
+        "jestConfig": "libs/chakra-ui-steps/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

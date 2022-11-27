@@ -12,7 +12,7 @@ import { breakpoints } from './foundations/breakpoints';
 import { globalStyles } from './styles';
 import { modalStyles } from './components/modal';
 import { avatarStyles } from './components/avatar';
-import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
+import { StepsStyleConfig as Steps } from '@omagize/chakra-ui-steps';
 import { menuTheme } from './components/menu';
 
 export default extendTheme(

@@ -1,17 +1,35 @@
-import { mode } from '@chakra-ui/theme-tools';
 import { dark, light } from 'variables/colors';
+import { menuAnatomy as parts } from '@chakra-ui/anatomy';
+import { createMultiStyleConfigHelpers } from '@chakra-ui/styled-system';
+
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(parts.keys);
 
 // define the base component styles
 // export the base styles in the component theme
 export const menuTheme = {
   components: {
-    Menu: {
-      parts: ['list'],
-      baseStyle: (props: any) => ({
+    Menu: defineMultiStyleConfig({
+      baseStyle: definePartsStyle({
+        item: {
+          _hover: {
+            _light: {
+              bg: light.cardBg,
+            },
+            _dark: {
+              bg: dark.cardBg,
+            },
+          },
+          bg: 'transparent',
+        },
         list: {
-          bg: mode(light.globalBg, dark.globalBg)(props),
+          _light: {
+            bg: light.globalBg,
+          },
+          _dark: {
+            bg: dark.globalBg,
+          },
         },
       }),
-    },
+    }),
   },
 };

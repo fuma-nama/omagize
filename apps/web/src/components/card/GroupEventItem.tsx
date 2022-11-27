@@ -9,7 +9,6 @@ import {
   IconButton,
   Image,
   Skeleton,
-  SkeletonCircle,
   SkeletonText,
   Text,
 } from '@chakra-ui/react';
@@ -128,18 +127,16 @@ function GroupEventContent({ event }: { event: GroupEvent }) {
 
 export function GroupEventSkeleton() {
   return (
-    <Card overflow="hidden" gap={3}>
-      <Skeleton w="full" h="200px" rounded="lg" />
-
-      <HStack justify="space-between">
+    <Card overflow="hidden">
+      <Flex direction="row" gap={5}>
+        <Skeleton w="100px" h="100px" rounded="lg" />
         <Flex direction="column" gap={3}>
           <Skeleton w="200px" h="20px" />
           <SkeletonText w="full" noOfLines={2} />
         </Flex>
-        <SkeletonCircle w="40px" h="40px" />
-      </HStack>
+      </Flex>
 
-      <Flex direction="row" flexWrap="wrap" gap={4} mt={2}>
+      <Flex direction="row" flexWrap="wrap" gap={4} mt={10} ml="auto">
         <Skeleton w="120px" h="25px" />
         <Skeleton w="100px" h="25px" />
       </Flex>

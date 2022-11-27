@@ -14,6 +14,7 @@ import { avatarStyles } from './components/avatar';
 import { StepsStyleConfig as Steps } from '@omagize/chakra-ui-steps';
 import { menuTheme } from './components/menu';
 import { pinInputTheme } from './components/pin-input';
+import { skeletonStyles } from './components/skeleton';
 
 export default extendTheme(
   { breakpoints }, // Breakpoints
@@ -33,6 +34,7 @@ export default extendTheme(
       Input: inputStyles,
       PinInput: pinInputTheme,
       Textarea: textareaStyles,
+      Skeleton: skeletonStyles,
       Steps,
     },
   }

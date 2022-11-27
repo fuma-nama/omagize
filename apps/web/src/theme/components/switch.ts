@@ -1,4 +1,9 @@
+import { switchAnatomy as parts } from '@chakra-ui/anatomy';
+import { createMultiStyleConfigHelpers } from '@chakra-ui/styled-system';
 import { mode } from '@chakra-ui/theme-tools';
+import { dark, light } from 'variables/colors';
+
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(parts.keys);
 
 export const switchStyles = {
   components: {
@@ -11,8 +16,8 @@ export const switchStyles = {
         },
       },
     },
-    Switch: {
-      baseStyle: {
+    Switch: defineMultiStyleConfig({
+      baseStyle: definePartsStyle({
         thumb: {
           fontWeight: 400,
           borderRadius: '50%',
@@ -32,15 +37,18 @@ export const switchStyles = {
             boxShadow: 'none',
           },
         },
-      },
+      }),
 
       variants: {
-        main: (props: any) => ({
+        main: definePartsStyle((props) => ({
           track: {
             bg: mode('gray.300', 'navy.700')(props),
+            _checked: {
+              bg: mode(light.brand, dark.brand)(props),
+            },
           },
-        }),
+        })),
       },
-    },
+    }),
   },
 };

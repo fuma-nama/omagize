@@ -1,12 +1,5 @@
 // Chakra imports
-import {
-  Flex,
-  FormLabel,
-  Switch,
-  SwitchProps,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Flex, FormLabel, Switch, SwitchProps, Text, useColorModeValue } from '@chakra-ui/react';
 // Custom components
 export default function SwitchField(
   props: {
@@ -20,11 +13,7 @@ export default function SwitchField(
   const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
   return (
     <Flex justify="space-between" align="center" borderRadius="16px">
-      <FormLabel
-        htmlFor={id}
-        _hover={{ cursor: 'pointer' }}
-        flexDirection="column"
-      >
+      <FormLabel htmlFor={id} _hover={{ cursor: 'pointer' }} flexDirection="column">
         <Text color={textColorPrimary} fontSize="md" fontWeight="500">
           {label}
         </Text>
@@ -32,13 +21,7 @@ export default function SwitchField(
           {desc}
         </Text>
       </FormLabel>
-      <Switch
-        id={id}
-        variant="main"
-        colorScheme="brandScheme"
-        size="md"
-        {...rest}
-      />
+      <Switch id={id} variant="main" size="md" {...rest} />
     </Flex>
   );
 }

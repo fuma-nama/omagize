@@ -6,6 +6,9 @@ import {
   Flex,
   defineStyle,
   defineStyleConfig,
+  forwardRef,
+  Box,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { CustomCardProps } from 'theme/theme';
 import { useItemHoverBg } from '../../variables/colors';
@@ -37,28 +40,26 @@ export const CardInput = chakra(
     }),
   })
 );
-const CustomCard = chakra(
-  'div',
-  defineStyleConfig({
-    baseStyle: defineStyle({
-      p: '20px',
-      display: 'flex',
-      flexDirection: 'column',
-      width: '100%',
-      position: 'relative',
-      borderRadius: '20px',
-      minWidth: '0px',
-      wordWrap: 'break-word',
-      _light: {
-        bg: '#ffffff',
-      },
-      _dark: {
-        bg: 'navy.800',
-      },
-      backgroundClip: 'border-box',
-    }),
-  })
-);
+const CustomCard = forwardRef<CustomCardProps, 'div'>((props, ref) => {
+  const bg = useColorModeValue('#ffffff', 'navy.800');
+
+  return (
+    <Box
+      ref={ref}
+      p="20px"
+      display="flex"
+      flexDirection="column"
+      width="100%"
+      position="relative"
+      borderRadius="20px"
+      minWidth="0px"
+      wordWrap="break-word"
+      bg={bg}
+      backgroundClip="border-box"
+      {...props}
+    />
+  );
+});
 
 export default CustomCard;
 export function CardButton(props: CustomCardProps) {

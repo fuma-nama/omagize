@@ -9,7 +9,7 @@ import { useColors } from 'variables/colors';
 import { SettingsProps } from './index';
 
 export function InfoContent({ value, onChange, group }: SettingsProps) {
-  const { textColorPrimary, brand, globalBg } = useColors();
+  const { textColorPrimary, brand } = useColors();
 
   const banner = useImagePickerCropModal(
     value.banner,
@@ -46,6 +46,7 @@ export function InfoContent({ value, onChange, group }: SettingsProps) {
           variant="flushed"
           _focus={{
             borderColor: brand,
+            boxShadow: 'none',
           }}
           fontSize="2xl"
           fontWeight="600"
@@ -54,12 +55,7 @@ export function InfoContent({ value, onChange, group }: SettingsProps) {
         />
         <Textarea
           color={textColorPrimary}
-          fontSize="md"
-          bg={globalBg}
-          rounded="lg"
-          border={0}
           placeholder="Give your group a introduction"
-          _focus={{}}
           value={value.about ?? group.introduction}
           onChange={(e) => onChange({ about: e.target.value })}
         />

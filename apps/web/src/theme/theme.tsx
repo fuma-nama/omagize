@@ -24,7 +24,6 @@ export default extendTheme(
   progressStyles, // progress styles
   sliderStyles, // slider styles
   inputStyles, // input styles
-  textareaStyles, // textarea styles
   switchStyles, // switch styles
   modalStyles,
   avatarStyles,
@@ -33,6 +32,7 @@ export default extendTheme(
     components: {
       Input: inputStyles,
       PinInput: pinInputTheme,
+      Textarea: textareaStyles,
       Steps,
     },
   }

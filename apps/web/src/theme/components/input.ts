@@ -1,12 +1,12 @@
 import { inputAnatomy } from '@chakra-ui/anatomy';
 import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
-import { dark, light } from 'variables/colors';
+import { mode } from '@chakra-ui/theme-tools';
 
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(
   inputAnatomy.keys
 );
 
-const defaultStyle = {
+const mainStyle = {
   border: '2px solid',
   borderRadius: '16px',
   fontSize: 'sm',
@@ -17,7 +17,6 @@ const defaultStyle = {
     _placeholder: {
       color: 'secondaryGray.700',
     },
-    borderColor: 'secondaryGray.400',
   },
   _dark: {
     color: 'white',
@@ -30,26 +29,26 @@ const defaultStyle = {
 };
 
 export const inputStyles = defineMultiStyleConfig({
-  baseStyle: definePartsStyle({
+  baseStyle: definePartsStyle((props) => ({
     field: {
       fontWeight: 400,
-      _light: {
-        borderColor: light.textColorSecondary,
-      },
-      _dark: {
-        borderColor: dark.textColorSecondary,
-      },
+      borderColor: mode('secondaryGray.400', 'navy.600')(props),
       borderRadius: '8px',
     },
-  }),
+  })),
 
   variants: {
+    flushed: definePartsStyle((props) => ({
+      field: {
+        borderBottomColor: mode('secondaryGray.400', 'navy.600')(props),
+      },
+    })),
     main: definePartsStyle({
-      field: defaultStyle,
+      field: mainStyle,
     }),
     focus: definePartsStyle({
       field: {
-        ...defaultStyle,
+        ...mainStyle,
         _focus: {
           _light: {
             borderColor: 'brand.300',

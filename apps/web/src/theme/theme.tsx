@@ -1,5 +1,4 @@
 import { extendTheme, HTMLChakraProps, ThemingProps } from '@chakra-ui/react';
-import { CardComponent } from './additions/card/card';
 import { buttonStyles } from './components/button';
 import { badgeStyles } from './components/badge';
 import { inputStyles } from './components/input';
@@ -14,6 +13,7 @@ import { modalStyles } from './components/modal';
 import { avatarStyles } from './components/avatar';
 import { StepsStyleConfig as Steps } from '@omagize/chakra-ui-steps';
 import { menuTheme } from './components/menu';
+import { pinInputTheme } from './components/pin-input';
 
 export default extendTheme(
   { breakpoints }, // Breakpoints
@@ -26,12 +26,13 @@ export default extendTheme(
   inputStyles, // input styles
   textareaStyles, // textarea styles
   switchStyles, // switch styles
-  CardComponent, // card component
   modalStyles,
   avatarStyles,
   menuTheme,
   {
     components: {
+      Input: inputStyles,
+      PinInput: pinInputTheme,
       Steps,
     },
   }

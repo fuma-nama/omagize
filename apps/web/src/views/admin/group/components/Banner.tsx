@@ -14,11 +14,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-import {
-  Member,
-  useGroupDetailQuery,
-  useGroupMembersQuery,
-} from '@omagize/api';
+import { Member, useGroupDetailQuery, useGroupMembersQuery } from '@omagize/api';
 import { GroupDetail } from '@omagize/api';
 import { useColors } from 'variables/colors';
 import { MdArrowDropDown } from 'react-icons/md';
@@ -45,7 +41,7 @@ function Content({ group }: { group: GroupDetail }) {
         pos="relative"
         overflow="hidden"
         borderRadius="30px"
-        bg={group.bannerUrl ? null : bg}
+        bg={bg}
         p={{ base: '10px', '3sm': '20px' }}
       >
         {group.bannerUrl && (
@@ -53,10 +49,10 @@ function Content({ group }: { group: GroupDetail }) {
             pos="absolute"
             src={group.bannerUrl}
             objectFit="cover"
-            top="0"
+            top="-5px"
             left="0"
             w="full"
-            h="full"
+            h="calc(100% + 10px)"
             filter="auto"
             blur="sm"
             brightness={0.5}
@@ -66,28 +62,15 @@ function Content({ group }: { group: GroupDetail }) {
           {loaded && (
             <>
               <Show above="3sm">
-                <BannerContent
-                  group={group}
-                  members={membersQuery.data?.pages[0]}
-                />
+                <BannerContent group={group} members={membersQuery.data?.pages[0]} />
               </Show>
               <Hide above="3sm">
-                <BannerSmallContent
-                  group={group}
-                  members={membersQuery.data?.pages[0]}
-                />
+                <BannerSmallContent group={group} members={membersQuery.data?.pages[0]} />
               </Hide>
             </>
           )}
         </Box>
-        <Icon
-          as={MdArrowDropDown}
-          w="30px"
-          h="30px"
-          pos="absolute"
-          top="20px"
-          right="20px"
-        />
+        <Icon as={MdArrowDropDown} w="30px" h="30px" pos="absolute" top="20px" right="20px" />
       </Box>
     </>
   );
@@ -114,11 +97,7 @@ function BannerContent({ group, members }: BannerContentProps) {
         <HStack mt="10px">
           <AvatarGroup max={5}>
             {members.map((member) => (
-              <Avatar
-                key={member.id}
-                src={member.avatarUrl}
-                name={member.username}
-              />
+              <Avatar key={member.id} src={member.avatarUrl} name={member.username} />
             ))}
           </AvatarGroup>
           <Text>{group.memberCount} Members</Text>
@@ -147,20 +126,10 @@ function BannerSmallContent({ group, members }: BannerContentProps) {
         </Text>
       </HStack>
 
-      <HStack
-        color={textColorPrimary}
-        bg={cardBg}
-        w="full"
-        rounded="2xl"
-        minH="40px"
-      >
+      <HStack color={textColorPrimary} bg={cardBg} w="full" rounded="2xl" minH="40px">
         <AvatarGroup max={5}>
           {members.map((member) => (
-            <Avatar
-              key={member.id}
-              src={member.avatarUrl}
-              name={member.username}
-            />
+            <Avatar key={member.id} src={member.avatarUrl} name={member.username} />
           ))}
         </AvatarGroup>
         <Text fontWeight="bold">{group.memberCount} Members</Text>

@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, LegacyRef, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { Reset } from '@omagize/api';
 import { Crop } from 'react-image-crop';
 
@@ -113,75 +113,13 @@ function resizeImageBase(
   context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
 }
 
-export function useImagePickerResize<T extends UploadImage | Reset>(
-  value: T,
-  onChange: (file: T) => void,
-  format: Format,
-  props: InputHTMLAttributes<HTMLInputElement> | null = {
-    accept: supportedImageTypes,
-  }
-) {
-  const base = useImagePickerBase(value, onChange);
-
-  return {
-    ...base,
-    picker: (
-      <FilePicker
-        {...props}
-        onChange={(file: File) => {
-          resizeImage(file, format).then((result) => onChange(result as T));
-        }}
-        inputRef={base.ref}
-      />
-    ),
-  };
-}
-
-export function useImagePickerBase<T extends UploadImage | Reset>(
-  value: T,
-  onChange: (file: T) => void
-) {
-  const ref = useRef<HTMLInputElement>();
-  const url = useImageUrl(value);
-
-  return {
-    value,
-    setValue: onChange,
-    select() {
-      ref.current.click();
-    },
-    ref,
-    url,
-  };
-}
-
-export function FilePicker(props: {
-  onChange: (file: File) => void;
-  inputRef: LegacyRef<HTMLInputElement>;
-}) {
-  const { inputRef, onChange, ...rest } = props;
-
-  return (
-    <input
-      type="file"
-      ref={inputRef}
-      value={[]}
-      onChange={(e) => {
-        const files = e.target.files;
-        if (files && files.length > 0) {
-          onChange(files[0]);
-        }
-      }}
-      hidden
-      {...rest}
-    />
-  );
-}
-
 export function useImageUrl(file: UploadImage | Reset) {
   return useMemo(() => {
-    if (!file || file === 'reset') return null;
-    return URL.createObjectURL(file);
+    if (file instanceof Blob) {
+      return URL.createObjectURL(file);
+    } else {
+      return null;
+    }
   }, [file]);
 }
 

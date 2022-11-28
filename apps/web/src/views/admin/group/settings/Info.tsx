@@ -2,24 +2,35 @@ import { Avatar, Box, Flex, Input, Text, Textarea } from '@chakra-ui/react';
 import { GroupDetail, useMemberQuery } from '@omagize/api';
 import { SmallUserItem } from 'components/card/user/UserItem';
 import AutoImage from 'components/card/utils/AutoImage';
-import { useImagePickerCropModal } from 'components/modals/CropImageModal';
+import { useModalImageCropper } from 'components/modals/CropImageModal';
 import { AvatarFormat, BannerFormat } from 'utils/ImageUtils';
 import { Pick } from 'components/layout/Pick';
 import { useColors } from 'variables/colors';
 import { SettingsProps } from './index';
+import { useImagePicker } from 'components/picker/ImagePicker';
 
 export function InfoContent({ value, onChange, group }: SettingsProps) {
   const { textColorPrimary, brand } = useColors();
 
-  const banner = useImagePickerCropModal(
-    value.banner,
-    (f) => onChange({ banner: f }),
-    BannerFormat
+  const cropper = useModalImageCropper();
+  const banner = useImagePicker(value.banner, (f) =>
+    cropper.setEditing({
+      file: f,
+      format: BannerFormat,
+      onCrop: (blob) => onChange({ banner: blob }),
+    })
   );
-  const icon = useImagePickerCropModal(value.icon, (f) => onChange({ icon: f }), AvatarFormat);
+  const icon = useImagePicker(value.icon, (f) =>
+    cropper.setEditing({
+      file: f,
+      format: AvatarFormat,
+      onCrop: (blob) => onChange({ icon: blob }),
+    })
+  );
 
   return (
     <>
+      {cropper.modal}
       {icon.component}
       {banner.component}
       <AutoImage

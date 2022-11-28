@@ -6,9 +6,9 @@ import {
   Input,
   InputGroup,
 } from '@chakra-ui/react';
-import { useImagePickerCrop } from 'components/picker/ImagePicker';
+import { useImageCropper, useImagePicker } from 'components/picker/ImagePicker';
 import { ProfilePicker } from 'components/picker/ProfilePicker';
-import { UploadImage, AvatarFormat, useImagePickerResize, BannerFormat } from 'utils/ImageUtils';
+import { UploadImage, AvatarFormat, BannerFormat } from 'utils/ImageUtils';
 
 export type GroupOptions = {
   name: string;
@@ -25,24 +25,33 @@ export function CreateGroupForm({
   onChange: (options: Partial<GroupOptions>) => void;
   isError: boolean;
 }) {
-  const acceptedFileTypes = '.png, .jpg, .gif';
-
   const [name, setName] = [value.name, (v: string) => onChange({ name: v })];
-  const icon = useImagePickerCrop(value.icon, (v) => onChange({ icon: v }), AvatarFormat);
-  const banner = useImagePickerResize(value.banner, (v) => onChange({ banner: v }), BannerFormat, {
-    accept: acceptedFileTypes,
-  });
+  const cropper = useImageCropper();
+  const icon = useImagePicker(value.icon, (f) =>
+    cropper.setEditing({
+      file: f,
+      format: AvatarFormat,
+      onCrop: (blob) => onChange({ icon: blob }),
+    })
+  );
+  const banner = useImagePicker(value.banner, (f) =>
+    cropper.setEditing({
+      file: f,
+      format: BannerFormat,
+      onCrop: (blob) => onChange({ banner: blob }),
+    })
+  );
 
   return (
     <FormControl isRequired isInvalid={isError}>
       <InputGroup flexDirection="column">
-        {icon.filePicker.component}
-        {banner.picker}
-        {icon.cropper ?? (
+        {icon.component}
+        {banner.component}
+        {cropper.cropper ?? (
           <>
             <ProfilePicker
               selectBanner={banner.select}
-              selectIcon={icon.filePicker.select}
+              selectIcon={icon.select}
               bannerUrl={banner.url}
               iconUrl={icon.url}
               name={name}

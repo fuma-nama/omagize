@@ -14,19 +14,14 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { BiRightArrow } from 'react-icons/bi';
-import {
-  AvatarFormat,
-  BannerFormat,
-  UploadImage,
-  url,
-  useImagePickerResize,
-} from 'utils/ImageUtils';
+import { AvatarFormat, BannerFormat, UploadImage, url } from 'utils/ImageUtils';
 import { useMutation } from '@tanstack/react-query';
 import { dispatchSelfUser, updateProfile, useSelfUser } from '@omagize/api';
 import { ProfilePicker } from '../picker/ProfilePicker';
 import { Reset, SelfUser } from '@omagize/api';
 import { useState } from 'react';
-import { useImagePickerCrop } from 'components/picker/ImagePicker';
+import { useImageCropper, useImagePicker } from 'components/picker/ImagePicker';
+import { useFilePickerUrl } from 'components/picker/FilePicker';
 
 type ProfileOptions = {
   name?: string;
@@ -97,23 +92,35 @@ function Form(props: {
   const acceptedFileTypes = '.png, .jpg, .gif';
 
   const [name, setName] = [value.name, (v: string) => onChange({ name: v })];
-  const icon = useImagePickerCrop(value.avatar, (v) => onChange({ avatar: v }), AvatarFormat);
-  const banner = useImagePickerResize(value.banner, (v) => onChange({ banner: v }), BannerFormat, {
-    accept: acceptedFileTypes,
-  });
+  const cropper = useImageCropper();
+
+  const icon = useImagePicker(value.avatar, (f) =>
+    cropper.setEditing({
+      file: f,
+      format: AvatarFormat,
+      onCrop: (blob) => onChange({ avatar: blob }),
+    })
+  );
+  const banner = useImagePicker(value.banner, (f) =>
+    cropper.setEditing({
+      file: f,
+      format: BannerFormat,
+      onCrop: (blob) => onChange({ banner: blob }),
+    })
+  );
 
   const invalid = false;
 
   return (
     <FormControl isInvalid={invalid} isRequired>
       <InputGroup flexDirection="column">
-        {icon.filePicker.component}
-        {banner.picker}
-        {icon.cropper ?? (
+        {icon.component}
+        {banner.component}
+        {cropper.cropper ?? (
           <>
             <ProfilePicker
               selectBanner={banner.select}
-              selectIcon={icon.filePicker.select}
+              selectIcon={icon.select}
               bannerUrl={url(user.bannerUrl, banner.url)}
               iconUrl={url(user.avatarUrl, icon.url)}
               name={user.username}

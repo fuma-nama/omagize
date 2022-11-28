@@ -13,7 +13,7 @@ export default function useFilePicker(onChange: (file: File) => void) {
 
 export function useFilePickerUrl<T extends Blob | Reset>(
   value: T,
-  onChange: (file: Blob) => void,
+  onChange: (file: File) => void,
   props?: InputHTMLAttributes<HTMLInputElement>
 ) {
   const ref = useRef<HTMLInputElement>();

@@ -1,12 +1,40 @@
 import { BoxProps, Button, Center, Flex, FlexProps, HStack, Icon, Image } from '@chakra-ui/react';
 import { useColorModeValue } from '@chakra-ui/system';
 import { Reset } from '@omagize/api';
-import { InputHTMLAttributes, ReactElement, useRef, useState } from 'react';
+import { InputHTMLAttributes, ReactElement, RefObject, useRef, useState } from 'react';
 import { FaImage } from 'react-icons/fa';
-import ReactCrop, { Crop } from 'react-image-crop';
-import { cropImage, Format, supportedImageTypes } from 'utils/ImageUtils';
+import { Format, supportedImageTypes, useImageUrl } from 'utils/ImageUtils';
 import { Pick } from 'components/layout/Pick';
-import { useFilePickerUrl } from './FilePicker';
+import { FilePicker } from './FilePicker';
+import 'cropperjs/dist/cropper.css';
+import { Cropper, ReactCropperElement } from 'react-cropper';
+import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+
+export function useImagePicker<T extends Blob | Reset>(
+  value: T,
+  onChange: (file: File) => void,
+  props?: InputHTMLAttributes<HTMLInputElement>
+) {
+  const ref = useRef<HTMLInputElement>();
+  const url = useImageUrl(value);
+
+  return {
+    select() {
+      ref.current.click();
+    },
+    component: (
+      <FilePicker
+        inputRef={ref}
+        onChange={(files) => onChange(files[0])}
+        input={{
+          accept: supportedImageTypes,
+          ...props,
+        }}
+      />
+    ),
+    url,
+  };
+}
 
 export type SimplePickerProps = BasePickerProps & {
   holder?: ReactElement;
@@ -20,24 +48,23 @@ export function useImagePickerCropSimple<T extends Blob | Reset>(
   picker: SimplePickerProps = {}
 ) {
   const base = useImagePickerCrop(value, onChange, format, picker);
-  const filePicker = base.filePicker;
 
   return {
     ...base,
     component: (
       <>
-        {filePicker.component}
+        {base.component}
         {base.cropper ?? (
           <Pick
             w="full"
             h="full"
-            onClick={filePicker.select}
+            onClick={base.select}
             rounded="xl"
             overflow="hidden"
             {...picker.preview}
           >
-            {filePicker.url ? (
-              <Image w="full" maxH="500px" src={filePicker.url} objectFit="contain" />
+            {base.url ? (
+              <Image w="full" maxH="500px" src={base.url} objectFit="contain" />
             ) : (
               picker.holder ?? <DefaultImageHolder />
             )}
@@ -58,77 +85,109 @@ export function useImagePickerCrop<T extends Blob | Reset>(
   format: Format,
   picker: BasePickerProps = {}
 ) {
-  const [edit, setEdit] = useState<{
-    crop: Crop | null;
-    preview: string;
-  } | null>();
-
-  const filePicker = useFilePickerUrl<T>(
-    value,
-    (f) => {
-      const url = URL.createObjectURL(f);
-      setEdit({ preview: url, crop: null });
-    },
-    picker.input ?? {
-      accept: supportedImageTypes,
-    }
+  const { setEditing, cropper } = useImageCropper({ box: picker.cropper });
+  const { url, component, select } = useImagePicker(value, (f) =>
+    setEditing({
+      file: f,
+      format: format,
+      onCrop: (blob) => onChange(blob as T),
+    })
   );
 
-  function onCrop(img: HTMLImageElement) {
-    if (img == null) {
-      setEdit(null);
-    } else {
-      cropImage(edit.crop, img, format).then((result) => {
-        setEdit(null);
-        onChange(result as T);
-      });
-    }
-  }
-
   return {
-    cancelEdit: () => setEdit(null),
-    url: filePicker.url,
-    filePicker: filePicker,
-    cropper:
-      edit != null ? (
-        <Cropper
-          value={edit}
-          aspect={format.aspect}
-          onChange={(v) => setEdit((prev) => ({ ...prev, crop: v }))}
-          onCrop={onCrop}
-          box={picker.cropper}
-        />
-      ) : null,
+    cancelEdit: () => setEditing(null),
+    url: url,
+    component,
+    select,
+    cropper: cropper,
   };
 }
 
-export function Cropper({
-  aspect,
-  value,
-  onChange,
-  onCrop,
+export type CropTask = {
+  file: Blob;
+  format: Format;
+  onCrop: (element: Blob) => void;
+};
+export function useImageCropper({ box }: { box?: FlexProps } = {}) {
+  const [editing, setEditing] = useState<CropTask>(null);
+  const preview = useImageUrl(editing?.file);
+
+  return {
+    editing,
+    setEditing,
+    cropper: editing && (
+      <ImageCropper
+        preview={preview}
+        format={editing.format}
+        box={box}
+        onCrop={(blob) => {
+          editing.onCrop(blob);
+          setEditing(null);
+        }}
+        onClose={() => setEditing(null)}
+      />
+    ),
+  };
+}
+
+export function ImageCropper({
+  preview,
+  format,
   box,
+  onCrop,
+  onClose,
 }: {
-  value: { crop?: Crop; preview: string };
-  onChange: (v: Crop) => void;
-  aspect: number;
-  onCrop: (element: HTMLImageElement | null) => void;
+  preview: string;
+  format: Format;
+  onCrop: (element: Blob) => void;
+  onClose: () => void;
   box?: FlexProps;
 }) {
-  const ref = useRef<HTMLImageElement>();
+  const cropperRef = useRef<ReactCropperElement>(null);
+  const save = useCropMutation(
+    cropperRef,
+    (cropper) =>
+      cropper.getCroppedCanvas({ maxWidth: format.maxWidth, maxHeight: format.maxHeight }),
+    {
+      onSuccess: (blob) => onCrop(blob),
+    }
+  );
 
   return (
     <Flex direction="column" gap={2} align="center" maxH="500px" {...box}>
-      <ReactCrop aspect={aspect} crop={value.crop} onChange={onChange}>
-        <Image src={value.preview} ref={ref} />
-      </ReactCrop>
+      <Cropper
+        src={preview}
+        style={{ height: 400, width: '100%' }}
+        aspectRatio={format.aspect}
+        viewMode={1}
+        guides={false}
+        ref={cropperRef}
+      />
       <HStack>
-        <Button onClick={() => onCrop(null)}>Close</Button>
-        <Button variant="brand" onClick={() => onCrop(ref.current)}>
+        <Button onClick={onClose}>Close</Button>
+        <Button isLoading={save.isLoading} variant="brand" onClick={() => save.mutate()}>
           Crop
         </Button>
       </HStack>
     </Flex>
+  );
+}
+
+function useCropMutation(
+  cropperRef: RefObject<ReactCropperElement>,
+  crop: (cropper: Cropper) => HTMLCanvasElement = (cropper) => cropper.getCroppedCanvas(),
+  options?: Omit<UseMutationOptions<Blob, unknown, void, unknown>, 'mutationFn'>
+) {
+  return useMutation<Blob | null>(
+    () =>
+      new Promise<Blob>((resolve, reject) => {
+        const element = cropperRef.current;
+        if (element == null) return reject('Cropper ref is null');
+        const cropper = element.cropper;
+
+        crop(cropper).toBlob((blob) => resolve(blob));
+      }),
+    options
   );
 }
 

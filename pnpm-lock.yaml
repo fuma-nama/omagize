@@ -48,6 +48,7 @@ importers:
       chakra-react-select: ^4.2.5
       chakra-ui-carousel: ^1.0.6
       core-js: ^3.6.5
+      cropperjs: ^1.5.13
       emojibase: ^6.1.0
       emotion-theming: ^10.0.0
       eslint: ^8.0.0
@@ -115,6 +116,7 @@ importers:
       chakra-react-select: 4.4.0_3di34vqdgwk3jqlwgx5jusp27u
       chakra-ui-carousel: 1.0.6_oaslsuvwjfodiwwuabc467572y
       core-js: 3.26.1
+      cropperjs: 1.5.13
       emojibase: 6.1.0
       emotion-theming: 10.3.0_53jusob2jhmevmsrhkvbpx2hvm
       firebase: 9.14.0

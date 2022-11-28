@@ -8,6 +8,9 @@
       "react-app/jest"
     ]
   },
+  "scripts": {
+    "dev": "vite"
+  },
   "browserslist": {
     "production": [
       ">0.2%",

@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { Reset } from '@omagize/api';
-import { Crop } from 'react-image-crop';
 
 export const AvatarFormat: Format = {
   maxWidth: 500,
@@ -50,45 +49,6 @@ export function resizeImage(image: File | Blob, format: Format): Promise<Blob> {
       canvas.toBlob((b) => r(b));
     };
   });
-}
-
-export function cropImage(
-  crop: Crop | null,
-  imageObj: HTMLImageElement,
-  format: Format
-): Promise<Blob> {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-
-  if (crop != null) {
-    canvas.width = Math.min(crop?.width ?? imageObj.naturalWidth, format.maxWidth);
-    canvas.height = Math.min(crop?.height ?? imageObj.naturalHeight, format.maxHeight);
-    const scaleX = imageObj.naturalWidth / imageObj.width;
-    const scaleY = imageObj.naturalHeight / imageObj.height;
-    /*
-        const ratio = format.aspect
-        const inputRatio = canvas.width / canvas.height;
-        console.log(ratio === inputRatio)
-
-        You can check if ratio doesn't match, we will skip this part
-         */
-
-    context.drawImage(
-      imageObj,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-  } else {
-    resizeImageBase(canvas, context, imageObj, format);
-  }
-
-  return new Promise((r) => canvas.toBlob((b) => r(b)));
 }
 
 function resizeImageBase(

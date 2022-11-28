@@ -17,6 +17,7 @@ const mainStyle = {
     _placeholder: {
       color: 'secondaryGray.700',
     },
+    borderColor: 'secondaryGray.400',
   },
   _dark: {
     color: 'white',

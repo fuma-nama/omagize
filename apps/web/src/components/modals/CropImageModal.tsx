@@ -6,10 +6,8 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { Reset } from '@omagize/api';
-import { BasePickerProps, useImagePickerCrop } from 'components/picker/ImagePicker';
+import { useImageCropper } from 'components/picker/ImagePicker';
 import { ReactElement } from 'react';
-import { Format } from 'utils/ImageUtils';
 
 export function CropImageModal({
   picker,
@@ -37,23 +35,18 @@ export function CropImageModal({
   );
 }
 
-export function useImagePickerCropModal<T extends Blob | Reset>(
-  value: T,
-  onChange: (file: T) => void,
-  format: Format,
-  picker: BasePickerProps = {}
-) {
-  const base = useImagePickerCrop(value, onChange, format, picker);
+export function useModalImageCropper() {
+  const { cropper: component, ...cropper } = useImageCropper();
 
   return {
-    url: base.url,
-    select: base.filePicker.select,
-    cancelEdit: base.cancelEdit,
-    component: (
-      <>
-        {base.filePicker.component}
-        <CropImageModal picker={base} />
-      </>
+    ...cropper,
+    modal: (
+      <CropImageModal
+        picker={{
+          cancelEdit: () => cropper.setEditing(null),
+          cropper: component,
+        }}
+      />
     ),
   };
 }

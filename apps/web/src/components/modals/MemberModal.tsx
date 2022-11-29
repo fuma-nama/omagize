@@ -48,19 +48,19 @@ function Members({ group, enabled }: { group: Snowflake; enabled: boolean }) {
   const query = useGroupMembersQuery(group, enabled);
 
   return (
-    <Flex id="members-div" direction="column">
-      <InfiniteScroll
-        dataLength={query.data.pages.length}
-        next={() => query.fetchNextPage()}
-        inverse={true}
-        hasMore={query.hasNextPage}
-        loader={<h4>Loading...</h4>}
-        scrollableTarget="members-div"
-      >
-        {query.data.pages.map((page) =>
-          page.map((member) => <UserItem key={member.id} user={member} />)
-        )}
-      </InfiniteScroll>
+    <Flex
+      direction="column"
+      gap={2}
+      as={InfiniteScroll as any}
+      dataLength={query.data.pages.length}
+      next={() => query.fetchNextPage()}
+      hasMore={query.hasNextPage}
+      loader={<h4>Loading...</h4>}
+      scrollableTarget="members-div"
+    >
+      {query.data.pages.map((page) =>
+        page.map((member) => <UserItem key={member.id} user={member} />)
+      )}
     </Flex>
   );
 }

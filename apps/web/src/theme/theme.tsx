@@ -7,7 +7,7 @@ import { sliderStyles } from './components/slider';
 import { textareaStyles } from './components/textarea';
 import { switchStyles } from './components/switch';
 import { linkStyles } from './components/link';
-import { breakpoints } from './foundations/breakpoints';
+import { breakpoints } from './breakpoints';
 import { globalStyles } from './styles';
 import { modalStyles } from './components/modal';
 import { avatarStyles } from './components/avatar';
@@ -15,9 +15,9 @@ import { StepsStyleConfig as Steps } from '@omagize/chakra-ui-steps';
 import { menuTheme } from './components/menu';
 import { pinInputTheme } from './components/pin-input';
 import { skeletonStyles } from './components/skeleton';
+import { tabsStyles } from './components/tabs';
 
 export default extendTheme(
-  { breakpoints }, // Breakpoints
   globalStyles,
   badgeStyles, // badge styles
   buttonStyles, // button styles
@@ -30,12 +30,14 @@ export default extendTheme(
   avatarStyles,
   menuTheme,
   {
+    breakpoints,
     components: {
       Input: inputStyles,
       PinInput: pinInputTheme,
       Textarea: textareaStyles,
       Skeleton: skeletonStyles,
       Steps,
+      Tabs: tabsStyles,
     },
   }
 );

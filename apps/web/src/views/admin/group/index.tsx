@@ -79,7 +79,7 @@ function Main({ group }: { group: GroupDetail }) {
         <Text fontSize="2xl" fontWeight="600">
           Recent Messages
         </Text>
-        <MessagesPreview />
+        <MessagesPreview channel={group.channel.id} limit={20} />
       </Flex>
     </>
   );

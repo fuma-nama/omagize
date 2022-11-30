@@ -1,29 +1,32 @@
-import { Box, Flex } from '@chakra-ui/react';
-import { useSelected } from 'utils/navigate';
-import { useInfiniteMessageQuery } from '@omagize/api';
-import MessageItem, {
-  MessageItemSkeleton,
-} from 'components/card/chat/MessageItem';
-import { SmallErrorPanel } from 'components/panel/ErrorPanel';
-import { Holder } from 'components/layout/Container';
+import { Flex } from '@chakra-ui/react';
+import { Message, Snowflake, useInfiniteMessageQuery } from '@omagize/api';
+import MessageItem, { MessageItemSkeleton } from 'components/card/chat/MessageItem';
+import { QueryStatus } from 'components/panel/QueryPanel';
+import { useMemo } from 'react';
 
-export function MessagesPreview() {
-  const { selectedGroup } = useSelected();
-  const query = useInfiniteMessageQuery(selectedGroup);
+export function MessagesPreview({ channel, limit }: { channel: Snowflake; limit: number }) {
+  const query = useInfiniteMessageQuery(channel);
+  const pages = query.data?.pages;
+  const messages = useMemo(() => {
+    if (pages == null) return null;
+    const items: Message[] = [];
 
-  if (query.error) {
-    return (
-      <Box flexGrow={1}>
-        <SmallErrorPanel error={query.error} retry={query.refetch} />
-      </Box>
-    );
-  }
+    for (const page of pages) {
+      for (const message of page) {
+        if (items.length > limit) break;
 
+        items.push(message);
+      }
+    }
+    return items;
+  }, [pages, limit]);
+
+  console.log(messages);
   return (
     <Flex direction="column-reverse" maxH="1000px" overflow="auto" gap={5}>
-      <Holder
-        isLoading={query.isLoading}
-        skeleton={
+      <QueryStatus
+        query={query}
+        loading={
           <>
             <MessageItemSkeleton noOfLines={4} />
             <MessageItemSkeleton noOfLines={2} />
@@ -31,18 +34,12 @@ export function MessagesPreview() {
             <MessageItemSkeleton noOfLines={1} />
           </>
         }
+        error="Failed to load messages"
       >
-        {() => {
-          const pages = query.data.pages;
-          const lastPage = pages[pages.length - 1];
-
-          return lastPage
-            .slice(lastPage.length - 8, lastPage.length - 1)
-            .map((message) => (
-              <MessageItem key={message.id} message={message} />
-            ));
-        }}
-      </Holder>
+        {messages?.map((message) => (
+          <MessageItem message={message} />
+        ))}
+      </QueryStatus>
     </Flex>
   );
 }

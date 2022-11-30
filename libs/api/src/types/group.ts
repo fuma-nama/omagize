@@ -5,7 +5,7 @@ import { toBannerUrl, toIconUrl } from '../utils/mediaUtils';
 import { User } from './user';
 import { parseDate } from '../utils/common';
 import { Channel } from './message';
-import { DefaultRole } from './role';
+import { DefaultRole, Role } from './role';
 
 export type Group = {
   id: Snowflake;
@@ -36,6 +36,7 @@ export type RawGroupDetail = RawGroup & {
   admins: RawMember[]; //admins' user id of the group
   events: RawGroupEvent[];
   defaultRole: DefaultRole;
+  roles: Role[];
   /**
    * What does this group about
    */
@@ -46,6 +47,7 @@ export type GroupDetail = Group & {
   memberCount: number;
   admins: Member[]; //admins' of the group
   events: GroupEvent[];
+  roles: Role[];
   defaultRole: DefaultRole;
   /**
    * What does this group about
@@ -62,6 +64,7 @@ export function GroupDetail(raw: RawGroupDetail): GroupDetail {
     memberCount: raw.memberCount,
     introduction: raw.introduction,
     defaultRole: raw.defaultRole,
+    roles: raw.roles,
   };
 }
 

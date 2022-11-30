@@ -33,6 +33,7 @@ import { useColors } from 'variables/colors';
 
 export function RolePanel({ groupId }: { groupId: Snowflake }) {
   const query = useGroupDetailQuery(groupId);
+  const [name, setName] = useState('');
   const [value, setValue] = useState<UpdateRolesOptions>({});
   const [open, setOpen] = useState<SelectedRole>();
   const panel = usePermissionManagePanel(open, value, setValue);
@@ -42,19 +43,22 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
     <Grid templateColumns="1fr 1fr" gap={3}>
       <QueryStatus loading={<LoadingPanel size="sm" />} query={query} error="Failed to load roles">
         <Flex direction="column" gap={3}>
-          <CreateRolePanel group={groupId} />
-          {group?.roles.map((role) => (
-            <RoleItem
-              selected={open != null && open.type === 'role' && open.role.id === role.id}
-              role={role}
-              onClick={() =>
-                setOpen({
-                  type: 'role',
-                  role: role,
-                })
-              }
-            />
-          ))}
+          <CreateRolePanel group={groupId} name={name} setName={setName} />
+          {group?.roles
+            .filter((role) => role.name.toLowerCase().startsWith(name.toLowerCase()))
+            .map((role) => (
+              <RoleItem
+                key={role.id}
+                selected={open != null && open.type === 'role' && open.role.id === role.id}
+                role={role}
+                onClick={() =>
+                  setOpen({
+                    type: 'role',
+                    role: role,
+                  })
+                }
+              />
+            ))}
           <DefaultRoleItem
             selected={open != null && open.type === 'default_role'}
             role={group?.defaultRole}
@@ -73,8 +77,15 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
   );
 }
 
-function CreateRolePanel({ group }: { group: Snowflake }) {
-  const [name, setName] = useState('');
+function CreateRolePanel({
+  group,
+  name,
+  setName,
+}: {
+  group: Snowflake;
+  name: string;
+  setName: (v: string) => void;
+}) {
   const mutation = useMutation(() => createRole(group, name));
 
   return (
@@ -88,7 +99,12 @@ function CreateRolePanel({ group }: { group: Snowflake }) {
           variant="focus"
           placeholder="Role name..."
         />
-        <Button variant="brand" isLoading={mutation.isLoading} onClick={() => mutation.mutate()}>
+        <Button
+          variant="brand"
+          isLoading={mutation.isLoading}
+          onClick={() => mutation.mutate()}
+          disabled={mutation.isLoading || name.trim().length === 0}
+        >
           Create
         </Button>
       </HStack>

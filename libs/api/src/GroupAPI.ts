@@ -6,7 +6,13 @@ import { DateObject, Snowflake } from './types/common';
 import { Group, GroupDetail, GroupInvite, Member } from './types/group';
 import { GroupEvent } from './types/group';
 import { Reset } from './AccountAPI';
-import { RawChannel } from './types';
+import {
+  GroupPermission,
+  RawChannel,
+  RawGroupDetail,
+  Role,
+  RoleObject as RolesObject,
+} from './types';
 
 export type RawGroup = {
   id: Snowflake;
@@ -15,16 +21,6 @@ export type RawGroup = {
   bannerHash?: string;
   owner: Snowflake;
   channel: RawChannel;
-};
-
-export type RawGroupDetail = RawGroup & {
-  memberCount: number;
-  admins: RawMember[]; //admins' user id of the group
-  events: RawGroupEvent[];
-  /**
-   * What does this group about
-   */
-  introduction?: string;
 };
 
 export type RawMember = RawUser & {
@@ -68,6 +64,12 @@ export type UpdateGroupOptions = {
   //options
   mentionEveryone?: boolean;
 };
+
+export type UpdateRolesOptions = {
+  [role: Snowflake]: Partial<GroupPermission>;
+  defaultRole?: Partial<GroupPermission>;
+};
+
 export async function updateGroup(group: Snowflake, options: UpdateGroupOptions) {
   await callDefault(`/groups/${group}`, {
     method: 'PATCH',
@@ -180,5 +182,31 @@ export function modifyGroupInvite(group: string, once: boolean, expire: Date | n
 export function leaveGroup(group: Snowflake) {
   return callDefault(`/groups/${group}/leave`, {
     method: 'POST',
+  });
+}
+
+export async function fetchRoles(group: Snowflake) {
+  return await callReturn<RolesObject>(`/groups/${group}/roles`, {
+    method: 'GET',
+  });
+}
+
+/**
+ * Update role settings
+ * @returns Updated roles
+ */
+export async function updateRoles(group: Snowflake, options: UpdateRolesOptions) {
+  return await callReturn<Partial<RolesObject>>(`/groups/${group}/roles`, {
+    method: 'PATCH',
+    body: JSON.stringify(options),
+  });
+}
+
+export async function createRole(group: Snowflake, name: string) {
+  return await callReturn<Role>(`/groups/${group}/roles`, {
+    method: 'POST',
+    body: JSON.stringify({
+      name: name,
+    }),
   });
 }

@@ -1,10 +1,11 @@
 import { RawGroupEvent } from '../GroupAPI';
-import { RawGroup, RawGroupDetail, RawGroupInvite, RawMember } from '../GroupAPI';
+import { RawGroup, RawGroupInvite, RawMember } from '../GroupAPI';
 import { Snowflake } from './common';
 import { toBannerUrl, toIconUrl } from '../utils/mediaUtils';
 import { User } from './user';
 import { parseDate } from '../utils/common';
 import { Channel } from './message';
+import { DefaultRole } from './role';
 
 export type Group = {
   id: Snowflake;
@@ -30,10 +31,22 @@ export function Group(raw: RawGroup): Group {
   };
 }
 
+export type RawGroupDetail = RawGroup & {
+  memberCount: number;
+  admins: RawMember[]; //admins' user id of the group
+  events: RawGroupEvent[];
+  defaultRole: DefaultRole;
+  /**
+   * What does this group about
+   */
+  introduction?: string;
+};
+
 export type GroupDetail = Group & {
   memberCount: number;
   admins: Member[]; //admins' of the group
   events: GroupEvent[];
+  defaultRole: DefaultRole;
   /**
    * What does this group about
    */
@@ -48,6 +61,7 @@ export function GroupDetail(raw: RawGroupDetail): GroupDetail {
     events: raw.events.map((e) => GroupEvent(e)),
     memberCount: raw.memberCount,
     introduction: raw.introduction,
+    defaultRole: raw.defaultRole,
   };
 }
 

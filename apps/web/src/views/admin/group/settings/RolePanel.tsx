@@ -27,34 +27,48 @@ import { QueryStatus } from 'components/panel/QueryPanel';
 import { SaveBar } from 'components/panel/SaveBar';
 import { useState } from 'react';
 import { BsPeopleFill, BsThreeDotsVertical } from 'react-icons/bs';
+import { RiTeamLine } from 'react-icons/ri';
 import { CustomCardProps } from 'theme/theme';
 import { useColors } from 'variables/colors';
 
 export function RolePanel({ groupId }: { groupId: Snowflake }) {
-  const group = useGroupDetailQuery(groupId);
+  const query = useGroupDetailQuery(groupId);
   const [value, setValue] = useState<UpdateRolesOptions>({});
   const [open, setOpen] = useState<SelectedRole>();
   const panel = usePermissionManagePanel(open, value, setValue);
+  const group = query.data;
 
   return (
     <Grid templateColumns="1fr 1fr" gap={3}>
-      <QueryStatus loading={<LoadingPanel size="sm" />} query={group} error="Failed to load roles">
+      <QueryStatus loading={<LoadingPanel size="sm" />} query={query} error="Failed to load roles">
         <Flex direction="column" gap={3}>
           <CreateRolePanel group={groupId} />
+          {group?.roles.map((role) => (
+            <RoleItem
+              selected={open != null && open.type === 'role' && open.role.id === role.id}
+              role={role}
+              onClick={() =>
+                setOpen({
+                  type: 'role',
+                  role: role,
+                })
+              }
+            />
+          ))}
           <DefaultRoleItem
             selected={open != null && open.type === 'default_role'}
-            role={group.data?.defaultRole}
+            role={group?.defaultRole}
             onClick={() =>
               setOpen({
                 type: 'default_role',
-                role: group?.data.defaultRole,
+                role: group?.defaultRole,
               })
             }
           />
         </Flex>
       </QueryStatus>
       {panel}
-      <RolesSaveBar group={group.data?.id} value={value} reset={() => setValue({})} />
+      <RolesSaveBar group={query.data?.id} value={value} reset={() => setValue({})} />
     </Grid>
   );
 }
@@ -117,8 +131,39 @@ export function DefaultRoleItem({
   );
 }
 
-export function RoleItem({ role }: { role: Role }) {
-  return;
+export function RoleItem({
+  role,
+  selected,
+  ...props
+}: { role: Role; selected: boolean } & Omit<CustomCardProps, 'role'>) {
+  const { brand, cardBg } = useColors();
+
+  return (
+    <CardButton
+      gap={3}
+      alignItems="center"
+      flexDirection="row"
+      color={selected && 'white'}
+      bg={selected ? brand : cardBg}
+      _hover={
+        selected && {
+          bg: brand,
+        }
+      }
+      {...props}
+    >
+      <Icon as={RiTeamLine} />
+      <Text fontSize="xl" fontWeight="600">
+        {role.name}
+      </Text>
+      <IconButton
+        ml="auto"
+        icon={<BsThreeDotsVertical />}
+        aria-label="Settings"
+        variant={selected && 'brand'}
+      />
+    </CardButton>
+  );
 }
 
 function RolesSaveBar({

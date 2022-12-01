@@ -1,6 +1,15 @@
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
-import { Box, Flex, Grid, Text } from '@chakra-ui/layout';
-import { Input } from '@chakra-ui/react';
+import { Box, Flex, Grid } from '@chakra-ui/layout';
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
+} from '@chakra-ui/react';
 import {
   DefaultRole,
   GroupPermission,
@@ -25,11 +34,10 @@ export type SelectedRole =
 
 export function usePermissionManagePanel(
   selected: SelectedRole | null,
+  onClose: () => void,
   value: UpdateRolesOptions,
   setValue: React.Dispatch<React.SetStateAction<UpdateRolesOptions>>
 ) {
-  if (selected == null) return null;
-
   function change(id: keyof UpdateRolesOptions, v: UpdateRole | UpdateDefaultRole) {
     setValue((prev) => ({
       ...prev,
@@ -40,31 +48,55 @@ export function usePermissionManagePanel(
     }));
   }
 
-  switch (selected.type) {
-    case 'role':
-      return (
-        <Flex direction="column" gap={2}>
-          <RoleManagePanel
-            role={selected.role}
-            value={value[selected.role.id]}
-            onChange={(e) => change(selected.role.id, e)}
-          />
+  function getPanel() {
+    switch (selected?.type) {
+      case 'role':
+        return (
+          <>
+            <RoleManagePanel
+              role={selected.role}
+              value={value[selected.role.id]}
+              onChange={(e) => change(selected.role.id, e)}
+            />
+            <PermissionManagePanel
+              permission={selected.role}
+              value={value[selected.role.id]}
+              onChange={(e) => change(selected.role.id, e)}
+            />
+          </>
+        );
+      case 'default_role':
+        return (
           <PermissionManagePanel
             permission={selected.role}
-            value={value[selected.role.id]}
-            onChange={(e) => change(selected.role.id, e)}
+            value={value.defaultRole}
+            onChange={(e) => change('defaultRole', e)}
           />
-        </Flex>
-      );
-    case 'default_role':
-      return (
-        <PermissionManagePanel
-          permission={selected.role}
-          value={value.defaultRole}
-          onChange={(e) => change('defaultRole', e)}
-        />
-      );
+        );
+    }
   }
+
+  return {
+    asComponent: () => (
+      <Flex direction="column" gap={2}>
+        {getPanel()}
+      </Flex>
+    ),
+    asModal: () => (
+      <Modal isOpen={selected != null} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody display="flex" flexDirection="column" gap={4}>
+            {getPanel()}
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    ),
+  };
 }
 
 export function RoleManagePanel({

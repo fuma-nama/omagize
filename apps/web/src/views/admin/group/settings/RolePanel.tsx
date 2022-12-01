@@ -1,4 +1,13 @@
-import { Button, ButtonGroup, Flex, FormControl, Grid, HStack, Input } from '@chakra-ui/react';
+import {
+  Button,
+  ButtonGroup,
+  Flex,
+  FormControl,
+  Grid,
+  HStack,
+  Input,
+  Show,
+} from '@chakra-ui/react';
 import {
   createRole,
   Snowflake,
@@ -19,8 +28,8 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
   const query = useGroupDetailQuery(groupId);
   const [name, setName] = useState('');
   const [value, setValue] = useState<UpdateRolesOptions>({});
-  const [open, setOpen] = useState<SelectedRole>();
-  const panel = usePermissionManagePanel(open, value, setValue);
+  const [open, setOpen] = useState<SelectedRole | null>();
+  const panel = usePermissionManagePanel(open, () => setOpen(null), value, setValue);
   const group = query.data;
 
   const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
@@ -53,7 +62,7 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
   };
 
   return (
-    <Grid templateColumns="1fr 1fr" gap={3}>
+    <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={3}>
       <QueryStatus loading={<LoadingPanel size="sm" />} query={query} error="Failed to load roles">
         <Flex direction="column" gap={3}>
           <CreateRolePanel group={groupId} name={name} setName={setName} />
@@ -79,7 +88,8 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
           />
         </Flex>
       </QueryStatus>
-      {panel}
+      <Show above="lg">{panel.asComponent()}</Show>
+      <Show below="lg">{panel.asModal()}</Show>
       <RolesSaveBar group={query.data?.id} value={value} reset={() => setValue({})} />
     </Grid>
   );

@@ -6,13 +6,7 @@ import { DateObject, Snowflake } from './types/common';
 import { Group, GroupDetail, GroupInvite, Member } from './types/group';
 import { GroupEvent } from './types/group';
 import { Reset } from './AccountAPI';
-import {
-  GroupPermission,
-  RawChannel,
-  RawGroupDetail,
-  Role,
-  RoleObject as RolesObject,
-} from './types';
+import { RawChannel, RawGroupDetail, Role, DefaultRole, RoleObject as RolesObject } from './types';
 
 export type RawGroup = {
   id: Snowflake;
@@ -66,9 +60,12 @@ export type UpdateGroupOptions = {
 };
 
 export type UpdateRolesOptions = {
-  [role: Snowflake]: Partial<GroupPermission>;
-  defaultRole?: Partial<GroupPermission>;
+  [role: Snowflake]: UpdateRole;
+  defaultRole?: UpdateDefaultRole;
 };
+
+export type UpdateRole = Partial<Omit<Role, 'id' | 'group'>>;
+export type UpdateDefaultRole = Partial<Omit<DefaultRole, 'group'>>;
 
 export async function updateGroup(group: Snowflake, options: UpdateGroupOptions) {
   await callDefault(`/groups/${group}`, {

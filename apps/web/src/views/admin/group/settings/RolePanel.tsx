@@ -49,7 +49,7 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
             .map((role) => (
               <RoleItem
                 key={role.id}
-                selected={open != null && open.type === 'role' && open.role.id === role.id}
+                selected={open?.type === 'role' && open.role.id === role.id}
                 role={role}
                 onClick={() =>
                   setOpen({
@@ -60,7 +60,7 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
               />
             ))}
           <DefaultRoleItem
-            selected={open != null && open.type === 'default_role'}
+            selected={open?.type === 'default_role'}
             role={group?.defaultRole}
             onClick={() =>
               setOpen({

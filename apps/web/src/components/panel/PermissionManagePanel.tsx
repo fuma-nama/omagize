@@ -1,8 +1,17 @@
-import { FormControl } from '@chakra-ui/form-control';
-import { Flex } from '@chakra-ui/layout';
-import { DefaultRole, GroupPermission, Role, UpdateRolesOptions } from '@omagize/api';
+import { FormControl, FormLabel } from '@chakra-ui/form-control';
+import { Box, Flex, Grid, Text } from '@chakra-ui/layout';
+import { Input } from '@chakra-ui/react';
+import {
+  DefaultRole,
+  GroupPermission,
+  Role,
+  UpdateDefaultRole,
+  UpdateRole,
+  UpdateRolesOptions,
+} from '@omagize/api';
 import CustomCard from 'components/card/Card';
 import SwitchField from 'components/fields/SwitchField';
+import { useColors } from 'variables/colors';
 
 export type SelectedRole =
   | {
@@ -21,7 +30,7 @@ export function usePermissionManagePanel(
 ) {
   if (selected == null) return null;
 
-  function change(id: keyof UpdateRolesOptions, v: Partial<GroupPermission>) {
+  function change(id: keyof UpdateRolesOptions, v: UpdateRole | UpdateDefaultRole) {
     setValue((prev) => ({
       ...prev,
       [id]: {
@@ -34,11 +43,18 @@ export function usePermissionManagePanel(
   switch (selected.type) {
     case 'role':
       return (
-        <PermissionManagePanel
-          permission={selected.role}
-          value={value[selected.role.id]}
-          onChange={(e) => change(selected.role.id, e)}
-        />
+        <Flex direction="column" gap={2}>
+          <RoleManagePanel
+            role={selected.role}
+            value={value[selected.role.id]}
+            onChange={(e) => change(selected.role.id, e)}
+          />
+          <PermissionManagePanel
+            permission={selected.role}
+            value={value[selected.role.id]}
+            onChange={(e) => change(selected.role.id, e)}
+          />
+        </Flex>
       );
     case 'default_role':
       return (
@@ -49,6 +65,35 @@ export function usePermissionManagePanel(
         />
       );
   }
+}
+
+export function RoleManagePanel({
+  role,
+  value,
+  onChange,
+}: {
+  role: Role;
+  value?: UpdateRole;
+  onChange: (update: UpdateRole) => void;
+}) {
+  const { brand, textColorSecondary } = useColors();
+
+  return (
+    <Grid templateColumns="10px 1fr" gap={2}>
+      <Box bg={brand} rounded="lg" />
+      <FormControl as={Flex} direction="column">
+        <FormLabel htmlFor="role-name" color={textColorSecondary}>
+          Role Name
+        </FormLabel>
+        <Input
+          id="role-name"
+          variant="flushed"
+          value={value?.name ?? role.name}
+          onChange={(e) => onChange({ name: e.target.value })}
+        />
+      </FormControl>
+    </Grid>
+  );
 }
 
 export function PermissionManagePanel({

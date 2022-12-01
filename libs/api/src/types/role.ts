@@ -9,6 +9,7 @@ export interface Role extends GroupPermission {
   id: Snowflake;
   name: string;
   group: Snowflake;
+  position: number;
 }
 
 export interface DefaultRole extends GroupPermission {

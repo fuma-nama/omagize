@@ -2,6 +2,7 @@ import { Flex, forwardRef, Icon, IconButton, Text } from '@chakra-ui/react';
 import { DefaultRole, Role } from '@omagize/api';
 import { CardButton } from 'components/card/Card';
 import { SelectedRole } from 'components/panel/PermissionManagePanel';
+import { useMemo } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { BsPeopleFill, BsThreeDotsVertical } from 'react-icons/bs';
 import { RiTeamLine } from 'react-icons/ri';
@@ -17,6 +18,8 @@ export function Roles({
   setSelected: (v: SelectedRole) => void;
   roles: Role[];
 }) {
+  const sorted_roles = useMemo(() => roles.sort((a, b) => a.position - b.position), [roles]);
+
   return (
     <Droppable droppableId="roles">
       {(provided, snapshot) => (
@@ -26,8 +29,8 @@ export function Roles({
           ref={provided.innerRef}
           {...provided.droppableProps}
         >
-          {roles.map((role, i) => (
-            <Draggable key={role.id} draggableId={role.id} index={i}>
+          {sorted_roles.map((role, i) => (
+            <Draggable key={role.id} draggableId={role.id} index={role.position}>
               {(provided, snapshot) => (
                 <RoleItem
                   ref={provided.innerRef}

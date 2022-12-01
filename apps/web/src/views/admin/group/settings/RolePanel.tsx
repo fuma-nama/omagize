@@ -1,35 +1,19 @@
-import {
-  Button,
-  ButtonGroup,
-  Flex,
-  FormControl,
-  Grid,
-  HStack,
-  Icon,
-  IconButton,
-  Input,
-  Text,
-} from '@chakra-ui/react';
+import { Button, ButtonGroup, Flex, FormControl, Grid, HStack, Input } from '@chakra-ui/react';
 import {
   createRole,
-  DefaultRole,
-  Role,
   Snowflake,
   updateRoles,
   UpdateRolesOptions,
   useGroupDetailQuery,
 } from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
-import { CardButton } from 'components/card/Card';
 import LoadingPanel from 'components/panel/LoadingPanel';
 import { SelectedRole, usePermissionManagePanel } from 'components/panel/PermissionManagePanel';
 import { QueryStatus } from 'components/panel/QueryPanel';
 import { SaveBar } from 'components/panel/SaveBar';
 import { useState } from 'react';
-import { BsPeopleFill, BsThreeDotsVertical } from 'react-icons/bs';
-import { RiTeamLine } from 'react-icons/ri';
-import { CustomCardProps } from 'theme/theme';
-import { useColors } from 'variables/colors';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { DefaultRoleItem, Roles } from './Roles';
 
 export function RolePanel({ groupId }: { groupId: Snowflake }) {
   const query = useGroupDetailQuery(groupId);
@@ -42,23 +26,17 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
   return (
     <Grid templateColumns="1fr 1fr" gap={3}>
       <QueryStatus loading={<LoadingPanel size="sm" />} query={query} error="Failed to load roles">
-        <Flex direction="column" gap={3}>
+        <Flex direction="column" gap={3} overflow="auto">
           <CreateRolePanel group={groupId} name={name} setName={setName} />
-          {group?.roles
-            .filter((role) => role.name.toLowerCase().startsWith(name.toLowerCase()))
-            .map((role) => (
-              <RoleItem
-                key={role.id}
-                selected={open?.type === 'role' && open.role.id === role.id}
-                role={role}
-                onClick={() =>
-                  setOpen({
-                    type: 'role',
-                    role: role,
-                  })
-                }
-              />
-            ))}
+          <DragDropContext onDragEnd={() => {}}>
+            <Roles
+              roles={group?.roles.filter((role) =>
+                role.name.toLowerCase().startsWith(name.toLowerCase())
+              )}
+              selected={open}
+              setSelected={setOpen}
+            />
+          </DragDropContext>
           <DefaultRoleItem
             selected={open?.type === 'default_role'}
             role={group?.defaultRole}
@@ -109,76 +87,6 @@ function CreateRolePanel({
         </Button>
       </HStack>
     </FormControl>
-  );
-}
-
-export function DefaultRoleItem({
-  role,
-  selected,
-  ...props
-}: { role: DefaultRole; selected: boolean } & Omit<CustomCardProps, 'role'>) {
-  const { brand, cardBg } = useColors();
-
-  return (
-    <CardButton
-      gap={3}
-      alignItems="center"
-      flexDirection="row"
-      color={selected && 'white'}
-      bg={selected ? brand : cardBg}
-      _hover={
-        selected && {
-          bg: brand,
-        }
-      }
-      {...props}
-    >
-      <Icon as={BsPeopleFill} />
-      <Text fontSize="xl" fontWeight="600">
-        All Members
-      </Text>
-      <IconButton
-        ml="auto"
-        icon={<BsThreeDotsVertical />}
-        aria-label="Settings"
-        variant={selected && 'brand'}
-      />
-    </CardButton>
-  );
-}
-
-export function RoleItem({
-  role,
-  selected,
-  ...props
-}: { role: Role; selected: boolean } & Omit<CustomCardProps, 'role'>) {
-  const { brand, cardBg } = useColors();
-
-  return (
-    <CardButton
-      gap={3}
-      alignItems="center"
-      flexDirection="row"
-      color={selected && 'white'}
-      bg={selected ? brand : cardBg}
-      _hover={
-        selected && {
-          bg: brand,
-        }
-      }
-      {...props}
-    >
-      <Icon as={RiTeamLine} />
-      <Text fontSize="xl" fontWeight="600">
-        {role.name}
-      </Text>
-      <IconButton
-        ml="auto"
-        icon={<BsThreeDotsVertical />}
-        aria-label="Settings"
-        variant={selected && 'brand'}
-      />
-    </CardButton>
   );
 }
 

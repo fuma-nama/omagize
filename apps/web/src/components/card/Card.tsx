@@ -62,16 +62,20 @@ const CustomCard = forwardRef<CustomCardProps, 'div'>((props, ref) => {
 });
 
 export default CustomCard;
-export function CardButton(props: CustomCardProps) {
+
+export const CardButton = forwardRef<CustomCardProps, 'div'>((props, ref) => {
   const hoverBg = useItemHoverBg();
+
   return (
     <CustomCard
-      {...props}
+      ref={ref}
       transition="0.2s all"
+      cursor="pointer"
       _hover={{ cursor: 'pointer', ...hoverBg, ...props._hover }}
+      {...props}
     />
   );
-}
+});
 
 export function TagCard(props: StackProps) {
   return (

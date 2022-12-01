@@ -1,3 +1,4 @@
+import { dark, light } from './../../variables/colors';
 import { inputAnatomy } from '@chakra-ui/anatomy';
 import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
@@ -39,9 +40,28 @@ export const inputStyles = defineMultiStyleConfig({
   })),
 
   variants: {
-    flushed: definePartsStyle((props) => ({
+    flushed: definePartsStyle(() => ({
       field: {
-        borderBottomColor: mode('secondaryGray.400', 'navy.600')(props),
+        _focus: {
+          _dark: {
+            borderColor: dark.brand,
+          },
+          _light: {
+            borderColor: light.brand,
+          },
+          boxShadow: 'none',
+        },
+
+        fontSize: '2xl',
+        fontWeight: '600',
+        _light: {
+          color: light.textColorPrimary,
+          borderBottomColor: 'secondaryGray.400',
+        },
+        _dark: {
+          color: dark.textColorPrimary,
+          borderBottomColor: 'navy.600',
+        },
       },
     })),
     main: definePartsStyle({

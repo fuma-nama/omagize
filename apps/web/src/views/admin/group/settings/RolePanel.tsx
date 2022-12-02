@@ -34,30 +34,30 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
 
   const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
     if (destination == null || source.index === destination.index) return;
-    const updates = new Map<Snowflake, number>([[draggableId, destination.index]]);
+    const updates = {
+      [draggableId]: destination.index,
+    };
     const type = source.index > destination.index ? 'forward' : 'backward';
 
     for (const role of group.roles) {
-      const position = value[role.id]?.position ?? role.position;
+      const position = value?.positions?.[role.id] ?? role.position;
 
       if (type === 'forward' && position >= destination.index && position < source.index) {
-        updates.set(role.id, position + 1);
+        updates[role.id] = position + 1;
       }
       if (type === 'backward' && position > source.index && position <= destination.index) {
-        updates.set(role.id, position - 1);
+        updates[role.id] = position - 1;
       }
     }
 
     setValue((prev) => {
-      const clone = { ...prev };
-      for (const [id, position] of updates) {
-        clone[id] = {
-          ...prev[id],
-          position,
-        };
-      }
-
-      return clone;
+      return {
+        ...prev,
+        positions: {
+          ...prev.positions,
+          ...updates,
+        },
+      };
     });
   };
 
@@ -70,7 +70,8 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
             <Roles
               roles={group?.roles.map((role) => ({
                 ...role,
-                ...value[role.id],
+                ...value.roles?.[role.id],
+                position: value.positions?.[role.id] ?? role.position,
               }))}
               selected={open}
               setSelected={setOpen}

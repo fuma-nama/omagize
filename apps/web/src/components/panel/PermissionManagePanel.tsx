@@ -14,6 +14,7 @@ import {
   DefaultRole,
   GroupPermission,
   Role,
+  Snowflake,
   UpdateDefaultRole,
   UpdateRole,
   UpdateRolesOptions,
@@ -38,12 +39,27 @@ export function usePermissionManagePanel(
   value: UpdateRolesOptions,
   setValue: React.Dispatch<React.SetStateAction<UpdateRolesOptions>>
 ) {
-  function change(id: keyof UpdateRolesOptions, v: UpdateRole | UpdateDefaultRole) {
+  const roles = value.roles ?? {};
+
+  function changeDefault(v: UpdateDefaultRole) {
     setValue((prev) => ({
       ...prev,
-      [id]: {
-        ...prev[id],
+      defaultRole: {
+        ...prev.defaultRole,
         ...v,
+      },
+    }));
+  }
+
+  function changeRole(id: Snowflake, v: UpdateRole) {
+    setValue((prev) => ({
+      ...prev,
+      roles: {
+        ...prev.roles,
+        [id]: {
+          ...prev.roles?.[id],
+          ...v,
+        },
       },
     }));
   }
@@ -55,13 +71,13 @@ export function usePermissionManagePanel(
           <>
             <RoleManagePanel
               role={selected.role}
-              value={value[selected.role.id]}
-              onChange={(e) => change(selected.role.id, e)}
+              value={roles[selected.role.id]}
+              onChange={(e) => changeRole(selected.role.id, e)}
             />
             <PermissionManagePanel
               permission={selected.role}
-              value={value[selected.role.id]}
-              onChange={(e) => change(selected.role.id, e)}
+              value={roles[selected.role.id]}
+              onChange={(e) => changeRole(selected.role.id, e)}
             />
           </>
         );
@@ -70,7 +86,7 @@ export function usePermissionManagePanel(
           <PermissionManagePanel
             permission={selected.role}
             value={value.defaultRole}
-            onChange={(e) => change('defaultRole', e)}
+            onChange={(e) => changeDefault(e)}
           />
         );
     }

@@ -60,11 +60,24 @@ export type UpdateGroupOptions = {
 };
 
 export type UpdateRolesOptions = {
-  [role: Snowflake]: UpdateRole;
+  positions?: {
+    [key: Snowflake]: number;
+  };
+  roles?: {
+    [key: Snowflake]: UpdateRole;
+  };
   defaultRole?: UpdateDefaultRole;
 };
 
-export type UpdateRole = Partial<Omit<Role, 'id' | 'group'>>;
+export type UpdateRolesOptionsMapped = {
+  positions?: Array<{ id: Snowflake; position: number }>;
+  roles?: {
+    [key: Snowflake]: UpdateRole;
+  };
+  defaultRole?: UpdateDefaultRole;
+};
+
+export type UpdateRole = Partial<Omit<Role, 'id' | 'group' | 'position'>>;
 export type UpdateDefaultRole = Partial<Omit<DefaultRole, 'group'>>;
 
 export async function updateGroup(group: Snowflake, options: UpdateGroupOptions) {
@@ -193,9 +206,16 @@ export async function fetchRoles(group: Snowflake) {
  * @returns Updated roles
  */
 export async function updateRoles(group: Snowflake, options: UpdateRolesOptions) {
+  const mapped: UpdateRolesOptionsMapped = {
+    ...options,
+    positions:
+      options.positions != null
+        ? Object.entries(options.positions).map(([id, position]) => ({ id, position }))
+        : null,
+  };
   return await callReturn<Partial<RolesObject>>(`/groups/${group}/roles`, {
     method: 'PATCH',
-    body: JSON.stringify(options),
+    body: JSON.stringify(mapped),
   });
 }
 

@@ -203,7 +203,7 @@ export async function fetchRoles(group: Snowflake) {
 
 /**
  * Update role settings
- * @returns Updated roles
+ * @returns all roles
  */
 export async function updateRoles(group: Snowflake, options: UpdateRolesOptions) {
   const mapped: UpdateRolesOptionsMapped = {
@@ -213,7 +213,7 @@ export async function updateRoles(group: Snowflake, options: UpdateRolesOptions)
         ? Object.entries(options.positions).map(([id, position]) => ({ id, position }))
         : null,
   };
-  return await callReturn<Partial<RolesObject>>(`/groups/${group}/roles`, {
+  return await callReturn<RolesObject>(`/groups/${group}/roles`, {
     method: 'PATCH',
     body: JSON.stringify(mapped),
   });

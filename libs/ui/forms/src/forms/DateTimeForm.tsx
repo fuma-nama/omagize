@@ -1,6 +1,5 @@
 import { SimpleGrid } from '@chakra-ui/react';
-import { DatePicker } from '../../../components/src/picker/DatePicker';
-import { TimePicker, TimeValue } from '../../../components/src/picker/TimePicker';
+import { DatePicker, TimePicker, TimeValue } from '@omagize/ui/components';
 
 export function DateTimeForm(props: {
   min?: Date;

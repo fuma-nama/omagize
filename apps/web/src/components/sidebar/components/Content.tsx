@@ -8,7 +8,7 @@ import { SidebarItem } from '@omagize/utils/route-utils';
 import ActionBar from './ActionBar';
 import { useUserStore } from '@omagize/data-access-store';
 import { Snowflake } from '@omagize/api';
-import { ChatGroup, ChatGroupSkeleton } from '@omagize/ui/items';
+import { ChatGroupItem, ChatGroupSkeleton } from '@omagize/views/shared';
 
 function SidebarContent({
   items,
@@ -36,7 +36,7 @@ function SidebarContent({
         <Flex direction="column" ps="10px" gap={3}>
           {groups != null ? (
             groups.map((group) => (
-              <ChatGroup
+              <ChatGroupItem
                 key={group.id}
                 group={group}
                 active={selectedGroup === group.id}

@@ -5,7 +5,7 @@ import Banner from './components/Banner';
 import { useGroupEventsQuery, useSelfUser } from '@omagize/data-access-api';
 import Friends from './components/Friends';
 import { Carousel, LeftButton, Provider, RightButton } from 'chakra-ui-carousel';
-import { GlobalGroupEventItem, GroupEventSkeleton } from '@omagize/ui/items';
+import { GlobalGroupEventItem, GroupEventSkeleton } from '@omagize/views/shared';
 
 export function HomeView() {
   // Chakra Color Mode

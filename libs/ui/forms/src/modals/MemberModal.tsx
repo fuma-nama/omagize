@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { Snowflake } from '@omagize/api';
 import { useGroupMembersQuery } from '@omagize/data-access-api';
-import { UserItem } from '@omagize/ui/items';
+import { UserItem } from '@omagize/views/shared';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 export function MemberModal(props: { isOpen: boolean; onClose: () => void; group: Snowflake }) {

@@ -15,7 +15,7 @@ import {
 import { useColorModeValue } from '@chakra-ui/system';
 import { BiCheckCircle, BiErrorCircle, BiSearch } from 'react-icons/bi';
 import { useColors } from '@omagize/ui/theme';
-import { SmallUserItem } from '@omagize/ui/items';
+import { SmallUserItem } from '@omagize/views/shared';
 import { Placeholder } from '@omagize/ui/components';
 import {
   SearchBar,

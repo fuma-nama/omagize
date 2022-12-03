@@ -1,6 +1,5 @@
 import { Button, Flex, Text, useColorModeValue, VStack } from '@chakra-ui/react';
-import React from 'react';
-import { UserItem } from '@omagize/ui/items';
+import { UserItem } from '@omagize/views/shared';
 import { GroupDetail } from '@omagize/api';
 
 export default function AdminsCard({ group }: { group: GroupDetail }) {

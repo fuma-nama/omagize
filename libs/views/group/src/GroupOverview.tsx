@@ -11,7 +11,7 @@ import { MessagesPreview } from '@omagize/views/chat';
 import Banner from './components/Banner';
 import { useGroupModals } from './modals/useGroupModals';
 import { LoadingPanel, ErrorPanel, Card, AutoImage, CardButton } from '@omagize/ui/components';
-import { GroupEventItem } from '@omagize/ui/items';
+import { GroupEventItem } from '@omagize/views/shared';
 import { useColors } from '@omagize/ui/theme';
 import { useSelected } from '@omagize/utils/route-utils';
 import { useGroupDetailQuery } from '@omagize/data-access-api';

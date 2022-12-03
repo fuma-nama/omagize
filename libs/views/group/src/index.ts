@@ -1,3 +1,3 @@
 export * from './GroupOverview';
-export * from './navbar';
+export * from './GroupNavbar';
 export * from './settings';

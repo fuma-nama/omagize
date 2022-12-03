@@ -2,7 +2,7 @@ import { Avatar, Box, SkeletonCircle, SkeletonText, Text } from '@chakra-ui/reac
 import { Group } from '@omagize/api';
 import { Card, FadeImage } from '@omagize/ui/components';
 
-export function ChatGroup({
+export function ChatGroupItem({
   active,
   group,
   onSelect,

@@ -2,7 +2,7 @@ import { Avatar, Box, Flex, Input, Text, Textarea } from '@chakra-ui/react';
 import { GroupDetail } from '@omagize/api';
 import { useMemberQuery } from '@omagize/data-access-api';
 import { useModalImageCropper, AutoImage, Pick, useImagePicker } from '@omagize/ui/components';
-import { SmallUserItem } from '@omagize/ui/items';
+import { SmallUserItem } from '@omagize/views/shared';
 import { useColors } from '@omagize/ui/theme';
 import { BannerFormat, AvatarFormat } from '@omagize/utils/image';
 import { SettingsProps } from './index';

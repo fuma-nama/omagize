@@ -15,7 +15,7 @@ import {
 import { FriendRequest, FriendRequestType, Relation, RelationShip } from '@omagize/api';
 import { useUserStore } from '@omagize/data-access-store';
 import { TabButton, Holder, Placeholder } from '@omagize/ui/components';
-import { UserItemSkeleton, FriendItem, FriendRequestItem } from '@omagize/ui/items';
+import { UserItemSkeleton, FriendItem, FriendRequestItem } from '@omagize/views/shared';
 import { useColors } from '@omagize/ui/theme';
 import { AddFriendModal } from '@omagize/ui/forms';
 import { BiSad } from 'react-icons/bi';

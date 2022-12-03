@@ -19,20 +19,13 @@ export function onlyTime(date: Date): Date {
 }
 
 export function stringOfTime(date: Date): string {
-  const now = new Date(Date.now());
-  const isNow = now.getDate() === date.getDate() && now.getMinutes() == date.getMinutes();
-
-  if (isNow) {
-    return 'Now';
-  } else {
-    const dateText = stringOfDate(date);
-    return (
-      `${dateText} ` +
-      date.toLocaleTimeString(['en-us'], {
-        timeStyle: 'short',
-      })
-    );
-  }
+  const dateText = stringOfDate(date);
+  return (
+    `${dateText} ` +
+    date.toLocaleTimeString(['en-us'], {
+      timeStyle: 'short',
+    })
+  );
 }
 
 export function stringOfDate(date: Date) {

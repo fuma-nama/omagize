@@ -22,7 +22,6 @@ export function MessagesPreview({ channel, limit }: { channel: Snowflake; limit:
     return items;
   }, [pages, limit]);
 
-  console.log(messages);
   return (
     <Flex direction="column-reverse" maxH="1000px" overflow="auto" gap={5}>
       <QueryStatus

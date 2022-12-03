@@ -1,2 +1,2 @@
 export * from './MyAssetsView';
-export * from './navbar';
+export * from './MyAssetsNavbar';

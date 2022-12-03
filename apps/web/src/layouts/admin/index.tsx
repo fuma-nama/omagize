@@ -1,14 +1,16 @@
 // Chakra imports
 import { Box, Flex } from '@chakra-ui/react';
+import { AdminNavbar } from '@omagize/ui/components';
+import { getActiveSidebarItem } from '@omagize/utils/route-utils';
 // Layout components
-import Navbar from 'components/navbar/NavbarAdmin';
-import { Outlet } from 'react-router-dom';
-import { useActiveSidebarItem } from 'utils/RouteUtil';
+import { Outlet, useLocation } from 'react-router-dom';
+import { layouts } from '../../layouts';
+import items from '../../sidebar';
 
 export default function Dashboard() {
   document.documentElement.dir = 'ltr';
-
-  const activeItem = useActiveSidebarItem();
+  const location = useLocation();
+  const activeItem = getActiveSidebarItem(items, location);
 
   return (
     <Flex
@@ -26,7 +28,7 @@ export default function Dashboard() {
       transitionProperty="top, bottom, width"
       transitionTimingFunction="linear, linear, ease"
     >
-      <Navbar brandText={activeItem?.name} />
+      <AdminNavbar brandText={activeItem?.name} layoutes={layouts} />
       <Box mx="auto" w="full" pe="20px" padding={0} flex="1 1" mt="50px">
         <Outlet />
       </Box>

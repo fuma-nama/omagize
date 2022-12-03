@@ -11,7 +11,10 @@ export default defineConfig({
         plugins: ['@emotion/babel-plugin'],
       },
     }),
-    viteTsconfigPaths(),
+    viteTsconfigPaths({
+      root: '../../',
+      projects: ['tsconfig.base.json'],
+    }),
     svgrPlugin(),
   ],
   server: {

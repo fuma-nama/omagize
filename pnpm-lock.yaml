@@ -79,6 +79,7 @@ importers:
       react-infinite-scroll-component: ^6.1.0
       react-infinite-scroll-hook: ^4.0.4
       react-router-dom: ^6.3.0
+      react-select: ^5.7.0
       react-table: ^7.8.0
       react-test-renderer: 18.2.0
       reconnecting-websocket: ^4.4.0
@@ -135,6 +136,7 @@ importers:
       react-infinite-scroll-component: 6.1.0_react@18.2.0
       react-infinite-scroll-hook: 4.0.4_react@18.2.0
       react-router-dom: 6.4.3_biqbaboplfbrettd7655fr4n2y
+      react-select: 5.7.0_o6ujcdmwt6ni5mv4wdf5n6tg3y
       react-table: 7.8.0_react@18.2.0
       reconnecting-websocket: 4.4.0
       regenerator-runtime: 0.13.7
@@ -6674,7 +6676,7 @@ packages:
       '@emotion/react': 11.10.5_cuziicjcvwawlf5iuhzacuhqcy
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      react-select: 5.6.1_o6ujcdmwt6ni5mv4wdf5n6tg3y
+      react-select: 5.7.0_o6ujcdmwt6ni5mv4wdf5n6tg3y
     transitivePeerDependencies:
       - '@babel/core'
       - '@types/react'
@@ -12015,8 +12017,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-select/5.6.1_o6ujcdmwt6ni5mv4wdf5n6tg3y:
-    resolution: {integrity: sha512-dYNRswtxUHW+F1Sc0HnxO5ryecPIAsG0+Cwyq5EIXZJBxCxUG2hFfQz41tc++30/2ISuuPglDikc4hEb4NsiuA==}
+  /react-select/5.7.0_o6ujcdmwt6ni5mv4wdf5n6tg3y:
+    resolution: {integrity: sha512-lJGiMxCa3cqnUr2Jjtg9YHsaytiZqeNOKeibv6WF5zbK/fPegZ1hg3y/9P1RZVLhqBTs0PfqQLKuAACednYGhQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0

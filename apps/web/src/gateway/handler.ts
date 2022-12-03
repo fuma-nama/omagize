@@ -1,5 +1,3 @@
-import { RelationShip } from './../../../../libs/api/src/types/Friend';
-import { useUserStore } from 'stores/UserStore';
 import {
   FriendRemovedEvent,
   addGroupEvent,
@@ -29,7 +27,9 @@ import {
   FriendRequestType,
   Relation,
   MessageRemovedEvent,
+  RelationShip,
 } from '@omagize/api';
+import { useUserStore } from '@omagize/data-access-store';
 import { InfiniteData } from '@tanstack/react-query';
 
 export function handleEvent(message: GatewayMessage<unknown>) {

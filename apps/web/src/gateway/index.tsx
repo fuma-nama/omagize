@@ -7,12 +7,10 @@ import {
   onSignin,
   ReadyPayload,
 } from '@omagize/api';
+import { applyReadyPayload, useUserStore, useChatStore } from '@omagize/data-access-store';
 import { Auth } from 'firebase/auth';
 import { useEffect } from 'react';
 import { CloseEvent, ErrorEvent } from 'reconnecting-websocket/dist/events';
-import { useChatStore } from 'stores/ChatStore';
-import { applyReadyPayload } from 'stores/hooks';
-import { useUserStore } from 'stores/UserStore';
 import { handleEvent } from './handler';
 
 const listeners: Set<Partial<GatewayListener>> = new Set();

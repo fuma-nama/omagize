@@ -1,0 +1,24 @@
+{
+  "name": "views-chat",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/views/chat/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/views/chat/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/views/chat"],
+      "options": {
+        "jestConfig": "libs/views/chat/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

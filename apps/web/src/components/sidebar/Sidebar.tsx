@@ -1,30 +1,27 @@
-import React from 'react';
-
 // chakra imports
 import {
   Box,
-  Flex,
   Drawer,
   DrawerBody,
-  Icon,
   useColorModeValue,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
 } from '@chakra-ui/react';
-import Content from 'components/sidebar/components/Content';
-import { renderThumb, renderTrack, renderView } from 'components/layout/Scrollbar';
+import Content from './components/Content';
 
 // Assets
-import { IoMenuOutline } from 'react-icons/io5';
-import { usePageStore } from 'stores/PageStore';
+import { usePageStore } from '@omagize/data-access-store';
+import { SidebarItem, useSelected } from '@omagize/utils/route-utils';
 
-function Sidebar({ items }: { items: SidebarItem[]; [x: string]: any }) {
-  let variantChange = '0.2s linear';
-  let shadow = useColorModeValue('14px 17px 40px 4px rgba(112, 144, 176, 0.08)', 'unset');
+export function Sidebar({ items }: { items: SidebarItem[] }) {
+  const { selectedGroup, setSelectedGroup } = useSelected();
+
+  const variantChange = '0.2s linear';
+  const shadow = useColorModeValue('14px 17px 40px 4px rgba(112, 144, 176, 0.08)', 'unset');
   // Chakra Color Mode
-  let sidebarBg = useColorModeValue('white', 'navy.800');
-  let sidebarMargins = '0px';
+  const sidebarBg = useColorModeValue('white', 'navy.800');
+  const sidebarMargins = '0px';
 
   // SIDEBAR
   return (
@@ -39,37 +36,17 @@ function Sidebar({ items }: { items: SidebarItem[]; [x: string]: any }) {
         overflowX="hidden"
         boxShadow={shadow}
       >
-          <Content items={items} />
+        <Content items={items} selected={selectedGroup} onSelect={setSelectedGroup} />
       </Box>
     </Box>
   );
 }
 
-export function SidebarTrigger() {
-  const menuColor = useColorModeValue('gray.400', 'white');
-  const setOpen = usePageStore((s) => s.setSidebarIsOpen);
-
-  return (
-    <Flex display={{ sm: 'flex', xl: 'none' }} alignItems="center">
-      <Flex w="max-content" h="max-content" onClick={() => setOpen(true)}>
-        <Icon
-          as={IoMenuOutline}
-          color={menuColor}
-          my="auto"
-          w="20px"
-          h="20px"
-          me="10px"
-          _hover={{ cursor: 'pointer' }}
-        />
-      </Flex>
-    </Flex>
-  );
-}
-
 // FUNCTIONS
 export function SidebarResponsive({ items }: { items: SidebarItem[] }) {
-  let sidebarBackgroundColor = useColorModeValue('white', 'navy.800');
+  const sidebarBackgroundColor = useColorModeValue('white', 'navy.800');
   const [isOpen, setOpen] = usePageStore((s) => [s.sidebarIsOpen, s.setSidebarIsOpen]);
+  const { selectedGroup, setSelectedGroup } = useSelected();
 
   return (
     <Drawer
@@ -86,7 +63,7 @@ export function SidebarResponsive({ items }: { items: SidebarItem[] }) {
           _hover={{ boxShadow: 'none' }}
         />
         <DrawerBody maxW="285px" px="0rem" pb="0">
-            <Content items={items} />
+          <Content items={items} selected={selectedGroup} onSelect={setSelectedGroup} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>

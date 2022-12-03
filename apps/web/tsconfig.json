@@ -16,14 +16,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "paths": {
-      "@omagize/api": ["libs/api/src/index.ts"],
-      "@omagize/utils": ["libs/utils/src/index.ts"],
-      "@omagize/chakra-ui-steps": ["libs/chakra-ui-steps/src/index.ts"],
-      "*": ["apps/web/src/*"]
-    }
+    "jsx": "react-jsx"
   },
-  "include": ["./src"],
+  "include": [
+    "./src",
+    "../../libs/utils/markdown/src/markdown",
+    "../../libs/ui/components/src/fields/SidebarTrigger.tsx"
+  ],
   "extends": "../../tsconfig.base.json"
 }

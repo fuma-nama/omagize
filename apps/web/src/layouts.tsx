@@ -4,19 +4,13 @@ import { ReactElement, ReactNode } from 'react';
 import PageLayout from './layouts/PageLayout';
 import ChatLayout from './layouts/chat';
 import { Navigate } from 'react-router-dom';
-import GroupOverview from 'views/admin/group';
-import GroupSettings from 'views/admin/group/settings';
-import GroupChat from 'views/admin/chat/group/GroupChat';
-import { GroupNavbar } from 'views/admin/group/navbar/GroupNavbar';
-import SignIn from './views/auth';
-import MainDashboard from 'views/admin/default';
-import NFTMarketplace from 'views/admin/marketplace';
-import Profile from 'views/admin/profile';
-import { EmailVerifiedHandle } from 'views/auth/signup/verify';
-import PrivateChat from 'views/admin/chat/dm/PrivateChat';
-import { PrivateChatNavbar } from 'views/admin/chat/dm/PrivateChatNavbar';
-import MyAssets from 'views/admin/marketplace/me';
-import MyAssetsNavbar from 'views/admin/marketplace/me/navbar';
+import { AuthView } from '@omagize/views/auth';
+import { EmailVerifiedHandle } from 'libs/views/auth/src/signup/verify';
+import { GroupChatView, PrivateChatNavbar, PrivateChatView } from '@omagize/views/chat';
+import { HomeView } from '@omagize/views/home';
+import { MarketplaceView, MyAssets, MyAssetsNavbar } from '@omagize/views/marketplace';
+import { ProfileView } from '@omagize/views/profile';
+import { GroupNavbar, GroupOverview, GroupSettingsView } from '@omagize/views/group';
 
 export const layouts: RootLayout[] = [
   {
@@ -29,7 +23,7 @@ export const layouts: RootLayout[] = [
       },
       {
         path: 'signin',
-        component: <SignIn />,
+        component: <AuthView />,
       },
       {
         path: 'verified',
@@ -52,12 +46,12 @@ export const layouts: RootLayout[] = [
         subLayouts: [
           {
             path: 'users/:user',
-            component: <PrivateChat />,
+            component: <PrivateChatView />,
             navbar: <PrivateChatNavbar />,
           },
           {
             path: ':group',
-            component: <GroupChat />,
+            component: <GroupChatView />,
             navbar: <GroupNavbar />,
           },
         ],
@@ -68,14 +62,14 @@ export const layouts: RootLayout[] = [
         subLayouts: [
           {
             path: 'home',
-            component: <MainDashboard />,
+            component: <HomeView />,
           },
           {
             path: 'explore',
             subLayouts: [
               {
                 index: true,
-                component: <NFTMarketplace />,
+                component: <MarketplaceView />,
               },
               {
                 path: 'me',
@@ -86,7 +80,7 @@ export const layouts: RootLayout[] = [
           },
           {
             path: 'profile',
-            component: <Profile />,
+            component: <ProfileView />,
           },
           {
             path: ':group',
@@ -98,7 +92,7 @@ export const layouts: RootLayout[] = [
               },
               {
                 path: 'settings',
-                component: <GroupSettings />,
+                component: <GroupSettingsView />,
                 navbar: <GroupNavbar />,
               },
             ],

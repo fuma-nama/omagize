@@ -1,13 +1,15 @@
 // Chakra imports
 import { Box, Flex } from '@chakra-ui/react';
+import { AdminNavbar } from '@omagize/ui/components';
 // Layout components
-import Navbar from 'components/navbar/NavbarAdmin';
-import { Outlet } from 'react-router-dom';
-import { useActiveSidebarItem } from 'utils/RouteUtil';
-
+import { Outlet, useLocation } from 'react-router-dom';
+import { getActiveSidebarItem } from '@omagize/utils/route-utils';
+import items from '../../sidebar';
+import { layouts } from '../../layouts';
 export default function ChatLayout() {
   document.documentElement.dir = 'ltr';
-  const active = useActiveSidebarItem();
+  const location = useLocation();
+  const active = getActiveSidebarItem(items, location);
 
   return (
     <Flex
@@ -23,7 +25,7 @@ export default function ChatLayout() {
       transitionTimingFunction="linear, linear, ease"
     >
       <Box px={{ '3sm': '10px' }} py={{ '3sm': '10px' }} w="full">
-        <Navbar brandText={active?.name} />
+        <AdminNavbar layoutes={layouts} brandText={active?.name} />
       </Box>
       <Box flex={1} h={0}>
         <Outlet />

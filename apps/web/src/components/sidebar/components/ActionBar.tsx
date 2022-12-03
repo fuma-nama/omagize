@@ -1,7 +1,7 @@
 import { Button, useDisclosure } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import { DynamicModal } from '../../modals/Modal';
-import { AddGroupModal } from 'components/modals/AddGroupModal';
+import { AddGroupModal } from '@omagize/ui/forms';
+import { DynamicModal } from '@omagize/ui/components';
 
 export default function ActionBar() {
   const { isOpen, onClose, onOpen } = useDisclosure();

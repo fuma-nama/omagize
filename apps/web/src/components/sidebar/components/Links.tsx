@@ -3,21 +3,19 @@
 import { NavLink, useLocation } from 'react-router-dom';
 // chakra imports
 import { Box, Flex, HStack, Text, useColorModeValue } from '@chakra-ui/react';
-import { getActiveSidebarItem } from '../../../utils/RouteUtil';
+import { SidebarItem, getActiveSidebarItem } from '@omagize/utils/route-utils';
 
 export function SidebarLinks({ items }: { items: SidebarItem[] }) {
   const location = useLocation();
+  const active = getActiveSidebarItem(items, location);
 
-  // this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
-  const createLinks = (routes: SidebarItem[]) => {
-    const active = getActiveSidebarItem(location);
-
-    return routes.map((route: SidebarItem, index: number) => (
-      <Link key={index} item={route} active={active === route} />
-    ));
-  };
-  //  BRAND
-  return <>{createLinks(items)}</>;
+  return (
+    <>
+      {items.map((route: SidebarItem, index: number) => (
+        <Link key={index} item={route} active={active === route} />
+      ))}
+    </>
+  );
 }
 
 function Link(props: { item: SidebarItem; active: boolean }) {
@@ -43,12 +41,7 @@ function Link(props: { item: SidebarItem; active: boolean }) {
               {item.name}
             </Text>
           </Flex>
-          <Box
-            h="36px"
-            w="4px"
-            bg={active ? brandColor : 'transparent'}
-            borderRadius="5px"
-          />
+          <Box h="36px" w="4px" bg={active ? brandColor : 'transparent'} borderRadius="5px" />
         </HStack>
       </Box>
     </NavLink>

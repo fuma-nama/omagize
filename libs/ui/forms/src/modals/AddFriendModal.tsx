@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Flex,
   FormControl,
@@ -8,16 +7,11 @@ import {
   IconButton,
   Input,
   Modal,
-  ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
   useModalContext,
 } from '@chakra-ui/react';
@@ -25,26 +19,8 @@ import { useState } from 'react';
 import { BiSend } from 'react-icons/bi';
 import { useMutation } from '@tanstack/react-query';
 import { parseError, sendFriendRequest, User, useSelfUser } from '@omagize/api';
-import {
-  useSearchUsernameQuery,
-  useSearchUserIdQuery,
-  ResultPlaceholder,
-  SelectedUserItem,
-} from '../panel/SearchUserPanel';
 import { useUserStore } from '@omagize/data-access-store';
-import { useColors } from '@omagize/ui/theme';
-import {
-  SearchBar,
-  TabButton,
-  QueryStatusLayout,
-  LoadingPanel,
-  QueryStatus,
-} from '@omagize/ui/components';
-
-enum Tab {
-  ByName = 0,
-  ById = 1,
-}
+import { SearchPanel } from '../panel/SearchUserPanel';
 
 function useCheckSelected(selected: User | null): string | null {
   const self = useSelfUser();
@@ -94,104 +70,6 @@ export function AddFriendModal({
         </ModalFooter>
       </ModalContent>
     </Modal>
-  );
-}
-
-function SearchPanel({
-  value,
-  onChange,
-  invalid,
-}: {
-  value: User;
-  onChange: (user: User) => void;
-  invalid?: boolean;
-}) {
-  const [tab, setTab] = useState<Tab>(0);
-  const [search, setSearch] = useState('');
-
-  const nameQuery = useSearchUsernameQuery();
-  const idQuery = useSearchUserIdQuery();
-
-  const { cardBg } = useColors();
-
-  const onSearch = () => {
-    if (search.trim().length === 0) return;
-
-    switch (tab) {
-      case Tab.ByName: {
-        nameQuery.setSearch(search);
-        break;
-      }
-      case Tab.ById: {
-        idQuery.setSearch(search);
-        break;
-      }
-    }
-  };
-
-  const userItem = (user: User) => (
-    <SelectedUserItem
-      key={user.id}
-      user={user}
-      selected={user.id === value?.id}
-      onClick={() => onChange(user)}
-      invalid={invalid}
-    />
-  );
-
-  return (
-    <>
-      <Box w="full" px={4}>
-        <SearchBar
-          w="full"
-          onSearch={onSearch}
-          input={{
-            bg: cardBg,
-            value: search,
-            type: 'search',
-            onChange: (e) => setSearch(e.target.value),
-          }}
-        />
-      </Box>
-      <ModalBody>
-        <Tabs
-          variant="soft-rounded"
-          index={tab}
-          onChange={setTab}
-          display="flex"
-          flexDirection="column"
-        >
-          <TabList>
-            <TabButton>By Name</TabButton>
-            <TabButton>User ID</TabButton>
-          </TabList>
-
-          <TabPanels overflow="auto" minH="100px">
-            <TabPanel px={0}>
-              <QueryStatusLayout
-                query={nameQuery.query}
-                watch={nameQuery.query.data}
-                placeholder={<ResultPlaceholder />}
-                loading={nameQuery.query.isInitialLoading && <LoadingPanel size="sm" />}
-                container={(c) => <Flex direction="column" children={c} />}
-                error="Failed to search users"
-              >
-                {nameQuery.query.data?.map((user) => userItem(user))}
-              </QueryStatusLayout>
-            </TabPanel>
-            <TabPanel px={0}>
-              <QueryStatus
-                query={idQuery.query}
-                loading={idQuery.query.isInitialLoading && <LoadingPanel size="sm" />}
-                error="Failed to search user"
-              >
-                {idQuery.query.data && userItem(idQuery.query.data)}
-              </QueryStatus>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </ModalBody>
-    </>
   );
 }
 

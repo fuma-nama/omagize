@@ -2,7 +2,7 @@
 import { Flex, HStack, Text } from '@chakra-ui/react';
 // Custom components
 import Banner from './components/Banner';
-import { useGroupEventsQuery, useSelfUser } from '@omagize/api';
+import { useGroupEventsQuery, useSelfUser } from '@omagize/data-access-api';
 import Friends from './components/Friends';
 import { Carousel, LeftButton, Provider, RightButton } from 'chakra-ui-carousel';
 import { GlobalGroupEventItem, GroupEventSkeleton } from '@omagize/ui/items';

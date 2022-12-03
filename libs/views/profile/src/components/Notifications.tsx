@@ -1,15 +1,21 @@
 // Chakra imports
 import { Button, Flex, Text } from '@chakra-ui/react';
 // Custom components
-import { clearUserNotifications, useUserNotificationsQuery } from '@omagize/api';
-import { QueryStatusLayout, Placeholder, Repeat, Card } from '@omagize/ui/components';
-import { NotificationSkeleton } from '@omagize/ui/items';
+import { clearUserNotifications } from '@omagize/api';
+import { useUserNotificationsQuery } from '@omagize/data-access-api';
+import {
+  QueryStatusLayout,
+  Placeholder,
+  Repeat,
+  Card,
+  CustomCardProps,
+} from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
+import { NotificationSkeleton, UserNotificationItem } from '@omagize/views/shared';
 import { useMutation } from '@tanstack/react-query';
-import UserNotificationItem from 'libs/ui/items/src/notification/UserNotification';
 import { BiNotificationOff } from 'react-icons/bi';
 
-export default function Notifications(props: { [x: string]: any }) {
+export default function Notifications(props: CustomCardProps) {
   const { ...rest } = props;
   // Chakra Color Mode
   const { textColorPrimary } = useColors();

@@ -18,9 +18,10 @@ import {
 import { useState } from 'react';
 import { BiSend } from 'react-icons/bi';
 import { useMutation } from '@tanstack/react-query';
-import { parseError, sendFriendRequest, User, useSelfUser } from '@omagize/api';
+import { parseError, sendFriendRequest, User } from '@omagize/api';
 import { useUserStore } from '@omagize/data-access-store';
 import { SearchPanel } from '../panel/SearchUserPanel';
+import { useSelfUser } from '@omagize/data-access-api';
 
 function useCheckSelected(selected: User | null): string | null {
   const self = useSelfUser();

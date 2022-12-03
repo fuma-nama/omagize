@@ -1,13 +1,13 @@
 // Chakra imports
 import { Box, Flex } from '@chakra-ui/react';
-import { AdminNavbar } from '@omagize/ui/components';
+import { AdminNavbar } from '@omagize/views/shared';
 import { getActiveSidebarItem } from '@omagize/utils/route-utils';
 // Layout components
 import { Outlet, useLocation } from 'react-router-dom';
 import { layouts } from '../../layouts';
 import items from '../../sidebar';
 
-export default function Dashboard() {
+export default function DashboardLayout() {
   document.documentElement.dir = 'ltr';
   const location = useLocation();
   const activeItem = getActiveSidebarItem(items, location);

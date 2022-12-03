@@ -3,7 +3,7 @@ import { Flex, Grid } from '@chakra-ui/react';
 
 // Custom components
 import AccountPanel from './components/AccountPanel';
-import Banner from './components/Banner';
+import ProfileBanner from './components/ProfileBanner';
 import General from './components/General';
 import Notifications from './components/Notifications';
 import OwnedGroups from './components/OwnedGroups';
@@ -22,8 +22,8 @@ export function ProfileView() {
         }}
         gap={{ base: '20px', xl: '20px' }}
       >
-        <Banner />
-        <Notifications used={25.6} total={50} />
+        <ProfileBanner />
+        <Notifications />
       </Grid>
 
       <Grid

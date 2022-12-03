@@ -4,7 +4,7 @@ import { Center, Flex, Grid, SimpleGrid, Text } from '@chakra-ui/react';
 // Custom components
 import AdminsCard from './components/AdminsCard';
 import { Notifications } from './components/Notifications';
-import { useGroupDetailQuery, GroupDetail } from '@omagize/api';
+import { GroupDetail } from '@omagize/api';
 import { AddIcon } from '@chakra-ui/icons';
 import { GroupHeader, OptionsMenu } from './components/GroupHeader';
 import { MessagesPreview } from '@omagize/views/chat';
@@ -14,6 +14,7 @@ import { LoadingPanel, ErrorPanel, Card, AutoImage, CardButton } from '@omagize/
 import { GroupEventItem } from '@omagize/ui/items';
 import { useColors } from '@omagize/ui/theme';
 import { useSelected } from '@omagize/utils/route-utils';
+import { useGroupDetailQuery } from '@omagize/data-access-api';
 
 export function GroupOverview() {
   const { selectedGroup } = useSelected();

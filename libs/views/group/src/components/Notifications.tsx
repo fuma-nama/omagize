@@ -1,10 +1,11 @@
-import { clearGroupNotifications, useGroupNotificationsQuery } from '@omagize/api';
+import { clearGroupNotifications } from '@omagize/api';
+import { useGroupNotificationsQuery } from '@omagize/data-access-api';
 import { useSelected } from '@omagize/utils/route-utils';
 import { Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { BiNotificationOff } from 'react-icons/bi';
 import { useMutation } from '@tanstack/react-query';
 import { Repeat, Card, QueryStatusLayout, Placeholder } from '@omagize/ui/components';
-import { NotificationSkeleton, GroupNotificationItem } from '@omagize/ui/items';
+import { NotificationSkeleton, GroupNotificationItem } from '@omagize/views/shared';
 
 export function Notifications() {
   const { selectedGroup } = useSelected();

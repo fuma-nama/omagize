@@ -1,22 +1,10 @@
 import {
-  FriendRemovedEvent,
-  addGroupEvent,
-  addMessage,
-  client,
-  dispatchUser,
-  EventType,
   FriendRequest,
-  FriendRequestAddedEvent,
-  FriendRequestRepliedEvent,
-  GatewayMessage,
   Group,
-  GroupAddedEvent,
   GroupDetail,
   GroupEvent,
-  Keys,
   LoginPayload,
   Message,
-  OpCode,
   RawGroupDetail,
   RawGroupEvent,
   RawMemberClip,
@@ -26,10 +14,20 @@ import {
   User,
   FriendRequestType,
   Relation,
-  MessageRemovedEvent,
   RelationShip,
 } from '@omagize/api';
+import { client, Keys, addMessage, dispatchUser, addGroupEvent } from '@omagize/data-access-api';
 import { useUserStore } from '@omagize/data-access-store';
+import {
+  GatewayMessage,
+  OpCode,
+  EventType,
+  GroupAddedEvent,
+  FriendRequestAddedEvent,
+  FriendRequestRepliedEvent,
+  FriendRemovedEvent,
+  MessageRemovedEvent,
+} from '@omagize/gateway';
 import { InfiniteData } from '@tanstack/react-query';
 
 export function handleEvent(message: GatewayMessage<unknown>) {

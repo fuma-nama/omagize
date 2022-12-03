@@ -1,5 +1,6 @@
 import { Avatar, Box, Flex, Input, Text, Textarea } from '@chakra-ui/react';
-import { GroupDetail, useMemberQuery } from '@omagize/api';
+import { GroupDetail } from '@omagize/api';
+import { useMemberQuery } from '@omagize/data-access-api';
 import { useModalImageCropper, AutoImage, Pick, useImagePicker } from '@omagize/ui/components';
 import { SmallUserItem } from '@omagize/ui/items';
 import { useColors } from '@omagize/ui/theme';
@@ -14,14 +15,14 @@ export function InfoContent({ value, onChange, group }: SettingsProps) {
     cropper.setEditing({
       file: f,
       format: BannerFormat,
-      onCrop: (blob: File) => onChange({ banner: blob }),
+      onCrop: (blob) => onChange({ banner: blob }),
     })
   );
   const icon = useImagePicker(value.icon, (f) =>
     cropper.setEditing({
       file: f,
       format: AvatarFormat,
-      onCrop: (blob: File) => onChange({ icon: blob }),
+      onCrop: (blob) => onChange({ icon: blob }),
     })
   );
 

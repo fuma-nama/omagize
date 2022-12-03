@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 
 import { useQuery } from '@tanstack/react-query';
-import { Keys, fetchMyAssets, Assets } from '@omagize/api';
+import { fetchMyAssets, Assets } from '@omagize/api';
 import { BiRefresh, BiUpload } from 'react-icons/bi';
 import CreateAssetModal from '../components/modals/UploadAssetModal';
 import EmoijItem from '../components/assets/EmojiItem';
@@ -30,6 +30,7 @@ import {
 } from '@omagize/ui/components';
 import { useChatStore } from '@omagize/data-access-store';
 import { useColors } from '@omagize/ui/theme';
+import { Keys } from '@omagize/data-access-api';
 
 export function MyAssets() {
   return (

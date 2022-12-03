@@ -1,7 +1,8 @@
 // Chakra imports
 import { SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react';
 // Custom components
-import { firebase, useSelfUser } from '@omagize/api';
+import { firebase } from '@omagize/api';
+import { useSelfUser } from '@omagize/data-access-api';
 import { Card } from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
 import Information from './Information';

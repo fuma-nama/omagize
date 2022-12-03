@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createGroupEvent, GroupDetail, Keys } from '@omagize/api';
+import { createGroupEvent, GroupDetail } from '@omagize/api';
 import {
   Button,
   Flex,
@@ -24,6 +24,8 @@ import { onlyTime, onlyDate } from '@omagize/utils/common';
 import { UploadImage, BannerFormat } from '@omagize/utils/image';
 import { useImagePickerCropSimple } from '@omagize/ui/components';
 import { DateTimeForm } from '../forms/DateTimeForm';
+import { Keys } from '@omagize/data-access-api';
+import { ReactNode } from 'react';
 
 function getInitialStart(): Date {
   const date = new Date(Date.now());
@@ -179,7 +181,7 @@ function Form({
 }: {
   value: EventOptions;
   onChange: (options: Partial<EventOptions>) => void;
-  error?: any;
+  error?: ReactNode;
 }) {
   const image = useImagePickerCropSimple(value.image, (v) => onChange({ image: v }), BannerFormat);
 

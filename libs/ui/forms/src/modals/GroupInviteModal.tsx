@@ -11,13 +11,8 @@ import {
   Input,
   FormLabel,
 } from '@chakra-ui/react';
-import {
-  dispatchGroupInvite,
-  Group,
-  GroupInvite,
-  modifyGroupInvite,
-  useGroupInviteQuery,
-} from '@omagize/api';
+import { Group, GroupInvite, modifyGroupInvite } from '@omagize/api';
+import { useGroupInviteQuery, dispatchGroupInvite } from '@omagize/data-access-api';
 import { QueryStatus, LoadingPanel, DatePicker, SwitchField } from '@omagize/ui/components';
 import { onlyDate } from '@omagize/utils/common';
 import { useMutation } from '@tanstack/react-query';

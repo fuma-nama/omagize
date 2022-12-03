@@ -1,12 +1,15 @@
 import { Button, ButtonProps, Icon } from '@chakra-ui/react';
-import { FirebaseAuth, Keys } from '@omagize/api';
+import { FirebaseAuth } from '@omagize/api';
+import { handleSignIn, Keys } from '@omagize/data-access-api';
 import { useMutation } from '@tanstack/react-query';
 import { FcGoogle } from 'react-icons/fc';
 
 export function GoogleSignInButton(props: ButtonProps) {
-  const signin = useMutation(Keys.firebase.signin, () =>
-    FirebaseAuth.signInWithGoogle()
-  );
+  const signin = useMutation(Keys.firebase.signin, () => FirebaseAuth.signInWithGoogle(), {
+    async onSuccess() {
+      await handleSignIn();
+    },
+  });
 
   return (
     <Button

@@ -8,13 +8,8 @@ import {
   Input,
   Show,
 } from '@chakra-ui/react';
-import {
-  createRole,
-  Snowflake,
-  updateRoles,
-  UpdateRolesOptions,
-  useGroupDetailQuery,
-} from '@omagize/api';
+import { createRole, Snowflake, updateRoles, UpdateRolesOptions } from '@omagize/api';
+import { useGroupDetailQuery } from '@omagize/data-access-api';
 import { QueryStatus, LoadingPanel, SaveBar } from '@omagize/ui/components';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';

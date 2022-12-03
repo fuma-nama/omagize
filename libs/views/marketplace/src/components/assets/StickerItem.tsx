@@ -14,7 +14,8 @@ import {
   MenuList,
   Text,
 } from '@chakra-ui/react';
-import { CustomSticker, deleteAsset, likeAsset, unlikeAsset, useSelfUser } from '@omagize/api';
+import { CustomSticker, deleteAsset, likeAsset, unlikeAsset } from '@omagize/api';
+import { useSelfUser } from '@omagize/data-access-api';
 import { useChatStore } from '@omagize/data-access-store';
 import { Card } from '@omagize/ui/components';
 import { useColorsExtend } from '@omagize/ui/theme';

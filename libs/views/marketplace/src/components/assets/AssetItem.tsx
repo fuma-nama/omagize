@@ -1,5 +1,6 @@
 import { IconButtonProps, IconButton, Icon } from '@chakra-ui/react';
-import { Assets, client, Keys, MyAssets, Snowflake } from '@omagize/api';
+import { Assets, MyAssets, Snowflake } from '@omagize/api';
+import { client, Keys } from '@omagize/data-access-api';
 import { useChatStore } from '@omagize/data-access-store';
 import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 

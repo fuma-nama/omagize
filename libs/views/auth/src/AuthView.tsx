@@ -9,6 +9,7 @@ import { SignInForm } from './signIn';
 import { User } from 'firebase/auth';
 import { ResetPasswordForm } from './signIn/ResetPasswordForm';
 import { AuthLayout } from './layouts/AuthLayout';
+import { handleSignIn, handleSignUp } from '@omagize/data-access-api';
 
 export type SignInOptions = {
   email: string;
@@ -32,7 +33,7 @@ export function AuthView() {
       FirebaseAuth.signInWithEmailAndPassword(options.email, options.password),
     {
       async onSuccess(data) {
-        FirebaseAuth.handleSignIn();
+        handleSignIn();
       },
     }
   );
@@ -46,7 +47,7 @@ export function AuthView() {
       async onSuccess(data, options) {
         const user = data.user;
 
-        await FirebaseAuth.handleSignUp(data, options.username);
+        await handleSignUp(data, options.username);
 
         if (!user.emailVerified) {
           await sendVerifyEmail.mutateAsync(user);

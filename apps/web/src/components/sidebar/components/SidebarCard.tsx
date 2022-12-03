@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
-import { useSelfUser } from '@omagize/api';
+import { useSelfUser } from '@omagize/data-access-api';
 import { FiSettings } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 

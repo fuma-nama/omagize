@@ -1,11 +1,8 @@
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  UserCredential,
   signInWithEmailAndPassword,
-  getAdditionalUserInfo,
   createUserWithEmailAndPassword,
-  IdTokenResult,
   setPersistence,
   browserLocalPersistence,
   sendEmailVerification,
@@ -19,8 +16,6 @@ import {
   deleteUser,
 } from 'firebase/auth';
 import { firebase } from './firebase';
-import { authorize, signup } from '../AccountAPI';
-import { onSignin } from '../query';
 import { orgin } from '../utils/core';
 
 export function initFirebase() {
@@ -63,8 +58,7 @@ export const FirebaseAuth = {
     return await signInWithEmailAndPassword(firebase.auth, email, password);
   },
   async signInWithGoogle() {
-    const res = await signInWithPopup(firebase.auth, googleProvider);
-    return await this.handleSignUp(res, res.user.displayName);
+    return await signInWithPopup(firebase.auth, googleProvider);
   },
   async logout() {
     return await firebase.auth.signOut();
@@ -72,31 +66,10 @@ export const FirebaseAuth = {
   async deleteAccount() {
     await deleteUser(firebase.auth.currentUser);
   },
-  async handleSignIn() {
-    await onSignin(await authorize());
-  },
   async changeEmail(newEmail: string) {
     await updateEmail(firebase.auth.currentUser, newEmail);
   },
   async changePassword(newPassword: string) {
     await updatePassword(firebase.auth.currentUser, newPassword);
-  },
-  async handleSignUp(res: UserCredential, username: string) {
-    const token = await res.user.getIdTokenResult();
-    const isNew = getAdditionalUserInfo(res).isNewUser;
-    let payload;
-
-    if (isNew || !this.userCreated(token)) {
-      payload = await signup(username);
-    } else {
-      payload = await authorize();
-    }
-
-    if (res.user.emailVerified) {
-      await onSignin(payload);
-    }
-  },
-  userCreated(token: IdTokenResult): boolean {
-    return token.claims['userId'] != null;
   },
 };

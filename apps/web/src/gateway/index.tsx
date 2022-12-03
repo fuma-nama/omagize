@@ -1,13 +1,7 @@
-import {
-  client,
-  closeGateway,
-  connectGateway,
-  firebase,
-  GatewayListener,
-  onSignin,
-  ReadyPayload,
-} from '@omagize/api';
+import { firebase } from '@omagize/api';
+import { onSignin, client } from '@omagize/data-access-api';
 import { applyReadyPayload, useUserStore, useChatStore } from '@omagize/data-access-store';
+import { GatewayListener, ReadyPayload, closeGateway, connectGateway } from '@omagize/gateway';
 import { Auth } from 'firebase/auth';
 import { useEffect } from 'react';
 import { CloseEvent, ErrorEvent } from 'reconnecting-websocket/dist/events';

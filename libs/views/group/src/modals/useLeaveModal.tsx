@@ -1,5 +1,6 @@
 import { Button } from '@chakra-ui/react';
-import { GroupDetail, leaveGroup, useSelfUser } from '@omagize/api';
+import { GroupDetail, leaveGroup } from '@omagize/api';
+import { useSelfUser } from '@omagize/data-access-api';
 import { useUserStore } from '@omagize/data-access-store';
 import { useConfirmDialog } from '@omagize/ui/components';
 import { useMutation } from '@tanstack/react-query';

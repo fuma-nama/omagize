@@ -8,7 +8,8 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-import { GroupDetail, updateGroup, UpdateGroupOptions, useGroupDetailQuery } from '@omagize/api';
+import { GroupDetail, updateGroup, UpdateGroupOptions } from '@omagize/api';
+import { useGroupDetailQuery } from '@omagize/data-access-api';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { InfoContent } from './Info';

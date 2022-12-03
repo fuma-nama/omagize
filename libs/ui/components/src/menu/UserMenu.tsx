@@ -8,7 +8,8 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { User, useLogoutMutation, useSelfUser } from '@omagize/api';
+import { User } from '@omagize/api';
+import { useSelfUser, useLogoutMutation } from '@omagize/data-access-api';
 
 export function UserMenu(props: { color: string; shadow: string; bg: string }) {
   const user = useSelfUser();
@@ -50,7 +51,10 @@ function List(props: { textColor: string; shadow: string; menuBg: string; user: 
           fontWeight="700"
           color={textColor}
         >
-          👋&nbsp; Hey, {user.username}
+          <span aria-label="Hi" role="img">
+            👋
+          </span>
+          &nbsp; Hey, {user.username}
         </Text>
       </Flex>
       <Flex flexDirection="column" p="10px">

@@ -1,6 +1,6 @@
 // Chakra imports
 import { Box, Flex } from '@chakra-ui/react';
-import { AdminNavbar } from '@omagize/ui/components';
+import { AdminNavbar } from '@omagize/views/shared';
 // Layout components
 import { Outlet, useLocation } from 'react-router-dom';
 import { getActiveSidebarItem } from '@omagize/utils/route-utils';

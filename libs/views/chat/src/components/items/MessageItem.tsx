@@ -1,4 +1,4 @@
-import { deleteMessage, Message, useSelfUser } from '@omagize/api';
+import { deleteMessage, Message } from '@omagize/api';
 import {
   Avatar,
   Box,
@@ -23,6 +23,7 @@ import { MessageEditInput } from './MessageEditInput';
 import { useContextMenu, UserPopup } from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
 import { stringOfTime } from '@omagize/utils/common';
+import { useSelfUser } from '@omagize/data-access-api';
 
 export type MessagePermission = {
   edit: boolean;

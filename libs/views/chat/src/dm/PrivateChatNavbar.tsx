@@ -1,8 +1,8 @@
 import { BiLeftArrow } from 'react-icons/bi';
 import { IconButton, HStack, Avatar, Text } from '@chakra-ui/react';
-import { useUserInfo } from '@omagize/api';
 import { useNavigate, useParams } from 'react-router-dom';
-import { NavbarLinksBox, NavbarDefaultItems } from '@omagize/ui/components';
+import { NavbarLinksBox, NavbarDefaultItems } from '@omagize/views/shared';
+import { useUserInfo } from '@omagize/data-access-api';
 
 export function PrivateChatNavbar() {
   const navigate = useNavigate();

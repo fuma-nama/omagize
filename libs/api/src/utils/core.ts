@@ -2,7 +2,6 @@ import { firebase } from './../firebase/firebase';
 import { OmagizeError, APIErrorCode } from '../types/common';
 
 export const api = 'http://localhost:8080';
-export const ws = 'ws://localhost:8080/echo';
 export const orgin = 'http://localhost:3000';
 
 export type ReturnOptions<T> = Options & {
@@ -39,15 +38,10 @@ export async function callDefault(url: string, init?: Options) {
   return call(url, options).then((r) => handle(r, init));
 }
 
-export async function callReturn<T>(
-  url: string,
-  init?: ReturnOptions<T>
-): Promise<T> {
+export async function callReturn<T>(url: string, init?: ReturnOptions<T>): Promise<T> {
   const options = await withDefault(init);
 
-  return call(url, options).then((res) =>
-    handleResult<T>(res, init, (res) => res.json())
-  );
+  return call(url, options).then((res) => handleResult<T>(res, init, (res) => res.json()));
 }
 
 async function handleResult<T>(
@@ -81,9 +75,7 @@ async function handleError(res: Response, options: Options) {
   }
 }
 
-export async function withDefault<T extends Options>(
-  options: T
-): Promise<RequestInit> {
+export async function withDefault<T extends Options>(options: T): Promise<RequestInit> {
   const currentUser = firebase.auth.currentUser;
   const brand = options.init;
   const isForm = options.body instanceof FormData;
@@ -97,10 +89,7 @@ export async function withDefault<T extends Options>(
       ...(!isForm && {
         'Content-Type': options.contentType ?? 'application/json',
       }),
-      Authorization:
-        currentUser != null
-          ? 'Bearer ' + (await currentUser.getIdToken())
-          : undefined,
+      Authorization: currentUser != null ? 'Bearer ' + (await currentUser.getIdToken()) : undefined,
       ...brand?.headers,
     },
   };

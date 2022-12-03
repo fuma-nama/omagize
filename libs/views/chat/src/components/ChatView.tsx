@@ -1,5 +1,5 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
-import { Message, parseError, Snowflake, useInfiniteMessageQuery } from '@omagize/api';
+import { Message, parseError, Snowflake } from '@omagize/api';
 import { createContext, useContext, useRef } from 'react';
 import { MessageBar } from './MessageBar';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
@@ -10,6 +10,7 @@ import { ErrorPanel } from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
 import { MessageItem, MessageItemSkeleton } from './items';
 import { InputProvider } from '@omagize/ui/editor';
+import { useInfiniteMessageQuery } from '@omagize/data-access-api';
 
 function mapPage(messages: Message[]) {
   return messages.map((message) => <MessageItem key={message.id} message={message} />);

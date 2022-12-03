@@ -1,5 +1,5 @@
 import { Button, Heading, HStack, Icon } from '@chakra-ui/react';
-import { NavbarBox, NavbarLinksBox, NavbarDefaultItems } from '@omagize/ui/components';
+import { NavbarBox, NavbarLinksBox, NavbarDefaultItems } from '@omagize/views/shared';
 import { BiLeftArrow, BiSticker } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 

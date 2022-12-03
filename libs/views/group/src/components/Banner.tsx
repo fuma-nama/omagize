@@ -14,7 +14,8 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-import { Member, useGroupDetailQuery, useGroupMembersQuery } from '@omagize/api';
+import { Member } from '@omagize/api';
+import { useGroupDetailQuery, useGroupMembersQuery } from '@omagize/data-access-api';
 import { GroupDetail } from '@omagize/api';
 import { useColors } from '@omagize/ui/theme';
 import { useSelected } from '@omagize/utils/route-utils';

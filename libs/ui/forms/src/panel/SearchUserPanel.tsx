@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchUserInfo, Keys, searchUser, User } from '@omagize/api';
+import { fetchUserInfo, searchUser, User } from '@omagize/api';
 import {
   Box,
   Flex,
@@ -24,6 +24,7 @@ import {
   LoadingPanel,
   QueryStatus,
 } from '@omagize/ui/components';
+import { Keys } from '@omagize/data-access-api';
 
 export enum Tab {
   ByName = 0,
@@ -145,7 +146,7 @@ function useSearchUsernameQuery() {
 function useSearchUserIdQuery() {
   const [search, setSearch] = useState<string>(null);
 
-  const query = useQuery(Keys.user(search), () => fetchUserInfo(search), {
+  const query = useQuery(Keys.searchUser(search), () => fetchUserInfo(search), {
     enabled: search != null,
     retry: false,
   });

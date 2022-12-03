@@ -1,5 +1,6 @@
 import { Flex } from '@chakra-ui/react';
-import { Message, Snowflake, useInfiniteMessageQuery } from '@omagize/api';
+import { Message, Snowflake } from '@omagize/api';
+import { useInfiniteMessageQuery } from '@omagize/data-access-api';
 import { QueryStatus } from '@omagize/ui/components';
 import { useMemo } from 'react';
 import { MessageItemSkeleton, MessageItem } from './items';

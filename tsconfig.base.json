@@ -19,8 +19,9 @@
     "baseUrl": ".",
     "paths": {
       "@omagize/api": ["libs/api/src/index.ts"],
-      "@omagize/data-access": ["libs/data-access/src/index.ts"],
+      "@omagize/data-access-api": ["libs/data-access-api/src/index.ts"],
       "@omagize/data-access-store": ["libs/data-access-store/src/index.ts"],
+      "@omagize/gateway": ["libs/gateway/src/index.ts"],
       "@omagize/ui/chakra-ui-steps": ["libs/ui/chakra-ui-steps/src/index.ts"],
       "@omagize/ui/components": ["libs/ui/components/src/index.ts"],
       "@omagize/ui/editor": ["libs/ui/editor/src/index.ts"],
@@ -36,7 +37,8 @@
       "@omagize/views/group": ["libs/views/group/src/index.ts"],
       "@omagize/views/home": ["libs/views/home/src/index.ts"],
       "@omagize/views/marketplace": ["libs/views/marketplace/src/index.ts"],
-      "@omagize/views/profile": ["libs/views/profile/src/index.ts"]
+      "@omagize/views/profile": ["libs/views/profile/src/index.ts"],
+      "@omagize/views/shared": ["libs/views/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

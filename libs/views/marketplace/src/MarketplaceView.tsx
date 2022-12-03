@@ -20,7 +20,7 @@ import {
 import Banner from './components/Banner';
 
 import { useQuery } from '@tanstack/react-query';
-import { fetchLatestAssets, Keys, Assets } from '@omagize/api';
+import { fetchLatestAssets, Assets } from '@omagize/api';
 import { BiHappy, BiRefresh, BiUpload } from 'react-icons/bi';
 import { BsPeople } from 'react-icons/bs';
 import CreateAssetModal from './components/modals/UploadAssetModal';
@@ -31,6 +31,7 @@ import { SidePanel } from './SidePanel';
 import { useNavigate } from 'react-router-dom';
 import { Card, Placeholder, QueryStatusLayout, Repeat } from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
+import { Keys } from '@omagize/data-access-api';
 
 export function MarketplaceView() {
   return (

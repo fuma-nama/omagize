@@ -22,15 +22,14 @@ import {
 } from '@chakra-ui/react';
 import {
   Assets,
-  client,
   createEmoji,
   createSticker,
   CustomEmoji,
   CustomSticker,
-  Keys,
   MyAssets,
   parseError,
 } from '@omagize/api';
+import { client, Keys } from '@omagize/data-access-api';
 import { Card, TabButton, useImagePickerCropSimple } from '@omagize/ui/components';
 import { EmojiEntity } from '@omagize/ui/editor';
 import { StickerFormat, supportedImageTypes, EmojiFormat } from '@omagize/utils/image';

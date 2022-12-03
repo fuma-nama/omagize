@@ -9,14 +9,8 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import {
-  sendFriendRequest,
-  Snowflake,
-  useMemberQuery,
-  User,
-  useSelfUser,
-  useUserInfo,
-} from '@omagize/api';
+import { sendFriendRequest, Snowflake, User } from '@omagize/api';
+import { useUserInfo, useMemberQuery, useSelfUser } from '@omagize/data-access-api';
 import { useUserStore, usePageStore } from '@omagize/data-access-store';
 import { useColors } from '@omagize/ui/theme';
 import { useMutation } from '@tanstack/react-query';
@@ -74,23 +68,19 @@ function FriendActions({ user }: { user: User }) {
   const mutation = useMutation(() => sendFriendRequest(user.id, ''));
 
   if (self.id === user.id) return <></>;
-  return (
-    <>
-      {isFriend ? (
-        <Button leftIcon={<BiChat />} variant="action" onClick={() => setDM(user)}>
-          Chat
-        </Button>
-      ) : (
-        <Button
-          colorScheme="green"
-          leftIcon={<FaUserFriends />}
-          isLoading={mutation.isLoading}
-          onClick={() => mutation.mutate()}
-        >
-          Add Friend
-        </Button>
-      )}
-    </>
+  return isFriend ? (
+    <Button leftIcon={<BiChat />} variant="action" onClick={() => setDM(user)}>
+      Chat
+    </Button>
+  ) : (
+    <Button
+      colorScheme="green"
+      leftIcon={<FaUserFriends />}
+      isLoading={mutation.isLoading}
+      onClick={() => mutation.mutate()}
+    >
+      Add Friend
+    </Button>
   );
 }
 

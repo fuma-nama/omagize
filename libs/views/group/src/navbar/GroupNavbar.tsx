@@ -1,16 +1,10 @@
 import { Avatar, Button, HStack, Text } from '@chakra-ui/react';
 import { BiArrowBack } from 'react-icons/bi';
-import {
-  NavbarBox,
-  NavbarLinksBox,
-  SearchBar,
-  SidebarTrigger,
-  ThemeSwitch,
-  UserMenu,
-} from '@omagize/ui/components';
+import { SearchBar, SidebarTrigger, ThemeSwitch, UserMenu } from '@omagize/ui/components';
 import { useSelected } from '@omagize/utils/route-utils';
 import { useNavbarColors } from '@omagize/ui/theme';
 import { useGroup } from '@omagize/data-access-store';
+import { NavbarBox, NavbarLinksBox } from '@omagize/views/shared';
 
 export function GroupNavbar({ isRoot }: { isRoot?: boolean }) {
   const { selectedGroup } = useSelected();

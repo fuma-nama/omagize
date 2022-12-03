@@ -6,6 +6,5 @@ export * from './icons';
 export * from './layout';
 export * from './menu';
 export * from './modals';
-export * from './navbar';
 export * from './panel';
 export * from './picker';

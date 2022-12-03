@@ -5,12 +5,13 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { layouts, NormalLayout } from './layouts';
-import { client, firebase, initClient, initFirebase, useLoginQuery } from '@omagize/api';
+import { firebase, initFirebase } from '@omagize/api';
 import { QueryStatus, LoadingPanel } from '@omagize/ui/components';
 import { usePageStore } from '@omagize/data-access-store';
 import { theme } from '@omagize/ui/theme';
 import { initGateway } from './gateway';
 import { PrivateChatModal } from '@omagize/views/chat';
+import { initClient, useLoginQuery, client } from '@omagize/data-access-api';
 
 initClient();
 initFirebase();

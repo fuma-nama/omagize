@@ -12,7 +12,7 @@ import { GroupDetail, updateGroup, UpdateGroupOptions } from '@omagize/api';
 import { useGroupDetailQuery } from '@omagize/data-access-api';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { InfoContent } from './GroupInfoPanel';
+import { GroupInfoPanel } from './GroupInfoPanel';
 import { RolePanel } from './RolesPanel';
 import { TabButton, SaveBar, Card, LoadingPanel, SwitchField } from '@omagize/ui/components';
 import { useSelected } from '@omagize/utils/route-utils';
@@ -94,7 +94,7 @@ function GroupSaveBar({
 function Info({ value, onChange, group }: SettingsProps) {
   return (
     <Card w={{ base: '100%', lg: '700px' }}>
-      <InfoContent value={value} onChange={onChange} group={group} />
+      <GroupInfoPanel value={value} onChange={onChange} group={group} />
     </Card>
   );
 }

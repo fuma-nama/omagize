@@ -7,7 +7,7 @@ import { useColors } from '@omagize/ui/theme';
 import { BannerFormat, AvatarFormat } from '@omagize/utils/image';
 import { SettingsProps } from './GroupSettingsView';
 
-export function InfoContent({ value, onChange, group }: SettingsProps) {
+export function GroupInfoPanel({ value, onChange, group }: SettingsProps) {
   const { textColorPrimary, brand } = useColors();
 
   const cropper = useModalImageCropper();

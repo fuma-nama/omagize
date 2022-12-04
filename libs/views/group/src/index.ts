@@ -1,3 +1,3 @@
 export * from './GroupOverview';
 export * from './GroupNavbar';
-export * from './settings';
+export * from './settings/GroupSettingsView';

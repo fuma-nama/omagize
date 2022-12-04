@@ -8,6 +8,7 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalFooter,
+  ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
 import {
@@ -32,12 +33,13 @@ export type SelectedRole =
       role: DefaultRole;
     };
 
-export function usePermissionManagePanel(
-  selected: SelectedRole | null,
-  onClose: () => void,
-  value: UpdateRolesOptions,
-  setValue: React.Dispatch<React.SetStateAction<UpdateRolesOptions>>
-) {
+export type UpdateRolePanelProps = {
+  selected: SelectedRole | null;
+  value: UpdateRolesOptions;
+  setValue: React.Dispatch<React.SetStateAction<UpdateRolesOptions>>;
+};
+
+export function UpdateRolePanel({ selected, value, setValue }: UpdateRolePanelProps) {
   const roles = value.roles ?? {};
 
   function changeDefault(v: UpdateDefaultRole) {
@@ -63,55 +65,54 @@ export function usePermissionManagePanel(
     }));
   }
 
-  function getPanel() {
-    switch (selected?.type) {
-      case 'role':
-        return (
-          <>
-            <RoleManagePanel
-              role={selected.role}
-              value={roles[selected.role.id]}
-              onChange={(e) => changeRole(selected.role.id, e)}
-            />
-            <PermissionManagePanel
-              permission={selected.role}
-              value={roles[selected.role.id]}
-              onChange={(e) => changeRole(selected.role.id, e)}
-            />
-          </>
-        );
-      case 'default_role':
-        return (
+  switch (selected?.type) {
+    case 'role':
+      return (
+        <Flex direction="column" gap={2}>
+          <RoleManagePanel
+            role={selected.role}
+            value={roles[selected.role.id]}
+            onChange={(e) => changeRole(selected.role.id, e)}
+          />
           <PermissionManagePanel
             permission={selected.role}
-            value={value.defaultRole}
-            onChange={(e) => changeDefault(e)}
+            value={roles[selected.role.id]}
+            onChange={(e) => changeRole(selected.role.id, e)}
           />
-        );
-    }
+        </Flex>
+      );
+    case 'default_role':
+      return (
+        <PermissionManagePanel
+          permission={selected.role}
+          value={value.defaultRole}
+          onChange={(e) => changeDefault(e)}
+        />
+      );
   }
+}
 
-  return {
-    asComponent: () => (
-      <Flex direction="column" gap={2}>
-        {getPanel()}
-      </Flex>
-    ),
-    asModal: () => (
-      <Modal isOpen={selected != null} onClose={onClose} size="xl">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          <ModalBody display="flex" flexDirection="column" gap={4}>
-            {getPanel()}
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    ),
-  };
+export function UpdateRoleModal({
+  selected,
+  value,
+  setValue,
+  onClose,
+}: UpdateRolePanelProps & { onClose: () => void }) {
+  return (
+    <Modal isOpen={selected != null} onClose={onClose} size="xl" scrollBehavior="inside" isCentered>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalCloseButton />
+        <ModalHeader>Update Role</ModalHeader>
+        <ModalBody>
+          <UpdateRolePanel selected={selected} value={value} setValue={setValue} />
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={onClose}>Close</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
 }
 
 export function RoleManagePanel({

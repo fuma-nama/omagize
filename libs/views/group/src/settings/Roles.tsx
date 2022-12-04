@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { BsPeopleFill, BsThreeDotsVertical } from 'react-icons/bs';
 import { RiTeamLine } from 'react-icons/ri';
-import { SelectedRole } from './PermissionManagePanel';
+import { SelectedRole } from './UpdateRolePanel';
 
 export function Roles({
   selected,

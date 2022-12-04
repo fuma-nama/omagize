@@ -17,14 +17,13 @@ import {
 import { QueryStatus, LoadingPanel, SaveBar } from '@omagize/ui/components';
 import { useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { SelectedRole, usePermissionManagePanel } from './PermissionManagePanel';
+import { SelectedRole, UpdateRoleModal, UpdateRolePanel } from './UpdateRolePanel';
 import { DefaultRoleItem, Roles } from './Roles';
 
 export function RolePanel({ groupId }: { groupId: Snowflake }) {
   const query = useGroupDetailQuery(groupId);
   const [value, setValue] = useState<UpdateRolesOptions>({});
   const [open, setOpen] = useState<SelectedRole | null>();
-  const panel = usePermissionManagePanel(open, () => setOpen(null), value, setValue);
   const group = query.data;
 
   const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
@@ -84,8 +83,17 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
           />
         </Flex>
       </QueryStatus>
-      <Show above="lg">{panel.asComponent()}</Show>
-      <Show below="lg">{panel.asModal()}</Show>
+      <Show above="lg">
+        <UpdateRolePanel selected={open} value={value} setValue={setValue} />
+      </Show>
+      <Show below="lg">
+        <UpdateRoleModal
+          selected={open}
+          value={value}
+          setValue={setValue}
+          onClose={() => setOpen(null)}
+        />
+      </Show>
       <RolesSaveBar group={query.data?.id} value={value} reset={() => setValue({})} />
     </Grid>
   );

@@ -12,8 +12,8 @@ import { GroupDetail, updateGroup, UpdateGroupOptions } from '@omagize/api';
 import { useGroupDetailQuery } from '@omagize/data-access-api';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { InfoContent } from './Info';
-import { RolePanel } from './RolePanel';
+import { InfoContent } from './GroupInfoPanel';
+import { RolePanel } from './RolesPanel';
 import { TabButton, SaveBar, Card, LoadingPanel, SwitchField } from '@omagize/ui/components';
 import { useSelected } from '@omagize/utils/route-utils';
 

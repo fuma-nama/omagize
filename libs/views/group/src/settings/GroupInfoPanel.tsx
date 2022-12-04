@@ -5,7 +5,7 @@ import { useModalImageCropper, AutoImage, Pick, useImagePicker } from '@omagize/
 import { SmallUserItem } from '@omagize/views/shared';
 import { useColors } from '@omagize/ui/theme';
 import { BannerFormat, AvatarFormat } from '@omagize/utils/image';
-import { SettingsProps } from './index';
+import { SettingsProps } from './GroupSettingsView';
 
 export function InfoContent({ value, onChange, group }: SettingsProps) {
   const { textColorPrimary, brand } = useColors();

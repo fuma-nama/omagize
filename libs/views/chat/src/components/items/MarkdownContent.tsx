@@ -3,7 +3,7 @@ import { AssetType, getAssetUrl, Message, Snowflake } from '@omagize/api';
 import Markdown, { MarkdownToJSX } from 'markdown-to-jsx';
 import { createContext, useContext, useMemo } from 'react';
 import { EmojiEntity, EveryoneMention, StickerEntity, UserMention } from '@omagize/ui/editor';
-import { MemberPopup } from '@omagize/ui/components';
+import { UserPopup } from '@omagize/ui/components';
 import { unescapeHtml, escapeHtml } from '@omagize/utils/common';
 
 type Data = {
@@ -61,7 +61,7 @@ export default function MarkdownContent({ message }: { message: Message }) {
               return '';
           }
         })
-        .replace(/&lt;@([0-9]*)&gt;/g, `<Mention id="$1" group="${message.channel}" />`)
+        .replace(/&lt;@([0-9]*)&gt;/g, `<Mention id="$1" />`)
         .replace(/&lt;@everyone&gt;/g, '<Everyone />'),
     [message.content]
   );
@@ -73,7 +73,7 @@ export default function MarkdownContent({ message }: { message: Message }) {
   );
 }
 
-function Mention({ id, group }: { id: string; group?: string }) {
+function Mention({ id }: { id: string }) {
   const { mentions } = useContext(DataContext);
   const mention = useMemo(() => mentions.find((m) => m.id === id), [id, mentions]);
 
@@ -82,12 +82,12 @@ function Mention({ id, group }: { id: string; group?: string }) {
   }
 
   return (
-    <MemberPopup user={mention.id} group={group}>
+    <UserPopup user={mention.id}>
       <PopoverTrigger>
         <Box as="span">
           <UserMention avatar={mention.avatar} name={mention.name} />
         </Box>
       </PopoverTrigger>
-    </MemberPopup>
+    </UserPopup>
   );
 }

@@ -3,7 +3,7 @@ import { useGroup } from '@omagize/data-access-store';
 import { useSelected } from '@omagize/utils/route-utils';
 import { useQuery } from '@tanstack/react-query';
 import { ChatView, MessageProvider } from '../ChatView';
-import { LoadingPanel } from '@omagize/ui/components';
+import { LoadingPanel, UserPopupContext } from '@omagize/ui/components';
 import { MentionType } from '@omagize/utils/markdown';
 
 export function GroupChatView() {
@@ -34,5 +34,11 @@ export function GroupChatView() {
     channel: group?.channel?.id,
   };
 
-  return group == null ? <LoadingPanel size="sm" /> : <ChatView provider={provider} />;
+  return group == null ? (
+    <LoadingPanel size="sm" />
+  ) : (
+    <UserPopupContext.Provider value={{ type: 'member', group: selectedGroup }}>
+      <ChatView provider={provider} />
+    </UserPopupContext.Provider>
+  );
 }

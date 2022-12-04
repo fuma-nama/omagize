@@ -18,7 +18,7 @@ export type RawGroup = {
 };
 
 export type RawMember = RawUser & {
-  admin?: boolean;
+  role?: Role;
 };
 
 export type RawMemberClip = {
@@ -226,4 +226,26 @@ export async function createRole(group: Snowflake, name: string) {
       name: name,
     }),
   });
+}
+
+export type UpdateMemberOptions = {
+  /**
+   * Set user's role, will be ignored if `removeRole` is true
+   */
+  role?: Snowflake;
+  /**
+   * If true, remove the current role
+   */
+  removeRole?: true;
+};
+
+export async function updateMember(
+  group: Snowflake,
+  user: Snowflake,
+  options: UpdateMemberOptions
+) {
+  return await callReturn<RawMember>(`/groups/${group}/members/${user}`, {
+    method: 'PATCH',
+    body: JSON.stringify(options),
+  }).then((res) => new Member(res));
 }

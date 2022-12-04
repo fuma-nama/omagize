@@ -10,6 +10,9 @@ import {
   createRole,
   updateRoles,
   UpdateRolesOptions,
+  updateMember,
+  UpdateMemberOptions,
+  Member,
 } from '@omagize/api';
 import { useInfiniteQuery, useQuery, UseQueryOptions, useMutation } from '@tanstack/react-query';
 import { client } from './client';
@@ -94,6 +97,25 @@ export function useUpdateRolesMutation() {
               defaultRole: roles.defaultRole,
             }
         );
+      },
+    }
+  );
+}
+
+export function useUpdateMemberMutation() {
+  return useMutation(
+    ({
+      group,
+      user,
+      options,
+    }: {
+      group: Snowflake;
+      user: Snowflake;
+      options: UpdateMemberOptions;
+    }) => updateMember(group, user, options),
+    {
+      async onSuccess(updated, { group, user }) {
+        await client.setQueryData<Member>(Keys.member(group, user), updated);
       },
     }
   );

@@ -69,8 +69,11 @@ export function GroupDetail(raw: RawGroupDetail): GroupDetail {
 }
 
 export class Member extends User {
+  role: Role;
+
   constructor(raw: RawMember) {
     super(raw);
+    this.role = raw.role;
   }
 }
 

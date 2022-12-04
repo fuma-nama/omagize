@@ -2,7 +2,7 @@ import { searchMembers } from '@omagize/api';
 import { useGroup } from '@omagize/data-access-store';
 import { useSelected } from '@omagize/utils/route-utils';
 import { useQuery } from '@tanstack/react-query';
-import { ChatView, MessageProvider } from '../components';
+import { ChatView, MessageProvider } from '../ChatView';
 import { LoadingPanel } from '@omagize/ui/components';
 import { MentionType } from '@omagize/utils/markdown';
 

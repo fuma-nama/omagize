@@ -8,7 +8,7 @@ import { BannerFormat, AvatarFormat } from '@omagize/utils/image';
 import { SettingsProps } from './GroupSettingsView';
 
 export function GroupInfoPanel({ value, onChange, group }: SettingsProps) {
-  const { textColorPrimary, brand } = useColors();
+  const { textColorPrimary } = useColors();
 
   const cropper = useModalImageCropper();
   const banner = useImagePicker(value.banner, (f) =>
@@ -53,10 +53,6 @@ export function GroupInfoPanel({ value, onChange, group }: SettingsProps) {
         <Input
           color={textColorPrimary}
           variant="flushed"
-          _focus={{
-            borderColor: brand,
-            boxShadow: 'none',
-          }}
           fontSize="2xl"
           fontWeight="600"
           value={value.name ?? group.name}

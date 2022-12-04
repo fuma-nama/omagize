@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
@@ -59,7 +59,9 @@ function Modals() {
   );
 }
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+
+root.render(
   <ChakraProvider theme={theme}>
     <QueryClientProvider client={client}>
       <React.StrictMode>
@@ -69,6 +71,5 @@ ReactDOM.render(
         </BrowserRouter>
       </React.StrictMode>
     </QueryClientProvider>
-  </ChakraProvider>,
-  document.getElementById('root')
+  </ChakraProvider>
 );

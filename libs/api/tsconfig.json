@@ -10,7 +10,6 @@
       "path": "./tsconfig.spec.json"
     }
   ],
-  "implicitDependencies": ["utils"],
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true,
     "strict": true,

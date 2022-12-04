@@ -18,10 +18,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "./src",
-    "../../libs/utils/markdown/src/markdown",
-    "../../libs/ui/components/src/fields/SidebarTrigger.tsx"
-  ],
+  "include": ["./src"],
   "extends": "../../tsconfig.base.json"
 }

@@ -14,7 +14,7 @@ import { GrEmoji } from 'react-icons/gr';
 import { useMutation } from '@tanstack/react-query';
 import { FileUploadItem } from './items/FileUploadItem';
 import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
-import { MessageProvider } from './ChatView';
+import { MessageProvider } from '../ChatView';
 import { Descendant, Editor, Transforms } from 'slate';
 import { Slate } from 'slate-react';
 import { Card, CustomCardProps, useFilePicker } from '@omagize/ui/components';

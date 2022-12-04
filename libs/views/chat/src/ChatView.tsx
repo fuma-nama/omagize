@@ -1,20 +1,16 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
-import { Message, parseError, Snowflake } from '@omagize/api';
+import { parseError, Snowflake } from '@omagize/api';
 import { createContext, useContext, useRef } from 'react';
-import { MessageBar } from './MessageBar';
+import { MessageBar } from './components/MessageBar';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { LegacyRef } from 'react';
 import { BiMessageX } from 'react-icons/bi';
 import React from 'react';
 import { ErrorPanel } from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
-import { MessageItem, MessageItemSkeleton } from './items';
+import { MessageItem, MessageItemSkeleton } from './components/items';
 import { InputProvider } from '@omagize/ui/editor';
 import { useInfiniteMessageQuery } from '@omagize/data-access-api';
-
-function mapPage(messages: Message[]) {
-  return messages.map((message) => <MessageItem key={message.id} message={message} />);
-}
 
 export const MessageContext = createContext<MessageProvider>(undefined);
 export function useMessageProvider(): MessageProvider {
@@ -64,7 +60,9 @@ export function MessageView({ channel }: { channel: string }) {
     return <ErrorPanel retry={refetch}>{parseError(error, 'Failed to read messages')}</ErrorPanel>;
   }
 
-  const items = data?.pages.flatMap((a) => mapPage(a)) ?? [];
+  const items = (data?.pages ?? []).flatMap((messages) =>
+    messages.map((message) => <MessageItem key={message.id} message={message} />)
+  );
   return (
     <Box
       w="full"

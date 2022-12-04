@@ -19,8 +19,8 @@ import { MessageBar } from '../components/MessageBar';
 import { IoOpen } from 'react-icons/io5';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useDM } from '@omagize/utils/route-utils';
-import { LoadingPanel } from '@omagize/ui/components';
-import { MessageProvider, ChatView, MessageContext, MessageView } from '../components';
+import { LoadingPanel, QueryStatus } from '@omagize/ui/components';
+import { MessageProvider, ChatView, MessageContext, MessageView } from '../ChatView';
 
 export function PrivateChatView() {
   const { current: user } = useDM();
@@ -34,7 +34,11 @@ export function PrivateChatView() {
     channel: dmQuery.data?.id,
   };
 
-  return <>{dmQuery.isLoading ? <LoadingPanel size="sm" /> : <ChatView provider={provider} />}</>;
+  return (
+    <QueryStatus query={dmQuery} loading={<LoadingPanel size="sm" />} error="Failed to open DM">
+      <ChatView provider={provider} />
+    </QueryStatus>
+  );
 }
 
 export function PrivateChatModal({ user, onClose }: { user?: User; onClose: () => void }) {

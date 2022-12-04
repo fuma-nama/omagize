@@ -12,7 +12,7 @@ import {
   slateToMarkdown,
   SlateEditor,
 } from '@omagize/ui/editor';
-import { useMessageProvider } from '../ChatView';
+import { useMessageProvider } from '../../ChatView';
 
 export function MessageEditInput({ message, onClose }: { message: Message; onClose: () => void }) {
   const input = useMessageProvider().input;

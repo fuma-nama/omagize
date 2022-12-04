@@ -8,8 +8,8 @@ import {
   Input,
   Show,
 } from '@chakra-ui/react';
-import { createRole, Snowflake, updateRoles, UpdateRolesOptions } from '@omagize/api';
-import { useGroupDetailQuery } from '@omagize/data-access-api';
+import { Snowflake, updateRoles, UpdateRolesOptions } from '@omagize/api';
+import { useCreateRoleMutation, useGroupDetailQuery } from '@omagize/data-access-api';
 import { QueryStatus, LoadingPanel, SaveBar } from '@omagize/ui/components';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -19,7 +19,6 @@ import { DefaultRoleItem, Roles } from './Roles';
 
 export function RolePanel({ groupId }: { groupId: Snowflake }) {
   const query = useGroupDetailQuery(groupId);
-  const [name, setName] = useState('');
   const [value, setValue] = useState<UpdateRolesOptions>({});
   const [open, setOpen] = useState<SelectedRole | null>();
   const panel = usePermissionManagePanel(open, () => setOpen(null), value, setValue);
@@ -58,7 +57,7 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
     <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={3}>
       <QueryStatus loading={<LoadingPanel size="sm" />} query={query} error="Failed to load roles">
         <Flex direction="column" gap={3}>
-          <CreateRolePanel group={groupId} name={name} setName={setName} />
+          <CreateRolePanel group={groupId} />
           <DragDropContext onDragEnd={onDragEnd}>
             <Roles
               roles={group?.roles.map((role) => ({
@@ -89,16 +88,9 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
   );
 }
 
-function CreateRolePanel({
-  group,
-  name,
-  setName,
-}: {
-  group: Snowflake;
-  name: string;
-  setName: (v: string) => void;
-}) {
-  const mutation = useMutation(() => createRole(group, name));
+function CreateRolePanel({ group }: { group: Snowflake }) {
+  const [name, setName] = useState('');
+  const mutation = useCreateRoleMutation();
 
   return (
     <FormControl>
@@ -114,7 +106,12 @@ function CreateRolePanel({
         <Button
           variant="brand"
           isLoading={mutation.isLoading}
-          onClick={() => mutation.mutate()}
+          onClick={() =>
+            mutation.mutate({
+              group,
+              name,
+            })
+          }
           disabled={mutation.isLoading || name.trim().length === 0}
         >
           Create

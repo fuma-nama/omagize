@@ -1,6 +1,7 @@
 import { useChatStore } from './stores/ChatStore';
-import { Group, ReadyPayload } from '@omagize/api';
+import { Group } from '@omagize/api';
 import { useUserStore } from './stores/UserStore';
+import { ReadyPayload } from '@omagize/gateway';
 
 export function useGroup(id: string) {
   const groups = useUserStore((s) => s.groups);

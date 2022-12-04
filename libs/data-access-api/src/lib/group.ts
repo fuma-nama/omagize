@@ -7,8 +7,9 @@ import {
   fetchMemberInfo,
   fetchGroupDetail,
   fetchGroupInvite,
+  createRole,
 } from '@omagize/api';
-import { useInfiniteQuery, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, UseQueryOptions, useMutation } from '@tanstack/react-query';
 import { client } from './client';
 import { Keys } from './queries';
 
@@ -56,4 +57,22 @@ export function useGroupInviteQuery(group: Snowflake, options?: UseQueryOptions<
     refetchOnMount: 'always',
     ...options,
   });
+}
+
+export function useCreateRoleMutation() {
+  return useMutation(
+    (options: { group: string; name: string }) => createRole(options.group, options.name),
+    {
+      onSuccess(created, options) {
+        client.setQueryData<GroupDetail>(Keys.groupDetail(options.group), (prev) => {
+          if (prev == null || prev.roles.some((r) => r.id === created.id)) return null;
+
+          return {
+            ...prev,
+            roles: [...prev.roles, created].sort((a, b) => a.position - b.position),
+          };
+        });
+      },
+    }
+  );
 }

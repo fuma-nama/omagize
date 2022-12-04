@@ -8,10 +8,13 @@ import {
   Input,
   Show,
 } from '@chakra-ui/react';
-import { Snowflake, updateRoles, UpdateRolesOptions } from '@omagize/api';
-import { useCreateRoleMutation, useGroupDetailQuery } from '@omagize/data-access-api';
+import { Snowflake, UpdateRolesOptions } from '@omagize/api';
+import {
+  useCreateRoleMutation,
+  useGroupDetailQuery,
+  useUpdateRolesMutation,
+} from '@omagize/data-access-api';
 import { QueryStatus, LoadingPanel, SaveBar } from '@omagize/ui/components';
-import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { SelectedRole, usePermissionManagePanel } from './PermissionManagePanel';
@@ -130,11 +133,7 @@ function RolesSaveBar({
   group: Snowflake;
   reset: () => void;
 }) {
-  const mutation = useMutation(() => updateRoles(group, value), {
-    onSuccess() {
-      reset();
-    },
-  });
+  const mutation = useUpdateRolesMutation();
 
   return (
     <SaveBar isOpen={Object.entries(value).length !== 0}>
@@ -143,7 +142,7 @@ function RolesSaveBar({
           rounded="full"
           colorScheme="green"
           isLoading={mutation.isLoading}
-          onClick={() => mutation.mutate()}
+          onClick={() => mutation.mutate({ group, value }, { onSuccess: reset })}
         >
           Save
         </Button>

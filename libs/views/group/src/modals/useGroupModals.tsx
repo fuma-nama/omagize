@@ -1,7 +1,7 @@
 import { useDisclosure } from '@chakra-ui/react';
 import { GroupDetail } from '@omagize/api';
 import { DynamicModal } from '@omagize/ui/components';
-import { CreateEventModal, GroupInviteModal } from '@omagize/ui/forms';
+import { CreateEventModal, GroupInviteModal } from '@omagize/views/shared';
 import { useLeaveModal } from './useLeaveModal';
 
 export function useGroupModals(group: GroupDetail) {

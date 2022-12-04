@@ -23,7 +23,7 @@ import { useState } from 'react';
 import { onlyTime, onlyDate } from '@omagize/utils/common';
 import { UploadImage, BannerFormat } from '@omagize/utils/image';
 import { useImagePickerCropSimple } from '@omagize/ui/components';
-import { DateTimeForm } from '../forms/DateTimeForm';
+import { DateTimeForm } from '../panel/DateTimeForm';
 import { Keys } from '@omagize/data-access-api';
 import { ReactNode } from 'react';
 

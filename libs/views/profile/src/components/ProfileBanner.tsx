@@ -14,7 +14,7 @@ import { useSelfUser } from '@omagize/data-access-api';
 import { EditIcon } from '@chakra-ui/icons';
 import { useUserStore } from '@omagize/data-access-store';
 import { useColors } from '@omagize/ui/theme';
-import { EditAccountModal } from '@omagize/ui/forms';
+import { EditAccountModal } from '@omagize/views/shared';
 
 export default function ProfileBanner(props: CustomCardProps) {
   const user = useSelfUser();

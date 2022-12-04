@@ -25,7 +25,6 @@
       "@omagize/ui/chakra-ui-steps": ["libs/ui/chakra-ui-steps/src/index.ts"],
       "@omagize/ui/components": ["libs/ui/components/src/index.ts"],
       "@omagize/ui/editor": ["libs/ui/editor/src/index.ts"],
-      "@omagize/ui/forms": ["libs/ui/forms/src/index.ts"],
       "@omagize/ui/theme": ["libs/ui/theme/src/index.ts"],
       "@omagize/utils/common": ["libs/utils/common/src/index.ts"],
       "@omagize/utils/image": ["libs/utils/image/src/index.ts"],

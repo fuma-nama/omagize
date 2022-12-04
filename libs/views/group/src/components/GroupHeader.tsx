@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { FcLeave } from 'react-icons/fc';
 import { ReactNode } from 'react';
 import { CustomCardProps, CardButton, DynamicModal, useContextMenu } from '@omagize/ui/components';
-import { MemberModal } from '@omagize/ui/forms';
+import { MemberModal } from '@omagize/views/shared';
 import { useColors } from '@omagize/ui/theme';
 
 export type GroupHeaderProps = {
@@ -22,7 +22,7 @@ export function GroupHeader(props: GroupHeaderProps) {
   const { isOpen, onClose, onToggle } = useDisclosure();
   const navigate = useNavigate();
 
-  function Item({ text, icon, ...props }: { text: string; icon: any } & CustomCardProps) {
+  function Item({ text, icon, ...props }: { text: string; icon: ReactNode } & CustomCardProps) {
     return (
       <CardButton alignItems="center" gap={2} rounded="lg" {...props}>
         {icon}

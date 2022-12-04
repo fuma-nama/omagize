@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { FirebaseAuth, deleteAccount, firebase, parseFirebaseError } from '@omagize/api';
 import { Card, PasswordInput } from '@omagize/ui/components';
-import { ReauthTarget, useResetPasswordModal, ReAuthentricateModal } from '@omagize/ui/forms';
+import { ReauthTarget, useResetPasswordModal, ReAuthentricateModal } from '@omagize/views/shared';
 import { useColors } from '@omagize/ui/theme';
 import { useMutation } from '@tanstack/react-query';
 import { FirebaseError } from 'firebase/app';

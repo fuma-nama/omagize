@@ -1,6 +1,6 @@
 import { Button, useDisclosure } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import { AddGroupModal } from '@omagize/ui/forms';
+import { AddGroupModal } from '@omagize/views/shared';
 import { DynamicModal } from '@omagize/ui/components';
 
 export default function ActionBar() {

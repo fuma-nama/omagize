@@ -10,7 +10,14 @@ import { GroupHeader, OptionsMenu } from './components/GroupHeader';
 import { MessagesPreview } from '@omagize/views/chat';
 import Banner from './components/Banner';
 import { useGroupModals } from './modals/useGroupModals';
-import { LoadingPanel, ErrorPanel, Card, AutoImage, CardButton } from '@omagize/ui/components';
+import {
+  LoadingPanel,
+  ErrorPanel,
+  Card,
+  AutoImage,
+  CardButton,
+  UserPopupContext,
+} from '@omagize/ui/components';
 import { GroupEventItem } from '@omagize/views/shared';
 import { useColors } from '@omagize/ui/theme';
 import { useSelected } from '@omagize/utils/route-utils';
@@ -77,7 +84,14 @@ function Main({ group }: { group: GroupDetail }) {
         <Text fontSize="2xl" fontWeight="600">
           Recent Messages
         </Text>
-        <MessagesPreview channel={group.channel.id} limit={20} />
+        <UserPopupContext.Provider
+          value={{
+            type: 'member',
+            group: group.id,
+          }}
+        >
+          <MessagesPreview channel={group.channel.id} limit={20} />
+        </UserPopupContext.Provider>
       </Flex>
     </>
   );

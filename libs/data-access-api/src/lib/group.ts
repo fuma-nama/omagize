@@ -88,7 +88,7 @@ export function useUpdateRolesMutation() {
       updateRoles(options.group, options.value),
     {
       async onSuccess(roles, options) {
-        await client.setQueryData<GroupDetail>(
+        return await client.setQueryData<GroupDetail>(
           Keys.groupDetail(options.group),
           (prev) =>
             prev && {

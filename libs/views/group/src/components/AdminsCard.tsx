@@ -1,5 +1,5 @@
 import { Button, Flex, Text, useColorModeValue, VStack } from '@chakra-ui/react';
-import { UserItem } from '@omagize/views/shared';
+import { MemberItem } from '@omagize/views/shared';
 import { GroupDetail } from '@omagize/api';
 
 export default function AdminsCard({ group }: { group: GroupDetail }) {
@@ -23,7 +23,7 @@ export default function AdminsCard({ group }: { group: GroupDetail }) {
       </Flex>
       <VStack>
         {group.admins.map((member) => (
-          <UserItem key={member.id} user={member} />
+          <MemberItem key={member.id} member={member} group={group.id} />
         ))}
       </VStack>
     </Flex>

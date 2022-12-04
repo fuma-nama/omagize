@@ -37,7 +37,7 @@ export function MessagesPreview({ channel, limit }: { channel: Snowflake; limit:
         error="Failed to load messages"
       >
         {messages?.map((message) => (
-          <MessageItem message={message} />
+          <MessageItem key={message.id} message={message} />
         ))}
       </QueryStatus>
     </Flex>

@@ -15,7 +15,7 @@ export function UserItem({ user, ...props }: { user: User } & CustomCardProps) {
 
         <HStack gap="5px" pos="relative" align="start">
           <PopoverTrigger>
-            <Avatar name={user.username} src={user.avatarUrl} variant="normal" />
+            <Avatar name={user.username} src={user.avatarUrl} variant="normal" cursor="pointer" />
           </PopoverTrigger>
           <Flex direction="column">
             <PopoverTrigger>

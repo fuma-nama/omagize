@@ -11,8 +11,8 @@ import {
 } from '@chakra-ui/react';
 import { Snowflake } from '@omagize/api';
 import { useGroupMembersQuery } from '@omagize/data-access-api';
-import { UserItem } from '@omagize/views/shared';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { MemberItem } from '../items/MemberItem';
 
 export function MemberModal(props: { isOpen: boolean; onClose: () => void; group: Snowflake }) {
   return (
@@ -27,7 +27,7 @@ export function MemberModal(props: { isOpen: boolean; onClose: () => void; group
       <ModalContent overflow="hidden" h="500px">
         <ModalHeader>Group Members</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody id="members-div" overflow="auto">
           <Members group={props.group} enabled={props.isOpen} />
         </ModalBody>
 
@@ -56,7 +56,7 @@ function Members({ group, enabled }: { group: Snowflake; enabled: boolean }) {
       scrollableTarget="members-div"
     >
       {query.data.pages.map((page) =>
-        page.map((member) => <UserItem key={member.id} user={member} />)
+        page.map((member) => <MemberItem key={member.id} member={member} group={group} />)
       )}
     </Flex>
   );

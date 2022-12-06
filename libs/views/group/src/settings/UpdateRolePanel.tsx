@@ -144,6 +144,12 @@ export function RoleManagePanel({
   );
 }
 
+type Field = {
+  id: string;
+  field: keyof GroupPermission;
+  label: string;
+  description: string;
+};
 export function PermissionManagePanel({
   permission,
   value,
@@ -153,26 +159,46 @@ export function PermissionManagePanel({
   value: Partial<GroupPermission>;
   onChange: (update: Partial<GroupPermission>) => void;
 }) {
+  const items: Field[] = [
+    {
+      id: 'manage-members',
+      field: 'manageMembers',
+      label: 'Manage Members',
+      description: 'Allows kick and ban members',
+    },
+    {
+      id: 'mention-everyone',
+      field: 'mentionEveryone',
+      label: 'Mention Everyone',
+      description: 'Allows to mention @everyone',
+    },
+    {
+      id: 'manage-group-events',
+      field: 'manageGroupEvent',
+      label: 'Manage Group Events',
+      description: 'Create and Delete Group Events',
+    },
+    {
+      id: 'manage-messages',
+      field: 'manageMessages',
+      label: 'Manage Messages',
+      description: "Delete member's Messages",
+    },
+  ];
+
   return (
     <Flex direction="column" gap={2}>
-      <FormControl as={Card}>
-        <SwitchField
-          id="admin"
-          label="Administrator"
-          desc="Allows kick and ban members"
-          isChecked={value?.admin ?? permission.admin}
-          onChange={(e) => onChange({ admin: e.target.checked })}
-        />
-      </FormControl>
-      <FormControl as={Card}>
-        <SwitchField
-          id="mention_everyone"
-          label="Mention Everyone"
-          desc="Allows to mention @everyone"
-          isChecked={value?.mentionEveryone ?? permission.mentionEveryone}
-          onChange={(e) => onChange({ mentionEveryone: e.target.checked })}
-        />
-      </FormControl>
+      {items.map((item) => (
+        <FormControl key={item.id} as={Card}>
+          <SwitchField
+            id={item.id}
+            label={item.label}
+            desc={item.description}
+            isChecked={value?.[item.field] ?? permission[item.field]}
+            onChange={(e) => onChange({ [item.field]: e.target.checked })}
+          />
+        </FormControl>
+      ))}
     </Flex>
   );
 }

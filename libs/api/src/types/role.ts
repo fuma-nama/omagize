@@ -1,8 +1,10 @@
 import { Snowflake } from './common';
 
 export interface GroupPermission {
+  manageMembers: boolean;
   mentionEveryone: boolean;
-  admin: boolean;
+  manageGroupEvent: boolean;
+  manageMessages: boolean;
 }
 
 export interface Role extends GroupPermission {

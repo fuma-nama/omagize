@@ -1,20 +1,19 @@
 import { Flex, forwardRef, Icon, IconButton, Text } from '@chakra-ui/react';
-import { DefaultRole, Role } from '@omagize/api';
+import { DefaultRole, Role, Snowflake } from '@omagize/api';
 import { CustomCardProps, CardButton } from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
 import { useMemo } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { BsPeopleFill, BsThreeDotsVertical } from 'react-icons/bs';
 import { RiTeamLine } from 'react-icons/ri';
-import { SelectedRole } from './UpdateRolePanel';
 
 export function Roles({
   selected,
   setSelected,
   roles,
 }: {
-  selected?: SelectedRole;
-  setSelected: (v: SelectedRole) => void;
+  selected?: Snowflake;
+  setSelected: (role: Role) => void;
   roles: Role[];
 }) {
   const sorted_roles = useMemo(() => roles.sort((a, b) => a.position - b.position), [roles]);
@@ -34,14 +33,10 @@ export function Roles({
                 <RoleItem
                   ref={provided.innerRef}
                   role={role}
-                  selected={selected?.type === 'role' && selected.role.id === role.id}
+                  selected={selected === role.id}
                   box={{
                     my: 2,
-                    onClick: () =>
-                      setSelected({
-                        type: 'role',
-                        role: role,
-                      }),
+                    onClick: () => setSelected(role),
                     ...provided.dragHandleProps,
                     ...provided.draggableProps,
                   }}

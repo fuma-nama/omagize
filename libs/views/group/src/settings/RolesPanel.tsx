@@ -15,16 +15,57 @@ import {
   useUpdateRolesMutation,
 } from '@omagize/data-access-api';
 import { QueryStatus, LoadingPanel, SaveBar } from '@omagize/ui/components';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { SelectedRole, UpdateRoleModal, UpdateRolePanel } from './UpdateRolePanel';
 import { DefaultRoleItem, Roles } from './Roles';
 
+export type OpenedRole =
+  | {
+      type: 'role';
+      id: Snowflake;
+    }
+  | {
+      type: 'default_role';
+    };
+
 export function RolePanel({ groupId }: { groupId: Snowflake }) {
   const query = useGroupDetailQuery(groupId);
   const [value, setValue] = useState<UpdateRolesOptions>({});
-  const [open, setOpen] = useState<SelectedRole | null>();
+  const [open, setOpen] = useState<OpenedRole | null>();
   const group = query.data;
+
+  const mappedRoles = useMemo(
+    () =>
+      group?.roles.map((role) => ({
+        ...role,
+        ...value.roles?.[role.id],
+        position: value.positions?.[role.id] ?? role.position,
+      })),
+    [group?.roles, value.roles, value.positions]
+  );
+  const selected = useMemo<SelectedRole>(() => {
+    if (open == null || group == null) return null;
+
+    switch (open.type) {
+      case 'role': {
+        const role = group?.roles.find((role) => role.id === open.id);
+        if (role == null) return null;
+
+        return {
+          type: 'role',
+          role,
+        };
+      }
+      case 'default_role':
+        return {
+          type: 'default_role',
+          role: group?.defaultRole,
+        };
+      default:
+        return null;
+    }
+  }, [group, open]);
 
   const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
     if (destination == null || source.index === destination.index) return;
@@ -62,33 +103,24 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
           <CreateRolePanel group={groupId} />
           <DragDropContext onDragEnd={onDragEnd}>
             <Roles
-              roles={group?.roles.map((role) => ({
-                ...role,
-                ...value.roles?.[role.id],
-                position: value.positions?.[role.id] ?? role.position,
-              }))}
-              selected={open}
-              setSelected={setOpen}
+              roles={mappedRoles}
+              selected={open?.type === 'role' ? open.id : null}
+              setSelected={(v) => setOpen({ type: 'role', id: v.id })}
             />
           </DragDropContext>
           <DefaultRoleItem
             selected={open?.type === 'default_role'}
             role={group?.defaultRole}
-            onClick={() =>
-              setOpen({
-                type: 'default_role',
-                role: group?.defaultRole,
-              })
-            }
+            onClick={() => setOpen({ type: 'default_role' })}
           />
         </Flex>
       </QueryStatus>
       <Show above="lg">
-        <UpdateRolePanel selected={open} value={value} setValue={setValue} />
+        <UpdateRolePanel selected={selected} value={value} setValue={setValue} />
       </Show>
       <Show below="lg">
         <UpdateRoleModal
-          selected={open}
+          selected={selected}
           value={value}
           setValue={setValue}
           onClose={() => setOpen(null)}

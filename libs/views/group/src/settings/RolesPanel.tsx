@@ -1,26 +1,14 @@
-import {
-  Button,
-  ButtonGroup,
-  Flex,
-  FormControl,
-  Grid,
-  HStack,
-  Input,
-  Show,
-} from '@chakra-ui/react';
-import { Snowflake, UpdateRolesOptions } from '@omagize/api';
-import {
-  useCreateRoleMutation,
-  useGroupDetailQuery,
-  useUpdateRolesMutation,
-} from '@omagize/data-access-api';
+import { Button, ButtonGroup, Flex, Grid, Show } from '@chakra-ui/react';
+import { GroupDetail, Role, Snowflake, UpdateRolesOptions } from '@omagize/api';
+import { useGroupDetailQuery, useUpdateRolesMutation } from '@omagize/data-access-api';
 import { QueryStatus, LoadingPanel, SaveBar } from '@omagize/ui/components';
 import { useMemo, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { SelectedRole, UpdateRoleModal, UpdateRolePanel } from './UpdateRolePanel';
+import { MappedRole, UpdateRoleModal, UpdateRolePanel } from './UpdateRolePanel';
 import { DefaultRoleItem, Roles } from './Roles';
+import { CreateRolePanel } from './CreateRolePanel';
 
-export type OpenedRole =
+export type SelectedRole =
   | {
       type: 'role';
       id: Snowflake;
@@ -31,59 +19,16 @@ export type OpenedRole =
 
 export function RolePanel({ groupId }: { groupId: Snowflake }) {
   const query = useGroupDetailQuery(groupId);
-  const [value, setValue] = useState<UpdateRolesOptions>({});
-  const [open, setOpen] = useState<OpenedRole | null>();
   const group = query.data;
 
-  const mappedRoles = useMemo(
-    () =>
-      group?.roles.map((role) => ({
-        ...role,
-        ...value.roles?.[role.id],
-        position: value.positions?.[role.id] ?? role.position,
-      })),
-    [group?.roles, value.roles, value.positions]
-  );
-  const selected = useMemo<SelectedRole>(() => {
-    if (open == null || group == null) return null;
+  const [value, setValue] = useState<UpdateRolesOptions>({});
+  const [selected, setSelected] = useState<SelectedRole | null>();
+  const combined = useCombinedRoles(group?.roles, value);
+  const mappedSelect = useMemo(() => mapSelect(group, selected), [group, selected]);
 
-    switch (open.type) {
-      case 'role': {
-        const role = group?.roles.find((role) => role.id === open.id);
-        if (role == null) return null;
-
-        return {
-          type: 'role',
-          role,
-        };
-      }
-      case 'default_role':
-        return {
-          type: 'default_role',
-          role: group?.defaultRole,
-        };
-      default:
-        return null;
-    }
-  }, [group, open]);
-
-  const onDragEnd = ({ source, destination, draggableId }: DropResult) => {
-    if (destination == null || source.index === destination.index) return;
-    const updates = {
-      [draggableId]: destination.index,
-    };
-    const type = source.index > destination.index ? 'forward' : 'backward';
-
-    for (const role of group.roles) {
-      const position = value?.positions?.[role.id] ?? role.position;
-
-      if (type === 'forward' && position >= destination.index && position < source.index) {
-        updates[role.id] = position + 1;
-      }
-      if (type === 'backward' && position > source.index && position <= destination.index) {
-        updates[role.id] = position - 1;
-      }
-    }
+  const onDragEnd = (result: DropResult) => {
+    const updates = handleDragEnd(group, value, result);
+    if (updates == null) return;
 
     setValue((prev) => {
       return {
@@ -103,27 +48,27 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
           <CreateRolePanel group={groupId} />
           <DragDropContext onDragEnd={onDragEnd}>
             <Roles
-              roles={mappedRoles}
-              selected={open?.type === 'role' ? open.id : null}
-              setSelected={(v) => setOpen({ type: 'role', id: v.id })}
+              roles={combined}
+              selected={selected?.type === 'role' ? selected.id : null}
+              setSelected={(v) => setSelected({ type: 'role', id: v.id })}
             />
           </DragDropContext>
           <DefaultRoleItem
-            selected={open?.type === 'default_role'}
+            selected={selected?.type === 'default_role'}
             role={group?.defaultRole}
-            onClick={() => setOpen({ type: 'default_role' })}
+            onClick={() => setSelected({ type: 'default_role' })}
           />
         </Flex>
       </QueryStatus>
       <Show above="lg">
-        <UpdateRolePanel selected={selected} value={value} setValue={setValue} />
+        <UpdateRolePanel selected={mappedSelect} value={value} setValue={setValue} />
       </Show>
       <Show below="lg">
         <UpdateRoleModal
-          selected={selected}
+          selected={mappedSelect}
           value={value}
           setValue={setValue}
-          onClose={() => setOpen(null)}
+          onClose={() => setSelected(null)}
         />
       </Show>
       <RolesSaveBar group={query.data?.id} value={value} reset={() => setValue({})} />
@@ -131,37 +76,66 @@ export function RolePanel({ groupId }: { groupId: Snowflake }) {
   );
 }
 
-function CreateRolePanel({ group }: { group: Snowflake }) {
-  const [name, setName] = useState('');
-  const mutation = useCreateRoleMutation();
+function handleDragEnd(
+  group: GroupDetail,
+  value: UpdateRolesOptions,
+  { source, destination, draggableId }: DropResult
+): {
+  [key: string]: number;
+} | null {
+  if (destination == null || source.index === destination.index) return null;
+  const updates = {
+    [draggableId]: destination.index,
+  };
+  const type = source.index > destination.index ? 'forward' : 'backward';
 
-  return (
-    <FormControl>
-      <HStack>
-        <Input
-          w="full"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          variant="focus"
-          placeholder="Role name..."
-        />
-        <Button
-          variant="brand"
-          isLoading={mutation.isLoading}
-          onClick={() =>
-            mutation.mutate({
-              group,
-              name,
-            })
-          }
-          disabled={mutation.isLoading || name.trim().length === 0}
-        >
-          Create
-        </Button>
-      </HStack>
-    </FormControl>
+  for (const role of group.roles) {
+    const position = value?.positions?.[role.id] ?? role.position;
+
+    if (type === 'forward' && position >= destination.index && position < source.index) {
+      updates[role.id] = position + 1;
+    }
+    if (type === 'backward' && position > source.index && position <= destination.index) {
+      updates[role.id] = position - 1;
+    }
+  }
+
+  return updates;
+}
+
+function useCombinedRoles(roles: Role[] | null, value: UpdateRolesOptions) {
+  return useMemo(
+    () =>
+      roles?.map((role) => ({
+        ...role,
+        ...value.roles?.[role.id],
+        position: value.positions?.[role.id] ?? role.position,
+      })),
+    [roles, value.roles, value.positions]
   );
+}
+
+function mapSelect(group: GroupDetail | null, selected: SelectedRole | null): MappedRole | null {
+  if (selected == null || group == null) return null;
+
+  switch (selected.type) {
+    case 'role': {
+      const role = group?.roles.find((role) => role.id === selected.id);
+      if (role == null) return null;
+
+      return {
+        type: 'role',
+        role,
+      };
+    }
+    case 'default_role':
+      return {
+        type: 'default_role',
+        role: group?.defaultRole,
+      };
+    default:
+      return null;
+  }
 }
 
 function RolesSaveBar({

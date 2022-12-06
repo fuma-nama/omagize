@@ -23,7 +23,7 @@ import {
 import { Card, SwitchField } from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
 
-export type SelectedRole =
+export type MappedRole =
   | {
       type: 'role';
       role: Role;
@@ -34,7 +34,7 @@ export type SelectedRole =
     };
 
 export type UpdateRolePanelProps = {
-  selected: SelectedRole | null;
+  selected: MappedRole | null;
   value: UpdateRolesOptions;
   setValue: React.Dispatch<React.SetStateAction<UpdateRolesOptions>>;
 };

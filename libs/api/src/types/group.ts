@@ -33,7 +33,6 @@ export function Group(raw: RawGroup): Group {
 
 export type RawGroupDetail = RawGroup & {
   memberCount: number;
-  admins: RawMember[]; //admins' user id of the group
   events: RawGroupEvent[];
   defaultRole: DefaultRole;
   roles: Role[];
@@ -45,7 +44,6 @@ export type RawGroupDetail = RawGroup & {
 
 export type GroupDetail = Group & {
   memberCount: number;
-  admins: Member[]; //admins' of the group
   events: GroupEvent[];
   roles: Role[];
   defaultRole: DefaultRole;
@@ -58,7 +56,6 @@ export type GroupDetail = Group & {
 export function GroupDetail(raw: RawGroupDetail): GroupDetail {
   return {
     ...Group(raw),
-    admins: raw.admins.map((a) => new Member(a)),
     channel: Channel(raw.channel),
     events: raw.events.map((e) => GroupEvent(e)),
     memberCount: raw.memberCount,

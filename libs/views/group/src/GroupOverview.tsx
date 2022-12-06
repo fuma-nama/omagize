@@ -2,7 +2,6 @@
 import { Center, Flex, Grid, SimpleGrid, Text } from '@chakra-ui/react';
 
 // Custom components
-import AdminsCard from './components/AdminsCard';
 import { Notifications } from './components/Notifications';
 import { GroupDetail } from '@omagize/api';
 import { AddIcon } from '@chakra-ui/icons';
@@ -55,9 +54,6 @@ function Content({ group }: { group: GroupDetail }) {
         gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}
       >
         <About group={group} />
-        <Card px="0px">
-          <AdminsCard group={group} />
-        </Card>
         <Notifications />
       </Flex>
     </Grid>

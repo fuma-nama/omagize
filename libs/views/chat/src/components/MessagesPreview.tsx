@@ -3,6 +3,7 @@ import { Message, Snowflake } from '@omagize/api';
 import { useInfiniteMessageQuery } from '@omagize/data-access-api';
 import { QueryStatus } from '@omagize/ui/components';
 import { useMemo } from 'react';
+import { MessageContext, MessageProvider } from '../ChatView';
 import { MessageItemSkeleton, MessageItem } from './items';
 
 export function MessagesPreview({ channel, limit }: { channel: Snowflake; limit: number }) {
@@ -22,6 +23,15 @@ export function MessagesPreview({ channel, limit }: { channel: Snowflake; limit:
     return items;
   }, [pages, limit]);
 
+  const provider: MessageProvider = {
+    channel,
+    input: {
+      useSuggestion(search) {
+        return [];
+      },
+    },
+  };
+
   return (
     <Flex direction="column-reverse" maxH="1000px" overflow="auto" gap={5}>
       <QueryStatus
@@ -36,9 +46,11 @@ export function MessagesPreview({ channel, limit }: { channel: Snowflake; limit:
         }
         error="Failed to load messages"
       >
-        {messages?.map((message) => (
-          <MessageItem key={message.id} message={message} />
-        ))}
+        <MessageContext.Provider value={provider}>
+          {messages?.map((message) => (
+            <MessageItem key={message.id} message={message} />
+          ))}
+        </MessageContext.Provider>
       </QueryStatus>
     </Flex>
   );

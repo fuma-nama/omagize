@@ -13,6 +13,7 @@ import {
   updateMember,
   UpdateMemberOptions,
   Member,
+  deleteGroupEvent,
 } from '@omagize/api';
 import { useInfiniteQuery, useQuery, UseQueryOptions, useMutation } from '@tanstack/react-query';
 import { client } from './client';
@@ -119,4 +120,22 @@ export function useUpdateMemberMutation() {
       },
     }
   );
+}
+
+export function useDeleteGroupEventMutation() {
+  return useMutation((event: GroupEvent) => deleteGroupEvent(event.group, event.id), {
+    onSuccess: (_, event) => {
+      client.setQueryData<GroupEvent[]>(Keys.groupEvent.all, (prev) =>
+        prev?.filter((e) => e.id !== event.id)
+      );
+      client.setQueryData<GroupDetail>(
+        Keys.groupDetail(event.group),
+        (prev) =>
+          prev && {
+            ...prev,
+            events: prev.events.filter((e) => e.id !== event.id),
+          }
+      );
+    },
+  });
 }

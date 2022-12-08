@@ -24,7 +24,7 @@ function Events() {
   const query = useGroupEventsQuery();
 
   const empty = query.data != null && query.data.length === 0;
-  if (empty) return <></>;
+  if (empty) return null;
   return (
     <Flex direction="column" gap={3}>
       <Provider>
@@ -42,7 +42,11 @@ function Events() {
               ? query.data.map((event) => (
                   <GlobalGroupEventItem key={event.id} event={event} minW="fit-content" />
                 ))
-              : [<GroupEventSkeleton />, <GroupEventSkeleton />, <GroupEventSkeleton />]
+              : [
+                  <GroupEventSkeleton key={0} />,
+                  <GroupEventSkeleton key={1} />,
+                  <GroupEventSkeleton key={2} />,
+                ]
           }
         />
       </Provider>

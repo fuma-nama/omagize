@@ -4,8 +4,7 @@ import { callDefault, callReturn } from './utils/core';
 import { boolToString, toFormData } from './utils/common';
 import { SelfUser } from './types/account';
 import { GroupEvent } from './types/group';
-import { RawGroupEvent } from './GroupAPI';
-import { Channel, RawChannel, User } from './types';
+import { Channel, RawChannel, RawGroupEvent, User } from './types';
 
 export type RawUser = {
   id: Snowflake;

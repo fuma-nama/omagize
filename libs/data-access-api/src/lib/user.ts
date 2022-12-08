@@ -21,7 +21,7 @@ export function useSelfUser() {
 }
 
 export function useGroupEventsQuery() {
-  return useQuery(['all_group_event'], () => fetchGroupEvents());
+  return useQuery(Keys.groupEvent.all, () => fetchGroupEvents());
 }
 
 export function useUserInfo(id: Snowflake, enabled?: boolean) {

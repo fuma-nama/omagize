@@ -1,4 +1,4 @@
-import { deleteGroupEvent, GroupDetail, GroupEvent } from '@omagize/api';
+import { GroupEvent } from '@omagize/api';
 import { CustomCardProps, Card, HSeparator } from '@omagize/ui/components';
 import {
   Avatar,
@@ -20,8 +20,7 @@ import { useGroup } from '@omagize/data-access-store';
 import { useColors } from '@omagize/ui/theme';
 import { stringOfTime } from '@omagize/utils/common';
 import { useSelected } from '@omagize/utils/route-utils';
-import { useMutation } from '@tanstack/react-query';
-import { client, Keys } from '@omagize/data-access-api';
+import { useDeleteGroupEventMutation } from '@omagize/data-access-api';
 
 export function GlobalGroupEventItem({ event, ...props }: { event: GroupEvent } & CustomCardProps) {
   const { brand, textColorPrimary, textColorSecondary } = useColors();
@@ -123,23 +122,12 @@ function GroupEventContent({ event }: { event: GroupEvent }) {
 }
 
 function GroupEventActions({ happening, event }: { happening: boolean; event: GroupEvent }) {
-  const deleteMutation = useMutation(() => deleteGroupEvent(event.group, event.id), {
-    onSuccess: () => {
-      client.setQueryData<GroupDetail>(
-        Keys.groupDetail(event.group),
-        (prev) =>
-          prev && {
-            ...prev,
-            events: prev.events.filter((e) => e.id !== event.id),
-          }
-      );
-    },
-  });
+  const deleteMutation = useDeleteGroupEventMutation();
 
   return (
     <>
       <Button
-        onClick={() => deleteMutation.mutate()}
+        onClick={() => deleteMutation.mutate(event)}
         isLoading={deleteMutation.isLoading}
         {...(happening
           ? {

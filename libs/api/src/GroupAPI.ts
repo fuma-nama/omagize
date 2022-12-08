@@ -1,53 +1,20 @@
-import { RawUser } from './UserAPI';
 import { callDefault, callReturn } from './utils/core';
 import { stringifyDate } from './utils/common';
 import { toFormData } from './utils/common';
-import { DateObject, Snowflake } from './types/common';
+import { Snowflake } from './types/common';
 import { Group, GroupDetail, GroupInvite, Member } from './types/group';
 import { GroupEvent } from './types/group';
 import { Reset } from './AccountAPI';
-import { RawChannel, RawGroupDetail, Role, DefaultRole, RoleObject as RolesObject } from './types';
-
-export type RawGroup = {
-  id: Snowflake;
-  name: string;
-  iconHash?: string;
-  bannerHash?: string;
-  owner: Snowflake;
-  channel: RawChannel;
-};
-
-export type RawMember = RawUser & {
-  role?: Role;
-};
-
-export type RawMemberClip = {
-  group: Snowflake;
-  user: Snowflake;
-  admin: boolean;
-};
-
-/**
- * Let group members join your Birthdays, parties, and more!
- */
-export type RawGroupEvent = {
-  id: Snowflake;
-  imageHash?: number;
-  name: string;
-  description?: string;
-  startAt: DateObject;
-  endAt?: DateObject;
-  place?: string;
-  group: string;
-  author: RawUser;
-};
-
-export type RawGroupInvite = {
-  group: Snowflake;
-  code: string;
-  once: boolean;
-  expireAt: DateObject;
-};
+import {
+  RawGroupDetail,
+  Role,
+  DefaultRole,
+  RoleObject as RolesObject,
+  RawGroup,
+  RawGroupEvent,
+  RawGroupInvite,
+  RawMember,
+} from './types';
 
 export type UpdateGroupOptions = {
   name?: string;
@@ -136,18 +103,25 @@ export async function createGroupEvent(
   place: string | null,
   group: string
 ): Promise<GroupEvent> {
-  const data = new FormData();
-  data.append('name', name);
-  data.append('description', description);
-  data.append('startAt', stringifyDate(startAt));
-  if (endAt != null) data.append('endAt', stringifyDate(endAt));
-  if (image != null) data.append('image', image);
-  if (place != null) data.append('place', place);
+  const data = toFormData({
+    name: name,
+    description: description,
+    startAt: startAt,
+    endAt: endAt,
+    image: image,
+    place: place,
+  });
 
   return callReturn<RawGroupEvent>(`/groups/${group}/events`, {
     method: 'POST',
     body: data,
   }).then((res) => GroupEvent(res));
+}
+
+export async function deleteGroupEvent(group: Snowflake, event: Snowflake) {
+  return await callDefault(`/groups/${group}/events/${event}`, {
+    method: 'DELETE',
+  });
 }
 
 export function fetchGroups(): Promise<Group[]> {

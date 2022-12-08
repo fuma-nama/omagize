@@ -1,7 +1,7 @@
 import { DateObject } from '../types/common';
 
 export function toFormData(from: {
-  [key: string]: Blob | string | boolean | number | null | undefined;
+  [key: string]: Date | Blob | string | boolean | number | null | undefined;
 }): FormData {
   const data = new FormData();
 

@@ -1,11 +1,51 @@
-import { RawGroupEvent } from '../GroupAPI';
-import { RawGroup, RawGroupInvite, RawMember } from '../GroupAPI';
-import { Snowflake } from './common';
+import { DateObject, Snowflake } from './common';
 import { toBannerUrl, toIconUrl } from '../utils/mediaUtils';
 import { User } from './user';
 import { parseDate } from '../utils/common';
-import { Channel } from './message';
+import { Channel, RawChannel } from './message';
 import { DefaultRole, Role } from './role';
+import { RawUser } from '../UserAPI';
+
+export type RawGroup = {
+  id: Snowflake;
+  name: string;
+  iconHash?: string;
+  bannerHash?: string;
+  owner: Snowflake;
+  channel: RawChannel;
+};
+
+export type RawMember = RawUser & {
+  role?: Role;
+};
+
+export type RawMemberClip = {
+  group: Snowflake;
+  user: Snowflake;
+  admin: boolean;
+};
+
+/**
+ * Let group members join your Birthdays, parties, and more!
+ */
+export type RawGroupEvent = {
+  id: Snowflake;
+  imageHash?: number;
+  name: string;
+  description?: string;
+  startAt: DateObject;
+  endAt?: DateObject;
+  place?: string;
+  group: string;
+  author: RawUser;
+};
+
+export type RawGroupInvite = {
+  group: Snowflake;
+  code: string;
+  once: boolean;
+  expireAt: DateObject;
+};
 
 export type Group = {
   id: Snowflake;

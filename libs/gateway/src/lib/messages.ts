@@ -101,3 +101,11 @@ export type MessageRemovedEvent = {
   id: Snowflake;
   channel: Snowflake;
 };
+
+export type GroupUpdatedEvent = {
+  group: Snowflake;
+  name: string;
+  introduction?: string;
+  iconHash?: string;
+  bannerHash?: string;
+};

@@ -10,7 +10,7 @@ export type RawChannel = {
   id: Snowflake;
   group?: Snowflake;
   dm?: Snowflake;
-  lastRead: DateObject;
+  lastRead?: DateObject;
   unreadMentions: RawMentionNotification[];
 };
 
@@ -18,7 +18,7 @@ export type Channel = {
   id: Snowflake;
   group?: Snowflake;
   dm?: Snowflake;
-  lastRead: Date;
+  lastRead?: Date;
   unreadMentions: MentionNotification[];
 };
 

@@ -15,6 +15,8 @@ import {
   FriendRequestType,
   Relation,
   RelationShip,
+  toIconUrl,
+  toBannerUrl,
 } from '@omagize/api';
 import { client, Keys, addMessage, dispatchUser, addGroupEvent } from '@omagize/data-access-api';
 import { useUserStore } from '@omagize/data-access-store';
@@ -27,6 +29,7 @@ import {
   FriendRequestRepliedEvent,
   FriendRemovedEvent,
   MessageRemovedEvent,
+  GroupUpdatedEvent,
 } from '@omagize/gateway';
 import { InfiniteData } from '@tanstack/react-query';
 
@@ -35,7 +38,7 @@ export function handleEvent(message: GatewayMessage<unknown>) {
 
   switch (message.t) {
     case EventType.GroupUpdated: {
-      onGroupUpdate(message as GatewayMessage<RawGroupDetail>);
+      onGroupUpdate(message as GatewayMessage<GroupUpdatedEvent>);
       break;
     }
     case EventType.GroupAdded: {
@@ -174,12 +177,22 @@ function onGroupEvent(event: GatewayMessage<RawGroupEvent>) {
   return addGroupEvent(e);
 }
 
-function onGroupUpdate(event: GatewayMessage<RawGroupDetail>) {
-  const updated = GroupDetail(event.d);
+function onGroupUpdate(event: GatewayMessage<GroupUpdatedEvent>) {
+  const { group, ...raw } = event.d;
+  const updated = {
+    ...raw,
+    iconUrl: toIconUrl(group, raw.iconHash),
+    bannerUrl: toBannerUrl(group, raw.bannerHash),
+  };
 
-  useUserStore.getState().updateGroup(updated);
+  const { groups, updateGroup } = useUserStore.getState();
+  const prev = groups.find((g) => g.id === group);
 
-  client.setQueryData<GroupDetail>(Keys.groupDetail(updated.id), updated);
+  updateGroup({ ...prev, ...updated });
+  client.setQueryData<GroupDetail>(Keys.groupDetail(group), (prev) => ({
+    ...prev,
+    ...updated,
+  }));
 }
 
 function onGroupAdded(event: GatewayMessage<GroupAddedEvent>) {

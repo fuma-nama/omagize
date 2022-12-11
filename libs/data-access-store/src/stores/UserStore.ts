@@ -1,12 +1,5 @@
-import {
-  Relation,
-  FriendRequest,
-  Group,
-  LoginPayload,
-  ReadyPayload,
-  SelfUser,
-  Snowflake,
-} from '@omagize/api';
+import { Relation, FriendRequest, Group, LoginPayload, SelfUser, Snowflake } from '@omagize/api';
+import { ReadyPayload } from '@omagize/gateway';
 import create from 'zustand';
 import { Reset, withReset } from '../utils';
 

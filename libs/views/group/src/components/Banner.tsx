@@ -5,11 +5,9 @@ import {
   Box,
   Flex,
   Heading,
-  Hide,
   HStack,
   Icon,
   Image,
-  Show,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -32,7 +30,6 @@ export default function Banner() {
 function Content({ group }: { group: GroupDetail }) {
   const bg = useColorModeValue('brand.300', 'brand.400');
   const membersQuery = useGroupMembersQuery(group.id);
-  const loaded = membersQuery.isSuccess;
 
   return (
     <Box
@@ -58,17 +55,11 @@ function Content({ group }: { group: GroupDetail }) {
           brightness={0.5}
         />
       )}
-      <Box pos="relative">
-        {loaded && (
-          <>
-            <Show above="3sm">
-              <BannerContent group={group} members={membersQuery.data?.pages[0]} />
-            </Show>
-            <Hide above="3sm">
-              <BannerSmallContent group={group} members={membersQuery.data?.pages[0]} />
-            </Hide>
-          </>
-        )}
+      <Box display={{ base: 'none', '3sm': 'block' }}>
+        <BannerContent group={group} members={membersQuery.data?.pages[0]} />
+      </Box>
+      <Box display={{ base: 'block', '3sm': 'none' }}>
+        <BannerSmallContent group={group} members={membersQuery.data?.pages[0]} />
       </Box>
       <Icon as={MdArrowDropDown} w="30px" h="30px" pos="absolute" top="20px" right="20px" />
     </Box>
@@ -77,7 +68,7 @@ function Content({ group }: { group: GroupDetail }) {
 
 type BannerContentProps = {
   group: GroupDetail;
-  members: Member[];
+  members?: Member[];
 };
 function BannerContent({ group, members }: BannerContentProps) {
   return (
@@ -95,7 +86,7 @@ function BannerContent({ group, members }: BannerContentProps) {
         <Heading>{group.name}</Heading>
         <HStack mt="10px">
           <AvatarGroup max={5}>
-            {members.map((member) => (
+            {members?.map((member) => (
               <Avatar key={member.id} src={member.avatarUrl} name={member.username} />
             ))}
           </AvatarGroup>
@@ -127,7 +118,7 @@ function BannerSmallContent({ group, members }: BannerContentProps) {
 
       <HStack color={textColorPrimary} bg={cardBg} w="full" rounded="2xl" minH="40px">
         <AvatarGroup max={5}>
-          {members.map((member) => (
+          {members?.map((member) => (
             <Avatar key={member.id} src={member.avatarUrl} name={member.username} />
           ))}
         </AvatarGroup>

@@ -2,7 +2,7 @@
 import { Center, Flex, Grid, SimpleGrid, Text } from '@chakra-ui/react';
 
 // Custom components
-import { Notifications } from './components/Notifications';
+import { GroupNotifications } from './components/GroupNotifications';
 import { GroupDetail } from '@omagize/api';
 import { AddIcon } from '@chakra-ui/icons';
 import { GroupHeader, OptionsMenu } from './components/GroupHeader';
@@ -11,11 +11,11 @@ import Banner from './components/Banner';
 import { useGroupModals } from './modals/useGroupModals';
 import {
   LoadingPanel,
-  ErrorPanel,
   Card,
   AutoImage,
   CardButton,
   UserPopupContext,
+  QueryStatus,
 } from '@omagize/ui/components';
 import { GroupEventItem } from '@omagize/views/shared';
 import { useColors } from '@omagize/ui/theme';
@@ -26,14 +26,11 @@ export function GroupOverview() {
   const { selectedGroup } = useSelected();
   const query = useGroupDetailQuery(selectedGroup);
 
-  if (query.isLoading) {
-    return <LoadingPanel size="sm" />;
-  }
-  if (query.isError) {
-    return <ErrorPanel retry={() => query.refetch()}>Failed to load Group</ErrorPanel>;
-  }
-
-  return <Content group={query.data} />;
+  return (
+    <QueryStatus query={query} loading={<LoadingPanel size="sm" />} error="Failed to load Group">
+      <Content group={query.data} />
+    </QueryStatus>
+  );
 }
 
 function Content({ group }: { group: GroupDetail }) {
@@ -54,7 +51,7 @@ function Content({ group }: { group: GroupDetail }) {
         gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}
       >
         <About group={group} />
-        <Notifications />
+        <GroupNotifications group={group} />
       </Flex>
     </Grid>
   );

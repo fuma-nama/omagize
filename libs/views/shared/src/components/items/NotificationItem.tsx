@@ -1,8 +1,10 @@
 import { Card, Center, Flex, Icon, Skeleton, SkeletonText, Text } from '@chakra-ui/react';
 import { GoMention } from 'react-icons/go';
 import { IconType } from 'react-icons';
-import { GroupNotification, MentionNotification } from '@omagize/api';
+import { LoginNotification, MentionNotification, UserNotification } from '@omagize/api';
 import { useItemHoverBg, useColors } from '@omagize/ui/theme';
+import { AiFillWarning } from 'react-icons/ai';
+import { ReactNode } from 'react';
 
 export function NotificationSkeleton() {
   const bgItem = useItemHoverBg();
@@ -22,16 +24,19 @@ export function NotificationSkeleton() {
     </Card>
   );
 }
-export function GenericItem({
+
+export function NotificationItem({
   icon,
   title,
   description,
   time,
+  children,
 }: {
   icon: IconType;
   title: string;
   description?: string;
   time: string;
+  children?: ReactNode;
 }) {
   const { textColorPrimary, textColorSecondary } = useColors();
   const bgItem = useItemHoverBg();
@@ -52,29 +57,38 @@ export function GenericItem({
             </Text>
           </Flex>
           <Text color={textColorSecondary}>{description}</Text>
+          {children}
         </Flex>
       </Flex>
     </Card>
   );
 }
 
-export function GroupNotificationItem(props: GroupNotification & any) {
+export function MentionNotificationItem({ mention }: { mention: MentionNotification }) {
+  return (
+    <NotificationItem
+      icon={GoMention}
+      title={`${mention.author.username} Mentioned You`}
+      time={mention.timestamp.toLocaleTimeString()}
+      description={mention.message}
+    />
+  );
+}
+
+export function UserNotificationItem(props: UserNotification) {
   switch (props.type) {
-    case 'mention':
-      return <MentionNotificationItem {...props} />;
-    default:
-      return <></>;
+    case 'login':
+      return <LoginNotificationItem {...props} />;
   }
 }
 
-function MentionNotificationItem(props: MentionNotification) {
-  const { author, date } = props;
-
+function LoginNotificationItem({ from, time }: LoginNotification) {
   return (
-    <GenericItem
-      icon={GoMention}
-      title={`${author.username} Mentioned You`}
-      time={date.toLocaleTimeString()}
+    <NotificationItem
+      icon={AiFillWarning}
+      title={`New Login From ${from}`}
+      description={`Something Logged in to your Account From ${from}`}
+      time={time.toLocaleTimeString()}
     />
   );
 }

@@ -1,6 +1,7 @@
+import { MentionNotification } from './notification';
 import { RawAttachment } from '../MessageAPI';
 import { DateObject, Snowflake } from './common';
-import { User } from '.';
+import { RawMentionNotification, User } from '.';
 import { toAttachmentUrl } from '../utils';
 import { parseDate } from '../utils/common';
 import { RawUser } from '../UserAPI';
@@ -9,17 +10,23 @@ export type RawChannel = {
   id: Snowflake;
   group?: Snowflake;
   dm?: Snowflake;
+  lastRead: DateObject;
+  unreadMentions: RawMentionNotification[];
 };
 
 export type Channel = {
   id: Snowflake;
   group?: Snowflake;
   dm?: Snowflake;
+  lastRead: Date;
+  unreadMentions: MentionNotification[];
 };
 
 export function Channel(raw: RawChannel): Channel {
   return {
     ...raw,
+    lastRead: parseDate(raw.lastRead),
+    unreadMentions: raw.unreadMentions.map((m) => MentionNotification(m)),
   };
 }
 

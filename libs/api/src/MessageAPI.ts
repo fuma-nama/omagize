@@ -91,3 +91,9 @@ export async function deleteMessage(id: Snowflake, channel: Snowflake) {
     method: 'DELETE',
   });
 }
+
+export async function notifyReadChannel(channel: Snowflake) {
+  await callDefault(`/channels/${channel}/read`, {
+    method: 'POST',
+  });
+}

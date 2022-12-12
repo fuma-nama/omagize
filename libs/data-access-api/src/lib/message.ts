@@ -1,7 +1,13 @@
 import { Keys } from './queries';
-import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { client } from './client';
-import { Message, Snowflake, fetchMessagesLatest, fetchMessagesBefore } from '@omagize/api';
+import {
+  Message,
+  Snowflake,
+  fetchMessagesLatest,
+  fetchMessagesBefore,
+  notifyReadChannel,
+} from '@omagize/api';
 
 export function useInfiniteMessageQuery(channel: Snowflake) {
   return useInfiniteQuery(
@@ -35,4 +41,8 @@ export function addMessage(message: Message) {
       };
     }
   );
+}
+
+export function useNotifyReadChannelMutation(channel: Snowflake) {
+  return useMutation(['read_channel', channel], () => notifyReadChannel(channel));
 }

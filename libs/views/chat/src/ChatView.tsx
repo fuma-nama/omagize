@@ -1,6 +1,6 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { parseError, Snowflake } from '@omagize/api';
-import { createContext, useContext, useRef } from 'react';
+import { createContext, useContext, useEffect, useRef } from 'react';
 import { MessageBar } from './components/MessageBar';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { LegacyRef } from 'react';
@@ -10,7 +10,7 @@ import { ErrorPanel } from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
 import { MessageItem, MessageItemSkeleton } from './components/items';
 import { InputProvider } from '@omagize/ui/editor';
-import { useInfiniteMessageQuery } from '@omagize/data-access-api';
+import { useInfiniteMessageQuery, useNotifyReadChannelMutation } from '@omagize/data-access-api';
 
 export const MessageContext = createContext<MessageProvider>(undefined);
 export function useMessageProvider(): MessageProvider {
@@ -23,6 +23,9 @@ export interface MessageProvider {
 }
 
 export function ChatView({ provider }: { provider: MessageProvider }) {
+  const notifyMutation = useNotifyReadChannelMutation(provider.channel);
+  useEffect(() => notifyMutation.mutate(), [provider.channel]);
+
   return (
     <MessageContext.Provider value={provider}>
       <Flex pos="relative" h="full" direction="column">

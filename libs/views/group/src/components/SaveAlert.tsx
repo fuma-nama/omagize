@@ -1,11 +1,11 @@
 import { WarningIcon } from '@chakra-ui/icons';
 import { Center, Text, Box } from '@chakra-ui/react';
 import { Slide } from '@chakra-ui/transition';
+import { TagFlex } from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
 import { ReactNode } from 'react';
-import { TagFlex } from '../card';
 
-export function SaveBar({ isOpen, children }: { isOpen: boolean; children: ReactNode }) {
+export function SaveAlert({ isOpen, children }: { isOpen: boolean; children: ReactNode }) {
   const { cardBg, textColorPrimary, shadow } = useColors();
 
   return (

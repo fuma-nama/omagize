@@ -14,8 +14,9 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { GroupInfoPanel } from './GroupInfoPanel';
 import { RolePanel } from './RolesPanel';
-import { TabButton, SaveBar, Card, LoadingPanel, SwitchField } from '@omagize/ui/components';
+import { TabButton, Card, LoadingPanel, SwitchField } from '@omagize/ui/components';
 import { useSelected } from '@omagize/utils/route-utils';
+import { SaveAlert } from '../components/SaveAlert';
 
 export type SettingsProps = {
   value: UpdateGroupOptions;
@@ -73,7 +74,7 @@ function GroupSaveBar({
   });
 
   return (
-    <SaveBar isOpen={Object.entries(value).length !== 0}>
+    <SaveAlert isOpen={Object.entries(value).length !== 0}>
       <ButtonGroup isDisabled={mutation.isLoading} ml="auto">
         <Button
           rounded="full"
@@ -87,7 +88,7 @@ function GroupSaveBar({
           Discard
         </Button>
       </ButtonGroup>
-    </SaveBar>
+    </SaveAlert>
   );
 }
 

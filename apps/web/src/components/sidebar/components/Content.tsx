@@ -9,6 +9,7 @@ import ActionBar from './ActionBar';
 import { useUserStore } from '@omagize/data-access-store';
 import { Snowflake } from '@omagize/api';
 import { ChatGroupItem, ChatGroupSkeleton } from '@omagize/views/shared';
+import { Repeat } from '@omagize/ui/components';
 
 function SidebarContent({
   items,
@@ -33,7 +34,7 @@ function SidebarContent({
           <ActionBar />
         </Box>
 
-        <Flex direction="column" ps="10px" gap={3}>
+        <Flex direction="column" px="10px" gap={3}>
           {groups != null ? (
             groups.map((group) => (
               <ChatGroupItem
@@ -44,10 +45,9 @@ function SidebarContent({
               />
             ))
           ) : (
-            <>
+            <Repeat times={2}>
               <ChatGroupSkeleton />
-              <ChatGroupSkeleton />
-            </>
+            </Repeat>
           )}
         </Flex>
       </Stack>

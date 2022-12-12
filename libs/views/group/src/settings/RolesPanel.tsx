@@ -1,12 +1,13 @@
 import { Button, ButtonGroup, Flex, Grid, Show } from '@chakra-ui/react';
 import { GroupDetail, Role, Snowflake, UpdateRolesOptions } from '@omagize/api';
 import { useGroupDetailQuery, useUpdateRolesMutation } from '@omagize/data-access-api';
-import { QueryStatus, LoadingPanel, SaveBar } from '@omagize/ui/components';
+import { QueryStatus, LoadingPanel } from '@omagize/ui/components';
 import { useMemo, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { MappedRole, UpdateRoleModal, UpdateRolePanel } from './UpdateRolePanel';
 import { DefaultRoleItem, Roles } from './Roles';
 import { CreateRolePanel } from './CreateRolePanel';
+import { SaveAlert } from '../components/SaveAlert';
 
 export type SelectedRole =
   | {
@@ -150,7 +151,7 @@ function RolesSaveBar({
   const mutation = useUpdateRolesMutation();
 
   return (
-    <SaveBar isOpen={Object.entries(value).length !== 0}>
+    <SaveAlert isOpen={Object.entries(value).length !== 0}>
       <ButtonGroup isDisabled={mutation.isLoading} ml="auto">
         <Button
           rounded="full"
@@ -164,6 +165,6 @@ function RolesSaveBar({
           Discard
         </Button>
       </ButtonGroup>
-    </SaveBar>
+    </SaveAlert>
   );
 }

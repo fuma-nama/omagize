@@ -8,10 +8,6 @@ export type RawNotification = {
   date: DateObject;
 };
 
-export async function clearGroupNotifications() {
-  await delay(3000);
-}
-
 export function fetchUserNotifications(): UserNotification[] {
   return [];
 }

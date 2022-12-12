@@ -1,13 +1,13 @@
-import { clearGroupNotifications, GroupDetail } from '@omagize/api';
+import { GroupDetail } from '@omagize/api';
 import { Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { BiNotificationOff } from 'react-icons/bi';
-import { useMutation } from '@tanstack/react-query';
 import { Card, Placeholder, PlaceholderLayout } from '@omagize/ui/components';
 import { MentionNotificationItem } from '@omagize/views/shared';
+import { useNotifyReadChannelMutation } from '@omagize/data-access-api';
 
 export function GroupNotifications({ group }: { group: GroupDetail }) {
   const channel = group.channel;
-  const mutation = useMutation(['clear_group_notifications'], () => clearGroupNotifications());
+  const mutation = useNotifyReadChannelMutation(group.channel.id);
 
   const textColor = useColorModeValue('secondaryGray.900', 'white');
 

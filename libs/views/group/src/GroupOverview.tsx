@@ -25,35 +25,25 @@ import { useGroupDetailQuery } from '@omagize/data-access-api';
 export function GroupOverview() {
   const { selectedGroup } = useSelected();
   const query = useGroupDetailQuery(selectedGroup);
+  const group = query.data;
 
   return (
     <QueryStatus query={query} loading={<LoadingPanel size="sm" />} error="Failed to load Group">
-      <Content group={query.data} />
-    </QueryStatus>
-  );
-}
-
-function Content({ group }: { group: GroupDetail }) {
-  return (
-    <Grid
-      h="full"
-      mb="20px"
-      gridTemplateColumns={{ xl: 'repeat(2, 1fr)', '2xl': '1fr 0.46fr' }}
-      gap={{ base: '20px', xl: '20px' }}
-      display={{ base: 'block', xl: 'grid' }}
-    >
-      <Flex flexDirection="column" gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}>
-        <Main group={group} />
-      </Flex>
-      <Flex
-        direction="column"
-        gap="20px"
-        gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}
+      <Grid
+        h="full"
+        mb="20px"
+        gridTemplateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)', '2xl': '1fr 0.46fr' }}
+        gap={{ base: '20px', xl: '20px' }}
       >
-        <About group={group} />
-        <GroupNotifications group={group} />
-      </Flex>
-    </Grid>
+        <Flex flexDirection="column">
+          <Main group={group} />
+        </Flex>
+        <Flex direction="column" gap="20px">
+          <About group={group} />
+          <GroupNotifications group={group} />
+        </Flex>
+      </Grid>
+    </QueryStatus>
   );
 }
 

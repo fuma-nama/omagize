@@ -48,7 +48,7 @@ export function NotificationItem({
           <Icon as={icon} color="white" width="30px" height="30px" />
         </Center>
         <Flex flexGrow={1} direction="column">
-          <Flex direction="row" mb="5px">
+          <Flex direction="row" mb="5px" gap={2}>
             <Text flex={1} color={textColorPrimary} fontSize="md" fontWeight="bold">
               {title}
             </Text>

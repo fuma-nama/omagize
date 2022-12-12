@@ -1,6 +1,6 @@
 import { Icon } from '@chakra-ui/react';
-import { MdPerson, MdHome } from 'react-icons/md';
-import { BsSearch } from 'react-icons/bs';
+import { MdPerson, MdHome, MdShop } from 'react-icons/md';
+import { BsSearch, BsShop } from 'react-icons/bs';
 
 const items: SidebarItem[] = [
   {
@@ -11,7 +11,7 @@ const items: SidebarItem[] = [
   {
     name: 'Explore',
     path: '/user/explore',
-    icon: <Icon as={BsSearch} width="20px" height="20px" color="inherit" />,
+    icon: <Icon as={MdShop} width="20px" height="20px" color="inherit" />,
   },
   {
     name: 'Profile',

@@ -1,3 +1,4 @@
+import { useUserStore } from '@omagize/data-access-store';
 import { Keys } from './queries';
 import { InfiniteData, useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { client } from './client';
@@ -7,6 +8,8 @@ import {
   fetchMessagesLatest,
   fetchMessagesBefore,
   notifyReadChannel,
+  Channel,
+  GroupDetail,
 } from '@omagize/api';
 
 export function useInfiniteMessageQuery(channel: Snowflake) {
@@ -44,5 +47,36 @@ export function addMessage(message: Message) {
 }
 
 export function useNotifyReadChannelMutation(channel: Snowflake) {
-  return useMutation(['read_channel', channel], () => notifyReadChannel(channel));
+  return useMutation(['read_channel', channel], () => notifyReadChannel(channel), {
+    onSuccess() {
+      const { groups } = useUserStore.getState();
+      const group = groups.find((g) => g.channel.id === channel);
+      const data: Partial<Channel> = {
+        lastRead: new Date(Date.now()),
+        unreadMentions: [],
+      };
+
+      useUserStore.setState({
+        groups: groups.map((group) =>
+          group.channel.id === channel
+            ? {
+                ...group,
+                channel: {
+                  ...group.channel,
+                  ...data,
+                },
+              }
+            : group
+        ),
+      });
+
+      client.setQueryData<GroupDetail>(Keys.groupDetail(group.id), (old) => ({
+        ...old,
+        channel: {
+          ...old.channel,
+          ...data,
+        },
+      }));
+    },
+  });
 }

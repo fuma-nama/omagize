@@ -57,7 +57,7 @@ export const Card = forwardRef<CustomCardProps, 'div'>((props, ref) => {
       position="relative"
       borderRadius="20px"
       minWidth="0px"
-      wordWrap="break-word"
+      wordBreak="break-word"
       bg={bg}
       backgroundClip="border-box"
       {...props}

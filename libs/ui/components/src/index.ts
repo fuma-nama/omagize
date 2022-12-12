@@ -8,3 +8,4 @@ export * from './menu';
 export * from './modals';
 export * from './panel';
 export * from './picker';
+export * from './transitions';

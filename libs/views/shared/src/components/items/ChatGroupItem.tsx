@@ -1,6 +1,18 @@
-import { Avatar, Box, SkeletonCircle, SkeletonText, Text } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  Center,
+  Collapse,
+  HStack,
+  SkeletonCircle,
+  SkeletonText,
+  Spacer,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { Group } from '@omagize/api';
-import { Card, FadeImage } from '@omagize/ui/components';
+import { Card, HorizontalCollapse } from '@omagize/ui/components';
+import { useItemHoverBg } from '@omagize/ui/theme';
 
 export function ChatGroupItem({
   active,
@@ -11,37 +23,41 @@ export function ChatGroupItem({
   active: boolean;
   onSelect: () => void;
 }) {
+  const cardBg = useColorModeValue('gray.200', 'navy.900');
+  const hover = useItemHoverBg();
   const activeColor = 'brand.400';
 
   return (
-    <Box
-      transition="0.2s linear"
-      mr={active ? '5px' : '10px'}
-      filter="auto"
-      brightness={active ? 1 : 0.7}
+    <Card
+      overflow="hidden"
       onClick={onSelect}
-      _hover={{ cursor: 'pointer' }}
+      p={0}
+      flexDirection="column"
+      cursor="pointer"
+      bg={cardBg}
+      {...(active && hover)}
     >
-      <Card pos="relative" overflow="hidden">
-        <FadeImage
-          src={group.bannerUrl}
-          direction="to left"
-          placeholder={activeColor}
-          bg={active ? activeColor : 'black'}
-          image={{
-            filter: 'auto',
-            brightness: active ? 0.9 : 0.7,
-          }}
-        />
+      <Collapse in={active}>
+        <HStack p={3} bgImg={group.bannerUrl} bgColor={active ? activeColor : 'black'}>
+          <Avatar name={group.name} src={group.iconUrl} size="sm" />
+        </HStack>
+      </Collapse>
 
-        <Box pos="relative" maxW="70%" color="white">
-          <Avatar name={group.name} src={group.iconUrl} />
-          <Text mt={3} fontSize="lg" fontWeight="bold" lineHeight={1}>
-            {group.name}
-          </Text>
-        </Box>
-      </Card>
-    </Box>
+      <HStack p={3}>
+        <HorizontalCollapse in={!active}>
+          <Avatar name={group.name} src={group.iconUrl} size="sm" />
+        </HorizontalCollapse>
+        <Text mt={3} fontSize="lg" fontWeight="bold" lineHeight={1}>
+          {group.name}
+        </Text>
+        <Spacer />
+        {group.channel.unreadMentions.length > 0 && (
+          <Center pos="relative" color="white" bg={activeColor} w="30px" h="30px" rounded="full">
+            {group.channel.unreadMentions.length}
+          </Center>
+        )}
+      </HStack>
+    </Card>
   );
 }
 

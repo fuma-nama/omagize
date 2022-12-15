@@ -7,7 +7,6 @@ import {
   Heading,
   HStack,
   Icon,
-  Image,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -18,13 +17,17 @@ import { GroupDetail } from '@omagize/api';
 import { useColors } from '@omagize/ui/theme';
 import { useSelected } from '@omagize/utils/route-utils';
 import { MdArrowDropDown } from 'react-icons/md';
+import { QueryStatus } from '@omagize/ui/components';
 
 export default function Banner() {
   const { selectedGroup } = useSelected();
   const query = useGroupDetailQuery(selectedGroup);
-  if (query.isLoading) return <></>;
 
-  return <Content group={query.data} />;
+  return (
+    <QueryStatus query={query} loading={null} error="Failed to load Group">
+      <Content group={query.data} />
+    </QueryStatus>
+  );
 }
 
 function Content({ group }: { group: GroupDetail }) {
@@ -33,33 +36,28 @@ function Content({ group }: { group: GroupDetail }) {
 
   return (
     <Box
+      pos="relative"
       cursor="pointer"
       color="white"
-      pos="relative"
-      overflow="hidden"
       borderRadius="30px"
-      bg={bg}
-      p={{ base: '10px', '3sm': '20px' }}
+      bgColor={bg}
+      bgImg={group.bannerUrl}
+      bgSize="cover"
     >
-      {group.bannerUrl && (
-        <Image
-          pos="absolute"
-          src={group.bannerUrl}
-          objectFit="cover"
-          top="-5px"
-          left="0"
-          w="full"
-          h="calc(100% + 10px)"
-          filter="auto"
-          blur="sm"
-          brightness={0.5}
-        />
-      )}
-      <Box display={{ base: 'none', '3sm': 'block' }}>
-        <BannerContent group={group} members={membersQuery.data?.pages[0]} />
-      </Box>
-      <Box display={{ base: 'block', '3sm': 'none' }}>
-        <BannerSmallContent group={group} members={membersQuery.data?.pages[0]} />
+      <Box
+        h="full"
+        borderRadius="30px"
+        backdropFilter={group.bannerUrl != null && 'auto'}
+        backdropBlur="sm"
+        backdropBrightness={0.5}
+        p={{ base: '10px', '3sm': '20px' }}
+      >
+        <Box display={{ base: 'none', '3sm': 'block' }}>
+          <BannerContent group={group} members={membersQuery.data?.pages[0]} />
+        </Box>
+        <Box display={{ base: 'block', '3sm': 'none' }}>
+          <BannerSmallContent group={group} members={membersQuery.data?.pages[0]} />
+        </Box>
       </Box>
       <Icon as={MdArrowDropDown} w="30px" h="30px" pos="absolute" top="20px" right="20px" />
     </Box>

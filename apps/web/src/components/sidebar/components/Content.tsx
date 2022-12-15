@@ -9,7 +9,6 @@ import {
   Stack,
   Text,
   Tooltip,
-  useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 //   Custom components
@@ -41,10 +40,10 @@ function SidebarContent({
 
   // SIDEBAR
   return (
-    <Flex direction="column" height="100%" pt="25px" borderRadius="30px" overflow="auto">
+    <Flex direction="column" height="100%" overflow="auto">
       <AddGroupModal isOpen={isOpen} onClose={onClose} />
 
-      <Brand />
+      <Brand rounded="lg" />
       <Stack direction="column" mt="18px" mb="auto">
         <Box ps="10px">
           {items.map((route: SidebarItem, index: number) => (

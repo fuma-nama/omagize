@@ -8,7 +8,7 @@
     "test": "nx test",
     "dev": "nx dev",
     "preinstall": "npx only-allow pnpm",
-    "scan": "pnpm tsc -p ./apps/web"
+    "preview": "vite preview"
   },
   "private": true,
   "dependencies": {

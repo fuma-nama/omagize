@@ -1,6 +1,5 @@
 {
   "extends": "../../tsconfig.base.json",
-  "files": [],
   "include": [],
   "references": [
     {
@@ -14,9 +13,6 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "@omagize/utils": ["libs/utils/src/index.ts"]
-    }
+    "noFallthroughCasesInSwitch": true
   }
 }

@@ -1,8 +1,8 @@
 import { firebase } from './../firebase/firebase';
 import { OmagizeError, APIErrorCode } from '../types/common';
 
-export const api = 'http://localhost:8080';
-export const orgin = 'http://localhost:3000';
+export const api = import.meta.env.API;
+export const orgin = document.location.origin;
 
 export type ReturnOptions<T> = Options & {
   /**

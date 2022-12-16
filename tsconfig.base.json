@@ -17,6 +17,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "typeRoots": ["./types"],
     "paths": {
       "@omagize/api": ["libs/api/src/index.ts"],
       "@omagize/data-access-api": ["libs/data-access-api/src/index.ts"],

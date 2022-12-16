@@ -1,6 +1,3 @@
-import { mode } from '@chakra-ui/theme-tools';
-import { dark, light } from './colors';
-
 export const globalStyles = {
   colors: {
     brand: {
@@ -79,34 +76,5 @@ export const globalStyles = {
     gray: {
       100: '#FAFCFE',
     },
-  },
-  styles: {
-    global: (props: any) => ({
-      '::-webkit-scrollbar': {
-        w: '5px',
-        h: '5px',
-        bg: 'transparent',
-      },
-      '::-webkit-scrollbar-thumb': {
-        borderRadius: '10px',
-        bg: mode('rgba(0, 0, 0, 0.2)', 'rgba(255, 255, 255, 0.2)')(props),
-      },
-      '::-webkit-calendar-picker-indicator': {
-        filter: mode('none', 'invert(1)')(props),
-      },
-      body: {
-        color: mode(light.textColorPrimary, dark.textColorPrimary)(props),
-        overflow: 'hidden',
-        bg: mode('secondaryGray.300', 'navy.900')(props),
-        fontFamily: 'DM Sans',
-        letterSpacing: '-0.5px',
-      },
-      input: {
-        color: 'gray.700',
-      },
-      html: {
-        fontFamily: 'DM Sans',
-      },
-    }),
   },
 };

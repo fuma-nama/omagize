@@ -9,8 +9,20 @@ html,
 body,
 #root {
   height: 100%;
+  overflow: hidden;
+  letter-spacing: -0.5px;
 }
 
 option {
   color: black;
+}
+
+input {
+  color: var(--colors-gray-700);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background: transparent;
 }

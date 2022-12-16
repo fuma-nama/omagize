@@ -17,7 +17,7 @@
       "executor": "@nrwl/vite:build",
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/web"
+        "outputPath": "dist"
       }
     }
   }

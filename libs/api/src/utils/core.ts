@@ -1,7 +1,7 @@
 import { firebase } from './../firebase/firebase';
 import { OmagizeError, APIErrorCode } from '../types/common';
 
-export const api = import.meta.env.API;
+export const api = import.meta.env.VITE_API;
 export const orgin = document.location.origin;
 
 export type ReturnOptions<T> = Options & {

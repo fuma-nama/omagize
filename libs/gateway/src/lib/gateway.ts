@@ -2,7 +2,7 @@ import ReconnectingWebSocket, { CloseEvent, ErrorEvent } from 'reconnecting-webs
 import { GatewayMessage, IdentityEvent, OpCode, ReadyPayload, RawReadyPayload } from './messages';
 import { User } from 'firebase/auth';
 
-export const ws = import.meta.env.WS;
+export const ws = import.meta.env.VITE_WS;
 
 export interface GatewayListener {
   onReady: (payload: ReadyPayload) => void;

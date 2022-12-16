@@ -4,10 +4,10 @@ interface ImportMeta {
     /**
      * api url
      */
-    API: string;
+    VITE_API: string;
     /**
      * gateway url
      */
-    WS: string;
+    VITE_WS: string;
   };
 }

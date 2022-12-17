@@ -2,12 +2,9 @@
 import { Box, Center, Flex, Grid, Heading, HStack, Text } from '@chakra-ui/react';
 import { FooterAdmin, OmagizeLogo, ThemeToggle } from '@omagize/ui/components';
 import { useColors } from '@omagize/ui/theme';
+import { ReactNode } from 'react';
 
-function AuthIllustration(props: {
-  children: JSX.Element | string;
-  illustrationBackground: string;
-}) {
-  const { children, illustrationBackground } = props;
+export function AuthPanel({ children }: { children: ReactNode }) {
   // Chakra color mode
   return (
     <Grid
@@ -24,7 +21,7 @@ function AuthIllustration(props: {
           {children}
         </Box>
       </Flex>
-      <AuthImage image={illustrationBackground} />
+      <AuthImage />
       <Center pos="absolute" bottom={{ base: '15px', xl: '30px' }} w="full">
         <Box w="1313px" maxW="full" px="30px">
           <FooterAdmin />
@@ -35,7 +32,7 @@ function AuthIllustration(props: {
   );
 }
 
-function AuthImage({ image }: { image: string }) {
+function AuthImage() {
   const { brand } = useColors();
 
   return (
@@ -55,5 +52,3 @@ function AuthImage({ image }: { image: string }) {
     </Center>
   );
 }
-
-export default AuthIllustration;

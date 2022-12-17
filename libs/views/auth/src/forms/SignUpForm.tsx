@@ -5,9 +5,8 @@ import { GoogleSignInButton } from '../components/GoogleSignInButton';
 import { AuthForm } from '../components/AuthForm';
 import { AuthPage } from '..';
 import { SignUpOptions, useVerifySignUp } from '@omagize/api';
-import { HSeparator } from '@omagize/ui/components';
+import { HSeparator, PasswordInput } from '@omagize/ui/components';
 import { useAuthColors } from '@omagize/ui/theme';
-import { PasswordInput } from 'libs/ui/components/src/fields/PasswordInput';
 
 export function SignUpForm(props: {
   signup: (options: SignUpOptions) => void;

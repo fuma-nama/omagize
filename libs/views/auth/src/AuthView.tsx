@@ -1,15 +1,12 @@
 import { Box, Collapse } from '@chakra-ui/react';
-import illustration from './assets/auth.png';
-import { SignUpForm } from './signup/SignUpForm';
 import { firebase, FirebaseAuth, SignUpOptions } from '@omagize/api';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { VerifyMailAuto } from './signup/verify';
-import { SignInForm } from './signIn';
 import { User } from 'firebase/auth';
-import { ResetPasswordForm } from './signIn/ResetPasswordForm';
-import { AuthLayout } from './layouts/AuthLayout';
+import { ResetPasswordForm } from './forms/ResetPasswordForm';
+import { AuthPanel } from './layouts/AuthPanel';
 import { handleSignIn, handleSignUp } from '@omagize/data-access-api';
+import { SignUpForm, VerifyEmailPanel, SignInForm } from './forms';
 
 export type SignInOptions = {
   email: string;
@@ -58,7 +55,7 @@ export function AuthView() {
   );
 
   return (
-    <AuthLayout illustrationBackground={illustration}>
+    <AuthPanel>
       <Box
         maxW={{ base: '100%', md: 'max-content' }}
         w="100%"
@@ -77,7 +74,7 @@ export function AuthView() {
           />
         </Collapse>
         <Collapse in={page === AuthPage.VerifyEmail}>
-          <VerifyMailAuto
+          <VerifyEmailPanel
             user={firebase.auth.currentUser}
             isLoading={sendVerifyEmail.isLoading}
             send={(user) => sendVerifyEmail.mutate(user)}
@@ -96,6 +93,6 @@ export function AuthView() {
           <ResetPasswordForm setPage={setPage} />
         </Collapse>
       </Box>
-    </AuthLayout>
+    </AuthPanel>
   );
 }

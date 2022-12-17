@@ -3,7 +3,7 @@ import { User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { AuthForm } from '../components/AuthForm';
 
-export function VerifyMailAuto({
+export function VerifyEmailPanel({
   user,
   send,
   isLoading,
@@ -13,40 +13,18 @@ export function VerifyMailAuto({
   isLoading: boolean;
 }) {
   return (
-    <VerifyMail
-      email={user?.email}
-      resend={() => send(user)}
-      isResending={isLoading}
-      changeEmail={() => {
-        console.log('Not implemented');
-      }}
-    />
-  );
-}
-
-export function VerifyMail({
-  email,
-  resend,
-  isResending,
-}: {
-  email: string;
-  resend: () => void;
-  isResending: boolean;
-  changeEmail: () => void;
-}) {
-  return (
     <AuthForm
       title="Verify Email"
       description={
         <>
-          We have just sent your an email <b>{email}</b>
+          We have just sent your an email <b>{user?.email}</b>
           <br />
           Please check the email to continue
         </>
       }
     >
       <ButtonGroup>
-        <Button variant="brand" onClick={resend} isLoading={isResending}>
+        <Button variant="brand" onClick={() => send(user)} isLoading={isLoading}>
           Resend Email
         </Button>
         <Button>Change Email</Button>

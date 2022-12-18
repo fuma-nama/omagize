@@ -1,6 +1,6 @@
 // Chakra Imports
 import { Flex, FlexProps } from '@chakra-ui/react';
-import { SearchBar, SidebarTrigger, ThemeSwitch, UserMenu } from '@omagize/ui/components';
+import { SidebarTrigger, ThemeSwitch, UserMenu } from '@omagize/ui/components';
 import { useNavbarColors } from '@omagize/ui/theme';
 // Custom Components
 
@@ -9,7 +9,6 @@ import { NotificationsMenu } from '../menu/NotificationsMenu';
 export default function AdminNavbarLinks() {
   return (
     <NavbarLinksBox>
-      <SearchBar mb="unset" me="10px" />
       <NavbarDefaultItems />
     </NavbarLinksBox>
   );
@@ -17,12 +16,13 @@ export default function AdminNavbarLinks() {
 
 export function NavbarDefaultItems() {
   const { iconColor, textColorPrimary, menuBg, shadow } = useNavbarColors();
+  const icon = { base: textColorPrimary, '2sm': iconColor };
 
   return (
     <>
-      <SidebarTrigger />
-      <NotificationsMenu />
-      <ThemeSwitch color={iconColor} />
+      <SidebarTrigger color={icon} />
+      <NotificationsMenu color={icon} />
+      <ThemeSwitch color={icon} />
       <UserMenu color={textColorPrimary} shadow={shadow} bg={menuBg} />
     </>
   );
@@ -36,10 +36,11 @@ export function NavbarLinksBox(props: FlexProps) {
     <Flex
       alignItems="center"
       direction="row"
-      bg={menuBg}
-      p="10px"
+      bg={{ '2sm': menuBg }}
+      p={{ '2sm': '7px' }}
+      boxShadow={{ '2sm': shadow }}
       borderRadius="30px"
-      boxShadow={shadow}
+      gap="10px"
       {...props}
     />
   );

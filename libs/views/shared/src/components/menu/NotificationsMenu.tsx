@@ -1,4 +1,4 @@
-import { Flex, Icon, Menu, MenuButton, MenuList, Text } from '@chakra-ui/react';
+import { Flex, Icon, Menu, MenuButton, MenuButtonProps, MenuList, Text } from '@chakra-ui/react';
 import { MdNotificationsNone } from 'react-icons/md';
 import { BiNotificationOff } from 'react-icons/bi';
 import { useNavbarColors } from '@omagize/ui/theme';
@@ -6,7 +6,7 @@ import { useUserNotificationsQuery } from '@omagize/data-access-api';
 import { Repeat, Placeholder, QueryStatusLayout } from '@omagize/ui/components';
 import { NotificationSkeleton, UserNotificationItem } from '../items';
 
-export function NotificationsMenu() {
+export function NotificationsMenu(props: MenuButtonProps) {
   const { iconColor, textColorPrimary, menuBg, shadow, textColorBrand } = useNavbarColors();
   const query = useUserNotificationsQuery();
 
@@ -16,8 +16,8 @@ export function NotificationsMenu() {
         'min-width': '0',
       }}
     >
-      <MenuButton p="0px">
-        <Icon mt="6px" as={MdNotificationsNone} color={iconColor} w="18px" h="18px" me="10px" />
+      <MenuButton p="0px" color={iconColor} {...props}>
+        <Icon mt="6px" as={MdNotificationsNone} w="18px" h="18px" />
       </MenuButton>
       <MenuList
         boxShadow={shadow}

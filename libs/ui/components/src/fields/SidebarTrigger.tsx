@@ -1,24 +1,20 @@
-import { Flex, Icon, useColorModeValue } from '@chakra-ui/react';
+import { Icon, IconButton, IconButtonProps, useColorModeValue } from '@chakra-ui/react';
 import { IoMenuOutline } from 'react-icons/io5';
 import { usePageStore } from '@omagize/data-access-store';
 
-export function SidebarTrigger() {
+export function SidebarTrigger(props: Omit<IconButtonProps, 'aria-label'>) {
   const menuColor = useColorModeValue('gray.400', 'white');
   const setOpen = usePageStore((s) => s.setSidebarIsOpen);
 
   return (
-    <Flex display={{ sm: 'flex', xl: 'none' }} alignItems="center">
-      <Flex w="max-content" h="max-content" onClick={() => setOpen(true)}>
-        <Icon
-          as={IoMenuOutline}
-          color={menuColor}
-          my="auto"
-          w="20px"
-          h="20px"
-          me="10px"
-          _hover={{ cursor: 'pointer' }}
-        />
-      </Flex>
-    </Flex>
+    <IconButton
+      onClick={() => setOpen(true)}
+      variant="no-hover"
+      icon={<Icon as={IoMenuOutline} w="20px" h="20px" />}
+      color={menuColor}
+      _hover={{ cursor: 'pointer' }}
+      aria-label="toggle sidebar"
+      {...props}
+    />
   );
 }

@@ -35,8 +35,8 @@ export function AdminNavbar(
 
   return (
     <NavbarBox>
-      <Box mb={{ sm: '8px', md: '0px' }}>
-        <Breadcrumb>
+      <Box>
+        <Breadcrumb display={{ base: 'none', '3sm': 'flex' }}>
           <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
             <BreadcrumbLink href="#" color={secondaryText}>
               Pages
@@ -55,7 +55,7 @@ export function AdminNavbar(
           bg="inherit"
           borderRadius="inherit"
           fontWeight="bold"
-          fontSize="34px"
+          fontSize={{ base: '24px', '3sm': '34px' }}
           _hover={{ color: { mainText } }}
           _active={{
             bg: 'inherit',
@@ -69,7 +69,7 @@ export function AdminNavbar(
           {brandText || <SkeletonText w="full" noOfLines={2} />}
         </Link>
       </Box>
-      {active?.navbarLinks || <AdminNavbarLinks />}
+      <AdminNavbarLinks />
     </NavbarBox>
   );
 }
@@ -83,52 +83,26 @@ export function NavbarBox({
   bar?: FlexProps;
   children: ReactNode;
 }) {
-  const navbarBackdrop = 'blur(20px)';
   const navbarBg = useColorModeValue('rgba(244, 247, 254, 0.2)', 'rgba(11,20,55,0.5)');
+  const breakpoint = '2sm';
 
   return (
-    <Box
-      zIndex="sticky"
-      pos="sticky"
-      bg={navbarBg}
-      backdropFilter={navbarBackdrop}
-      backgroundPosition="center"
-      backgroundSize="cover"
-      borderRadius="16px"
-      transitionDelay="0s, 0s, 0s, 0s"
-      transitionDuration=" 0.25s, 0.25s, 0.25s, 0s"
-      transition-property="box-shadow, background-color, filter, border"
-      transitionTimingFunction="linear, linear, linear, linear"
-      alignItems={{ xl: 'center' }}
-      display="flex"
-      justifyContent={{ xl: 'center' }}
-      lineHeight="25.6px"
-      mx="auto"
-      pb="8px"
-      px={{
-        sm: '15px',
-        md: '10px',
-      }}
-      ps={{
-        xl: '12px',
-      }}
-      pt="8px"
-      top={0}
-      w="full"
-      {...box}
-    >
+    <Box top={0} zIndex="sticky" pos="sticky" p={{ [breakpoint]: '12px' }} pb="2px">
       <Flex
-        w="100%"
-        direction={{
-          base: 'column',
-          '3sm': 'row',
-        }}
-        gap={2}
-        justify="space-between"
-        alignItems="stretch"
-        {...bar}
+        bg={navbarBg}
+        backdropFilter="blur(20px)"
+        borderRadius={{ [breakpoint]: '16px' }}
+        alignItems={{ xl: 'center' }}
+        justifyContent={{ xl: 'center' }}
+        lineHeight="25.6px"
+        py="8px"
+        px="10px"
+        w="full"
+        {...box}
       >
-        {children}
+        <Flex w="100%" direction="row" gap={2} justify="space-between" align="center" {...bar}>
+          {children}
+        </Flex>
       </Flex>
     </Box>
   );

@@ -1,27 +1,16 @@
-import { Button, Icon, useColorMode } from '@chakra-ui/react';
+import { Icon, IconButton, IconButtonProps, useColorMode } from '@chakra-ui/react';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 
-export function ThemeSwitch(props: { color?: string }) {
+export function ThemeSwitch(props: Omit<IconButtonProps, 'aria-label'>) {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <Button
+    <IconButton
       variant="no-hover"
-      bg="transparent"
-      p="0px"
-      minW="unset"
-      minH="unset"
-      h="18px"
-      w="max-content"
       onClick={toggleColorMode}
-    >
-      <Icon
-        me="10px"
-        h="18px"
-        w="18px"
-        color={props.color}
-        as={colorMode === 'light' ? IoMdMoon : IoMdSunny}
-      />
-    </Button>
+      icon={<Icon h="18px" w="18px" as={colorMode === 'light' ? IoMdMoon : IoMdSunny} />}
+      aria-label="switch color mode"
+      {...props}
+    />
   );
 }

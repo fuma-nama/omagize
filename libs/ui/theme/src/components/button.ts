@@ -107,6 +107,13 @@ export const buttonStyles = {
             bg: mode('secondaryGray.100', 'brand.400')(props),
           },
         }),
+        'no-hover': {
+          p: '0px',
+          minW: 'unset',
+          minH: 'unset',
+          h: '18px',
+          w: 'max-content',
+        },
       },
     },
   },

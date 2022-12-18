@@ -26,7 +26,9 @@ export function GroupHeader(props: GroupHeaderProps) {
     return (
       <CardButton alignItems="center" gap={2} rounded="lg" {...props}>
         {icon}
-        <Text fontSize={{ base: 'md', md: 'lg' }}>{text}</Text>
+        <Text display={{ base: 'none', '2sm': 'block' }} fontSize={{ base: 'md', md: 'lg' }}>
+          {text}
+        </Text>
       </CardButton>
     );
   }

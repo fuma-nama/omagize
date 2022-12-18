@@ -14,6 +14,7 @@ import {
   IconButton,
   Tooltip,
   Icon,
+  ButtonGroup,
 } from '@chakra-ui/react';
 
 // Custom components
@@ -63,18 +64,9 @@ function Content() {
     <>
       <CreateAssetModal isOpen={isOpen} onClose={onClose} />
       <Banner upload={onOpen} />
-      <Flex direction="column">
-        <Flex
-          ms="24px"
-          mt="45px"
-          mb="20px"
-          justifyContent="space-between"
-          direction="row"
-          flexWrap="wrap"
-          align="center"
-          gap={3}
-        >
-          <Text color={textColor} fontSize="2xl" fontWeight="700" mr={6}>
+      <Flex direction="column" px={{ base: '12px', '3sm': '24px' }} gap="20px" my="45px">
+        <HStack justifyContent="space-between" flexWrap="wrap" gap={3} spacing={0}>
+          <Text color={textColor} fontSize="2xl" fontWeight="700">
             Latest Emojis
             <Tooltip label="Refresh Assets">
               <IconButton
@@ -86,15 +78,15 @@ function Content() {
               />
             </Tooltip>
           </Text>
-          <HStack>
+          <ButtonGroup>
             <Button variant="brand" leftIcon={<BiUpload />} onClick={onOpen}>
               Upload
             </Button>
             <Button leftIcon={<BsPeople />} onClick={() => navigate('/user/explore/me')}>
               My Assets
             </Button>
-          </HStack>
-        </Flex>
+          </ButtonGroup>
+        </HStack>
         <QueryStatusLayout
           query={query}
           watch={query.data?.emojis}
@@ -115,7 +107,7 @@ function Content() {
         >
           <LatestEmojis assets={query.data} />
         </QueryStatusLayout>
-        <Text mt="45px" mb="20px" color={textColor} fontSize="2xl" ms="24px" fontWeight="700">
+        <Text mt="25px" color={textColor} fontSize="2xl" fontWeight="700">
           New Stickers
         </Text>
         <QueryStatusLayout

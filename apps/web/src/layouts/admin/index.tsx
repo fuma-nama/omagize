@@ -15,21 +15,15 @@ export default function DashboardLayout() {
   return (
     <Flex
       direction="column"
-      float="right"
       height="100%"
       overflow="auto"
       position="relative"
-      p={{ base: '10px', md: '30px' }}
       w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
       maxWidth={{ base: '100%', xl: 'calc( 100% - 290px )' }}
       maxHeight="100%"
-      transition="all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)"
-      transitionDuration=".2s, .2s, .35s"
-      transitionProperty="top, bottom, width"
-      transitionTimingFunction="linear, linear, ease"
     >
       <AdminNavbar brandText={activeItem?.name} layoutes={layouts} />
-      <Box mx="auto" w="full" pe="20px" padding={0} flex="1 1" mt="50px">
+      <Box w="full" pe="20px" padding={0} flex="1 1" p={{ base: '10px', md: '30px' }}>
         <Outlet />
       </Box>
     </Flex>

@@ -1,5 +1,5 @@
 // Chakra imports
-import { Button, Flex, Link, Text } from '@chakra-ui/react';
+import { Button, ButtonGroup, Flex, Text } from '@chakra-ui/react';
 import { User } from '@omagize/api';
 
 // Assets
@@ -45,12 +45,11 @@ export default function Banner({ user }: { user: User }) {
           '3xl': '34%',
         }}
         fontWeight="500"
-        mb="40px"
         lineHeight="28px"
       >
         Enter in this creative world. Create your own group and start chating!
       </Text>
-      <Flex align="center">
+      <ButtonGroup mt="40px" gap="10px">
         <Button
           bg="white"
           color="black"
@@ -61,16 +60,13 @@ export default function Banner({ user }: { user: User }) {
           fontSize="14px"
           py="20px"
           px="27"
-          me="38px"
         >
           Discover now
         </Button>
-        <Link>
-          <Text color="white" fontSize="sm" fontWeight="500">
-            Watch video
-          </Text>
-        </Link>
-      </Flex>
+        <Button variant="link" color="white" fontSize="sm" fontWeight="500">
+          Watch video
+        </Button>
+      </ButtonGroup>
     </Flex>
   );
 }

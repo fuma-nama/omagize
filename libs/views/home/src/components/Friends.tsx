@@ -49,7 +49,7 @@ export default function Friends() {
       <AddFriendModal isOpen={isOpen} onClose={onClose} />
       <Tabs isLazy variant="soft-rounded">
         <Flex direction="row" flexWrap="wrap">
-          <Text fontSize="2xl" fontWeight="700" mr={2}>
+          <Text display={{ base: 'none', '3sm': 'block' }} fontSize="2xl" fontWeight="700" mr={2}>
             Your Friends
           </Text>
           <TabList gap={2}>

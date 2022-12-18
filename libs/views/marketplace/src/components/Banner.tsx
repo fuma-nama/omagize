@@ -9,11 +9,13 @@ export default function Banner({ upload }: { upload: () => void }) {
   // Chakra Color Mode
   return (
     <Flex
+      display={{ base: 'none', '3sm': 'flex' }}
       direction="column"
       bgImage={banner}
       bgSize="cover"
       py={{ base: '30px', md: '56px' }}
       px={{ base: '30px', md: '64px' }}
+      mb="45px"
       borderRadius="30px"
     >
       <Text

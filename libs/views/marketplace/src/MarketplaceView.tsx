@@ -5,7 +5,6 @@ import {
   Button,
   Flex,
   Grid,
-  Text,
   SimpleGrid,
   HStack,
   Skeleton,
@@ -30,8 +29,7 @@ import StickerItem from './components/assets/StickerItem';
 import { FaSadCry } from 'react-icons/fa';
 import { SidePanel } from './SidePanel';
 import { useNavigate } from 'react-router-dom';
-import { Card, Placeholder, QueryStatusLayout, Repeat } from '@omagize/ui/components';
-import { useColors } from '@omagize/ui/theme';
+import { Card, Placeholder, QueryStatusLayout, Repeat, SubHeading } from '@omagize/ui/components';
 import { Keys } from '@omagize/data-access-api';
 
 export function MarketplaceView() {
@@ -54,8 +52,6 @@ export function MarketplaceView() {
 }
 
 function Content() {
-  // Chakra Color Mode
-  const { textColorPrimary: textColor } = useColors();
   const query = useQuery(Keys.market.assets, () => fetchLatestAssets());
   const { isOpen, onClose, onOpen } = useDisclosure();
   const navigate = useNavigate();
@@ -64,9 +60,9 @@ function Content() {
     <>
       <CreateAssetModal isOpen={isOpen} onClose={onClose} />
       <Banner upload={onOpen} />
-      <Flex direction="column" px={{ base: '12px', '3sm': '24px' }} gap="20px" my="45px">
+      <Flex direction="column" px={{ base: '12px', '3sm': '24px' }} gap="20px" mb="45px">
         <HStack justifyContent="space-between" flexWrap="wrap" gap={3} spacing={0}>
-          <Text color={textColor} fontSize="2xl" fontWeight="700">
+          <SubHeading>
             Latest Emojis
             <Tooltip label="Refresh Assets">
               <IconButton
@@ -77,7 +73,7 @@ function Content() {
                 onClick={() => query.refetch()}
               />
             </Tooltip>
-          </Text>
+          </SubHeading>
           <ButtonGroup>
             <Button variant="brand" leftIcon={<BiUpload />} onClick={onOpen}>
               Upload
@@ -107,9 +103,7 @@ function Content() {
         >
           <LatestEmojis assets={query.data} />
         </QueryStatusLayout>
-        <Text mt="25px" color={textColor} fontSize="2xl" fontWeight="700">
-          New Stickers
-        </Text>
+        <SubHeading mt="25px">New Stickers</SubHeading>
         <QueryStatusLayout
           query={query}
           watch={query.data?.stickers}

@@ -12,7 +12,7 @@ export function HomeView() {
   const user = useSelfUser();
 
   return (
-    <Flex direction="column" gap={5} mb={10}>
+    <Flex direction="column" gap={5} mb={10} px="10px">
       <Banner user={user} />
       <Events />
       <Friends />

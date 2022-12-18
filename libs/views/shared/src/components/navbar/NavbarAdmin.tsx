@@ -54,9 +54,8 @@ export function AdminNavbar(
           href="#"
           bg="inherit"
           borderRadius="inherit"
-          fontWeight="bold"
-          fontSize={{ base: '24px', '3sm': '34px' }}
-          _hover={{ color: { mainText } }}
+          fontWeight={{ base: '600', '3sm': 'bold' }}
+          fontSize={{ base: '22px', '3sm': '34px' }}
           _active={{
             bg: 'inherit',
             transform: 'none',
@@ -93,8 +92,7 @@ export function NavbarBox({
         backdropFilter="blur(20px)"
         borderRadius={{ [breakpoint]: '16px' }}
         lineHeight="25.6px"
-        py="8px"
-        px="10px"
+        p={{ base: '10px 20px', [breakpoint]: '8px 10px' }}
         w="full"
         {...box}
       >

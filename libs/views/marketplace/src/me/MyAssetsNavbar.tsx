@@ -1,4 +1,4 @@
-import { Button, Heading, HStack, Icon } from '@chakra-ui/react';
+import { Heading, HStack, Icon, IconButton } from '@chakra-ui/react';
 import { NavbarBox, NavbarLinksBox, NavbarDefaultItems } from '@omagize/views/shared';
 import { BiLeftArrow, BiSticker } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
@@ -9,13 +9,15 @@ export function MyAssetsNavbar() {
   return (
     <NavbarBox>
       <HStack>
+        <IconButton
+          aria-label="back"
+          icon={<BiLeftArrow />}
+          onClick={() => navigate('/user/explore')}
+        />
         <Icon as={BiSticker} w="40px" h="40px" />
         <Heading size="md">My Assets</Heading>
       </HStack>
       <NavbarLinksBox>
-        <Button leftIcon={<BiLeftArrow />} mr={2} onClick={() => navigate('/user/explore')}>
-          Back
-        </Button>
         <NavbarDefaultItems />
       </NavbarLinksBox>
     </NavbarBox>

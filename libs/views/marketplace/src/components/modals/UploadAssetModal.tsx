@@ -228,7 +228,7 @@ function useEmojiForm(onClose: () => void) {
         <Card mt={5}>
           <Text fontWeight="600">Preview</Text>
           <Text as="span" align="center" display="inline-flex">
-            Hello World <EmojiEntity src={picker.url} name={name} />
+            Hello World {picker.url != null && <EmojiEntity src={picker.url} name={name} />}
           </Text>
         </Card>
       </FormControl>

@@ -4,7 +4,6 @@ import {
   Flex,
   Text,
   SimpleGrid,
-  HStack,
   Skeleton,
   SkeletonText,
   useDisclosure,
@@ -32,10 +31,26 @@ import { useChatStore } from '@omagize/data-access-store';
 import { useColors } from '@omagize/ui/theme';
 import { Keys } from '@omagize/data-access-api';
 
-export function MyAssets() {
+export function MyAssetsView() {
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
   return (
-    <Flex flexDirection="column">
+    <Flex pos="relative" direction="column" h="full" overflow="auto">
       <Content />
+      <CreateAssetModal isOpen={isOpen} onClose={onClose} />
+
+      <Button
+        pos="absolute"
+        right={{ base: '12px', md: '28px' }}
+        bottom={{ base: '12px', md: '28px' }}
+        variant="brand"
+        leftIcon={<BiUpload />}
+        onClick={onOpen}
+        size="lg"
+        rounded="full"
+      >
+        Upload
+      </Button>
     </Flex>
   );
 }
@@ -43,7 +58,6 @@ export function MyAssets() {
 function Content() {
   // Chakra Color Mode
   const { textColorPrimary: textColor } = useColors();
-  const { isOpen, onClose, onOpen } = useDisclosure();
   const query = useQuery(Keys.market.me, () => fetchMyAssets(), {
     onSuccess(data) {
       useChatStore.setState({
@@ -56,60 +70,42 @@ function Content() {
   const owned = query.data?.owned;
 
   return (
-    <>
-      <CreateAssetModal isOpen={isOpen} onClose={onClose} />
-      <Flex direction="column">
-        <Flex
-          ms="24px"
-          mb="20px"
-          justifyContent="space-between"
-          direction="row"
-          flexWrap="wrap"
-          align="center"
-          gap={3}
-        >
-          <Text color={textColor} fontSize="2xl" fontWeight="700" mr={6}>
-            Favorite Assets
-            <Tooltip label="Refresh Assets">
-              <IconButton
-                ml={2}
-                icon={<BiRefresh />}
-                aria-label="Refresh"
-                isLoading={query.isRefetching}
-                onClick={() => query.refetch()}
-              />
-            </Tooltip>
-          </Text>
-          <HStack>
-            <Button variant="brand" leftIcon={<BiUpload />} onClick={onOpen}>
-              Upload
-            </Button>
-          </HStack>
-        </Flex>
-        <Favorites />
-        <Text mt="45px" mb="20px" color={textColor} fontSize="2xl" ms="24px" fontWeight="700">
-          Owned Assets
-        </Text>
-        <QueryStatusLayout
-          query={query}
-          watch={owned && [...owned.stickers, ...owned.emojis]}
-          error="Failed to fetch your assets"
-          skeleton={
-            <Repeat times={3}>
-              <AssetItemSkeleton />
-            </Repeat>
-          }
-          container={(c) => (
-            <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3, xl: 4 }} gap="20px" children={c} />
-          )}
-          placeholder={
-            <Placeholder icon={<Icon as={FaSadCry} w="40px" h="40px" />}>No any Assets</Placeholder>
-          }
-        >
-          <LatestStickers owned={query.data?.owned} />
-        </QueryStatusLayout>
-      </Flex>
-    </>
+    <Flex direction="column" px={{ base: '15px', md: '24px' }} gap="20px">
+      <Text color={textColor} fontSize="2xl" fontWeight="700" mr={6}>
+        Favorite Assets
+        <Tooltip label="Refresh Assets">
+          <IconButton
+            ml={2}
+            icon={<BiRefresh />}
+            aria-label="Refresh"
+            isLoading={query.isRefetching}
+            onClick={() => query.refetch()}
+          />
+        </Tooltip>
+      </Text>
+      <Favorites />
+      <Text mt="25px" color={textColor} fontSize="2xl" fontWeight="700">
+        Owned Assets
+      </Text>
+      <QueryStatusLayout
+        query={query}
+        watch={owned && [...owned.stickers, ...owned.emojis]}
+        error="Failed to fetch your assets"
+        skeleton={
+          <Repeat times={3}>
+            <AssetItemSkeleton />
+          </Repeat>
+        }
+        container={(c) => (
+          <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3, xl: 4 }} gap="20px" children={c} />
+        )}
+        placeholder={
+          <Placeholder icon={<Icon as={FaSadCry} w="40px" h="40px" />}>No any Assets</Placeholder>
+        }
+      >
+        <LatestStickers owned={query.data?.owned} />
+      </QueryStatusLayout>
+    </Flex>
   );
 }
 

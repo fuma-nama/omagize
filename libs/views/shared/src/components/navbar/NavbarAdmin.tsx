@@ -87,13 +87,11 @@ export function NavbarBox({
   const breakpoint = '2sm';
 
   return (
-    <Box top={0} zIndex="sticky" pos="sticky" p={{ [breakpoint]: '12px' }} pb="2px">
+    <Box top={0} zIndex="sticky" pos="sticky" p={{ [breakpoint]: '12px' }} px={{ lg: '20px' }}>
       <Flex
         bg={navbarBg}
         backdropFilter="blur(20px)"
         borderRadius={{ [breakpoint]: '16px' }}
-        alignItems={{ xl: 'center' }}
-        justifyContent={{ xl: 'center' }}
         lineHeight="25.6px"
         py="8px"
         px="10px"

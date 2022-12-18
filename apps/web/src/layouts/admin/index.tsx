@@ -23,7 +23,7 @@ export default function DashboardLayout() {
       maxHeight="100%"
     >
       <AdminNavbar brandText={activeItem?.name} layoutes={layouts} />
-      <Box w="full" pe="20px" padding={0} flex="1 1" p={{ base: '10px', md: '30px' }}>
+      <Box w="full" padding={0} flex="1 1" p={{ base: '10px', md: '20px 30px' }}>
         <Outlet />
       </Box>
     </Flex>

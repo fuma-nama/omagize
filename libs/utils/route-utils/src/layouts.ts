@@ -65,7 +65,6 @@ export type IndexRoute = Layout & {
 
 export type Layout = {
   component?: ReactNode;
-  navbarLinks?: ReactNode;
   navbar?: ReactElement;
 };
 

@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom';
 import { AuthView, EmailVerifiedHandle } from '@omagize/views/auth';
 import { GroupChatView, PrivateChatNavbar, PrivateChatView } from '@omagize/views/chat';
 import { HomeView } from '@omagize/views/home';
-import { MarketplaceView, MyAssets, MyAssetsNavbar } from '@omagize/views/marketplace';
+import { MarketplaceView, MyAssetsView, MyAssetsNavbar } from '@omagize/views/marketplace';
 import { ProfileView } from '@omagize/views/profile';
 import { GroupNavbar, GroupOverview, GroupSettingsView } from '@omagize/views/group';
 
@@ -56,7 +56,6 @@ export const layouts: RootLayout[] = [
         ],
       },
       {
-        path: '*',
         component: <AdminLayout />,
         subLayouts: [
           {
@@ -72,7 +71,7 @@ export const layouts: RootLayout[] = [
               },
               {
                 path: 'me',
-                component: <MyAssets />,
+                component: <MyAssetsView />,
                 navbar: <MyAssetsNavbar />,
               },
             ],

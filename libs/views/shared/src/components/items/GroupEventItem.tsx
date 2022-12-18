@@ -23,7 +23,7 @@ import { useSelected } from '@omagize/utils/route-utils';
 import { useDeleteGroupEventMutation } from '@omagize/data-access-api';
 
 export function GlobalGroupEventItem({ event, ...props }: { event: GroupEvent } & CustomCardProps) {
-  const { brand, textColorPrimary, textColorSecondary } = useColors();
+  const { brand, textColorPrimary } = useColors();
   const group = useGroup(event.group);
   const happening = event.startAt <= new Date(Date.now());
   const { setSelectedGroup } = useSelected();
@@ -52,12 +52,6 @@ export function GlobalGroupEventItem({ event, ...props }: { event: GroupEvent } 
             <Text fontWeight="600">{group.name}</Text>
           </HStack>
         )}
-        {event.place != null && (
-          <HStack spacing={1} color={textColorSecondary}>
-            <Icon as={MdPlace} />
-            <Text fontWeight="600">{event.place}</Text>
-          </HStack>
-        )}
         <Spacer />
         <GroupEventActions happening={happening} event={event} />
       </Flex>
@@ -66,7 +60,7 @@ export function GlobalGroupEventItem({ event, ...props }: { event: GroupEvent } 
 }
 
 export function GroupEventItem({ event }: { event: GroupEvent }) {
-  const { brand, textColorPrimary, textColorSecondary } = useColors();
+  const { brand, textColorPrimary } = useColors();
   const happening = event.startAt <= new Date(Date.now());
 
   return (
@@ -84,18 +78,10 @@ export function GroupEventItem({ event }: { event: GroupEvent }) {
         {happening && event.endAt && <Text fontSize="sm">End at {stringOfTime(event.endAt)}</Text>}
       </HStack>
       <GroupEventContent event={event} />
-
       <HSeparator mt="auto" />
-      <Flex direction="row" px={4} py={2} gap={2}>
-        {event.place != null && (
-          <HStack spacing={1} color={textColorSecondary}>
-            <Icon as={MdPlace} />
-            <Text fontWeight="600">{event.place}</Text>
-          </HStack>
-        )}
-        <Spacer />
+      <HStack px={4} py={2} justify="end">
         <GroupEventActions happening={happening} event={event} />
-      </Flex>
+      </HStack>
     </Card>
   );
 }
@@ -115,6 +101,12 @@ function GroupEventContent({ event }: { event: GroupEvent }) {
           {event.name}
         </Text>
         <Text color={textColorSecondary}>{event.description}</Text>
+        {event.place != null && (
+          <HStack spacing={1} color={textColorSecondary}>
+            <Icon as={MdPlace} />
+            <Text fontWeight="600">{event.place}</Text>
+          </HStack>
+        )}
         <Text color={textColorSecondary}>By {author.username}</Text>
       </Flex>
     </Flex>

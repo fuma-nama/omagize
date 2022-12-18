@@ -93,7 +93,7 @@ function Content() {
             </Repeat>
           }
           container={(c) => (
-            <SimpleGrid columns={{ base: 1, '2sm': 2, md: 3 }} gap="20px">
+            <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3 }} gap="20px">
               {c}
             </SimpleGrid>
           )}
@@ -114,7 +114,7 @@ function Content() {
             </Repeat>
           }
           container={(c) => (
-            <SimpleGrid columns={{ base: 1, '2sm': 2, md: 3 }} gap="20px">
+            <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3 }} gap="20px">
               {c}
             </SimpleGrid>
           )}

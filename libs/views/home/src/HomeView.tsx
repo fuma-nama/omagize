@@ -1,11 +1,12 @@
 // Chakra imports
-import { Flex, HStack, Text } from '@chakra-ui/react';
+import { Flex, HStack, Show } from '@chakra-ui/react';
 // Custom components
 import Banner from './components/Banner';
 import { useGroupEventsQuery, useSelfUser } from '@omagize/data-access-api';
 import Friends from './components/Friends';
 import { Carousel, LeftButton, Provider, RightButton } from 'chakra-ui-carousel';
 import { GlobalGroupEventItem, GroupEventSkeleton } from '@omagize/views/shared';
+import { SubHeading } from '@omagize/ui/components';
 
 export function HomeView() {
   // Chakra Color Mode
@@ -29,11 +30,11 @@ function Events() {
     <Flex direction="column" gap={3}>
       <Provider>
         <HStack>
-          <Text fontSize="2xl" fontWeight="700">
-            Group Events
-          </Text>
-          <LeftButton variant="action" />
-          <RightButton variant="action" />
+          <SubHeading>Group Events</SubHeading>
+          <Show above="3sm">
+            <LeftButton variant="action" />
+            <RightButton variant="action" />
+          </Show>
         </HStack>
         <Carousel
           gap={20}

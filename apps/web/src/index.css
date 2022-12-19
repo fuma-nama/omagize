@@ -26,3 +26,16 @@ input {
   height: 5px;
   background: transparent;
 }
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.chakra-ui-dark *::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+* {
+  border-color: var(--chakra-colors-chakra-border-color);
+}

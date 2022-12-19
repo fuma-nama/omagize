@@ -8,7 +8,7 @@ import { layouts, NormalLayout } from './layouts';
 import { firebase, initFirebase } from '@omagize/api';
 import { QueryStatus, LoadingPanel } from '@omagize/ui/components';
 import { usePageStore } from '@omagize/data-access-store';
-import { theme, useColorsExtend } from '@omagize/ui/theme';
+import { styles, theme } from '@omagize/ui/theme';
 import { initGateway } from './gateway';
 import { PrivateChatModal } from '@omagize/views/chat';
 import { initClient, useLoginQuery, client } from '@omagize/data-access-api';
@@ -41,32 +41,11 @@ function RootRoutes({ loggedIn }: { loggedIn: boolean }) {
 
 function Pages() {
   const query = useLoginQuery();
-  const { textColorPrimary, globalBg, scrollbar } = useColorsExtend(
-    {
-      scrollbar: 'rgba(0, 0, 0, 0.2)',
-    },
-    {
-      scrollbar: 'rgba(255, 255, 255, 0.2)',
-    }
-  );
 
   return (
-    <Box
-      w="full"
-      h="full"
-      color={textColorPrimary}
-      bg={globalBg}
-      sx={{
-        '*::-webkit-scrollbar-thumb': {
-          borderRadius: '10px',
-          bgColor: scrollbar,
-        },
-      }}
-    >
-      <QueryStatus query={query} error="Failed to login" loading={<LoadingPanel size="lg" />}>
-        <RootRoutes loggedIn={query.data != null} />
-      </QueryStatus>
-    </Box>
+    <QueryStatus query={query} error="Failed to login" loading={<LoadingPanel size="lg" />}>
+      <RootRoutes loggedIn={query.data != null} />
+    </QueryStatus>
   );
 }
 
@@ -83,14 +62,16 @@ function Modals() {
 const root = createRoot(document.getElementById('root'));
 
 root.render(
-  <ChakraProvider theme={theme}>
-    <QueryClientProvider client={client}>
-      <React.StrictMode>
-        <BrowserRouter>
-          <Modals />
-          <Pages />
-        </BrowserRouter>
-      </React.StrictMode>
-    </QueryClientProvider>
-  </ChakraProvider>
+  <React.StrictMode>
+    <ChakraProvider theme={theme}>
+      <QueryClientProvider client={client}>
+        <Box sx={styles}>
+          <BrowserRouter>
+            <Modals />
+            <Pages />
+          </BrowserRouter>
+        </Box>
+      </QueryClientProvider>
+    </ChakraProvider>
+  </React.StrictMode>
 );

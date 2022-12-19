@@ -9,12 +9,11 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import { FriendRequest, FriendRequestType, Relation, RelationShip } from '@omagize/api';
 import { useUserStore } from '@omagize/data-access-store';
-import { TabButton, Holder, Placeholder } from '@omagize/ui/components';
+import { TabButton, Holder, Placeholder, SubHeading } from '@omagize/ui/components';
 import {
   AddFriendModal,
   UserItemSkeleton,
@@ -49,9 +48,7 @@ export default function Friends() {
       <AddFriendModal isOpen={isOpen} onClose={onClose} />
       <Tabs isLazy variant="soft-rounded">
         <Flex direction="row" flexWrap="wrap">
-          <Text display={{ base: 'none', '3sm': 'block' }} fontSize="2xl" fontWeight="700" mr={2}>
-            Your Friends
-          </Text>
+          <SubHeading mr={2}>Your Friends</SubHeading>
           <TabList gap={2}>
             <CountTab count={friends?.length}>All</CountTab>
             <CountTab count={friendRequests?.length}>Pending</CountTab>

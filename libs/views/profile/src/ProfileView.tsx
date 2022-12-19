@@ -6,7 +6,6 @@ import AccountPanel from './components/AccountPanel';
 import ProfileBanner from './components/ProfileBanner';
 import General from './components/General';
 import Notifications from './components/Notifications';
-import OwnedGroups from './components/OwnedGroups';
 
 export function ProfileView() {
   return (
@@ -35,7 +34,6 @@ export function ProfileView() {
         templateRows="auto auto"
         gap={{ base: '20px', xl: '20px' }}
       >
-        <OwnedGroups />
         <AccountPanel />
         <General pe="20px" />
       </Grid>

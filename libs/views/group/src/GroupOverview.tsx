@@ -103,7 +103,7 @@ function About({ group }: { group: GroupDetail }) {
 
 function GroupEvents({ detail, onOpen }: { detail: GroupDetail; onOpen: () => void }) {
   const { textColorSecondary } = useColors();
-  const atBottom = detail.events.length === 0 || detail.events.length % 2 === 0;
+  const atBottom = detail.events?.length === 0 || detail.events?.length % 2 === 0;
 
   return (
     <SimpleGrid
@@ -115,7 +115,7 @@ function GroupEvents({ detail, onOpen }: { detail: GroupDetail; onOpen: () => vo
       }}
       gap={3}
     >
-      {detail.events.map((e) => (
+      {detail.events?.map((e) => (
         <GroupEventItem key={e.id} event={e} />
       ))}
       {!atBottom && (

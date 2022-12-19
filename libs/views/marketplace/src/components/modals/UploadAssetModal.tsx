@@ -20,16 +20,8 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import {
-  Assets,
-  createEmoji,
-  createSticker,
-  CustomEmoji,
-  CustomSticker,
-  MyAssets,
-  parseError,
-} from '@omagize/api';
-import { client, Keys } from '@omagize/data-access-api';
+import { createEmoji, createSticker, parseError } from '@omagize/api';
+import { onCreatedEmoji, onCreatedSticker } from '@omagize/data-access-api';
 import { Card, TabButton, useImagePickerCropSimple } from '@omagize/ui/components';
 import { EmojiEntity } from '@omagize/ui/editor';
 import { StickerFormat, supportedImageTypes, EmojiFormat } from '@omagize/utils/image';
@@ -85,51 +77,6 @@ function Body({ onClose }: { onClose: () => void }) {
   );
 }
 
-function updateEmojis(add: CustomEmoji) {
-  client.setQueryData<MyAssets>(
-    Keys.market.me,
-    (prev) =>
-      prev && {
-        ...prev,
-        owned: {
-          ...prev.owned,
-          emojis: [add, ...prev.owned.emojis],
-        },
-      }
-  );
-
-  client.setQueryData<Assets>(
-    Keys.market.assets,
-    (prev) =>
-      prev && {
-        ...prev,
-        emojis: [add, ...prev.emojis],
-      }
-  );
-}
-
-function updateStickers(add: CustomSticker) {
-  client.setQueryData<MyAssets>(
-    Keys.market.me,
-    (prev) =>
-      prev && {
-        ...prev,
-        owned: {
-          ...prev.owned,
-          stickers: [add, ...prev.owned.stickers],
-        },
-      }
-  );
-  client.setQueryData<Assets>(
-    Keys.market.assets,
-    (prev) =>
-      prev && {
-        ...prev,
-        stickers: [add, ...prev.stickers],
-      }
-  );
-}
-
 function useStickerForm(onClose: () => void) {
   const [name, setName] = useState('');
   const [image, setImage] = useState<Blob>();
@@ -146,7 +93,7 @@ function useStickerForm(onClose: () => void) {
 
   const mutation = useMutation(() => createSticker(name, image), {
     onSuccess: (sticker) => {
-      updateStickers(sticker);
+      onCreatedSticker(sticker);
       onClose();
     },
   });
@@ -196,7 +143,7 @@ function useEmojiForm(onClose: () => void) {
 
   const mutation = useMutation(() => createEmoji(name, image), {
     onSuccess: (emoji) => {
-      updateEmojis(emoji);
+      onCreatedEmoji(emoji);
       onClose();
     },
   });

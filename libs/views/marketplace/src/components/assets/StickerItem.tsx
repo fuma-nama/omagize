@@ -14,22 +14,19 @@ import {
   MenuList,
   Text,
 } from '@chakra-ui/react';
-import { CustomSticker, deleteAsset, likeAsset, unlikeAsset } from '@omagize/api';
-import { useSelfUser } from '@omagize/data-access-api';
-import { useChatStore } from '@omagize/data-access-store';
+import { CustomSticker } from '@omagize/api';
+import {
+  useDeleteStickerMutation,
+  useLikeStickerMutation,
+  useSelfUser,
+} from '@omagize/data-access-api';
 import { Card } from '@omagize/ui/components';
 import { useColorsExtend } from '@omagize/ui/theme';
-import { useMutation } from '@tanstack/react-query';
 import { BsThreeDots } from 'react-icons/bs';
-import { LikeButton, onDeleteSticker } from './AssetItem';
+import { LikeButton } from '../LikeButton';
 
 export default function StickerItem({ sticker }: { sticker: CustomSticker }) {
-  const { id, name, url, author } = sticker;
-  const store = useChatStore((s) => ({
-    hasLike: s.liked_stickers?.some((e) => e.id === id),
-    like: s.likeSticker,
-    unlike: s.unlikeSticker,
-  }));
+  const { name, url, author } = sticker;
   const { brand, textColor } = useColorsExtend(
     {
       textColor: 'navy.700',
@@ -41,14 +38,7 @@ export default function StickerItem({ sticker }: { sticker: CustomSticker }) {
     }
   );
 
-  const likeMutation = useMutation(
-    (like: boolean) => (like ? likeAsset(id, 'sticker') : unlikeAsset(id, 'sticker')),
-    {
-      onSuccess: (_, _like) => {
-        _like ? store.like(sticker) : store.unlike(id);
-      },
-    }
-  );
+  const { isFavoite, setFavoite } = useLikeStickerMutation(sticker);
 
   return (
     <Card flexDirection="column" p="20px">
@@ -68,7 +58,7 @@ export default function StickerItem({ sticker }: { sticker: CustomSticker }) {
           <Image src={url} w="100px" h="100px" pos="relative" />
         </Center>
 
-        <LikeButton hasLike={store.hasLike} onClick={() => likeMutation.mutate(!store.hasLike)} />
+        <LikeButton hasLike={isFavoite} onClick={() => setFavoite(!isFavoite)} />
       </Box>
       <Flex flexDirection="column" justify="space-between" h="100%">
         <Flex justify="space-between" direction="row" mb="auto">
@@ -87,14 +77,7 @@ export default function StickerItem({ sticker }: { sticker: CustomSticker }) {
             >
               {name}
             </Text>
-            <Text
-              color="secondaryGray.600"
-              fontSize={{
-                base: 'sm',
-              }}
-              fontWeight="400"
-              me="14px"
-            >
+            <Text color="secondaryGray.600" fontSize="sm" fontWeight="400" me="14px">
               {author.username}
             </Text>
           </Flex>
@@ -108,11 +91,7 @@ export default function StickerItem({ sticker }: { sticker: CustomSticker }) {
 
 function Actions({ sticker, ...props }: { sticker: CustomSticker } & FlexProps) {
   const user = useSelfUser();
-  const deleteMutation = useMutation(() => deleteAsset(sticker.id, 'stickers'), {
-    onSuccess() {
-      onDeleteSticker(sticker.id);
-    },
-  });
+  const deleteMutation = useDeleteStickerMutation();
 
   return (
     <Flex direction="row" justify="end" gap={2} {...props}>
@@ -137,7 +116,11 @@ function Actions({ sticker, ...props }: { sticker: CustomSticker } & FlexProps) 
         <MenuList>
           <MenuItem icon={<ViewIcon />}>View Info</MenuItem>
           {sticker.author.id === user.id && (
-            <MenuItem color="red.400" icon={<DeleteIcon />} onClick={() => deleteMutation.mutate()}>
+            <MenuItem
+              color="red.400"
+              icon={<DeleteIcon />}
+              onClick={() => deleteMutation.mutate(sticker.id)}
+            >
               Delete
             </MenuItem>
           )}

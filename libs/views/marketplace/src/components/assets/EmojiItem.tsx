@@ -1,4 +1,3 @@
-// Chakra imports
 import { DeleteIcon, ViewIcon } from '@chakra-ui/icons';
 import {
   Avatar,
@@ -15,23 +14,20 @@ import {
   MenuList,
   Text,
 } from '@chakra-ui/react';
-import { CustomEmoji, deleteAsset, likeAsset, unlikeAsset } from '@omagize/api';
-import { useSelfUser } from '@omagize/data-access-api';
-import { useChatStore } from '@omagize/data-access-store';
+import { CustomEmoji } from '@omagize/api';
+import {
+  useDeleteEmojiMutation,
+  useLikeEmojiMutation,
+  useSelfUser,
+} from '@omagize/data-access-api';
 import { Card } from '@omagize/ui/components';
 import { useColorsExtend } from '@omagize/ui/theme';
-import { useMutation } from '@tanstack/react-query';
-// Custom components
 import { BsThreeDots } from 'react-icons/bs';
-import { LikeButton, onDeleteEmoji } from './AssetItem';
+import { LikeButton } from '../LikeButton';
 
-export default function EmoijItem(props: { emoji: CustomEmoji }) {
-  const { id, name, url, author } = props.emoji;
-  const store = useChatStore((s) => ({
-    hasLike: s.liked_emojis?.some((e) => e.id === id),
-    like: s.likeEmoji,
-    unlike: s.unlikeEmoji,
-  }));
+export default function EmoijItem({ emoji }: { emoji: CustomEmoji }) {
+  const { name, url, author } = emoji;
+  const { isFavoite, setFavoite } = useLikeEmojiMutation(emoji);
   const { brand, textColor, textColorSecondary } = useColorsExtend(
     {
       textColor: 'navy.700',
@@ -40,15 +36,6 @@ export default function EmoijItem(props: { emoji: CustomEmoji }) {
     {
       textColor: 'white',
       textColorBid: 'white',
-    }
-  );
-
-  const likeMutation = useMutation(
-    (like: boolean) => (like ? likeAsset(id, 'emoji') : unlikeAsset(id, 'emoji')),
-    {
-      onSuccess: (_, _like) => {
-        _like ? store.like(props.emoji) : store.unlike(id);
-      },
     }
   );
 
@@ -69,23 +56,12 @@ export default function EmoijItem(props: { emoji: CustomEmoji }) {
           />
           <Image src={url} w="50px" h="50px" pos="relative" />
         </Center>
-        <LikeButton hasLike={store.hasLike} onClick={() => likeMutation.mutate(!store.hasLike)} />
+        <LikeButton hasLike={isFavoite} onClick={() => setFavoite(!isFavoite)} />
       </Box>
       <Flex flexDirection="column" justify="space-between">
         <Flex justify="space-between" direction="row">
           <Flex direction="column">
-            <Text
-              color={textColor}
-              fontSize={{
-                base: 'xl',
-                xl: 'lg',
-                '2xl': 'md',
-                '3xl': 'lg',
-              }}
-              mb="5px"
-              fontWeight="bold"
-              me="14px"
-            >
+            <Text color={textColor} fontSize="lg" mb="5px" fontWeight="bold" me="14px">
               {name}
             </Text>
             <Text color={textColorSecondary} fontSize="sm" fontWeight="400" me="14px">
@@ -94,7 +70,7 @@ export default function EmoijItem(props: { emoji: CustomEmoji }) {
           </Flex>
           <Avatar src={author.avatarUrl} name={author.username} size="sm" />
         </Flex>
-        <Actions emoji={props.emoji} mt="25px" />
+        <Actions emoji={emoji} mt="25px" />
       </Flex>
     </Card>
   );
@@ -102,11 +78,7 @@ export default function EmoijItem(props: { emoji: CustomEmoji }) {
 
 function Actions({ emoji, ...props }: { emoji: CustomEmoji } & FlexProps) {
   const user = useSelfUser();
-  const deleteMutation = useMutation(() => deleteAsset(emoji.id, 'emojis'), {
-    onSuccess() {
-      onDeleteEmoji(emoji.id);
-    },
-  });
+  const deleteMutation = useDeleteEmojiMutation();
 
   return (
     <Flex direction="row" justify="end" gap={2} {...props}>
@@ -131,7 +103,11 @@ function Actions({ emoji, ...props }: { emoji: CustomEmoji } & FlexProps) {
         <MenuList>
           <MenuItem icon={<ViewIcon />}>View Info</MenuItem>
           {emoji.author.id === user.id && (
-            <MenuItem color="red.400" icon={<DeleteIcon />} onClick={() => deleteMutation.mutate()}>
+            <MenuItem
+              color="red.400"
+              icon={<DeleteIcon />}
+              onClick={() => deleteMutation.mutate(emoji.id)}
+            >
               Delete
             </MenuItem>
           )}

@@ -1,5 +1,3 @@
-import React from 'react';
-
 // Chakra imports
 import {
   Button,
@@ -19,8 +17,8 @@ import {
 // Custom components
 import Banner from './components/Banner';
 
-import { useQuery } from '@tanstack/react-query';
-import { fetchLatestAssets, Assets } from '@omagize/api';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { fetchLatestAssets as fetchCategoryAssets, CategoryAssets } from '@omagize/api';
 import { BiHappy, BiRefresh, BiUpload } from 'react-icons/bi';
 import { BsPeople } from 'react-icons/bs';
 import CreateAssetModal from './components/modals/UploadAssetModal';
@@ -52,7 +50,7 @@ export function MarketplaceView() {
 }
 
 function Content() {
-  const query = useQuery(Keys.market.assets, () => fetchLatestAssets());
+  const query = useQuery(Keys.market.assets, () => fetchCategoryAssets());
   const { isOpen, onClose, onOpen } = useDisclosure();
   const navigate = useNavigate();
 
@@ -83,49 +81,9 @@ function Content() {
             </Button>
           </ButtonGroup>
         </HStack>
-        <QueryStatusLayout
-          query={query}
-          watch={query.data?.emojis}
-          error="Failed to fetch Emojis"
-          skeleton={
-            <Repeat times={3}>
-              <AssetItemSkeleton />
-            </Repeat>
-          }
-          container={(c) => (
-            <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3 }} gap="20px">
-              {c}
-            </SimpleGrid>
-          )}
-          placeholder={
-            <Placeholder icon={<Icon as={BiHappy} w="40px" h="40px" />}>No More Emojis</Placeholder>
-          }
-        >
-          <LatestEmojis assets={query.data} />
-        </QueryStatusLayout>
+        <LatestEmojis query={query} />
         <SubHeading mt="25px">New Stickers</SubHeading>
-        <QueryStatusLayout
-          query={query}
-          watch={query.data?.stickers}
-          error="Failed to fetch Stickers"
-          skeleton={
-            <Repeat times={3}>
-              <AssetItemSkeleton />
-            </Repeat>
-          }
-          container={(c) => (
-            <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3 }} gap="20px">
-              {c}
-            </SimpleGrid>
-          )}
-          placeholder={
-            <Placeholder icon={<Icon as={FaSadCry} w="40px" h="40px" />}>
-              No More Stickers
-            </Placeholder>
-          }
-        >
-          <LatestStickers assets={query.data} />
-        </QueryStatusLayout>
+        <LatestStickers query={query} />
       </Flex>
     </>
   );
@@ -140,22 +98,60 @@ function AssetItemSkeleton() {
   );
 }
 
-function LatestEmojis({ assets }: { assets: Assets }) {
+function LatestEmojis({ query }: { query: UseQueryResult<CategoryAssets> }) {
+  const emojis = query.data?.latest.emojis;
+
   return (
-    <>
-      {assets.emojis.map((emoji) => (
+    <QueryStatusLayout
+      query={query}
+      watch={emojis}
+      error="Failed to fetch Emojis"
+      skeleton={
+        <Repeat times={3}>
+          <AssetItemSkeleton />
+        </Repeat>
+      }
+      container={(c) => (
+        <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3 }} gap="20px">
+          {c}
+        </SimpleGrid>
+      )}
+      placeholder={
+        <Placeholder icon={<Icon as={BiHappy} w="40px" h="40px" />}>No More Emojis</Placeholder>
+      }
+    >
+      {emojis?.map((emoji) => (
         <EmoijItem key={emoji.id} emoji={emoji} />
       ))}
-    </>
+    </QueryStatusLayout>
   );
 }
 
-function LatestStickers({ assets }: { assets: Assets }) {
+function LatestStickers({ query }: { query: UseQueryResult<CategoryAssets> }) {
+  const stickers = query.data?.latest.stickers;
+
   return (
-    <>
-      {assets.stickers.map((sticker) => (
+    <QueryStatusLayout
+      query={query}
+      watch={stickers}
+      error="Failed to fetch Stickers"
+      skeleton={
+        <Repeat times={3}>
+          <AssetItemSkeleton />
+        </Repeat>
+      }
+      container={(c) => (
+        <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3 }} gap="20px">
+          {c}
+        </SimpleGrid>
+      )}
+      placeholder={
+        <Placeholder icon={<Icon as={FaSadCry} w="40px" h="40px" />}>No More Stickers</Placeholder>
+      }
+    >
+      {stickers?.map((sticker) => (
         <StickerItem key={sticker.id} sticker={sticker} />
       ))}
-    </>
+    </QueryStatusLayout>
   );
 }

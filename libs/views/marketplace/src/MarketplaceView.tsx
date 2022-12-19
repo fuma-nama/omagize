@@ -32,33 +32,51 @@ import { Keys } from '@omagize/data-access-api';
 
 export function MarketplaceView() {
   const query = useQuery(Keys.market.assets, () => fetchCategoryAssets());
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
-    <Grid
-      mb="20px"
-      gridTemplateColumns={{ xl: 'repeat(3, 1fr)', '2xl': '1fr 0.46fr' }}
-      gap={{ base: '20px', xl: '20px' }}
-      display={{ base: 'flex', '2xl': 'grid' }}
-      flexDirection="column"
-    >
-      <Flex flexDirection="column" gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}>
-        <Content query={query} />
-      </Flex>
-      <Flex flexDirection="column" gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}>
-        <SidePanel recommends={query.data?.recommend} />
-      </Flex>
-    </Grid>
+    <>
+      <Grid
+        mb="20px"
+        gridTemplateColumns={{ base: '1fr', xl: 'repeat(2, 1fr)', '2xl': '1fr 0.46fr' }}
+        gap={{ base: '20px', xl: '20px' }}
+      >
+        <Flex flexDirection="column" gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}>
+          <Content query={query} openUploadModal={onOpen} />
+        </Flex>
+        <Flex flexDirection="column" gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}>
+          <SidePanel recommends={query.data?.recommend} />
+        </Flex>
+      </Grid>
+      <CreateAssetModal isOpen={isOpen} onClose={onClose} />
+      <Button
+        pos="fixed"
+        right={{ base: '28px', md: '50px' }}
+        bottom={{ base: '28px', md: '50px' }}
+        leftIcon={<BiUpload />}
+        onClick={onOpen}
+        colorScheme="pink"
+        size="lg"
+        rounded="full"
+      >
+        Upload
+      </Button>
+    </>
   );
 }
 
-function Content({ query }: { query: UseQueryResult<CategoryAssets> }) {
-  const { isOpen, onClose, onOpen } = useDisclosure();
+function Content({
+  query,
+  openUploadModal,
+}: {
+  query: UseQueryResult<CategoryAssets>;
+  openUploadModal: () => void;
+}) {
   const navigate = useNavigate();
 
   return (
     <>
-      <CreateAssetModal isOpen={isOpen} onClose={onClose} />
-      <Banner upload={onOpen} />
+      <Banner upload={openUploadModal} />
       <Flex direction="column" px={{ base: '12px', '3sm': '24px' }} gap="20px" mb="45px">
         <HStack justifyContent="space-between" flexWrap="wrap" gap={3} spacing={0}>
           <SubHeading>
@@ -74,9 +92,6 @@ function Content({ query }: { query: UseQueryResult<CategoryAssets> }) {
             </Tooltip>
           </SubHeading>
           <ButtonGroup>
-            <Button variant="brand" leftIcon={<BiUpload />} onClick={onOpen}>
-              Upload
-            </Button>
             <Button leftIcon={<BsPeople />} onClick={() => navigate('/user/explore/me')}>
               My Assets
             </Button>
@@ -113,7 +128,7 @@ function LatestEmojis({ query }: { query: UseQueryResult<CategoryAssets> }) {
         </Repeat>
       }
       container={(c) => (
-        <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3 }} gap="20px">
+        <SimpleGrid columns={{ base: 1, '3sm': 2, '2xl': 3 }} gap="20px">
           {c}
         </SimpleGrid>
       )}
@@ -142,7 +157,7 @@ function LatestStickers({ query }: { query: UseQueryResult<CategoryAssets> }) {
         </Repeat>
       }
       container={(c) => (
-        <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3 }} gap="20px">
+        <SimpleGrid columns={{ base: 1, '3sm': 2, '2xl': 3 }} gap="20px">
           {c}
         </SimpleGrid>
       )}

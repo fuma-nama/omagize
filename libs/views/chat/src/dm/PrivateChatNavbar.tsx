@@ -11,14 +11,18 @@ export function PrivateChatNavbar() {
   const info = query.data;
 
   return (
-    <Flex direction="row" align="center" gap={2} p={2}>
+    <Flex direction="row" align="center" gap={2} p={{ base: 2, md: 7 }} py={{ base: 2, md: 4 }}>
       <IconButton
+        minW={0}
+        py={2}
+        pr={2}
         icon={<Icon as={BiLeftArrowAlt} w="20px" h="20px" />}
         onClick={() => navigate(`/user/home`)}
+        variant="link"
         aria-label="back"
       />
       <HStack mr="auto">
-        <Avatar src={info?.avatarUrl} name={info?.username} size="sm" />
+        <Avatar src={info?.avatarUrl} name={info?.username} size={{ base: 'sm', md: 'md' }} />
         <Text fontWeight="600" fontSize="xl">
           {info?.username}
         </Text>

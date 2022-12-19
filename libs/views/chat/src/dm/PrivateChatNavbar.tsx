@@ -1,5 +1,5 @@
-import { BiLeftArrow } from 'react-icons/bi';
-import { IconButton, HStack, Avatar, Text, Flex } from '@chakra-ui/react';
+import { BiLeftArrowAlt } from 'react-icons/bi';
+import { IconButton, HStack, Avatar, Text, Flex, Icon } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { NavbarLinksBox, NavbarDefaultItems } from '@omagize/views/shared';
 import { useUserInfo } from '@omagize/data-access-api';
@@ -12,7 +12,11 @@ export function PrivateChatNavbar() {
 
   return (
     <Flex direction="row" align="center" gap={2} p={2}>
-      <IconButton aria-label="back" icon={<BiLeftArrow />} onClick={() => navigate(`/user/home`)} />
+      <IconButton
+        icon={<Icon as={BiLeftArrowAlt} w="20px" h="20px" />}
+        onClick={() => navigate(`/user/home`)}
+        aria-label="back"
+      />
       <HStack mr="auto">
         <Avatar src={info?.avatarUrl} name={info?.username} size="sm" />
         <Text fontWeight="600" fontSize="xl">

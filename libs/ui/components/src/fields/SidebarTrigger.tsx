@@ -8,6 +8,7 @@ export function SidebarTrigger(props: Omit<IconButtonProps, 'aria-label'>) {
 
   return (
     <IconButton
+      display={{ xl: 'none' }}
       onClick={() => setOpen(true)}
       variant="no-hover"
       icon={<Icon as={IoMenuOutline} w="20px" h="20px" />}

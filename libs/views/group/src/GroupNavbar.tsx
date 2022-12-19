@@ -16,6 +16,7 @@ export function GroupNavbar({ isRoot }: { isRoot?: boolean }) {
         {!isRoot && (
           <IconButton
             minW={0}
+            py={2}
             pr={2}
             icon={<Icon as={BiLeftArrowAlt} w="20px" h="20px" />}
             onClick={() => setSelectedGroup(selectedGroup)}

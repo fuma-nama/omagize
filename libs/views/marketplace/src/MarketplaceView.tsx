@@ -31,6 +31,8 @@ import { Card, Placeholder, QueryStatusLayout, Repeat, SubHeading } from '@omagi
 import { Keys } from '@omagize/data-access-api';
 
 export function MarketplaceView() {
+  const query = useQuery(Keys.market.assets, () => fetchCategoryAssets());
+
   return (
     <Grid
       mb="20px"
@@ -40,17 +42,16 @@ export function MarketplaceView() {
       flexDirection="column"
     >
       <Flex flexDirection="column" gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}>
-        <Content />
+        <Content query={query} />
       </Flex>
       <Flex flexDirection="column" gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}>
-        <SidePanel />
+        <SidePanel recommends={query.data?.recommend} />
       </Flex>
     </Grid>
   );
 }
 
-function Content() {
-  const query = useQuery(Keys.market.assets, () => fetchCategoryAssets());
+function Content({ query }: { query: UseQueryResult<CategoryAssets> }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const navigate = useNavigate();
 

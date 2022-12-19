@@ -70,13 +70,17 @@ export function useNotifyReadChannelMutation(channel: Snowflake) {
         ),
       });
 
-      client.setQueryData<GroupDetail>(Keys.groupDetail(group.id), (old) => ({
-        ...old,
-        channel: {
-          ...old.channel,
-          ...data,
-        },
-      }));
+      client.setQueryData<GroupDetail>(
+        Keys.groupDetail(group.id),
+        (old) =>
+          old != null && {
+            ...old,
+            channel: {
+              ...old.channel,
+              ...data,
+            },
+          }
+      );
     },
   });
 }

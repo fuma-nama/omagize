@@ -7,7 +7,7 @@ import { stringOfDate } from '@omagize/utils/common';
 export function SidePanel({ recommends }: { recommends?: Assets }) {
   return (
     <Card px="10px">
-      <Flex align="center" justify="space-between" w="100%" px="12px" mb="20px">
+      <Flex align="center" justify="space-between" w="100%" px="12px" mb="20px" gap={3}>
         <SubHeading>Recommended</SubHeading>
         <Button variant="action">See all</Button>
       </Flex>

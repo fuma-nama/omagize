@@ -26,6 +26,7 @@ import {
   Repeat,
   Placeholder,
   Card,
+  SubHeading,
 } from '@omagize/ui/components';
 import { useChatStore } from '@omagize/data-access-store';
 import { useColors } from '@omagize/ui/theme';
@@ -55,8 +56,6 @@ export function MyAssetsView() {
 }
 
 function Content() {
-  // Chakra Color Mode
-  const { textColorPrimary: textColor } = useColors();
   const query = useQuery(Keys.market.me, () => fetchMyAssets(), {
     onSuccess(data) {
       useChatStore.setState({
@@ -69,8 +68,8 @@ function Content() {
   const owned = query.data?.owned;
 
   return (
-    <Flex direction="column" px={{ base: '15px', md: '24px' }} gap="20px">
-      <Text color={textColor} fontSize="2xl" fontWeight="700" mr={6}>
+    <Flex direction="column" px={{ base: '15px', md: '24px' }} gap="20px" mb="200px">
+      <SubHeading mr={6}>
         Favorite Assets
         <Tooltip label="Refresh Assets">
           <IconButton
@@ -81,11 +80,9 @@ function Content() {
             onClick={() => query.refetch()}
           />
         </Tooltip>
-      </Text>
+      </SubHeading>
       <Favorites />
-      <Text mt="25px" color={textColor} fontSize="2xl" fontWeight="700">
-        Owned Assets
-      </Text>
+      <SubHeading mt="25px">Owned Assets</SubHeading>
       <QueryStatusLayout
         query={query}
         watch={owned && [...owned.stickers, ...owned.emojis]}
@@ -133,13 +130,15 @@ function Favorites() {
           <EmoijItem key={emoji.id} emoji={emoji} />
         ))}
       </SimpleGrid>
-      <Flex align="center" direction="row" my={3}>
-        <HSeparator />
-        <Text mx={2} color={textColorSecondary}>
-          Stickers
-        </Text>
-        <HSeparator />
-      </Flex>
+      {stickers?.length > 0 && (
+        <Flex align="center" direction="row" my={3}>
+          <HSeparator />
+          <Text mx={2} color={textColorSecondary}>
+            Stickers
+          </Text>
+          <HSeparator />
+        </Flex>
+      )}
       <SimpleGrid columns={{ base: 1, '3sm': 2, md: 3, xl: 4 }} gap="20px">
         {stickers?.map((sticker) => (
           <StickerItem key={sticker.id} sticker={sticker} />

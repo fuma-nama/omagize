@@ -35,23 +35,22 @@ export function MyAssetsView() {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
-    <Flex pos="relative" direction="column" h="full" overflow="auto">
+    <>
       <Content />
       <CreateAssetModal isOpen={isOpen} onClose={onClose} />
-
       <Button
-        pos="absolute"
-        right={{ base: '12px', md: '28px' }}
-        bottom={{ base: '12px', md: '28px' }}
-        variant="brand"
+        pos="fixed"
+        right={{ base: '28px', md: '50px' }}
+        bottom={{ base: '28px', md: '50px' }}
         leftIcon={<BiUpload />}
         onClick={onOpen}
+        colorScheme="pink"
         size="lg"
         rounded="full"
       >
         Upload
       </Button>
-    </Flex>
+    </>
   );
 }
 

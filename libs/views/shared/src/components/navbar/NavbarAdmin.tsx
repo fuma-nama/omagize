@@ -5,7 +5,6 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  ChakraProps,
   Flex,
   FlexProps,
   Link,
@@ -18,13 +17,13 @@ import { ReactNode } from 'react';
 import { getActiveLayout, RootLayout } from '@omagize/utils/route-utils';
 import AdminNavbarLinks from './NavbarLinksAdmin';
 
-export function AdminNavbar(
-  props: {
-    brandText: string;
-    layoutes: RootLayout[];
-  } & ChakraProps
-) {
-  const { brandText, layoutes } = props;
+export function AdminNavbar({
+  brandText,
+  layoutes,
+}: {
+  brandText: string;
+  layoutes: RootLayout[];
+}) {
   const mainText = useColorModeValue('navy.700', 'white');
   const secondaryText = useColorModeValue('gray.700', 'white');
   const active = getActiveLayout(useLocation(), layoutes);

@@ -1,4 +1,4 @@
-export * from './account';
+export * from './asset';
 export * from './auth';
 export * from './client';
 export * from './group';

@@ -1,6 +1,6 @@
 import { SelfUser, LoginPayload, fetchGroupEvents, Snowflake, fetchUserInfo } from '@omagize/api';
 import { useQuery } from '@tanstack/react-query';
-import { useLoginQuery } from './account';
+import { useLoginQuery } from './auth';
 import { client } from './client';
 import { Keys } from './queries';
 

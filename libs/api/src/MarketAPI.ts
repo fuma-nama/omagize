@@ -1,24 +1,23 @@
 import { Snowflake } from './types/common';
 import {
-  Assets,
+  CategoryAssets,
   CustomEmoji,
   CustomSticker,
-  RawAssets,
+  MyAssets,
+  RawCategoryAssets,
   RawCustomEmoji,
   RawCustomSticker,
+  RawMyAssets,
 } from './types';
 import { toFormData } from './utils';
 import { callDefault, callReturn } from './utils/core';
 
-export async function fetchLatestAssets(): Promise<Assets> {
-  const result = await callReturn<RawAssets>(`/market/assets`, {
+export async function fetchLatestAssets(): Promise<CategoryAssets> {
+  const raw = await callReturn<RawCategoryAssets>(`/market/assets`, {
     method: 'GET',
   });
 
-  return {
-    emojis: result.emojis.map((emoji) => CustomEmoji(emoji)),
-    stickers: result.stickers.map((sticker) => CustomSticker(sticker)),
-  };
+  return CategoryAssets(raw);
 }
 
 export async function createEmoji(name: string, image: Blob) {
@@ -67,22 +66,10 @@ export async function deleteAsset(asset: Snowflake, type: 'emojis' | 'stickers')
   });
 }
 
-type RawMyAssets = {
-  owned: RawAssets;
-  favorites: RawAssets;
-};
-export type MyAssets = {
-  owned: Assets;
-  favorites: Assets;
-};
-
 export async function fetchMyAssets(): Promise<MyAssets> {
   const raw = await callReturn<RawMyAssets>(`/market/assets/me`, {
     method: 'GET',
   });
 
-  return {
-    owned: Assets(raw.owned),
-    favorites: Assets(raw.favorites),
-  };
+  return MyAssets(raw);
 }

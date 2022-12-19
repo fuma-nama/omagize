@@ -6,29 +6,31 @@ import { stringOfDate } from '@omagize/utils/common';
 
 export function SidePanel({ recommends }: { recommends?: Assets }) {
   return (
-    <Card px="0px" mb="20px">
-      <Flex align={{ sm: 'flex-start', lg: 'center' }} justify="space-between" w="100%" px="22px">
+    <Card px="10px">
+      <Flex align="center" justify="space-between" w="100%" px="12px" mb="20px">
         <SubHeading>Recommended</SubHeading>
         <Button variant="action">See all</Button>
       </Flex>
-      {recommends?.emojis?.map((emoji) => (
-        <AssetItem
-          key={emoji.id}
-          image={emoji.url}
-          name={emoji.name}
-          author={emoji.author.username}
-          date={stringOfDate(emoji.createdAt)}
-        />
-      ))}
-      {recommends?.stickers?.map((sticker) => (
-        <AssetItem
-          key={sticker.id}
-          image={sticker.url}
-          name={sticker.name}
-          author={sticker.author.username}
-          date={stringOfDate(sticker.createdAt)}
-        />
-      ))}
+      <Flex direction="column" gap="10px">
+        {recommends?.emojis?.map((emoji) => (
+          <AssetItem
+            key={emoji.id}
+            image={emoji.url}
+            name={emoji.name}
+            author={emoji.author.username}
+            date={stringOfDate(emoji.createdAt)}
+          />
+        ))}
+        {recommends?.stickers?.map((sticker) => (
+          <AssetItem
+            key={sticker.id}
+            image={sticker.url}
+            name={sticker.name}
+            author={sticker.author.username}
+            date={stringOfDate(sticker.createdAt)}
+          />
+        ))}
+      </Flex>
     </Card>
   );
 }

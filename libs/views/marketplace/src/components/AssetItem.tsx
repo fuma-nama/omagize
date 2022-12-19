@@ -20,8 +20,8 @@ export function AssetItem(props: { image: string; name: string; author: string; 
       _hover={bgItem}
       bg="transparent"
       boxShadow="unset"
-      px="24px"
-      py="21px"
+      px="14px"
+      py="11px"
       transition="0.2s linear"
       flexDirection="row"
       gap="10px"

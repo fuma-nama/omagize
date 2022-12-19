@@ -1,5 +1,5 @@
-import { Avatar, HStack, IconButton, Text } from '@chakra-ui/react';
-import { BiLeftArrow } from 'react-icons/bi';
+import { Avatar, HStack, Icon, IconButton, Text } from '@chakra-ui/react';
+import { BiLeftArrowAlt } from 'react-icons/bi';
 import { SidebarTrigger, ThemeSwitch, UserMenu } from '@omagize/ui/components';
 import { useSelected } from '@omagize/utils/route-utils';
 import { useNavbarColors } from '@omagize/ui/theme';
@@ -15,7 +15,9 @@ export function GroupNavbar({ isRoot }: { isRoot?: boolean }) {
       <HStack>
         {!isRoot && (
           <IconButton
-            icon={<BiLeftArrow />}
+            minW={0}
+            pr={2}
+            icon={<Icon as={BiLeftArrowAlt} w="20px" h="20px" />}
             onClick={() => setSelectedGroup(selectedGroup)}
             variant="link"
             aria-label="back"

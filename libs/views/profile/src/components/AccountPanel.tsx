@@ -76,7 +76,7 @@ function Pasword({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
       {resetPassword.modal}
       <PasswordInput
         input={{
-          placeholder: 'New Passowrd',
+          placeholder: 'New Password',
           variant: 'focus',
           value: password,
           onChange: (e) => setPassword(e.target.value),
@@ -107,7 +107,7 @@ function Email({ setTarget }: { setTarget: (target: ReauthTarget) => void }) {
 
   const onChangeMail = () => {
     setTarget({
-      message: 'You must verify to change your email',
+      message: 'You must be verified in order to change your email',
       onDone: () => emailMutation.mutate(email),
     });
   };

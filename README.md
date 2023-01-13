@@ -1,6 +1,6 @@
-# In Development
+# Omagize
 
-This project is a Modern Web Chat App
+This project is a simple Modern Web Chat App
 <br>
 Go to The [App Source](./apps/web/)
 
